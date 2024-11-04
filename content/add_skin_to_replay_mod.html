@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Add skin to Replay Mod.">
+    <meta property="og:description" content="Add your own skin to the Replay Mod.">
+    <meta property="og:image" content="https://cdn1.iconfinder.com/data/icons/rounded-black-basic-ui/139/Photo_Add-RoundedBlack-512.png">
+    <title>Add skin to Replay Mod</title>
+    <link rel="icon" href="../assets/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/download.css" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1144521904849121"
+    crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <audio id="clickSound" src="../assets/sounds/click.mp3" preload="auto"></audio>
+    <div class="body">
+      <div id="notification-bar">File ready</div>
+      <div id="content-container">
+        <div id="container-header">
+            <h1>Add Skin to Replay Mod</h1>
+        </div>
+        <div class="content">
+            <form id="skin-form">
+                <label for="name">Your player name :</label>
+                <input type="text" id="name" name="name" required maxlength="15" placeholder="player name . . .">
+                <br>
+                <label>Replay Mod mcaddon file :</label>
+                <label class="file-label" for="addon">
+                    <div class="label-design">
+                        <div id="addon-name" style="opacity: 0.3;">mcaddon file</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                    </div>
+                    <input type="file" id="addon" name="addon" accept=".mcaddon" required>
+                </label>
+                <label>Skin PNG file :</label>
+                <label class="file-label" for="skin">
+                    <div class="label-design">
+                        <div id="skin-name" style="opacity: 0.3;">PNG file</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                    </div>
+                    <input type="file" id="skin" name="skin" accept="image/png" required>
+                </label>
+                <br>
+                <button id="submit-button" type="submit">Submit</button>
+            </form>
+            <div id="progress-container" style="display: none;">
+                <div id="progress-bar"></div>
+                <div id="progress-text">0%</div>
+            </div>
+            <div id="message"></div>
+            <a id="download-link" href="#" download style="display: none;">Download Modified Addon</a>
+    
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+            <script type="module">
+                import { downloadZip } from "https://cdn.jsdelivr.net/npm/client-zip/index.js";
+
+                document.getElementById('addon').addEventListener('change', function(event) {
+                    const fileName = event.target.files[0] ? event.target.files[0].name : '';
+                    const addon = document.getElementById('addon-name')
+                    addon.textContent = fileName.slice(0, 15) + ' ...';
+                    addon.style.opacity = '0.8';
+                });
+
+                document.getElementById('skin').addEventListener('change', function(event) {
+                    const fileName = event.target.files[0] ? event.target.files[0].name : '';
+                    const skin = document.getElementById('skin-name')
+                    skin.textContent = fileName.slice(0, 15) + (fileName.length > 15 ? ' ...' : '');
+
+                    skin.style.opacity = '0.8';
+                });
+    
+                document.getElementById('skin-form').addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const progressContainer = document.getElementById('progress-container');
+                    const progressBar = document.getElementById('progress-bar');
+                    const progressText = document.getElementById('progress-text');
+                    progressContainer.style.display = 'block';
+
+                    progressBar.style.width = '0%';
+                    progressText.textContent = '0%';
+
+                    console.log("Form submitted");
+    
+                    const originalName = document.getElementById('name').value;
+                    const name = originalName.replace(/ /g, '_');
+                    const addonFile = document.getElementById('addon').files[0];
+                    const skinFile = document.getElementById('skin').files[0];
+    
+                    if (skinFile.type !== 'image/png') {
+                        const message = document.getElementById('message')
+                        message.innerText = 'Not a valid skin. The skin picture must be of the type PNG.';
+                        message.style.color = 'rgb(185, 117, 117)';
+                        message.style["margin"] = '10px';
+
+                        console.log("Invalid skin file type");
+                        progressContainer.style.display = 'none';
+                        return;
+                    }
+    
+                    const skinImage = new Image();
+                    skinImage.src = URL.createObjectURL(skinFile);
+                    skinImage.onload = async () => {
+                        console.log("Skin image loaded");
+                        progressBar.style.width = '10%';
+                        progressText.textContent = '10%';
+    
+                        if (skinImage.width !== 64 || skinImage.height !== 64) {
+                            const message = document.getElementById('message')
+                            message.innerText = 'Not a valid skin. The script only supports skin size of 64 x 64';
+                            message.style.color = 'rgb(185, 117, 117)';
+                            message.style["margin"] = '10px';
+
+                            console.log("Invalid skin dimensions");
+                            progressContainer.style.display = 'none';
+                            return;
+                        }
+    
+                        try {
+                            const addonBuffer = await addonFile.arrayBuffer();
+                            const skinBuffer = await skinFile.arrayBuffer();
+
+                            progressBar.style.width = '20%';
+                            progressText.textContent = '20%';
+    
+                            const zip = new JSZip();
+                            const loadedZip = await zip.loadAsync(addonBuffer);
+                            console.log("Addon zip loaded");
+
+                            progressBar.style.width = '50%';
+                            progressText.textContent = '50%';
+
+                            const manifestFiles = Object.keys(loadedZip.files).filter(filename => filename.endsWith('manifest.json'));
+                            if (!manifestFiles.length) {
+                                const message = document.getElementById('message')
+                                message.innerText = 'Not a valid addon. The addon must contain a manifest.json file.';
+                                message.style.color = 'rgb(185, 117, 117)';
+                                message.style["margin"] = '10px';
+
+                                console.log("No manifest.json found");
+                                progressContainer.style.display = 'none';
+                                return;
+                            }
+    
+                            let validResourcePackFound = false;
+    
+                            for (const manifestFile of manifestFiles) {
+                                const manifest = JSON.parse(await loadedZip.file(manifestFile).async('string'));
+                                const type = manifest?.modules[0]?.type;
+                                const uuid = manifest?.header?.uuid;
+                                const isReplay = uuid === "93d83720-a5d1-4a2c-ae07-0ece6a4e4a66" || uuid === "13707829-5be7-4854-8b26-02e67d3be77f";
+    
+                                if (type === "resources" && isReplay) {
+                                    console.log("Resource pack identified");
+    
+                                    const resourceFolderPath = Object.keys(loadedZip.files).find(filename => filename.endsWith('textures/entity/'));
+                                    loadedZip.file(`${resourceFolderPath}${name}.png`, skinBuffer);
+                                    const skinJsonPath = Object.keys(loadedZip.files).find(filename => filename.endsWith('render_controllers/skin.json'));
+                                    const skinJson = JSON.parse(await loadedZip.file(skinJsonPath).async('string'));
+                                    const skinArray = skinJson.render_controllers["controller.render.skin"].arrays.textures["array.skin"];
+                                    const skinTexture = skinJson.render_controllers["controller.render.skin"].textures[0];
+                                    
+                                    progressBar.style.width = '70%';
+                                    progressText.textContent = '70%';
+    
+                                    if (skinTexture.includes(`texture.${name}`)) {
+                                        const message = document.getElementById('message')
+                                        message.innerText = 'Skin already exists. The name you sent already exists in this addon.';
+                                        message.style.color = 'rgb(185, 117, 117)';
+                                        message.style["margin"] = '10px';
+
+                                        console.log("Skin already exists in this addon");
+                                        progressContainer.style.display = 'none';
+                                        return;
+                                    }
+    
+                                    skinJson.render_controllers["controller.render.skin"].arrays.textures["array.skin"].push(`texture.${name}`);
+                                    skinJson.render_controllers["controller.render.skin"].textures[0] = skinTexture.replace("array.skin[", `array.skin[query.is_name_any('${originalName}')*${skinArray.length - 1} + `);
+                                    loadedZip.file(skinJsonPath, JSON.stringify(skinJson, null, 2));
+    
+                                    const entityJsonPath = Object.keys(loadedZip.files).find(filename => filename.endsWith('entity/steve.entity.json'));
+                                    const entityJson = JSON.parse(await loadedZip.file(entityJsonPath).async('string'));
+                                    entityJson["minecraft:client_entity"].description.textures[name] = `textures/entity/${name}`;
+                                    loadedZip.file(entityJsonPath, JSON.stringify(entityJson, null, 2));
+                                    
+                                    progressBar.style.width = '90%';
+                                    progressText.textContent = '90%';
+    
+                                    console.log("Modified zip ready to be created");
+                                    const newZipBlob = await loadedZip.generateAsync({ type: 'blob' });
+                                    const downloadLink = document.getElementById('download-link');
+                                    downloadLink.href = URL.createObjectURL(newZipBlob);
+                                    downloadLink.download = `+${name}_Replay_Mod.mcaddon`;
+                                    downloadLink.style.display = 'block';
+                                    
+                                    progressBar.style.width = '100%';
+                                    progressText.textContent = '100%';
+
+                                    setTimeout(() => {
+                                        progressContainer.style.display = 'none';
+                                        console.log("Download link prepared");
+                                        const message = document.getElementById('message')
+                                        message.innerText = 'Skin added successfully.\nUse the downloaded file next time to add more skins.';
+                                        message.style.color = 'rgb(125, 185, 117)';
+                                        message.style["margin"] = '10px';
+
+                                        validResourcePackFound = true;
+                                    }, 500);
+
+                                    break;
+                                }
+                            }
+    
+                            if (!validResourcePackFound) {
+                                const message = document.getElementById('message')
+                                message.innerText = 'No a valid Replay Mod.';
+                                message.style.color = 'rgb(185, 117, 117)';
+                                message.style["margin"] = '10px';
+
+                                console.log("No valid resource pack found for the Replay mod.");
+                                progressContainer.style.display = 'none';
+                            }
+    
+                        } catch (error) {
+                            console.error("Error while processing the addon:", error);
+                            const message = document.getElementById('message').innerText = 'There was an error while processing the addon.';
+                            message.style.color = 'rgb(185, 117, 117)';
+                            message.style["margin"] = '10px';
+
+                            progressContainer.style.display = 'none';
+                        }
+                    };
+                });
+            </script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
