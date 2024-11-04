@@ -40,6 +40,30 @@
       "description": "My github account. I am new to GitHub but feel free to check out my projects.",
       "link": "https://github.com/MinecraftBedrockArabic",
       "coverImage": "assets/images/git.jpg"
-    }
+    },
+    {
+      "title": "Youtube",
+      "description": "This is my official Discord Server. It is open for everyone.",
+      "link": "https://discord.gg/6z8ZPUdVTT",
+      "coverImage": "assets/images/dis.jpg"
+    },
+    {
+      "title": "MCPDL",
+      "description": "This is my official Discord Server. It is open for everyone.",
+      "link": "https://mcpedl.com/user/shadow-gamer-100k/",
+      "coverImage": "assets/images/mcp.png"
+    },
+    {
+      "title": "ModBay",
+      "description": "This is my official ModBay page. It is open for everyone.",
+      "link": "https://modbay.org/user/shadowgem100k/",
+      "coverImage": "assets/images/md.png"
+    },
+    {
+      "title": "TikTok",
+      "description": "This is my official TikTok account. It is open for everyone.",
+      "link": "https://www.tiktok.com/@shadowgamer100k",
+      "coverImage": "assets/images/tik.jpg"
+    },
   ]
 }
