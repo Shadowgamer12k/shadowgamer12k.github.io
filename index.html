@@ -45,7 +45,6 @@
             margin: 20px auto;
         }
 
-        /* Improved ad container styling */
         #ad-container {
             display: none; /* Initially hidden */
             margin: 20px auto;
@@ -56,6 +55,19 @@
             width: 90%;
             max-width: 500px;
             box-shadow: 0 0 10px #5fa82c;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        #adblock-message {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #ff4c4c;
+            background: #1a1a1a;
+            color: #ffb3b3;
+            max-width: 90%;
+            margin: 20px auto;
             font-size: 1.2rem;
             text-align: center;
         }
@@ -89,71 +101,6 @@
             cursor: not-allowed;
             box-shadow: none;
         }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Contact buttons section */
-        #contact-buttons {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-btn {
-            background-color: #5fa82c;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            border-radius: 5px;
-            font-family: 'Bangers', cursive;
-            letter-spacing: 1px;
-            box-shadow: 0 4px #388016;
-            text-transform: uppercase;
-        }
-
-        .contact-btn:hover {
-            background-color: #6bd03d;
-        }
-
-        .contact-btn:active {
-            box-shadow: 0 2px #388016;
-            transform: translateY(2px);
-        }
-
-        @media screen and (max-width: 600px) {
-            h1 {
-                font-size: 3rem;
-            }
-
-            p {
-                font-size: 1.2rem;
-            }
-
-            button {
-                font-size: 1.2rem;
-                padding: 10px 20px;
-            }
-
-            #ad-container {
-                height: auto;
-                font-size: 1rem;
-                padding: 15px;
-            }
-
-            #text-container {
-                font-size: 1.2rem;
-            }
-
-            .contact-btn {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-        }
     </style>
     <script>
         let timer;
@@ -162,43 +109,57 @@
         function showAd() {
             // Show the ad container
             document.getElementById('ad-container').classList.remove('hidden');
-            document.getElementById('ad-container').style.display = 'block'; // Make sure it's visible
+            document.getElementById('ad-container').style.display = 'block';
             document.getElementById('start-btn').disabled = true;
             timer = setInterval(() => {
                 document.getElementById('timer').textContent = `Wait ${countdown--} seconds...`;
                 if (countdown < 0) {
                     clearInterval(timer);
-                    document.getElementById('ad-container').style.display = 'none'; // Hide the ad
-                    document.getElementById('text-container').style.display = 'block'; // Show the text
+                    document.getElementById('ad-container').style.display = 'none';
+                    document.getElementById('text-container').style.display = 'block';
                 }
             }, 1000);
         }
+
+        function detectAdBlocker() {
+            const ad = document.createElement('div');
+            ad.className = 'ad';
+            ad.style.display = 'none';
+            document.body.appendChild(ad);
+            const isBlocked = !ad.offsetParent;
+            document.body.removeChild(ad);
+
+            if (isBlocked) {
+                document.getElementById('adblock-message').style.display = 'block';
+                document.getElementById('start-btn').disabled = true;
+            }
+        }
+
+        window.onload = function () {
+            detectAdBlocker();
+        };
     </script>
 </head>
 <body>
     <h1>Earth Craft</h1>
-    <p>Unlock the port and adress by watching the ad below for 20 seconds.</p>
+    <p>Unlock the port and address by watching the ad below for 20 seconds.</p>
 
     <div id="ad-container" class="hidden">
         <p>Ad is loading...</p>
         <p id="timer">Wait 20 seconds...</p>
     </div>
 
-    <button id="start-btn" onclick="showAd()">show Ad to Unlock</button>
+    <div id="adblock-message">
+        <p>It seems like you're using an ad blocker. Please disable it to continue.</p>
+    </div>
+
+    <button id="start-btn" onclick="showAd()">Show Ad to Unlock</button>
 
     <div id="text-container">
-        <h2>dont shear this info with others</h2>
-        <p>- Here is the server link if you are on android : test</p>
-        <p>- Port : test</p>
-        <p>- adress : test</p>
-    </div>
-
-    <!-- Contact Buttons Section -->
-    <div id="contact-buttons">
-        <a href="https://www.youtube.com/@shadowgamer100k" target="_blank" class="contact-btn">YouTube</a>
-        <a href="http://bit.ly/4fUVc9H" target="_blank" class="contact-btn">Discord</a>
-        <a href="https://www.paypal.com/paypalme/shadowgamer100k" target="_blank" class="contact-btn">PayPal</a>
-        <a href="https://mcpedl.com/user/shadow-gamer-100k/" target="_blank" class="contact-btn">MCPDL</a>
+        <h2>Don't share this info with others</h2>
+        <p>- Here is the server link if you are on Android: test</p>
+        <p>- Port: test</p>
+        <p>- Address: test</p>
     </div>
 </body>
-            </html>
+</html>
