@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Locker</title>
     <style>
+        @font-face {
+            font-family: "Minecrafter Alt";
+            src: url("https://example.com/fonts/minecrafter-alt.ttf") format("truetype"); /* Replace with a valid URL to the font */
+        }
+
         body {
-            font-family: "Minecraft", sans-serif;
+            font-family: "Minecrafter Alt", sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
@@ -57,7 +62,7 @@
             font-size: 1.5rem;
             border-radius: 0;
             box-shadow: 0 4px #388016;
-            font-family: "Minecraft", sans-serif;
+            font-family: "Minecrafter Alt", sans-serif;
             text-transform: uppercase;
         }
 
@@ -123,20 +128,19 @@
     </script>
 </head>
 <body>
-    <h1>MINECRAFT SERVER</h1>
-    <p>You can get the server port and adress by whatching this ad</p>
+    <h1>Text Locker</h1>
+    <p>Unlock the hidden text by watching the ad below for 20 seconds.</p>
 
     <div id="ad-container" class="hidden">
         <p>Ad is loading...</p>
         <p id="timer">Wait 20 seconds...</p>
     </div>
 
-    <button id="start-btn" onclick="showAd()">watch Ad to Unlock</button>
+    <button id="start-btn" onclick="showAd()">Show Ad to Unlock Text</button>
 
     <div id="text-container">
         <h2>Hidden Text</h2>
-        <p>port : test</p>
-        <p>adress : test</p>
+        <p>This is the secret text that was locked!</p>
     </div>
 </body>
 </html>
