@@ -3,34 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Shadow website">
-    <meta property="og:description" content="a website where i share my projects, and other things.">
-    <meta property="og:image" content="assets/images/skinhead.png">
-    <title>Shadow</title>
-    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./assets/css/styles.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1144521904849121"
-     crossorigin="anonymous"></script
+    <title>Text Locker</title>
+    <style>
+        body {
+            font-family: "Minecraft", sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #2a2a2a;
+            color: #d4d4d4;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #5fa82c;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+
+        #text-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #5fa82c;
+            background: #1a1a1a;
+            color: #b4ff99;
+            box-shadow: 0 0 10px #5fa82c;
+            font-size: 1.4rem;
+        }
+
+        #ad-container {
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px dashed #5fa82c;
+            background: #1a1a1a;
+            color: #b4ff99;
+            width: 90%;
+            max-width: 400px;
+            height: 150px;
+            box-shadow: 0 0 10px #5fa82c;
+            font-size: 1.2rem;
+        }
+
+        button {
+            background-color: #5fa82c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 0;
+            box-shadow: 0 4px #388016;
+            font-family: "Minecraft", sans-serif;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #6bd03d;
+        }
+
+        button:active {
+            box-shadow: 0 2px #388016;
+            transform: translateY(2px);
+        }
+
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+
+            button {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+            }
+
+            #ad-container {
+                height: 120px;
+                font-size: 1rem;
+            }
+
+            #text-container {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+    <script>
+        let timer;
+        let countdown = 20; // seconds
+
+        function showAd() {
+            document.getElementById('ad-container').classList.remove('hidden');
+            document.getElementById('start-btn').disabled = true;
+            timer = setInterval(() => {
+                document.getElementById('timer').textContent = `Wait ${countdown--} seconds...`;
+                if (countdown < 0) {
+                    clearInterval(timer);
+                    document.getElementById('ad-container').classList.add('hidden');
+                    document.getElementById('text-container').style.display = 'block';
+                }
+            }, 1000);
+        }
+    </script>
 </head>
 <body>
-    <audio id="clickSound" src="./assets/sounds/click.mp3" preload="auto"></audio>
-    <img src="assets/images/pro.png" class="img-title" alt="Projects">
-    <div class="navbar">
-        <div class="navbar-item navbar-selected">Projects</div>
-        <div class="navbar-item">Others</div>
-        <div class="navbar-item">Social</div>
-        <div class="navbar-item">Friends</div>
+    <h1>MINECRAFT SERVER</h1>
+    <p>You can get the server port and adress by whatching this ad</p>
+
+    <div id="ad-container" class="hidden">
+        <p>Ad is loading...</p>
+        <p id="timer">Wait 20 seconds...</p>
     </div>
-    <div class="overlay">
-        <div class="border-1"></div>
-        <div class="border-1 border-2"></div>
-        <div class="container">
-            <!-- projects will be added here -->
-        </div>
-        <div class="post-details" style="color: white;">
-            <div class="format-page"></div>
-        </div>
+
+    <button id="start-btn" onclick="showAd()">watch Ad to Unlock</button>
+
+    <div id="text-container">
+        <h2>Hidden Text</h2>
+        <p>port : test</p>
+        <p>adress : test</p>
     </div>
-    <script src="./assets/js/main.js"></script>
 </body>
 </html>
