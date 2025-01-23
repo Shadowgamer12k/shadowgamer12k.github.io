@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Locker</title>
-    <!-- Add Google Fonts link for Bangers -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
     <style>
-        /* Use Bangers font for the page */
         body {
             font-family: 'Bangers', cursive;
             text-align: center;
@@ -46,7 +44,7 @@
         }
 
         #ad-container {
-            display: none; /* Initially hidden */
+            display: none;
             margin: 20px auto;
             padding: 20px;
             border: 2px dashed #5fa82c;
@@ -107,7 +105,6 @@
         let countdown = 20; // seconds
 
         function showAd() {
-            // Show the ad container
             document.getElementById('ad-container').classList.remove('hidden');
             document.getElementById('ad-container').style.display = 'block';
             document.getElementById('start-btn').disabled = true;
@@ -121,15 +118,40 @@
             }, 1000);
         }
 
-        function detectAdBlocker() {
+        function detectDomAdBlocker() {
             const ad = document.createElement('div');
-            ad.className = 'ad';
+            ad.className = 'adsbox';
             ad.style.display = 'none';
             document.body.appendChild(ad);
             const isBlocked = !ad.offsetParent;
             document.body.removeChild(ad);
+            return isBlocked;
+        }
 
-            if (isBlocked) {
+        function detectDnsAdBlocker() {
+            return new Promise((resolve) => {
+                const testAdUrl = "https://ads.example.com/dummy-ad.js";
+                const adTest = document.createElement('img');
+                adTest.src = testAdUrl;
+                adTest.style.display = 'none';
+
+                adTest.onerror = function () {
+                    resolve(true); // DNS AdBlocker detected
+                };
+
+                adTest.onload = function () {
+                    resolve(false); // No DNS AdBlocker
+                };
+
+                document.body.appendChild(adTest);
+            });
+        }
+
+        async function detectAdBlocker() {
+            const domBlocked = detectDomAdBlocker();
+            const dnsBlocked = await detectDnsAdBlocker();
+
+            if (domBlocked || dnsBlocked) {
                 document.getElementById('adblock-message').style.display = 'block';
                 document.getElementById('start-btn').disabled = true;
             }
@@ -150,7 +172,7 @@
     </div>
 
     <div id="adblock-message">
-        <p>It seems like you're using an ad blocker. Please disable it to continue.</p>
+        <p>We detected that you are using an ad blocker (DNS or DOM-based). Please disable it to continue.</p>
     </div>
 
     <button id="start-btn" onclick="showAd()">Show Ad to Unlock</button>
