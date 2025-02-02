@@ -3,185 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Locker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <title>My Minecraft Mods</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
         body {
-            font-family: 'Bangers', cursive;
+            background-color: #222;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
             text-align: center;
-            margin: 0;
+            background-image: url('https://www.minecraft.net/content/dam/games/minecraft/key-art/Update_Lush_Caves.jpg');
+            background-size: cover;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            margin: 50px auto;
+            width: 90%;
+            border-radius: 10px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            background: gray;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .tab:hover, .tab.active {
+            background: #555;
+        }
+        .mod-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            list-style: none;
             padding: 0;
-            background-color: #2a2a2a;
-            color: #d4d4d4;
-            letter-spacing: 2px;
         }
-
-        h1 {
-            font-size: 4rem;
-            color: #5fa82c;
-            text-shadow: 2px 2px 0 #000;
-            letter-spacing: 3px;
+        .mod-item {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: left;
         }
-
-        p {
-            font-size: 1.5rem;
-            letter-spacing: 1px;
+        .mod-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .mod-item h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .mod-item p {
+            font-size: 14px;
+        }
+        .mod-item a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
             margin-top: 10px;
         }
-
-        #text-container {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border: 2px solid #5fa82c;
-            background: #1a1a1a;
-            color: #b4ff99;
-            box-shadow: 0 0 10px #5fa82c;
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-            max-width: 90%;
-            margin: 20px auto;
-        }
-
-        #ad-container {
-            display: none;
-            margin: 20px auto;
-            padding: 20px;
-            border: 2px dashed #5fa82c;
-            background: #1a1a1a;
-            color: #b4ff99;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 0 10px #5fa82c;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        #adblock-message {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border: 2px dashed #ff4c4c;
-            background: #1a1a1a;
-            color: #ffb3b3;
-            max-width: 90%;
-            margin: 20px auto;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        button {
-            background-color: #5fa82c;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            border-radius: 0;
-            box-shadow: 0 4px #388016;
-            font-family: 'Bangers', cursive;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background-color: #6bd03d;
-        }
-
-        button:active {
-            box-shadow: 0 2px #388016;
-            transform: translateY(2px);
-        }
-
-        button:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
     </style>
-    <script>
-        let timer;
-        let countdown = 20; // seconds
-
-        function showAd() {
-            document.getElementById('ad-container').classList.remove('hidden');
-            document.getElementById('ad-container').style.display = 'block';
-            document.getElementById('start-btn').disabled = true;
-            timer = setInterval(() => {
-                document.getElementById('timer').textContent = `Wait ${countdown--} seconds...`;
-                if (countdown < 0) {
-                    clearInterval(timer);
-                    document.getElementById('ad-container').style.display = 'none';
-                    document.getElementById('text-container').style.display = 'block';
-                }
-            }, 1000);
-        }
-
-        function detectDomAdBlocker() {
-            const ad = document.createElement('div');
-            ad.className = 'adsbox';
-            ad.style.display = 'none';
-            document.body.appendChild(ad);
-            const isBlocked = !ad.offsetParent;
-            document.body.removeChild(ad);
-            return isBlocked;
-        }
-
-        function detectDnsAdBlocker() {
-            return new Promise((resolve) => {
-                const testAdUrl = "https://ads.example.com/dummy-ad.js";
-                const adTest = document.createElement('img');
-                adTest.src = testAdUrl;
-                adTest.style.display = 'none';
-
-                adTest.onerror = function () {
-                    resolve(true); // DNS AdBlocker detected
-                };
-
-                adTest.onload = function () {
-                    resolve(false); // No DNS AdBlocker
-                };
-
-                document.body.appendChild(adTest);
-            });
-        }
-
-        async function detectAdBlocker() {
-            const domBlocked = detectDomAdBlocker();
-            const dnsBlocked = await detectDnsAdBlocker();
-
-            if (domBlocked || dnsBlocked) {
-                document.getElementById('adblock-message').style.display = 'block';
-                document.getElementById('start-btn').disabled = true;
-            }
-        }
-
-        window.onload = function () {
-            detectAdBlocker();
-        };
-    </script>
 </head>
 <body>
-    <h1>Earth Craft</h1>
-    <p>Unlock the port and address by watching the ad below for 20 seconds.</p>
-
-    <div id="ad-container" class="hidden">
-        <p>Ad is loading...</p>
-        <p id="timer">Wait 20 seconds...</p>
-    </div>
-
-    <div id="adblock-message">
-        <p>We detected that you are using an ad blocker (DNS or DOM-based). Please disable it to continue.</p>
-    </div>
-
-    <button id="start-btn" onclick="showAd()">Show Ad to Unlock</button>
-
-    <div id="text-container">
-        <h2>Don't share this info with others</h2>
-        <p>- Here is the server link if you are on Android: test</p>
-        <p>- Port: test</p>
-        <p>- Address: test</p>
+    <div class="container">
+        <h1>PROJECTS</h1>
+        <div class="tabs">
+            <div class="tab active">PROJECTS</div>
+            <div class="tab">OTHERS</div>
+            <div class="tab">SOCIAL</div>
+            <div class="tab">FRIENDS</div>
+        </div>
+        <ul class="mod-list">
+            <li class="mod-item">
+                <img src="https://via.placeholder.com/300" alt="Mod 1">
+                <h3>Player Heads Add-on</h3>
+                <p>This add-on allows you to add Player Heads to the game.</p>
+                <a href="#">Download</a>
+            </li>
+            <li class="mod-item">
+                <img src="https://via.placeholder.com/300" alt="Mod 2">
+                <h3>Replay Mod (Discontinued)</h3>
+                <p>This add-on allows you to record in-game actions and replay them later.</p>
+                <a href="#">Download</a>
+            </li>
+            <li class="mod-item">
+                <img src="https://via.placeholder.com/300" alt="Mod 3">
+                <h3>Arabic Language Fix</h3>
+                <p>Fixes the inverted syntax of the Arabic language within the game.</p>
+                <a href="#">Download</a>
+            </li>
+            <li class="mod-item">
+                <img src="https://via.placeholder.com/300" alt="Mod 4">
+                <h3>Clickable Signs</h3>
+                <p>This add-on allows you to make signs clickable with custom commands.</p>
+                <a href="#">Download</a>
+            </li>
+        </ul>
     </div>
 </body>
 </html>
