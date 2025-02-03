@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shadow100k</title>
-    <meta name="description" content="Showcase of Minecraft addons and projects">
+    <title>My Minecraft Mods</title>
+    <meta name="description" content="Showcase of Minecraft mods and projects including Player Heads, Replay Mod, and Arabic Language Fix">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -570,7 +570,7 @@ a.close-button:active:after {
     <!-- Modal -->
     <div class="modal">
         <div class="modal-content">
-            <a href="https://shadowgamer12k.github.io/shadow/#" class="close-button">Close</a>
+            <a href="#" class="close-button">Close</a>
              <p></p> 
             <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
             <div class="modal-description"></div>
@@ -581,15 +581,26 @@ a.close-button:active:after {
         </div>
     </div>
 
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-button">CLOSE</button>
+            <div class="modal-video-container">
+                <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="modal-description"></div>
+            <div class="download-buttons">
+                <a href="#" class="download-button behavior-pack">BEHAVIOR PACK</a>
+                <a href="#" class="download-button resource-pack">RESOURCE PACK</a>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Audio functionality
         const clickSound = document.getElementById('clickSound');
         
         function playClickSound() {
             clickSound.currentTime = 0;
-            clickSound.play().catch(error => {
-                console.log('Audio play prevented:', error);
-            });
+            clickSound.play().catch(error => console.log('Audio error:', error));
         }
 
         // Tab functionality
@@ -597,44 +608,34 @@ a.close-button:active:after {
             tab.addEventListener('click', () => {
                 playClickSound();
                 const target = tab.dataset.target;
-                const container = tab.closest('.container');
-                
-                container.querySelectorAll('[role="tab"], .tab-content').forEach(element => {
-                    element.classList.remove('active');
+                document.querySelectorAll('[role="tab"], .tab-content').forEach(el => {
+                    el.classList.remove('active');
                 });
-
                 tab.classList.add('active');
                 document.getElementById(target).classList.add('active');
             });
         });
 
         // Modal functionality
-        const modItems = document.querySelectorAll('#projects .mod-item');
+        const modItems = document.querySelectorAll('.mod-item');
         const modal = document.querySelector('.modal');
-        const closeModalBtn = document.querySelector('.close-modal');
 
         modItems.forEach(mod => {
             mod.addEventListener('click', () => {
                 playClickSound();
-                const videoSrc = mod.dataset.video;
-                const description = mod.dataset.description;
-                const behaviorPack = mod.dataset.behavior;
-                const resourcePack = mod.dataset.resource;
-
+                const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
                 modal.querySelector('.modal-video').src = videoSrc;
-                modal.querySelector('.modal-description').textContent = description;
-                modal.querySelector('.behavior-pack').href = behaviorPack;
-                modal.querySelector('.resource-pack').href = resourcePack;
+                modal.querySelector('.modal-description').textContent = mod.dataset.description;
+                modal.querySelector('.behavior-pack').href = mod.dataset.behavior;
+                modal.querySelector('.resource-pack').href = mod.dataset.resource;
                 
                 modal.style.display = 'flex';
-                setTimeout(() => {
-                    modal.classList.add('active');
-                }, 10);
+                setTimeout(() => modal.classList.add('active'), 10);
                 document.body.style.overflow = 'hidden';
             });
         });
 
-        // Close modal
+        // Close modal functionality
         function closeModal() {
             modal.classList.remove('active');
             setTimeout(() => {
@@ -644,21 +645,15 @@ a.close-button:active:after {
             }, 300);
         }
 
-        closeModalBtn.addEventListener('click', closeModal);
+        document.querySelector('.close-button').addEventListener('click', () => {
+            playClickSound();
+            closeModal();
+        });
+
         window.addEventListener('click', (e) => e.target === modal && closeModal());
         document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
-
-        // Add sound to all clickable links
-        document.querySelectorAll('.social-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        // Remove this line to prevent overriding default behavior
-        // e.preventDefault();
-
-        playClickSound();
-        window.open(e.target.href, '_blank'); // This ensures the link opens in a new tab
-    });
-});
-
     </script>
+</body>
+</html>
 </body>
 </html>
