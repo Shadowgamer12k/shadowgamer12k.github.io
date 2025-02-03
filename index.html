@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +46,7 @@
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 20px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
@@ -142,6 +143,19 @@
             border-radius: 3px;
             font-size: 10px;
             margin-left: 10px;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--minecraft-blue);
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        } 
+        .social-link:hover {
+            text-decoration: underline;
+            transform: scale(1.05);
         }
 
         .modal {
@@ -240,52 +254,224 @@
             justify-content: center;
         }
 
-        .download-button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            text-decoration: none;
-            color: #000;
-            transition: transform 0.2s;
+       
+button {
+  font-size: 18px;
+  background-color: #008542;
+  color: #fff;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0;
+  z-index: 1;
+  user-select: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: unset;
+  padding: 0.8rem 1.5rem;
+  text-decoration: none;
+  font-weight: 900;
+  transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
+
+button:before {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+  z-index: -1;
+  background-color: #008542 !important;
+  box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+    0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+    4px 0 rgb(21 108 0 / 50%) inset;
+}
+
+button:after {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
+
+button:hover:before {
+  box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+    -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+}
+
+button:hover:after {
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+}
+
+button:active {
+  transform: translateY(4px);
+}
+
+button:active:after {
+  box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+}
+
+
+        /* Specific Button Styles for Packs */
+        .behavior-pack-button {
+            background-color: #004d2c;
         }
 
-        .download-button:hover {
-            transform: scale(1.05);
+        .resource-pack-button {
+            background-color: #003f64;
         }
+/* From Uiverse.io by cssbuttons-io */
+a.download-button {
+  font-size: 18px;
+  background-color: #008542;
+  color: #fff;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0;
+  z-index: 1;
+  user-select: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: unset;
+  padding: 0.8rem 1.5rem;
+  text-decoration: none;
+  font-weight: 900;
+  transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
 
-        .behavior-pack {
-            background: var(--minecraft-green);
-        }
+a.download-button:before {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+  z-index: -1;
+  background-color: #008542 !important;
+  box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+    0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+    4px 0 rgb(21 108 0 / 50%) inset;
+}
 
-        .resource-pack {
-            background: #ffcc00;
-        }
+a.download-button:after {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
 
-        @media (max-width: 600px) {
-            .mod-item {
-                width: 100%;
-            }
-            
-            .tab {
-                font-size: 12px;
-                padding: 8px 15px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-            
-            .modal-video {
-                height: 200px;
-            }
-            
-            .download-buttons {
-                flex-direction: column;
-            }
-        }
+a.download-button:hover:before {
+  box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+    -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+}
+
+a.download-button:hover:after {
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+}
+
+a.download-button:active {
+  transform: translateY(4px);
+}
+
+a.download-button:active:after {
+  box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+}
+/* From Uiverse.io by cssbuttons-io */
+a.close-button {
+  font-size: 18px;
+  background-color: #e63946; /* لون أحمر لإشارة إلى الإغلاق */
+  color: #fff;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 0;
+  z-index: 1;
+  user-select: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: unset;
+  padding: 0.8rem 1.5rem;
+  text-decoration: none;
+  font-weight: 900;
+  transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
+
+a.close-button:before {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+  z-index: -1;
+  background-color: #e63946 !important; /* نفس اللون الأحمر */
+  box-shadow: 0 -4px rgb(255 0 0 / 50%) inset,
+    0 4px rgb(255 100 100 / 99%) inset, -4px 0 rgb(255 100 100 / 50%) inset,
+    4px 0 rgb(255 0 0 / 50%) inset;
+}
+
+a.close-button:after {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+  transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+}
+
+a.close-button:hover:before {
+  box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+    -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+}
+
+a.close-button:hover:after {
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+}
+
+a.close-button:active {
+  transform: translateY(4px);
+}
+
+a.close-button:active:after {
+  box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+}
+
     </style>
 </head>
 <body>
@@ -365,14 +551,14 @@
         <div id="social" class="tab-content">
             <ul class="mod-list">
                 <li class="mod-item social-item">
-                    <img src="youtube-icon.png" alt="YouTube">
+                    <img src="assets/images/youtube.png" alt="YouTube">
                     <h3>YouTube <span class="social-badge">Videos</span></h3>
                     <p>Watch our tutorials</p>
-                    <a href="#" class="social-link">Visit Channel</a>
+                    <a href="https://www.youtube.com/@shadowgamer100k" rel="noopener noreferrer" target="_blank" class="social-link">Visit Channel</a>
                 </li>
                 
                 <li class="mod-item social-item">
-                    <img src="discord-icon.png" alt="Discord">
+                    <img src="assets/images/discord.png" alt="Discord">
                     <h3>Discord <span class="social-badge">Community</span></h3>
                     <p>Join our server</p>
                     <a href="#" class="social-link">Join Server</a>
@@ -384,7 +570,8 @@
     <!-- Modal -->
     <div class="modal">
         <div class="modal-content">
-            <button class="close-modal"></button>
+            <a href="https://www.netflix.com/login" class="close-button">Close</a>
+             <p></p> 
             <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
             <div class="modal-description"></div>
             <div class="download-buttons">
@@ -422,7 +609,7 @@
         });
 
         // Modal functionality
-        const modItems = document.querySelectorAll('.mod-item');
+        const modItems = document.querySelectorAll('#projects .mod-item');
         const modal = document.querySelector('.modal');
         const closeModalBtn = document.querySelector('.close-modal');
 
@@ -462,15 +649,16 @@
         document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
 
         // Add sound to all clickable links
-        document.querySelectorAll('.download-button, .social-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                playClickSound();
-                setTimeout(() => {
-                    window.location.href = e.target.href;
-                }, 100);
-            });
-        });
+        document.querySelectorAll('.social-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        // Remove this line to prevent overriding default behavior
+        // e.preventDefault();
+
+        playClickSound();
+        window.open(e.target.href, '_blank'); // This ensures the link opens in a new tab
+    });
+});
+
     </script>
 </body>
 </html>
