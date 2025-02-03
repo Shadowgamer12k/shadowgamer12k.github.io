@@ -158,29 +158,21 @@
         }
 
         .modal-content {
-            background: #333;
-            padding: 30px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 800px;
-            position: relative;
-            border: 3px solid var(--minecraft-green);
-        }
+        max-height: 80vh;
+        overflow-y: auto;
+    }
 
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff4444;
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            line-height: 30px;
-        }
+         .close-modal {
+        width: 32px;
+        height: 32px;
+        background: url('https://your-image-link.com/pixel-x-icon.png') no-repeat center;
+        background-size: contain;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
 
         .modal-video {
             width: 100%;
@@ -411,7 +403,9 @@
             modal.querySelector('.modal-video').src = '';
             document.body.style.overflow = 'auto';
         }
-
+      modal.addEventListener('wheel', (e) => {
+        e.stopPropagation();
+    }, { passive: true });
         closeModalBtn.addEventListener('click', closeModal);
         window.addEventListener('click', (e) => e.target === modal && closeModal());
         document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
