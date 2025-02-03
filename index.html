@@ -27,7 +27,24 @@
             margin: 0;
             overflow-x: hidden; /* منع التمرير الأفقي */
         }
+.news-badge {
+            background: #aa55ff;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-left: 10px;
+        }
 
+        .news-date {
+            color: #55aaff;
+            font-size: 0.8em;
+            margin: 10px 0;
+        }
+
+        .news-item {
+            border-color: #aa55ff;
+        }
         .container {
             background: rgba(0, 0, 0, 0.8);
             padding: 20px;
@@ -674,18 +691,26 @@
                 </div>
             </div>
 
-            <div class="news-article">
-                <div class="news-date">July 10, 2024</div>
-                <h3 class="news-title">Monthly Build Contest</h3>
-                <div class="news-content">
-                    <p>Join our monthly building contest for a chance to win premium mod packs!</p>
-                    <p>🏆 Prizes include:</p>
-                    <ul>
-                        <li>1st Place: All mods for 1 year</li>
-                        <li>2nd Place: 3 mods of choice</li>
-                    </ul>
-                </div>
-            </div>
+           <div id="news" class="tab-content">
+            <ul class="mod-list">
+                <li class="mod-item news-item">
+                    <div class="news-date">July 15, 2024</div>
+                    <h3>Land Claim Update <span class="news-badge">NEWS</span></h3>
+                    <p>Version 2.0 released with enhanced protection features and new UI!</p>
+                </li>
+
+                <li class="mod-item news-item">
+                    <div class="news-date">July 10, 2024</div>
+                    <h3>Build Contest <span class="news-badge">EVENT</span></h3>
+                    <p>Join our monthly building competition for awesome prizes!</p>
+                </li>
+
+                <li class="mod-item news-item">
+                    <div class="news-date">July 5, 2024</div>
+                    <h3>New Mod Teaser <span class="news-badge">PREVIEW</span></h3>
+                    <p>Check out our upcoming inventory management system mod!</p>
+                </li>
+            </ul>
         </div>
     <script>
         const clickSound = document.getElementById('clickSound');
