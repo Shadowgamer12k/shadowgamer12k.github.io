@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://fonts.cdnfonts.com/s/16918/Minecraft-Regular.woff') format('woff');
+        }
+
+        body {
+            font-family: 'Minecraft', Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #2b2b2b;
+            color: #ffffff;
+        }
+
+        .loadingspinner {
+            --square: 26px;
+            --offset: 30px;
+            --duration: 2.4s;
+            --delay: 0.2s;
+            --timing-function: ease-in-out;
+            --in-duration: 0.4s;
+            --in-delay: 0.1s;
+            --in-timing-function: ease-out;
+            width: calc( 3 * var(--offset) + var(--square));
+            height: calc( 2 * var(--offset) + var(--square));
+            padding: 0px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            position: relative;
+            display: none; /* Hide initially */
+        }
+
+        .loadingspinner div {
+            display: inline-block;
+            background: #00ff00;
+            border: none;
+            border-radius: 2px;
+            width: var(--square);
+            height: var(--square);
+            position: absolute;
+            padding: 0px;
+            margin: 0px;
+            font-size: 6pt;
+            color: black;
+        }
+
+        .loadingspinner #square1 {
+            left: calc(0 * var(--offset));
+            top: calc(0 * var(--offset));
+            animation: square1 var(--duration) var(--delay) var(--timing-function) infinite,
+                       squarefadein var(--in-duration) calc(1 * var(--in-delay)) var(--in-timing-function) both;
+        }
+
+        .loadingspinner #square2 {
+            left: calc(0 * var(--offset));
+            top: calc(1 * var(--offset));
+            animation: square2 var(--duration) var(--delay) var(--timing-function) infinite,
+                       squarefadein var(--in-duration) calc(1 * var(--in-delay)) var(--in-timing-function) both;
+        }
+
+        .loadingspinner #square3 {
+            left: calc(1 * var(--offset));
+            top: calc(1 * var(--offset));
+            animation: square3 var(--duration) var(--delay) var(--timing-function) infinite,
+                       squarefadein var(--in-duration) calc(2 * var(--in-delay)) var(--in-timing-function) both;
+        }
+
+        .loadingspinner #square4 {
+            left: calc(2 * var(--offset));
+            top: calc(1 * var(--offset));
+            animation: square4 var(--duration) var(--delay) var(--timing-function) infinite,
+                       squarefadein var(--in-duration) calc(3 * var(--in-delay)) var(--in-timing-function) both;
+        }
+
+        .loadingspinner #square5 {
+            left: calc(3 * var(--offset));
+            top: calc(1 * var(--offset));
+            animation: square5 var(--duration) var(--delay) var(--timing-function) infinite,
+                       squarefadein var(--in-duration) calc(4 * var(--in-delay)) var(--in-timing-function) both;
+        }
+
+        @keyframes square1 {
+            0% {
+                left: calc(0 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            8.333% {
+                left: calc(0 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            100% {
+                left: calc(0 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+        }
+
+        @keyframes square2 {
+            0% {
+                left: calc(0 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            8.333% {
+                left: calc(0 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            16.67% {
+                left: calc(1 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            25.00% {
+                left: calc(1 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            83.33% {
+                left: calc(1 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            91.67% {
+                left: calc(1 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            100% {
+                left: calc(0 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+        }
+
+        @keyframes square3 {
+            0%, 100% {
+                left: calc(1 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            16.67% {
+                left: calc(1 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            25.00% {
+                left: calc(1 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            33.33% {
+                left: calc(2 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            41.67% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            66.67% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            75.00% {
+                left: calc(2 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            83.33% {
+                left: calc(1 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            91.67% {
+                left: calc(1 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+        }
+
+        @keyframes square4 {
+            0% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            33.33% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            41.67% {
+                left: calc(2 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            50.00% {
+                left: calc(3 * var(--offset));
+                top: calc(2 * var(--offset));
+            }
+
+            58.33% {
+                left: calc(3 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            100% {
+                left: calc(3 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+        }
+
+        @keyframes square5 {
+            0% {
+                left: calc(3 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            50.00% {
+                left: calc(3 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            58.33% {
+                left: calc(3 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            66.67% {
+                left: calc(2 * var(--offset));
+                top: calc(0 * var(--offset));
+            }
+
+            75.00% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+
+            100% {
+                left: calc(2 * var(--offset));
+                top: calc(1 * var(--offset));
+            }
+        }
+
+        @keyframes squarefadein {
+            0% {
+                transform: scale(0.75);
+                opacity: 0.0;
+            }
+
+            100% {
+                transform: scale(1.0);
+                opacity: 1.0;
+            }
+        }
+        .error {
+            color: #ff4444;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .completed {
+            background-color: #005c20 !important;
+            cursor: not-allowed;
+        }
+
+        button {
+            font-size: 10px;
+            background-color: #008542;
+            color: #fff;
+            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 0;
+            z-index: 1;
+            user-select: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: unset;
+            margin: 9px;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-weight: 900;
+            transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        button:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+            z-index: -1;
+            background-color: #008542 !important;
+            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+                        0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+                        4px 0 rgb(21 108 0 / 50%) inset;
+        }
+
+        button:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        button:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+                        -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        button:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        button:active {
+            transform: translateY(4px);
+        }
+
+        button:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+    </style>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const targetURL = params.get("url");
+        let tasksCompleted = 0;
+
+        function taskCompleted() {
+            tasksCompleted++;
+            if (tasksCompleted === 3) {
+                if (!targetURL) {
+                    showError("Invalid redirect link.");
+                    return;
+                }
+                showRedirectMessage();
+                startRedirectCountdown();
+            }
+        }
+
+        function showRedirectMessage() {
+            document.getElementById("message").textContent = "Redirecting you...";
+            document.querySelector(".loadingspinner").style.display = "block";
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.style.display = "none";
+            });
+        }
+
+        function startRedirectCountdown() {
+            let seconds = 5;
+            const countdownElement = document.createElement("div");
+            countdownElement.id = "countdown";
+            document.querySelector(".loadingspinner").after(countdownElement);
+            
+            const interval = setInterval(() => {
+                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
+                if (seconds-- <= 0) {
+                    clearInterval(interval);
+                    window.location.href = targetURL;
+                }
+            }, 1000);
+        }
+
+        function showError(message) {
+            document.getElementById("message").textContent = message;
+            document.querySelector(".error").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <h2>Complete the tasks to proceed</h2>
+    <p id="message">Please complete all tasks to be redirected.</p>
+    <button class="task-button">Task 1</button>
+    <button class="task-button">Task 2</button>
+    <button class="task-button">Task 3</button>
+    <div class="loadingspinner">
+        <div id="square1"></div>
+        <div id="square2"></div>
+        <div id="square3"></div>
+        <div id="square4"></div>
+        <div id="square5"></div>
+    </div>
+    <div class="error" style="display: none;">Invalid redirect link.</div>
+</body>
+</html>
+<script>
+    function startCountdown(button, taskNumber) {
+        let countdown = 5;
+        const originalText = button.textContent;
+        button.disabled = true;
+        
+        const interval = setInterval(() => {
+            if (countdown > 0) {
+                button.textContent = `${originalText} (${countdown}s)`;
+                countdown--;
+            } else {
+                clearInterval(interval);
+                button.classList.add("completed");
+                button.textContent = `✔ ${originalText} Completed`;
+                taskCompleted();
+            }
+        }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!targetURL) {
+            document.querySelector(".error").style.display = "block";
+            document.getElementById("message").textContent = "Missing redirect URL!";
+        }
+        
+        document.querySelectorAll(".task-button").forEach((button, index) => {
+            button.addEventListener("click", () => startCountdown(button, index + 1));
+        });
+    });
+</script>
