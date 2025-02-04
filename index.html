@@ -580,9 +580,14 @@
                         <img src="assets/images/landClaim.png" alt="Land Claim">
                         <h3>Land Claim <span class="version-badge">v1.2.1</span></h3>
                         <p>This addon will protect your areas from other players...see more</p>
-                       
                     </li>
-                
+                 <script>
+        function redirectToDownload(element) {
+        playClickSound();
+        const url = element.href;
+        window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
+        }
+        </script>
 
                 <!-- Item Carrier Post -->
                 <li class="mod-item" 
