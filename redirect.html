@@ -49,8 +49,8 @@
             color: black;
         }
 
-        /* Animations (بقيت كما هي) */
-        
+        /* Animations remain the same */
+
         .error {
             color: #ff4444;
             display: none;
@@ -58,25 +58,77 @@
         }
 
         .task-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #008542;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 10px;
-            transition: all 0.3s ease;
             font-size: 14px;
+            background-color: #008542;
+            color: #fff;
+            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 0;
+            z-index: 1;
+            user-select: none;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: unset;
+            margin: 9px;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-weight: 900;
+            transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+            border-radius: 5px;
         }
 
-        .task-button:hover {
-            background: #006633;
-            transform: scale(1.05);
+        .task-button:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+            z-index: -1;
+            background-color: #008542 !important;
+            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+                        0 4px rgb(100 253 31 / 99%) inset, 
+                        -4px 0 rgb(100 253 31 / 50%) inset,
+                        4px 0 rgb(21 108 0 / 50%) inset;
+        }
+
+        .task-button:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        .task-button:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 
+                        0 4px rgb(255 255 255 / 20%) inset,
+                        -4px 0 rgb(255 255 255 / 20%) inset, 
+                        4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        .task-button:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        .task-button:active {
+            transform: translateY(4px);
         }
 
         .task-button.completed {
-            background: #005c20;
+            background-color: #005c20 !important;
             cursor: not-allowed;
             opacity: 0.7;
         }
@@ -109,7 +161,6 @@
         const params = new URLSearchParams(window.location.search);
         const targetURL = params.get("url");
         let tasksCompleted = 0;
-        let activeWindows = [];
 
         function taskCompleted() {
             tasksCompleted++;
@@ -155,8 +206,7 @@
             if (button.classList.contains('completed')) return;
 
             const originalText = button.textContent;
-            const newWindow = window.open(button.href, '_blank');
-            activeWindows.push(newWindow);
+            window.open(button.href, '_blank'); // Open ad window but don't store reference
 
             let countdown = 5;
             button.style.pointerEvents = 'none';
@@ -169,7 +219,6 @@
                     clearInterval(interval);
                     button.classList.add("completed");
                     button.textContent = `✔ ${originalText} Completed`;
-                    if (newWindow && !newWindow.closed) newWindow.close();
                     taskCompleted();
                 }
             }, 1000);
@@ -186,13 +235,6 @@
                     e.preventDefault();
                     startCountdown(button);
                 });
-            });
-        });
-
-        // Close all opened windows when leaving page
-        window.addEventListener('beforeunload', () => {
-            activeWindows.forEach(win => {
-                if (win && !win.closed) win.close();
             });
         });
     </script>
