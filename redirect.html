@@ -140,6 +140,24 @@
         }
     </style>
 </head>
+  <script>
+        // Ad blocker detection script
+        function detectAdBlock() {
+            return new Promise((resolve) => {
+                const ad = document.createElement('div');
+                ad.innerHTML = '&nbsp;';
+                ad.className = 'ad-box';
+                ad.style.cssText = 'width: 1px; height: 1px; position: absolute; left: -100px; top: -100px; visibility: hidden;';
+                document.body.appendChild(ad);
+
+                window.setTimeout(() => {
+                    const detected = ad.offsetHeight === 0;
+                    document.body.removeChild(ad);
+                    resolve(detected);
+                }, 100);
+            });
+        }
+    </script>
 <body>
     <h2>Complete the tasks to proceed</h2>
     <p id="message">Please complete all tasks to be redirected.</p>
@@ -156,7 +174,11 @@
         <div id="square5"></div>
     </div>
     <div class="error" style="display: none;">Invalid redirect link.</div>
-
+ <div id="adblock-warning" style="display: none; color: #ff4444; padding: 20px; border: 2px solid #ff4444; margin: 20px auto; max-width: 600px;">
+        <h3>Ad Blocker Detected!</h3>
+        <p>Please disable your ad blocker to continue. Our service relies on ads to keep content free.</p>
+        <button onclick="location.reload()" class="task-button">I've disabled my ad blocker - Reload Page</button>
+    </div>
     <script>
         const params = new URLSearchParams(window.location.search);
         const targetURL = params.get("url");
@@ -202,29 +224,47 @@
             document.querySelector(".error").style.display = "block";
         }
 
-        function startCountdown(button) {
+       function startCountdown(button) {
             if (button.classList.contains('completed')) return;
 
-            const originalText = button.textContent;
-            window.open(button.href, '_blank'); // Open ad window but don't store reference
-
-            let countdown = 5;
-            button.style.pointerEvents = 'none';
-
-            const interval = setInterval(() => {
-                if (countdown > 0) {
-                    button.textContent = `${originalText} (${countdown}s)`;
-                    countdown--;
-                } else {
-                    clearInterval(interval);
-                    button.classList.add("completed");
-                    button.textContent = `✔ ${originalText} Completed`;
-                    taskCompleted();
+            // Additional check when clicking button
+            detectAdBlock().then(adBlockDetected => {
+                if (adBlockDetected) {
+                    showError("Ad blocker detected! Please disable to continue.");
+                    return;
                 }
-            }, 1000);
+
+                const originalText = button.textContent;
+                window.open(button.href, '_blank');
+
+                let countdown = 5;
+                button.style.pointerEvents = 'none';
+
+                const interval = setInterval(() => {
+                    if (countdown > 0) {
+                        button.textContent = `${originalText} (${countdown}s)`;
+                        countdown--;
+                    } else {
+                        clearInterval(interval);
+                        button.classList.add("completed");
+                        button.textContent = `✔ ${originalText} Completed`;
+                        taskCompleted();
+                    }
+                }, 1000);
+            });
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Check for ad blocker first
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                document.getElementById('adblock-warning').style.display = 'block';
+                document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
+                document.getElementById('message').style.display = 'none';
+                return;
+            }
+
+            // Original initialization code
             if (!targetURL) {
                 document.querySelector(".error").style.display = "block";
                 document.getElementById("message").textContent = "Missing redirect URL!";
