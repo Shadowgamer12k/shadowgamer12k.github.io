@@ -572,23 +572,24 @@
                 <!-- Land claim Post -->
                 <ul class="mod-list">
                     <!-- Land claim Post -->
-                    <li class="mod-item" 
-                        data-video="https://youtu.be/k0GzCw3DSMQ?si=Ui5TnJB4vUe-I77_"
-                        data-description="This addon ensures complete security for your protected areas, preventing any unauthorized modifications. Players outside your designated area won't be able to open chests, use doors, or activate redstone mechanisms. Your builds remain safe from griefing, theft, and any kind of destruction!"
-                        data-behavior="https://direct-link.net/642753/landclaim"
-                        data-resource="https://direct-link.net/642753/landclaimrs">
-                        <img src="assets/images/landClaim.png" alt="Land Claim">
-                        <h3>Land Claim <span class="version-badge">v1.2.1</span></h3>
-                        <p>This addon will protect your areas from other players...see more</p>
-                    </li>
-                 <script>
-        function redirectToDownload(element) {
-        playClickSound();
-        const url = element.href;
-        window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
+                     <li class="mod-item" 
+                    data-video="https://youtu.be/k0GzCw3DSMQ"
+                    data-description="Addon description..."
+                    data-behavior="https://direct-link.net/642753/landclaim"
+                    data-resource="https://direct-link.net/642753/landclaimrs">
+                    <img src="assets/images/landClaim.png" alt="Land Claim">
+                    <h3>Land Claim <span class="version-badge">v1.2.1</span></h3>
+                    <p>Protect your areas from other players...</p>
+                    <a href="#" class="download-button behavior-pack" onclick="redirectToDownload(this, 'behavior')">Behavior Pack</a>
+                    <a href="#" class="download-button resource-pack" onclick="redirectToDownload(this, 'resource')">Resource Pack</a>
+                </li>
+                <script> 
+function redirectToDownload(element, type) {
+            const parent = element.closest('.mod-item');
+            const url = type === 'behavior' ? parent.dataset.behavior : parent.dataset.resource;
+            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
         }
-        </script>
-
+                </script>
                 <!-- Item Carrier Post -->
                 <li class="mod-item" 
                     data-video="https://www.youtube.com/embed/VIDEO_ID_2"
