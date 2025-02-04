@@ -579,17 +579,9 @@
                     data-resource="https://direct-link.net/642753/landclaimrs">
                     <img src="assets/images/landClaim.png" alt="Land Claim">
                     <h3>Land Claim <span class="version-badge">v1.2.1</span></h3>
-                    <p>Protect your areas from other players...</p>
-                    <a href="#" class="download-button behavior-pack" onclick="redirectToDownload(this, 'behavior')">Behavior Pack</a>
-                    <a href="#" class="download-button resource-pack" onclick="redirectToDownload(this, 'resource')">Resource Pack</a>
+                    <p>Protect your areas from other players...see more</p>
                 </li>
-                <script> 
-function redirectToDownload(element, type) {
-            const parent = element.closest('.mod-item');
-            const url = type === 'behavior' ? parent.dataset.behavior : parent.dataset.resource;
-            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
-        }
-                </script>
+             
                 <!-- Item Carrier Post -->
                 <li class="mod-item" 
                     data-video="https://www.youtube.com/embed/VIDEO_ID_2"
@@ -730,7 +722,7 @@ function redirectToDownload(element, type) {
         });
 
         // Modal functionality
-        const modItems = document.querySelectorAll('.mod-item');
+                const modItems = document.querySelectorAll('.mod-item');
         const modal = document.querySelector('.modal');
 
         modItems.forEach(mod => {
@@ -739,14 +731,18 @@ function redirectToDownload(element, type) {
                 const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
                 modal.querySelector('.modal-video').src = videoSrc;
                 modal.querySelector('.modal-description').textContent = mod.dataset.description;
-                modal.querySelector('.behavior-pack').href = mod.dataset.behavior;
-                modal.querySelector('.resource-pack').href = mod.dataset.resource;
-                
+                modal.dataset.behavior = mod.dataset.behavior;
+                modal.dataset.resource = mod.dataset.resource;
                 modal.style.display = 'flex';
                 setTimeout(() => modal.classList.add('active'), 10);
                 document.body.style.overflow = 'hidden';
             });
         });
+
+        function redirectToDownload(element, type) {
+            const url = type === 'behavior' ? modal.dataset.behavior : modal.dataset.resource;
+            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
+        }
 
         // Close modal functionality
         function closeModal() {
