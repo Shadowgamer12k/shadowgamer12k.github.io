@@ -712,25 +712,27 @@
                 const modItems = document.querySelectorAll('.mod-item');
         const modal = document.querySelector('.modal');
 
-       modItems.forEach(mod => {
+    modItems.forEach(mod => {
     mod.addEventListener('click', () => {
         playClickSound();
         const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
         const modal = document.querySelector('.modal');
         
-        // Update modal content
         modal.querySelector('.modal-video').src = videoSrc;
         modal.querySelector('.modal-description').textContent = mod.dataset.description;
         
-        // Update download links directly
-        modal.querySelector('.behavior-pack').href = mod.dataset.behavior;
-        modal.querySelector('.resource-pack').href = mod.dataset.resource;
+        // تحديث روابط التحويل لاستخدام صفحة redirect.html
+        const behaviorURL = encodeURIComponent(mod.dataset.behavior);
+        const resourceURL = encodeURIComponent(mod.dataset.resource);
         
-        // Show modal
+        modal.querySelector('.behavior-pack').href = `redirect.html?url=${behaviorURL}`;
+        modal.querySelector('.resource-pack').href = `redirect.html?url=${resourceURL}`;
+        
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('active'), 10);
         document.body.style.overflow = 'hidden';
     });
+});
 });
 
         function redirectToDownload(element, type) {
