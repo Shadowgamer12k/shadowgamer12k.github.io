@@ -49,7 +49,47 @@
             color: black;
         }
 
-        /* Animations remain the same */
+        @keyframes square1 {
+            0% { left: 0; top: 0; }
+            8.333% { left: 0; top: 30px; }
+            100% { left: 0; top: 30px; }
+        }
+
+        @keyframes square2 {
+            0% { left: 0; top: 30px; }
+            8.333% { left: 0; top: 60px; }
+            16.67% { left: 30px; top: 60px; }
+            25.00% { left: 30px; top: 30px; }
+            83.33% { left: 30px; top: 30px; }
+            91.67% { left: 30px; top: 0; }
+            100% { left: 0; top: 0; }
+        }
+
+        @keyframes square3 {
+            0%, 100% { left: 30px; top: 30px; }
+            25.00% { left: 30px; top: 0; }
+            33.33% { left: 60px; top: 0; }
+            41.67% { left: 60px; top: 30px; }
+            75.00% { left: 60px; top: 60px; }
+            83.33% { left: 30px; top: 60px; }
+            91.67% { left: 30px; top: 30px; }
+        }
+
+        @keyframes square4 {
+            0% { left: 60px; top: 30px; }
+            41.67% { left: 60px; top: 60px; }
+            50.00% { left: 90px; top: 60px; }
+            58.33% { left: 90px; top: 30px; }
+            100% { left: 90px; top: 30px; }
+        }
+
+        @keyframes square5 {
+            0% { left: 90px; top: 30px; }
+            58.33% { left: 90px; top: 0; }
+            66.67% { left: 60px; top: 0; }
+            75.00% { left: 60px; top: 30px; }
+            100% { left: 60px; top: 30px; }
+        }
 
         .error {
             color: #ff4444;
@@ -81,52 +121,6 @@
             border-radius: 5px;
         }
 
-        .task-button:before {
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 100%;
-            height: 100%;
-            content: "";
-            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-            z-index: -1;
-            background-color: #008542 !important;
-            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
-                        0 4px rgb(100 253 31 / 99%) inset, 
-                        -4px 0 rgb(100 253 31 / 50%) inset,
-                        4px 0 rgb(21 108 0 / 50%) inset;
-        }
-
-        .task-button:after {
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 100%;
-            height: 100%;
-            content: "";
-            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-        }
-
-        .task-button:hover:before {
-            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 
-                        0 4px rgb(255 255 255 / 20%) inset,
-                        -4px 0 rgb(255 255 255 / 20%) inset, 
-                        4px 0 rgb(0 0 0 / 50%) inset;
-        }
-
-        .task-button:hover:after {
-            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-        }
-
-        .task-button:active {
-            transform: translateY(4px);
-        }
-
         .task-button.completed {
             background-color: #005c20 !important;
             cursor: not-allowed;
@@ -138,26 +132,17 @@
             font-size: 1.2em;
             margin: 20px;
         }
+
+        #adblock-warning {
+            display: none;
+            color: #ff4444;
+            padding: 20px;
+            border: 2px solid #ff4444;
+            margin: 20px auto;
+            max-width: 600px;
+        }
     </style>
 </head>
-  <script>
-        // Ad blocker detection script
-        function detectAdBlock() {
-            return new Promise((resolve) => {
-                const ad = document.createElement('div');
-                ad.innerHTML = '&nbsp;';
-                ad.className = 'ad-box';
-                ad.style.cssText = 'width: 1px; height: 1px; position: absolute; left: -100px; top: -100px; visibility: hidden;';
-                document.body.appendChild(ad);
-
-                window.setTimeout(() => {
-                    const detected = ad.offsetHeight === 0;
-                    document.body.removeChild(ad);
-                    resolve(detected);
-                }, 100);
-            });
-        }
-    </script>
 <body>
     <h2>Complete the tasks to proceed</h2>
     <p id="message">Please complete all tasks to be redirected.</p>
@@ -167,21 +152,40 @@
     <a class="task-button" href="https://www.profitablecpmrate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38" target="_blank">Task 3</a>
 
     <div class="loadingspinner">
-        <div id="square1"></div>
-        <div id="square2"></div>
-        <div id="square3"></div>
-        <div id="square4"></div>
-        <div id="square5"></div>
+        <div id="square1" style="animation: square1 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square2" style="animation: square2 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square3" style="animation: square3 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square4" style="animation: square4 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square5" style="animation: square5 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
     </div>
+
     <div class="error" style="display: none;">Invalid redirect link.</div>
- <div id="adblock-warning" style="display: none; color: #ff4444; padding: 20px; border: 2px solid #ff4444; margin: 20px auto; max-width: 600px;">
+    <div id="adblock-warning">
         <h3>Ad Blocker Detected!</h3>
         <p>Please disable your ad blocker to continue. Our service relies on ads to keep content free.</p>
         <button onclick="location.reload()" class="task-button">I've disabled my ad blocker - Reload Page</button>
     </div>
+
     <script>
+        // Improved ad blocker detection
+        function detectAdBlock() {
+            return new Promise((resolve) => {
+                const fakeAd = document.createElement('div');
+                fakeAd.innerHTML = '&nbsp;';
+                fakeAd.className = 'adsbox';
+                fakeAd.style.height = '1px';
+                document.body.appendChild(fakeAd);
+                
+                setTimeout(() => {
+                    const isBlocked = fakeAd.offsetHeight === 0;
+                    document.body.removeChild(fakeAd);
+                    resolve(isBlocked);
+                }, 100);
+            });
+        }
+
         const params = new URLSearchParams(window.location.search);
-        const targetURL = params.get("url");
+        const targetURL = decodeURIComponent(params.get("url"));
         let tasksCompleted = 0;
 
         function taskCompleted() {
@@ -224,38 +228,35 @@
             document.querySelector(".error").style.display = "block";
         }
 
-       function startCountdown(button) {
+        async function startCountdown(button) {
             if (button.classList.contains('completed')) return;
 
-            // Additional check when clicking button
-            detectAdBlock().then(adBlockDetected => {
-                if (adBlockDetected) {
-                    showError("Ad blocker detected! Please disable to continue.");
-                    return;
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                showError("Ad blocker detected! Please disable to continue.");
+                return;
+            }
+
+            const originalText = button.textContent;
+            const adWindow = window.open(button.href, '_blank');
+            
+            let countdown = 5;
+            button.style.pointerEvents = 'none';
+
+            const interval = setInterval(() => {
+                if (countdown > 0) {
+                    button.textContent = `${originalText} (${countdown}s)`;
+                    countdown--;
+                } else {
+                    clearInterval(interval);
+                    button.classList.add("completed");
+                    button.textContent = `✔ ${originalText} Completed`;
+                    taskCompleted();
                 }
-
-                const originalText = button.textContent;
-                window.open(button.href, '_blank');
-
-                let countdown = 5;
-                button.style.pointerEvents = 'none';
-
-                const interval = setInterval(() => {
-                    if (countdown > 0) {
-                        button.textContent = `${originalText} (${countdown}s)`;
-                        countdown--;
-                    } else {
-                        clearInterval(interval);
-                        button.classList.add("completed");
-                        button.textContent = `✔ ${originalText} Completed`;
-                        taskCompleted();
-                    }
-                }, 1000);
-            });
+            }, 1000);
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
-            // Check for ad blocker first
             const adBlockDetected = await detectAdBlock();
             if (adBlockDetected) {
                 document.getElementById('adblock-warning').style.display = 'block';
@@ -264,10 +265,9 @@
                 return;
             }
 
-            // Original initialization code
             if (!targetURL) {
-                document.querySelector(".error").style.display = "block";
-                document.getElementById("message").textContent = "Missing redirect URL!";
+                showError("Missing redirect URL!");
+                return;
             }
             
             document.querySelectorAll(".task-button").forEach(button => {
