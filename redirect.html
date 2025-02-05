@@ -101,7 +101,7 @@
             margin-top: 20px;
         }
 
-        button {
+        a.task-button {
             font-size: 10px;
             background-color: #008542;
             color: #fff;
@@ -124,7 +124,7 @@
             transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
         }
 
-        task-button:before {
+        a.task-button:before {
             position: absolute;
             pointer-events: none;
             top: 0;
@@ -141,7 +141,7 @@
                         4px 0 rgb(21 108 0 / 50%) inset;
         }
 
-        task-button:after {
+        a.task-button:after {
             position: absolute;
             pointer-events: none;
             top: 0;
@@ -154,20 +154,20 @@
             transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
         }
 
-        task-button:hover:before {
+        a.task-button:hover:before {
             box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
                         -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
         }
 
-        task-button:hover:after {
+        a.task-button:hover:after {
             box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
         }
 
-        task-button:active {
+        a.task-button:active {
             transform: translateY(4px);
         }
 
-        task-button:active:after {
+        a.task-button:active:after {
             box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
         }
         #countdown {
