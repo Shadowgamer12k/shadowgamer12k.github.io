@@ -17,12 +17,25 @@
             --minecraft-dark: #2d2d2d;
         }
 
-        body {
+     body {
             background-color: black;
             font-family: 'Press Start 2P', cursive;
             color: white;
             text-align: center;
             background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+        }
+        body {
+            background-color: #313131;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
+            background-size: 30px 30px;
+            background-position: -5px -5px;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            text-align: center;
             background-attachment: fixed;
             min-height: 100vh;
             margin: 0;
@@ -47,16 +60,7 @@
         .news-item {
             border-color: #aa55ff;
         }
-        .container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            margin: 50px auto;
-            width: 90%;
-            max-width: 1200px; /* تحديد عرض أقصى للشاشات الكبيرة */
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            box-sizing: border-box; /* تضمين الحشو في العرض */
-        }
+    
 
         h1 {
             font-family: 'Press Start 2P', cursive;
