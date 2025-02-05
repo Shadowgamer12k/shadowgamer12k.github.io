@@ -6,17 +6,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Redirecting...</title>
     <style>
-        @font-face {
+       @font-face {
             font-family: 'Minecraft';
-            src: url('https://fonts.cdnfonts.com/s/16918/Minecraft-Regular.woff') format('woff');
+            src: url('https://cdn.fonts.net/ua/woff2/Minecraft.woff2') format('woff2'),
+                 url('https://fonts.cdnfonts.com/s/16918/Minecraft-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
         }
 
-        body {
+          body {
             font-family: 'Minecraft', Arial, sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 20px;
             background-color: #2b2b2b;
             color: #ffffff;
+            -webkit-font-smoothing: antialiased;
         }
 
         .loadingspinner {
@@ -143,7 +148,9 @@
             max-width: 600px;
         }
     </style>
+    <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
 </head>
+    
 <body>
     <h2>Complete the tasks to proceed</h2>
     <p id="message">Please complete all tasks to be redirected.</p>
@@ -169,6 +176,15 @@
     </div>
 
     <script>
+        function playClickSound() {
+            const clickSound = document.getElementById('clickSound');
+            try {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            } catch(error) {
+                console.log('Sound playback error:', error);
+            }
+        }
         // Improved ad blocker detection
         function detectAdBlock() {
             return new Promise((resolve) => {
