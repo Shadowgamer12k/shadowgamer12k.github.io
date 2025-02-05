@@ -757,6 +757,21 @@
         window.addEventListener('click', (e) => e.target === modal && closeModal());
         document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
     </script>
+    <script>
+        function updateTabTitle() {
+            const activeTab = document.querySelector('.tab.active');
+            const tabTitle = activeTab ? activeTab.textContent : 'PROJECTS';
+            document.getElementById('tab-title').textContent = tabTitle;
+        }
+
+        // Call the function initially to set the title
+        updateTabTitle();
+
+        // Update the title whenever a tab is clicked
+        document.querySelectorAll('[role="tab"]').forEach(tab => {
+            tab.addEventListener('click', updateTabTitle);
+        });
+    </script>
 </body>
 </html>
 </body>
