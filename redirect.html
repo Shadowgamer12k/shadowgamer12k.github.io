@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,7 +214,7 @@
     <a class="task-button" href="https://www.profitablecpmrate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38" target="_blank">Task 3</a>
     <a class="task-button" href="https://www.profitablecpmrate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485" target="_blank">Task 4</a>
 
-    <div class="loadingspinner">
+    <div class="loadingspinner"></div>
         <div id="square1" style="animation: square1 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
         <div id="square2" style="animation: square2 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
         <div id="square3" style="animation: square3 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
@@ -292,7 +290,7 @@
                 countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
                 if (seconds-- <= 0) {
                     clearInterval(interval);
-                    window.location.href = targetURL;
+                    window.open(targetURL, '_blank');
                 }
             }, 1000);
         }
