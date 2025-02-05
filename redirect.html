@@ -7,13 +7,11 @@
     <title>Redirecting...</title>
     <style>
        @font-face {
-            font-family: 'Minecraft';
-            src: url('https://cdn.fonts.net/ua/woff2/Minecraft.woff2') format('woff2'),
-                 url('https://fonts.cdnfonts.com/s/16918/Minecraft-Regular.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+    font-family: 'Minecraft';
+    src: url('assets/fonts/arPix.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 
           body {
             font-family: 'Minecraft', Arial, sans-serif;
@@ -103,8 +101,8 @@
             margin-top: 20px;
         }
 
-        .task-button {
-            font-size: 14px;
+        button {
+            font-size: 10px;
             background-color: #008542;
             color: #fff;
             text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
@@ -124,15 +122,54 @@
             text-decoration: none;
             font-weight: 900;
             transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-            border-radius: 5px;
         }
 
-        .task-button.completed {
-            background-color: #005c20 !important;
-            cursor: not-allowed;
-            opacity: 0.7;
+        task-button:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+            z-index: -1;
+            background-color: #008542 !important;
+            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+                        0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+                        4px 0 rgb(21 108 0 / 50%) inset;
         }
 
+        task-button:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        task-button:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+                        -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        task-button:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        task-button:active {
+            transform: translateY(4px);
+        }
+
+        task-button:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
         #countdown {
             color: #55ff55;
             font-size: 1.2em;
