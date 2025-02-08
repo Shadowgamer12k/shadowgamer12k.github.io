@@ -790,113 +790,144 @@
             </ul>
         </div>
     <script>
-// Improved Ad Block Detection System
-let adBlockCheckInterval;
-let detectionCount = 0;
+// Advanced Ad Block Detection System
+const adDetection = {
+    // Configuration
+    debugMode: true, // Set to false for production
+    checkInterval: 3000,
+    requiredDetectionCount: 2,
 
-const detectionMethods = {
-    elementCheck: () => {
-        const testElem = document.getElementById('ad-detection');
-        return testElem ? 
-            (testElem.offsetHeight === 0 || 
-             getComputedStyle(testElem).display === 'none') : 
-            false;
-    },
+    // Detection Methods
+    methods: {
+        // Method 1: Fake Ad Element
+        elementCheck: () => {
+            const testElem = document.createElement('div');
+            testElem.className = 'pub_300x250 pub_300x250m pub_728x90 ad-unit';
+            testElem.innerHTML = '&nbsp;';
+            document.body.appendChild(testElem);
+            
+            const isHidden = testElem.offsetHeight === 0 || 
+                           getComputedStyle(testElem).display === 'none';
+            document.body.removeChild(testElem);
+            return isHidden;
+        },
 
-    requestCheck: async () => {
-        try {
-            const response = await fetch('https://adservice.google.com/adsid/integrator.js', {
-                method: 'HEAD',
-                mode: 'no-cors'
+        // Method 2: Blocked Request Check
+        requestCheck: async () => {
+            try {
+                const testURLs = [
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                    'https://adservice.google.com/adsid/integrator.js',
+                    'https://sprungextraordinaryhonorary.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js'
+                ];
+
+                const results = await Promise.all(
+                    testURLs.map(url => 
+                        fetch(url, {method: 'HEAD', mode: 'no-cors'})
+                        .then(() => false)
+                        .catch(() => true)
+                    )
+                );
+
+                return results.filter(Boolean).length >= 2;
+            } catch {
+                return false;
+            }
+        },
+
+        // Method 3: Ad Blocker API Detection
+        apiCheck: () => {
+            return new Promise(resolve => {
+                if(window.adblockDetector || window.brave?.isBrave) {
+                    resolve(true);
+                    return;
+                }
+
+                const fakeAd = document.createElement('div');
+                fakeAd.id = 'detectadblock';
+                fakeAd.style.height = '1px';
+                document.body.appendChild(fakeAd);
+
+                setTimeout(() => {
+                    resolve(fakeAd.offsetHeight === 0);
+                    document.body.removeChild(fakeAd);
+                }, 100);
             });
-            return false;
-        } catch {
-            return true;
         }
     },
 
-    extensionCheck: () => {
-        return new Promise(resolve => {
-            if (typeof chrome === 'undefined') resolve(false);
-            const adblockIds = [
-                'cjpalhdlnbpafiamejdnhcphjbkeiagm', // uBlock
-                'cfhdojbkjhnklbpkdaibdccddilifddb'  // AdBlock Plus
-            ];
-            
-            let checksCompleted = 0;
-            adblockIds.forEach(id => {
-                chrome.runtime.sendMessage(id, {}, response => {
-                    checksCompleted++;
-                    if (!chrome.runtime.lastError) {
-                        resolve(true);
-                    }
-                    if (checksCompleted === adblockIds.length) {
-                        resolve(false);
-                    }
-                });
-            });
-        });
+    // Detection System
+    async runDetection() {
+        try {
+            const results = await Promise.all([
+                this.methods.elementCheck(),
+                this.methods.requestCheck(),
+                this.methods.apiCheck()
+            ]);
+
+            if(this.debugMode) {
+                console.log('[Ad Detection Debug]', 
+                    `Element Check: ${results[0]}`, 
+                    `Request Check: ${results[1]}`, 
+                    `API Check: ${results[2]}`
+                );
+            }
+
+            return results.filter(Boolean).length >= this.requiredDetectionCount;
+        } catch (error) {
+            if(this.debugMode) console.error('[Ad Detection Error]', error);
+            return false;
+        }
+    },
+
+    // Modal Control
+    showModal() {
+        document.querySelector('.adblock-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        this.startAutoCheck();
+    },
+
+    hideModal() {
+        document.querySelector('.adblock-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        this.stopAutoCheck();
+    },
+
+    // Auto-Check System
+    startAutoCheck() {
+        this.intervalId = setInterval(async () => {
+            const isBlocked = await this.runDetection();
+            if(!isBlocked) this.hideModal();
+        }, this.checkInterval);
+    },
+
+    stopAutoCheck() {
+        clearInterval(this.intervalId);
     }
 };
 
-async function comprehensiveCheck() {
-    const results = await Promise.all([
-        detectionMethods.elementCheck(),
-        detectionMethods.requestCheck(),
-        detectionMethods.extensionCheck()
-    ]);
-    
-    // Require 2/3 detection methods to confirm
-    return results.filter(Boolean).length >= 2;
-}
-
-function handleAdBlockState(isBlocked) {
-    const modal = document.querySelector('.adblock-modal');
-    const statusElem = document.getElementById('detectionStatus');
-    
-    if (isBlocked) {
-        detectionCount++;
-        statusElem.textContent = `Detection count: ${detectionCount}`;
-        statusElem.style.display = 'block';
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        // Start recheck interval
-        adBlockCheckInterval = setInterval(async () => {
-            const stillBlocked = await comprehensiveCheck();
-            if (!stillBlocked) {
-                clearInterval(adBlockCheckInterval);
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                sessionStorage.setItem('adblockBypassed', 'true');
-            }
-        }, 3000);
-    } else {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Initial check
+// Initialization
 document.addEventListener('DOMContentLoaded', async () => {
-    if (!sessionStorage.getItem('adblockBypassed')) {
-        const isBlocked = await comprehensiveCheck();
-        handleAdBlockState(isBlocked);
-    }
+    // First check after 2 seconds to let page load
+    setTimeout(async () => {
+        const initialCheck = await adDetection.runDetection();
+        if(initialCheck) adDetection.showModal();
+    }, 2000);
+
+    // Periodic background checks
+    setInterval(async () => {
+        const backgroundCheck = await adDetection.runDetection();
+        if(backgroundCheck) adDetection.showModal();
+    }, 10000);
 });
 
-// Manual recheck button
+// Manual Recheck Button
 document.getElementById('recheckButton').addEventListener('click', async () => {
-    const isBlocked = await comprehensiveCheck();
-    if (!isBlocked) {
-        sessionStorage.setItem('adblockBypassed', 'true');
+    const currentState = await adDetection.runDetection();
+    if(!currentState) {
+        adDetection.hideModal();
+        sessionStorage.setItem('adblockVerified', Date.now());
     }
-    handleAdBlockState(isBlocked);
-});
-
-// Session cleanup on reload
-window.addEventListener('beforeunload', () => {
-    sessionStorage.removeItem('adblockBypassed');
 });
         
         const clickSound = document.getElementById('clickSound');
