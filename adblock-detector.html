@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Blocker Detector - Improved Version</title>
+</head>
+<body>
+    <h1>Ad Blocker Detection Test</h1>
+    <div id="status">Checking for ad blocker...</div>
+
+    <!-- Test element that ad blockers typically hide -->
+    <div id="ad-banner" style="height: 1px; width: 1px; position: absolute; left: -999px; top: -999px;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
+             width="1" 
+             height="1" 
+             class="ad-element">
+    </div>
+
+    <!-- Ad block detection script -->
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const testElement = document.querySelector('.ad-element');
+                const adBanner = document.getElementById('ad-banner');
+                const status = document.getElementById('status');
+
+                // Check multiple conditions for more accurate detection
+                const isAdBlockEnabled = (
+                    !testElement || 
+                    !adBanner || 
+                    testElement.offsetHeight === 0 ||
+                    adBanner.offsetHeight === 0 ||
+                    window.getComputedStyle(testElement).display === 'none' ||
+                    window.getComputedStyle(adBanner).display === 'none'
+                );
+
+                status.innerHTML = isAdBlockEnabled 
+                    ? 'Ad blocker is enabled' 
+                    : 'No ad blocker detected';
+
+                // Add styling to make the result more visible
+                status.style.color = isAdBlockEnabled ? '#e74c3c' : '#27ae60';
+                status.style.fontWeight = 'bold';
+                status.style.marginTop = '20px';
+            }, 100); // Small delay to ensure DOM is fully loaded
+        });
+    </script>
+</body>
+</html>
