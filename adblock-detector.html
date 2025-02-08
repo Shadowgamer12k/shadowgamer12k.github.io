@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Blocker Detector with File Check</title>
+    <title>Accurate Ad Blocker Detector</title>
     <style>
-        .ad-test {
+        #detection-test {
             position: absolute;
             left: -9999px;
             height: 1px;
@@ -15,102 +15,97 @@
     </style>
 </head>
 <body>
-    <h1>Ad Blocker Detection Test</h1>
-    <div id="status">Checking for ad blocker...</div>
+    <h1>Ad Blocker Test</h1>
+    <div id="status">Testing...</div>
 
-    <!-- Test elements -->
-    <div class="ad-test" id="ad-banner"></div>
-    <div class="ad-test" id="ad-container"></div>
+    <div id="detection-test" class="ad-unit"></div>
 
     <script>
-        (function() {
-            const detectionMethods = {
-                // Check if test elements are hidden
-                elementCheck: () => {
-                    const elements = document.querySelectorAll('.ad-test');
-                    return Array.from(elements).some(el => {
-                        const style = window.getComputedStyle(el);
-                        return style.display === 'none' || 
-                               el.offsetHeight === 0 ||
-                               style.visibility === 'hidden';
-                    });
-                },
-
-                // Check fake ad file request
-                fileCheck: () => {
-                    return new Promise((resolve) => {
-                        const testScript = document.createElement('script');
-                        testScript.src = '/stickyads.js'; // This file should exist on your server
-                        testScript.onload = () => {
-                            document.body.removeChild(testScript);
-                            resolve(false);
-                        };
-                        testScript.onerror = () => {
-                            document.body.removeChild(testScript);
-                            resolve(true);
-                        };
-                        document.body.appendChild(testScript);
-                    });
-                },
-
-                // Check known ad URLs
-                networkCheck: async () => {
-                    try {
-                        const urls = [
-                            'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                            'https://adservice.google.com/adsid/integrator.js',
-                            '/stickyads.js' // Local test file
-                        ];
-
-                        const results = await Promise.all(urls.map(url => 
-                            fetch(url, { method: 'HEAD' })
-                                .then(res => !res.ok)
-                                .catch(() => true)
-                        ));
-
-                        return results.some(blocked => blocked);
-                    } catch {
-                        return false;
-                    }
-                }
-            };
-
-            async function detectAdBlock() {
-                // Run checks in parallel
-                const [elementResult, fileResult, networkResult] = await Promise.all([
-                    detectionMethods.elementCheck(),
-                    detectionMethods.fileCheck(),
-                    detectionMethods.networkCheck()
-                ]);
-
-                return elementResult || fileResult || networkResult;
+        (async function() {
+            // Configuration - Update this to your actual detection file URL
+            const TEST_FILE_URL = '/detection-file.js';
+            
+            // Method 1: Element visibility check
+            function checkElementVisibility() {
+                const testElement = document.getElementById('detection-test');
+                if (!testElement) return true;
+                
+                const style = window.getComputedStyle(testElement);
+                return style.display === 'none' || 
+                       style.visibility === 'hidden' ||
+                       testElement.offsetHeight === 0;
             }
 
-            // Initialize detection
-            window.addEventListener('DOMContentLoaded', async () => {
-                setTimeout(async () => {
-                    const status = document.getElementById('status');
-                    try {
-                        const isBlocked = await detectAdBlock();
-                        
-                        status.textContent = isBlocked 
-                            ? 'Ad blocker detected! 🛑' 
-                            : 'No ad blocker detected ✅';
-                            
-                        status.style.color = isBlocked ? '#dc3545' : '#28a745';
-                    } catch (e) {
-                        status.textContent = 'Detection failed - Refresh to try again';
-                        status.style.color = '#ffc107';
+            // Method 2: File existence check
+            async function checkFileAccess() {
+                try {
+                    // First check if the file actually exists
+                    const headResponse = await fetch(TEST_FILE_URL, {method: 'HEAD'});
+                    if (!headResponse.ok) {
+                        console.error('Detection file not found on server!');
+                        return false;
                     }
-                    
-                    // Styling
-                    status.style.fontWeight = 'bold';
-                    status.style.padding = '15px';
-                    status.style.borderRadius = '5px';
-                    status.style.marginTop = '20px';
-                    status.style.backgroundColor = '#f8f9fa';
-                }, 1000); // Give enough time for all checks
-            });
+
+                    // Then try to load the file
+                    const response = await fetch(TEST_FILE_URL);
+                    return !response.ok;
+                } catch (error) {
+                    return true;
+                }
+            }
+
+            // Method 3: Create fake ad element
+            function checkDynamicElement() {
+                const testAd = document.createElement('div');
+                testAd.innerHTML = '&nbsp;';
+                testAd.className = 'ad-box';
+                testAd.style.height = '1px';
+                document.body.appendChild(testAd);
+
+                const isHidden = testAd.offsetHeight === 0;
+                document.body.removeChild(testAd);
+                return isHidden;
+            }
+
+            // Combined verification
+            async function runDetection() {
+                // Verify server file exists first
+                const serverCheck = await fetch(TEST_FILE_URL, {method: 'HEAD'});
+                if (!serverCheck.ok) {
+                    throw new Error('Detection file missing on server');
+                }
+
+                const results = await Promise.all([
+                    checkElementVisibility(),
+                    checkFileAccess(),
+                    checkDynamicElement()
+                ]);
+
+                return results.some(result => result === true);
+            }
+
+            // Display results
+            async function showStatus() {
+                const status = document.getElementById('status');
+                
+                try {
+                    const isBlocked = await runDetection();
+                    status.textContent = isBlocked 
+                        ? 'Ad blocker detected' 
+                        : 'No ad blocker found';
+                    status.style.color = isBlocked ? '#d32f2f' : '#388e3c';
+                } catch (error) {
+                    status.textContent = 'Configuration error: ' + error.message;
+                    status.style.color = '#f57c00';
+                }
+
+                status.style.fontWeight = 'bold';
+                status.style.padding = '10px';
+                status.style.marginTop = '20px';
+            }
+
+            // Start detection after short delay
+            setTimeout(showStatus, 1000);
         })();
     </script>
 </body>
