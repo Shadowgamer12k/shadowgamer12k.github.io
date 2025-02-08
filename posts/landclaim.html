@@ -2,127 +2,146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Epic Adventure Pack - Mobile Optimized</title>
-     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Adventure Pack - Minecraft Addon</title>
     <style>
-        /* Mobile-specific additions */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px !important;
-            }
-            
+         <link rel="stylesheet" href="style.css">
+        /* Responsive Additions */
+        @media (min-width: 1024px) {
             .main-grid {
-                grid-template-columns: 1fr !important;
-                gap: 20px !important;
+                grid-template-columns: 2fr 1fr;
+                gap: 40px;
             }
             
             .download-card {
-                position: relative !important;
-                top: auto !important;
+                position: sticky;
+                top: 20px;
+                height: fit-content;
             }
             
-            header h1 {
-                font-size: 1.5em !important;
-                line-height: 1.2 !important;
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
-            .mod-item {
-                padding: 15px !important;
-                margin-bottom: 15px !important;
+            .image-gallery {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .container {
+                padding: 15px;
             }
             
-            .download-button {
-                padding: 12px !important;
-                font-size: 0.9em !important;
+            .download-button span {
+                display: block;
+                margin-top: 5px;
             }
             
-            .image-grid {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .feature-list li {
-                font-size: 0.7em !important;
+            .feature-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
-    <!-- Your existing style here -->
+    <!-- Your original Minecraft style here -->
 </head>
 <body>
-    <div class="container" style="max-width: 100%; padding: 15px;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto;">
         <!-- Header -->
-        <header style="text-align: center; padding: 20px 0;">
-            <h1 style="font-size: 1.8em; margin: 0;">
-                EPIC ADVENTURE
-                <div style="font-size: 0.7em; color: var(--minecraft-green);">PACK</div>
+        <header class="mod-item" style="padding: 2rem; text-align: center; margin-bottom: 2rem;">
+            <h1 style="color: var(--minecraft-green); margin: 0;">
+                Epic Adventure Pack
+                <span class="version-badge">v1.4.2</span>
             </h1>
-            <div class="version-badge" style="margin-top: 10px;">v1.4.2</div>
+            <p class="news-date" style="color: var(--minecraft-blue);">Last Updated: November 15, 2023</p>
         </header>
 
-        <!-- Mobile-first grid -->
-        <div class="main-grid" style="display: grid; gap: 20px;">
-            <!-- Main Image -->
-            <div class="mod-item" style="padding: 0;">
-                <img src="main-preview.jpg" alt="Main Preview" style="width: 100%; height: auto;">
-            </div>
+        <!-- Main Grid -->
+        <div class="main-grid" style="display: grid; gap: 2rem;">
+            <!-- Left Column -->
+            <div>
+                <!-- Image Gallery -->
+                <div class="mod-item" style="padding: 1rem; margin-bottom: 2rem;">
+                    <div class="image-gallery" style="display: grid; gap: 1rem;">
+                        <img src="preview1.jpg" alt="Main Preview" class="mod-item">
+                        <img src="preview2.jpg" alt="Gameplay Preview" class="mod-item">
+                    </div>
+                </div>
 
-            <!-- Download Buttons -->
-            <div class="download-card mod-item" style="padding: 20px; text-align: center;">
-                <div class="download-buttons" style="display: grid; gap: 15px;">
-                    <a href="resource_pack.zip" 
-                       class="download-button resource-pack-button"
-                       style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        ⛏️ <div>Resource Pack<br><span style="font-size: 0.7em;">(256x Textures)</span></div>
-                    </a>
-                    
-                    <a href="behavior_pack.zip" 
-                       class="download-button behavior-pack-button"
-                       style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        🧩 <div>Behavior Pack<br><span style="font-size: 0.7em;">(Mobs & Mechanics)</span></div>
-                    </a>
+                <!-- Features -->
+                <div class="mod-item" style="padding: 2rem; margin-bottom: 2rem;">
+                    <h2 style="color: var(--minecraft-green);">Key Features</h2>
+                    <div class="feature-grid" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                        <div class="feature-card" style="padding: 1.5rem; border: 2px solid #555;">
+                            <h3 style="color: var(--minecraft-blue);">👹 50+ New Mobs</h3>
+                            <p style="font-size: 0.9rem;">Unique creatures with custom AI behaviors</p>
+                        </div>
+                        <div class="feature-card" style="padding: 1.5rem; border: 2px solid #555;">
+                            <h3 style="color: var(--minecraft-blue);">🌋 New Dimensions</h3>
+                            <p style="font-size: 0.9rem;">Explore mystical realms with unique challenges</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mod-item" style="padding: 2rem;">
+                    <h2 style="color: var(--minecraft-green);">About This Pack</h2>
+                    <p style="font-size: 0.9rem; line-height: 1.6;">
+                        Transform your Minecraft experience with:
+                        <br><br>
+                        - Enhanced combat system<br>
+                        - Unique resources & tools<br>
+                        - Performance optimizations<br>
+                        - HD texture support
+                    </p>
                 </div>
             </div>
 
-            <!-- Features -->
-            <div class="mod-item" style="padding: 20px;">
-                <h2 style="color: var(--minecraft-green); font-size: 1.2em;">FEATURES</h2>
-                <ul class="feature-list" style="columns: 2; font-size: 0.8em; padding: 0;">
-                    <li>✅ 50+ Mobs</li>
-                    <li>✅ New Dimension</li>
-                    <li>✅ HD Textures</li>
-                    <li>✅ Custom AI</li>
-                    <li>✅ Optimized</li>
-                    <li>✅ Multiplayer</li>
-                </ul>
-            </div>
+            <!-- Right Column -->
+            <div>
+                <!-- Download Card -->
+                <div class="download-card mod-item" style="padding: 2rem;">
+                    <h2 style="color: var(--minecraft-blue); text-align: center;">Download</h2>
+                    <div class="download-buttons" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                        <a href="resource_pack.zip" class="download-button resource-pack-button">
+                            📦 Resource Pack
+                            <span style="font-size: 0.9rem;">(Visual Assets)</span>
+                        </a>
+                        
+                        <a href="behavior_pack.zip" class="download-button behavior-pack-button">
+                            ⚙️ Behavior Pack
+                            <span style="font-size: 0.9rem;">(Game Mechanics)</span>
+                        </a>
+                    </div>
 
-            <!-- Image Grid -->
-            <div class="image-grid" style="display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-                <div class="mod-item" style="padding: 0;">
-                    <img src="showcase1.jpg" alt="Showcase 1">
-                    <p style="padding: 10px; font-size: 0.6em;">Nether Biome</p>
+                    <!-- Requirements -->
+                    <div style="margin-top: 2rem; padding: 1rem; background: #2d2d2d;">
+                        <h3 style="color: var(--minecraft-green); font-size: 0.9rem;">Requirements:</h3>
+                        <ul style="font-size: 0.9rem;">
+                            <li>▶ Minecraft 1.20+</li>
+                            <li>▶ 2GB RAM minimum</li>
+                            <li>▶ Latest Java Version</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="mod-item" style="padding: 0;">
-                    <img src="showcase2.jpg" alt="Showcase 2">
-                    <p style="padding: 10px; font-size: 0.6em;">Dragon Boss</p>
-                </div>
-            </div>
 
-            <!-- Description -->
-            <div class="mod-item" style="padding: 20px;">
-                <h2 style="color: var(--minecraft-blue); font-size: 1.2em;">DESCRIPTION</h2>
-                <p style="font-size: 0.7em; line-height: 1.5;">
-                    Explore a completely new Minecraft experience with custom mobs, 
-                    dimensions, and gameplay mechanics. Perfect for survival players 
-                    looking for fresh challenges!
-                </p>
+                <!-- Support -->
+                <div class="mod-item" style="padding: 2rem; margin-top: 2rem; text-align: center;">
+                    <h3 style="color: var(--minecraft-blue);">Support</h3>
+                    <p style="font-size: 0.9rem;">
+                        Need help? Contact us:<br>
+                        <a href="mailto:support@epicpack.com" style="color: var(--minecraft-green);">support@epicpack.com</a>
+                    </p>
+                </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <footer style="text-align: center; padding: 30px 0; font-size: 0.6em; color: #666;">
-            © 2023 Epic Adventure Pack<br>
-            Requires Minecraft 1.20+
+        <footer class="mod-item" style="margin-top: 3rem; padding: 1.5rem; text-align: center;">
+            <p style="font-size: 0.8rem; color: #666;">
+                © 2023 Epic Adventure Pack<br>
+                Not affiliated with Mojang/Microsoft
+            </p>
         </footer>
     </div>
 </body>
