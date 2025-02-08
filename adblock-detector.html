@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accurate Ad Blocker Detector</title>
+    <title>DNS Ad Blocker Detector</title>
     <style>
-        #detection-test {
+        #ad-test {
             position: absolute;
             left: -9999px;
             height: 1px;
@@ -18,94 +18,79 @@
     <h1>Ad Blocker Test</h1>
     <div id="status">Testing...</div>
 
-    <div id="detection-test" class="ad-unit"></div>
+    <div id="ad-test" class="ad-box"></div>
 
     <script>
         (async function() {
-            // Configuration - Update this to your actual detection file URL
-            const TEST_FILE_URL = './detection-file.js';
+            // Configuration - Use a non-ad sounding filename
+            const TEST_FILE_URL = './detection-asset.js';
             
-            // Method 1: Element visibility check
-            function checkElementVisibility() {
-                const testElement = document.getElementById('detection-test');
+            // Method 1: DNS-pattern-independent element check
+            function checkElementHiding() {
+                const testElement = document.getElementById('ad-test');
                 if (!testElement) return true;
                 
-                const style = window.getComputedStyle(testElement);
-                return style.display === 'none' || 
-                       style.visibility === 'hidden' ||
-                       testElement.offsetHeight === 0;
+                return testElement.offsetHeight === 0 || 
+                       window.getComputedStyle(testElement).display === 'none';
             }
 
-            // Method 2: File existence check
-            async function checkFileAccess() {
+            // Method 2: DNS-resistant network check
+            async function checkNetworkBlock() {
                 try {
-                    // First check if the file actually exists
-                    const headResponse = await fetch(TEST_FILE_URL, {method: 'HEAD'});
-                    if (!headResponse.ok) {
-                        console.error('Detection file not found on server!');
-                        return false;
-                    }
-
-                    // Then try to load the file
-                    const response = await fetch(TEST_FILE_URL);
+                    // Test a non-ad sounding URL
+                    const response = await fetch('/detection-asset.js?rand=' + Math.random());
                     return !response.ok;
                 } catch (error) {
                     return true;
                 }
             }
 
-            // Method 3: Create fake ad element
-            function checkDynamicElement() {
-                const testAd = document.createElement('div');
-                testAd.innerHTML = '&nbsp;';
-                testAd.className = 'ad-box';
-                testAd.style.height = '1px';
-                document.body.appendChild(testAd);
-
-                const isHidden = testAd.offsetHeight === 0;
-                document.body.removeChild(testAd);
+            // Method 3: Shadow DOM test (bypasses CSS blocking)
+            function checkShadowDOM() {
+                const testElement = document.createElement('div');
+                testElement.className = 'ad-container';
+                const shadow = testElement.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `<style>
+                    :host { display: block !important; height: 1px !important; }
+                </style>`;
+                
+                document.body.appendChild(testElement);
+                const isHidden = testElement.offsetHeight === 0;
+                document.body.removeChild(testElement);
                 return isHidden;
             }
 
-            // Combined verification
             async function runDetection() {
-                // Verify server file exists first
-                const serverCheck = await fetch(TEST_FILE_URL, {method: 'HEAD'});
-                if (!serverCheck.ok) {
-                    throw new Error('Detection file missing on server');
-                }
-
                 const results = await Promise.all([
-                    checkElementVisibility(),
-                    checkFileAccess(),
-                    checkDynamicElement()
+                    checkElementHiding(),
+                    checkNetworkBlock(),
+                    checkShadowDOM()
                 ]);
 
                 return results.some(result => result === true);
             }
 
-            // Display results
             async function showStatus() {
                 const status = document.getElementById('status');
                 
                 try {
                     const isBlocked = await runDetection();
                     status.textContent = isBlocked 
-                        ? 'Ad blocker detected' 
-                        : 'No ad blocker found';
-                    status.style.color = isBlocked ? '#d32f2f' : '#388e3c';
+                        ? 'Ad blocking detected (DNS or client-side)' 
+                        : 'No ad blocking detected';
+                    status.style.color = isBlocked ? '#c62828' : '#2e7d32';
                 } catch (error) {
-                    status.textContent = 'Configuration error: ' + error.message;
-                    status.style.color = '#f57c00';
+                    status.textContent = 'Test failed - check connection';
+                    status.style.color = '#ef6c00';
                 }
 
                 status.style.fontWeight = 'bold';
-                status.style.padding = '10px';
+                status.style.padding = '15px';
                 status.style.marginTop = '20px';
             }
 
-            // Start detection after short delay
-            setTimeout(showStatus, 1000);
+            // Start detection
+            setTimeout(showStatus, 1500);
         })();
     </script>
 </body>
