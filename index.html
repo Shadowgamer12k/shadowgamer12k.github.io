@@ -559,102 +559,90 @@
             box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
         }
         /* Ad Block Detection Modal */
-    .adblock-modal {
+        .adblock-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #2d2d2d;
+        border: 4px solid #55ff55;
+        padding: 20px;
+        z-index: 9999;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+        border-radius: 10px;
+    }
+
+    .adblock-modal h2 {
+        color: #55ff55;
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+    .adblock-modal p {
+        color: #fff;
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .adblock-modal button {
+        background: #008542;
+        border: 2px solid #55ff55;
+        color: #fff;
+        padding: 10px 25px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 10px;
+    }
+
+    .adblock-modal button:hover {
+        background: #00a550;
+        transform: scale(1.05);
+    }
+
+    .adblock-overlay {
         display: none;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 9999;
-        font-family: 'Press Start 2P', cursive;
-        animation: modalEntry 0.5s cubic-bezier(0, 0.8, 0.26, 0.99);
-    }
-@keyframes modalEntry {
-        0% { opacity: 0; transform: translateY(-20px); }
-        100% { opacity: 1; transform: translateY(0); }
-    }
-
-    .detection-status {
-        margin: 15px 0;
-        padding: 10px;
-        background: #333;
-        border-radius: 5px;
-        display: none;
-    }
-    .adblock-modal-content {
-        position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2d2d2d;
-        padding: 30px;
-        border-radius: 10px;
-        border: 4px solid #55ff55;
-        max-width: 600px;
-        text-align: center;
-    }
-
-    .adblock-modal h2 {
-        color: #e74c3c;
-        font-size: 1.5em;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px #000;
-    }
-
-    .adblock-modal p {
-        color: #fff;
-        font-size: 0.8em;
-        line-height: 1.5;
-        margin-bottom: 25px;
-    }
-
-    .adblock-modal-close {
-        background-color: #e63946;
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9em;
-        transition: all 0.3s ease;
-    }
-
-    .adblock-modal-close:hover {
-        background-color: #ff4757;
-        transform: scale(1.05);
-    }
-
-    /* Hidden ad element for detection */
-    .ad-section {
-        position: absolute;
-        left: -9999px;
-        height: 1px;
-        width: 1px;
-        overflow: hidden;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9998;
     }
     </style>
 </head>
 <body>
-<div class="adblock-modal">
-    <div class="adblock-modal-content">
-        <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
-        <div class="detection-status" id="detectionStatus"></div>
-        <p>Our content remains free thanks to ads. Please:</p>
-        <ul style="list-style: none; padding: 0; margin: 20px 0;">
-            <li>1. Disable your ad blocker</li>
-            <li>2. Whitelist our site</li>
-            <li>3. Click verify below</li>
-        </ul>
-        <div class="modal-buttons">
-            <button class="minecraft-button" id="recheckButton">✅ Verify Again</button>
-            <button class="minecraft-button" onclick="location.reload()">🔄 Reload Page</button>
+    <!-- first div -->
+    <div class="adblock-modal">
+        <div class="adblock-modal-content">
+            <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
+            <div class="detection-status" id="detectionStatus"></div>
+            <p>Our content remains free thanks to ads. Please:</p>
+            <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                <li>1. Disable your ad blocker</li>
+                <p></p>
+                <li>2. Whitelist our site</li>
+                <p></p>
+                <li>3. Click verify below</li>
+            </ul>
+            <div id="adblock-result" style="margin: 15px 0; color: white;"></div>
+            <button class="minecraft-button" id="recheck-button">🔄 Re-check</button>
+            <button class="minecraft-button" onclick="location.reload()">🗙 Close</button>
         </div>
     </div>
-</div>
+    
+    <div id="ad-test" class="ad ad-banner adsbox" style="height: 1px; width: 1px; position: absolute; left: -9999px;"></div>
 
-<div class="ad-section" id="ad-detection"></div>
+
+    
+
+    
     <!-- Click sound element -->
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
 
