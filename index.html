@@ -774,53 +774,141 @@
             </ul>
         </div>
     <script>
-// Ad Block Detection Script
-document.addEventListener('DOMContentLoaded', () => {
-    const adBlockDetected = () => {
-        document.querySelector('.adblock-modal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    };
+// Update the adBlockExtensions list with more IDs
+const adBlockExtensions = {
+    // Mainstream Ad Blockers
+    'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+    'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+    'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+    'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij',
+    'privacybadger': 'pkehgijcmpdhfbdbbnkijodmdjhbjlgp',
+    'adblockultimate': 'ohahllgiabjaoigichmmfljhkcfikeof',
+    'standsfairadblocker': 'fhhlhcidkmgpjlddmajkbkckdhjejhdh',
+    'poperblocker': 'bkkbcggnhapdmkeljlodacbihkajipgd',
+    
+    // Regional Blockers
+    'adblockforchrome': 'gighmmpiobklfepjocnamgkkbiglidom', // Popular in Asia
+    'adskip': 'gjnkbniapmfehphobdkmgeiglcknjiej', // Middle East
+    'adguardvpn': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+    'adremover': 'gjagmgngggpahljhmhhlbgoopdleimkf',
+    
+    // Privacy Tools
+    'duckduckgoprivacy': 'bkdgflcldnnnapblkhpmabedekbaejhl',
+    'disconnect': 'jeoacafpbcihiomhlakheieifhpjdfeo',
+    'httpsEverywhere': 'gcbommkclmclpchllfjekcdonpmejbdp',
+    
+    // Mobile Ad Blockers
+    'adblockbrowser': 'mehmfdomdipfphjombakejihccgokgbd',
+    'adblockfast': 'oianepfbejfjjdmlcaejdoecehkidjgd',
+    
+    // Chinese Blockers
+    'adp': 'hkgmldnainaglpjngpajnnjfhpdjkohh',
+    'adsafe': 'aegnopegbbhjeeiganiajffnalhlkkjb',
+    
+    // Russian Blockers
+    'adguardvpn_ru': 'kmpjlilnemjciohjckjadmgmicoldglf',
+    
+    // Enterprise Solutions
+    'cisco_umbrella': 'kjedmcenmfeljgljefgngjgjgkefhmje',
+    'pihole_detection': '_pi_hole' // Special detection
+};
 
-    // Method 1: Check hidden element
+// Add new network test patterns
+const testUrls = [
+    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+    'https://adservice.google.com/adsid/integrator.js',
+    'https://cdn.taboola.com/libtrc/unip/',
+    'https://js.genieessp.com/', // Common in Asian ads
+    'https://secure.adnxs.com/',
+    'https://cdn.doubleverify.com/dvtp_src.js'
+];
+
+// Add extension-specific element checks
+const adBlockSignatures = {
+    'AdGuard': () => document.querySelector('[data-adguard]'),
+    'uBlock': () => document.getElementById('ublock0-epicker'),
+    'AdBlock Plus': () => document.getElementById('abp-detection'),
+    'Ghostery': () => document.querySelector('.ghostery-tracker-tally'),
+    'Brave Shields': () => navigator.brave && navigator.brave.isBrave(),
+    'Opera Ad Blocker': () => window.opr && opr.addons,
+    'DuckDuckGo': () => document.getElementById('ddg-extension'),
+    'AdBlocker Ultimate': () => window.adblockultimate,
+    'Privacy Badger': () => window.privacyBadger,
+    'Pi-hole': () => navigator.webdriver === true
+};
+
+// Enhanced detection function
+function checkAllAdBlocks() {
+    // 1. Check hidden elements
     const adElement = document.getElementById('ad-detection');
     const style = window.getComputedStyle(adElement);
-    if(style.display === 'none' || style.visibility === 'hidden') {
-        adBlockDetected();
-    }
+    
+    // 2. Check blocked network requests
+    const networkChecks = testUrls.map(url => 
+        fetch(url, { method: 'HEAD' })
+        .then(r => !r.ok)
+        .catch(() => true)
+    );
 
-    // Method 2: Check blocked requests
-    const testUrls = [
-        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-        'https://adservice.google.com/adsid/integrator.js'
-    ];
-
-    Promise.all(testUrls.map(url => fetch(url, { method: 'HEAD' })))
-        .then(responses => {
-            if(responses.some(r => !r.ok)) adBlockDetected();
-        })
-        .catch(() => adBlockDetected());
-
-    // Method 3: Check Chrome extensions
-    const adBlockExtensions = {
-        'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-        'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-        'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg'
-    };
-
-    if(typeof chrome !== 'undefined') {
-        Object.values(adBlockExtensions).forEach(id => {
+    // 3. Check Chrome extensions
+    const extensionChecks = Object.values(adBlockExtensions).map(id => 
+        new Promise(resolve => {
+            if(typeof chrome === 'undefined') resolve(false);
             chrome.runtime.sendMessage(id, {}, response => {
-                if(!chrome.runtime.lastError) adBlockDetected();
+                resolve(!chrome.runtime.lastError);
             });
-        });
-    }
-});
+        })
+    );
 
-// Prevent right-click
-document.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    alert('Right-click is disabled to protect content!');
-    return false;
+    // 4. Check DOM signatures
+    const signatureChecks = Object.entries(adBlockSignatures)
+        .filter(([_, check]) => check())
+        .map(([name]) => name);
+
+    return Promise.all([...networkChecks, ...extensionChecks])
+        .then(results => {
+            const detected = results.some(r => r) || 
+                           signatureChecks.length > 0 || 
+                           (style.display === 'none' || style.visibility === 'hidden');
+            
+            return {
+                detected,
+                extensions: [
+                    ...signatureChecks,
+                    ...Object.keys(adBlockExtensions)
+                        .filter((_, i) => results[networkChecks.length + i])
+                ]
+            };
+        });
+}
+
+// Update modal content with detected extensions
+function showAdBlockModal(detectedInfo) {
+    const modal = document.querySelector('.adblock-modal');
+    const content = modal.querySelector('.adblock-modal-content');
+    
+    content.innerHTML = `
+        <h2>⚠️ AD BLOCK (${detectedInfo.extensions.join(', ') || 'Unknown'}) DETECTED ⚠️</h2>
+        <p>We've detected ${detectedInfo.extensions[0] || 'an ad blocker'} interfering with our site.</p>
+        <ul class="adblock-list">
+            <li>▶️ Please disable: ${detectedInfo.extensions.join(', ')}</li>
+            <li>🛑 Whitelist us in your ad blocker settings</li>
+            <li>💖 Support our free content via donations</li>
+        </ul>
+        <button class="adblock-modal-close" onclick="location.reload()">Reload After Disabling</button>
+    `;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+// Initialize detection
+document.addEventListener('DOMContentLoaded', () => {
+    checkAllAdBlocks().then(result => {
+        if(result.detected) {
+            showAdBlockModal(result);
+        }
+    });
 });
         
         const clickSound = document.getElementById('clickSound');
