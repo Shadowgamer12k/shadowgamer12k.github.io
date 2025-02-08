@@ -1,4 +1,4 @@
- <style>
+
        @font-face {
             font-family: 'Minecraft';
             src: url('assets/fonts/minecraft.otf') format('truetype');
@@ -252,4 +252,4 @@
             background: #00a550;
             transform: scale(1.05);
         }
-    </style>
+
