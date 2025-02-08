@@ -1,7 +1,7 @@
 
          @font-face {
             font-family: 'Minecraft';
-            src: url('../assets/fonts/minecraft.otf') format('truetype');
+            src: url('arPix.ttf') format('truetype');
         }
         
         :root {
