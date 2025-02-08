@@ -202,6 +202,67 @@
             margin: 20px auto;
             max-width: 600px;
         }
+          /* Ad Block Detection Modal */
+        .adblock-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 9998;
+            pointer-events: all;
+        }
+
+        .adblock-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2d2d2d;
+            border: 4px solid #55ff55;
+            padding: 20px;
+            z-index: 9999;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+            border-radius: 10px;
+            pointer-events: all;
+        }
+
+        .adblock-modal h2 {
+            color: #55ff55;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .adblock-modal p {
+            color: #fff;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .adblock-modal button {
+            background: #008542;
+            border: 2px solid #55ff55;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .adblock-modal button:hover {
+            background: #00a550;
+            transform: scale(1.05);
+        }
     </style>
     
 </head>
