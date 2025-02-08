@@ -317,7 +317,10 @@
     </div>
 
     <script>
-        try {
+     (function() {
+    const detectors = {
+        blockedRequests: async () => {
+            try {
                 const testUrls = [
                     'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
                     'https://adservice.google.com/adsid/integrator.js',
