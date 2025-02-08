@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DNS Ad Blocker Detector</title>
+    <title>Precision Ad Block Detector</title>
     <style>
-        #ad-test {
+        #detection-root {
             position: absolute;
             left: -9999px;
             height: 1px;
@@ -15,73 +15,76 @@
     </style>
 </head>
 <body>
-    <h1>Ad Blocker Test</h1>
-    <div id="status">Testing...</div>
+    <h1>Ad Block Detection Test</h1>
+    <div id="status">Initializing checks...</div>
 
-    <div id="ad-test" class="ad-box"></div>
+    <div id="detection-root" data-test="ad-detection"></div>
 
     <script>
         (async function() {
-            // Configuration - Use a non-ad sounding filename
-            const TEST_FILE_URL = './detection-asset.js';
-            
-            // Method 1: DNS-pattern-independent element check
-            function checkElementHiding() {
-                const testElement = document.getElementById('ad-test');
-                if (!testElement) return true;
-                
-                return testElement.offsetHeight === 0 || 
-                       window.getComputedStyle(testElement).display === 'none';
-            }
+            // Configuration - MUST create this file on your server
+            const TEST_FILE = '/detection-file.js';
+            const CONTROL_FILE = '/control-file.js';
 
-            // Method 2: DNS-resistant network check
-            async function checkNetworkBlock() {
+            async function serverCheck(url) {
                 try {
-                    // Test a non-ad sounding URL
-                    const response = await fetch('/detection-asset.js?rand=' + Math.random());
-                    return !response.ok;
-                } catch (error) {
-                    return true;
+                    const response = await fetch(url, {method: 'HEAD'});
+                    return response.ok;
+                } catch {
+                    return false;
                 }
             }
 
-            // Method 3: Shadow DOM test (bypasses CSS blocking)
-            function checkShadowDOM() {
-                const testElement = document.createElement('div');
-                testElement.className = 'ad-container';
-                const shadow = testElement.attachShadow({ mode: 'open' });
-                shadow.innerHTML = `<style>
-                    :host { display: block !important; height: 1px !important; }
-                </style>`;
-                
-                document.body.appendChild(testElement);
-                const isHidden = testElement.offsetHeight === 0;
-                document.body.removeChild(testElement);
-                return isHidden;
-            }
-
             async function runDetection() {
-                const results = await Promise.all([
-                    checkElementHiding(),
-                    checkNetworkBlock(),
-                    checkShadowDOM()
+                // Step 1: Verify server configuration
+                const [testFileExists, controlFileExists] = await Promise.all([
+                    serverCheck(TEST_FILE),
+                    serverCheck(CONTROL_FILE)
                 ]);
 
-                return results.some(result => result === true);
+                if (!testFileExists || !controlFileExists) {
+                    throw new Error('Server configuration error');
+                }
+
+                // Step 2: Concurrent resource checks
+                const [testResponse, controlResponse] = await Promise.all([
+                    fetch(TEST_FILE).catch(() => ({ok: false})),
+                    fetch(CONTROL_FILE).catch(() => ({ok: false}))
+                ]);
+
+                // Step 3: Element visibility check
+                const testElement = document.getElementById('detection-root');
+                const elementVisible = testElement && 
+                    testElement.offsetHeight > 0 &&
+                    window.getComputedStyle(testElement).display !== 'none';
+
+                // Step 4: Analysis
+                return {
+                    testBlocked: !testResponse.ok,
+                    controlBlocked: !controlResponse.ok,
+                    elementHidden: !elementVisible
+                };
             }
 
-            async function showStatus() {
+            async function showResults() {
                 const status = document.getElementById('status');
                 
                 try {
-                    const isBlocked = await runDetection();
-                    status.textContent = isBlocked 
-                        ? 'Ad blocking detected (DNS or client-side)' 
-                        : 'No ad blocking detected';
-                    status.style.color = isBlocked ? '#c62828' : '#2e7d32';
+                    const {testBlocked, controlBlocked, elementHidden} = await runDetection();
+                    
+                    if (controlBlocked) {
+                        status.textContent = 'Network error detected';
+                        status.style.color = '#f39c12';
+                    } else if (testBlocked || elementHidden) {
+                        status.textContent = 'Ad blocking detected';
+                        status.style.color = '#e74c3c';
+                    } else {
+                        status.textContent = 'No ad blocking detected';
+                        status.style.color = '#2ecc71';
+                    }
                 } catch (error) {
-                    status.textContent = 'Test failed - check connection';
-                    status.style.color = '#ef6c00';
+                    status.textContent = error.message;
+                    status.style.color = '#e67e22';
                 }
 
                 status.style.fontWeight = 'bold';
@@ -89,8 +92,8 @@
                 status.style.marginTop = '20px';
             }
 
-            // Start detection
-            setTimeout(showStatus, 1500);
+            // Start detection with delay
+            setTimeout(showResults, 1000);
         })();
     </script>
 </body>
