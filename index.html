@@ -559,66 +559,70 @@
             box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
         }
         /* Ad Block Detection Modal */
+        .adblock-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 9998;
+            pointer-events: all;
+        }
+
         .adblock-modal {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2d2d2d;
-        border: 4px solid #55ff55;
-        padding: 20px;
-        z-index: 9999;
-        max-width: 600px;
-        text-align: center;
-        box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
-        border-radius: 10px;
-    }
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2d2d2d;
+            border: 4px solid #55ff55;
+            padding: 20px;
+            z-index: 9999;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+            border-radius: 10px;
+            pointer-events: all;
+        }
 
-    .adblock-modal h2 {
-        color: #55ff55;
-        font-size: 1.5em;
-        margin-bottom: 15px;
-        text-transform: uppercase;
-    }
+        .adblock-modal h2 {
+            color: #55ff55;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
 
-    .adblock-modal p {
-        color: #fff;
-        font-size: 0.9em;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }
+        .adblock-modal p {
+            color: #fff;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
 
-    .adblock-modal button {
-        background: #008542;
-        border: 2px solid #55ff55;
-        color: #fff;
-        padding: 10px 25px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin: 0 10px;
-    }
+        .adblock-modal button {
+            background: #008542;
+            border: 2px solid #55ff55;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
 
-    .adblock-modal button:hover {
-        background: #00a550;
-        transform: scale(1.05);
-    }
-
-    .adblock-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        z-index: 9998;
-    }
+        .adblock-modal button:hover {
+            background: #00a550;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
-    <!-- first div -->
+    <div class="adblock-overlay"></div>
     <div class="adblock-modal">
         <div class="adblock-modal-content">
             <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
@@ -633,10 +637,10 @@
             </ul>
             <div id="adblock-result" style="margin: 15px 0; color: white;"></div>
             <button class="minecraft-button" id="recheck-button">🔄 Re-check</button>
-            
         </div>
     </div>
-    
+
+    <!-- Rest of your HTML content remains the same -->
     <div id="ad-test" class="ad ad-banner adsbox" style="height: 1px; width: 1px; position: absolute; left: -9999px;"></div>
 
 
@@ -859,22 +863,25 @@
     }
 
     function showAdblockModal(extension) {
-        const modal = document.querySelector('.adblock-modal');
-        const resultDiv = document.getElementById('adblock-result');
-        
-        resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                             <small>(Please disable to continue)</small>`;
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-
-    document.getElementById('recheck-button').addEventListener('click', async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (!detected) {
-            document.querySelector('.adblock-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+            const modal = document.querySelector('.adblock-modal');
+            const overlay = document.querySelector('.adblock-overlay');
+            const resultDiv = document.getElementById('adblock-result');
+            
+            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                                <small>(Please disable to continue)</small>`;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
-    });
+
+        document.getElementById('recheck-button').addEventListener('click', async () => {
+            const { detected, extension } = await detectAdBlock();
+            if (!detected) {
+                document.querySelector('.adblock-modal').style.display = 'none';
+                document.querySelector('.adblock-overlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
 
     // Initial check
     setTimeout(async () => {
