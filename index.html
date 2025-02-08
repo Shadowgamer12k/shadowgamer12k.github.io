@@ -762,158 +762,164 @@
     <script>
 //ad block extasions detection 
 (async function() {
-            const detectors = {
-                // Core detection methods
-                networkPatterns: [
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                    'https://adservice.google.com/adsid/integrator.js',
-                    'https://cdn.taboola.com/libtrc/unip/',
-                    'https://js.genieessp.com/',
-                    'https://securepubads.g.doubleclick.net/'
-                ],
+    const detectors = {
+        // Core detection methods
+        networkPatterns: [
+            'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+            'https://adservice.google.com/adsid/integrator.js',
+            'https://cdn.taboola.com/libtrc/unip/',
+            'https://js.genieessp.com/',
+            'https://securepubads.g.doubleclick.net/'
+        ],
 
-                extensionSignatures: {
-                    // Mainstream ad blockers
-                    'uBlock Origin': () => window.uboAdBlock || document.getElementById('ublock0-epicker'),
-                    'AdBlock Plus': () => window.AdBlock || document.getElementById('abp-detection'),
-                    'AdGuard': () => window.adguard || document.querySelector('[data-adguard]'),
-                    'Ghostery': () => window.Ghostery || document.querySelector('.ghostery-tracker-tally'),
-                    'Privacy Badger': () => window.privacyBadger,
-                    'AdBlocker Ultimate': () => window.adblockultimate,
-                    'Stands Fair AdBlocker': () => window.STANDSFF,
-                    'Brave Shields': () => window.navigator.brave || window.chrome?.runtime?.id === 'mnojpmjdmbbfmejpflffifhclcmidmda',
-                    'Poper Blocker': () => window.poperBlocker,
-                    'AdLock': () => window.adlockDetected,
-                    
-                    // Regional blockers
-                    'AdBlock for Chrome': () => document.getElementById('adblock-plus'),
-                    'Adskip': () => window.AdSkip,
-                    'AdRemover': () => window.adRemover,
-                    'AdThwart': () => window.adthwart,
-                    
-                    // Privacy tools
-                    'DuckDuckGo Privacy': () => window.duckduckgoPrivacyEssentials,
-                    'Disconnect': () => window.disconnect,
-                    'NoScript': () => document.getElementById('noscript_notice'),
-                    
-                    // Mobile blockers
-                    'AdBlock Browser': () => navigator.userAgent.includes('AdBlock Browser'),
-                    'Adblock Fast': () => window.adblockfast,
-                    
-                    // Chinese blockers
-                    'ADP': () => window.ADP,
-                    'AdSafe': () => window.adsafe,
-                    
-                    // Enterprise blockers
-                    'Cisco Umbrella': () => window.umbrellaBlocker,
-                    'Pi-hole': () => navigator.webdriver === true && window.location.host.includes('pi.hole')
-                },
+        extensionSignatures: {
+            // Mainstream ad blockers
+            'uBlock Origin': () => window.uboAdBlock || document.getElementById('ublock0-epicker'),
+            'AdBlock Plus': () => window.AdBlock || document.getElementById('abp-detection'),
+            'AdGuard': () => window.adguard || document.querySelector('[data-adguard]'),
+            'Ghostery': () => window.Ghostery || document.querySelector('.ghostery-tracker-tally'),
+            'Privacy Badger': () => window.privacyBadger,
+            'AdBlocker Ultimate': () => window.adblockultimate,
+            'Stands Fair AdBlocker': () => window.STANDSFF,
+            'Brave Shields': () => window.navigator.brave || window.chrome?.runtime?.id === 'mnojpmjdmbbfmejpflffifhclcmidmda',
+            'Poper Blocker': () => window.poperBlocker,
+            'AdLock': () => window.adlockDetected,
+            
+            // Regional blockers
+            'AdBlock for Chrome': () => document.getElementById('adblock-plus'),
+            'Adskip': () => window.AdSkip,
+            'AdRemover': () => window.adRemover,
+            'AdThwart': () => window.adthwart,
+            
+            // Privacy tools
+            'DuckDuckGo Privacy': () => window.duckduckgoPrivacyEssentials,
+            'Disconnect': () => window.disconnect,
+            'NoScript': () => document.getElementById('noscript_notice'),
+            
+            // Mobile blockers
+            'AdBlock Browser': () => navigator.userAgent.includes('AdBlock Browser'),
+            'Adblock Fast': () => window.adblockfast,
+            
+            // Chinese blockers
+            'ADP': () => window.ADP,
+            'AdSafe': () => window.adsafe,
+            
+            // Enterprise blockers
+            'Cisco Umbrella': () => window.umbrellaBlocker,
+            'Pi-hole': () => navigator.webdriver === true && window.location.host.includes('pi.hole')
+        },
 
-                chromeExtensions: {
-                    'uBlock Origin': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-                    'AdBlock Plus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-                    'AdGuard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-                    'Ghostery': 'mlomiejdfkolichcflejclcbmpeaniij',
-                    'Privacy Badger': 'pkehgijcmpdhfbdbbnkijodmdjhbjlgp',
-                    'AdBlocker Ultimate': 'ohahllgiabjaoigichmmfljhkcfikeof',
-                    'Stands Fair AdBlocker': 'fhhlhcidkmgpjlddmajkbkckdhjejhdh',
-                    'AdLock': 'gojhcdgcpbpfigcaejpfhfegekdgiblk',
-                    'Poper Blocker': 'bkkbcggnhapdmkeljlodacbihkajipgd',
-                    'AdSkip': 'gjnkbniapmfehphobdkmgeiglcknjiej'
-                },
+        chromeExtensions: {
+            'uBlock Origin': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+            'AdBlock Plus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+            'AdGuard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+            'Ghostery': 'mlomiejdfkolichcflejclcbmpeaniij',
+            'Privacy Badger': 'pkehgijcmpdhfbdbbnkijodmdjhbjlgp',
+            'AdBlocker Ultimate': 'ohahllgiabjaoigichmmfljhkcfikeof',
+            'Stands Fair AdBlocker': 'fhhlhcidkmgpjlddmajkbkckdhjejhdh',
+            'AdLock': 'gojhcdgcpbpfigcaejpfhfegekdgiblk',
+            'Poper Blocker': 'bkkbcggnhapdmkeljlodacbihkajipgd',
+            'AdSkip': 'gjnkbniapmfehphobdkmgeiglcknjiej'
+        },
 
-                // Advanced detection methods
-                checkNetworkBlocks: async function() {
-                    try {
-                        const results = await Promise.all(
-                            this.networkPatterns.map(url => 
-                                fetch(url, {method: 'HEAD'})
-                                .then(() => false)
-                                .catch(() => true)
-                            )
-                        );
-                        return results.filter(x => x).length >= 2;
-                    } catch {
-                        return false;
-                    }
-                },
-
-                checkElementHiding: function() {
-                    const testElement = document.querySelector('.ad-detection-helper');
-                    return testElement && 
-                        (testElement.offsetHeight === 0 ||
-                         window.getComputedStyle(testElement).display === 'none');
-                },
-
-                detectBrowserFeatures: function() {
-                    return {
-                        isBrave: !!window.navigator.brave,
-                        isOpera: !!window.opr,
-                        isEdge: !!window.chrome && !!window.chrome.webstore
-                    };
-                },
-
-                checkChromeExtensions: async function() {
-                    if (typeof chrome === 'undefined') return [];
-                    
-                    const detected = [];
-                    for (const [name, id] of Object.entries(this.chromeExtensions)) {
-                        const exists = await new Promise(resolve => {
-                            chrome.runtime.sendMessage(id, {}, (response) => {
-                                resolve(chrome.runtime.lastError ? false : true);
-                            });
-                        });
-                        if (exists) detected.push(name);
-                    }
-                    return detected;
-                }
-            };
-
-            async function comprehensiveCheck() {
-                const results = await Promise.all([
-                    detectors.checkNetworkBlocks(),
-                    detectors.checkElementHiding(),
-                    detectors.checkChromeExtensions(),
-                    Object.entries(detectors.extensionSignatures)
-                        .filter(([_, check]) => check())
-                        .map(([name]) => name)
-                ]);
-
-                const [networkBlocked, elementHidden, chromeExts, signatureMatches] = results;
-                const browserFeatures = detectors.detectBrowserFeatures();
-
-                return {
-                    detected: networkBlocked || elementHidden || chromeExts.length > 0 || signatureMatches.length > 0,
-                    extensions: [...new Set([...chromeExts, ...signatureMatches])],
-                    browserFeatures
-                };
+        // Advanced detection methods
+        checkNetworkBlocks: async function() {
+            try {
+                const results = await Promise.all(
+                    this.networkPatterns.map(url => 
+                        fetch(url, {method: 'HEAD'})
+                        .then(() => false)
+                        .catch(() => true)
+                    )
+                );
+                return results.filter(x => x).length >= 2;
+            } catch {
+                return false;
             }
+        },
 
-            // Display results
-            setTimeout(async () => {
-                const { detected, extensions, browserFeatures } = await comprehensiveCheck();
-                const result = document.getElementById('result');
-                
-                if (detected) {
-                    let message = `Detected ${extensions.length > 0 ? extensions.join(', ') : 'ad blocking'}`;
-                    
-                    if (browserFeatures.isBrave) message += '<br>Brave Shields detected';
-                    if (browserFeatures.isOpera) message += '<br>Opera built-in blocker';
-                    
-                    result.innerHTML = `${message}<br><small>(${new Date().toLocaleString()} scan)</small>`;
-                    result.style.color = '#d32f2f';
-                } else {
-                    result.textContent = 'No ad blocking detected';
-                    result.style.color = '#388e3c';
-                }
+        checkElementHiding: function() {
+            const testElement = document.querySelector('.ad-detection-helper');
+            return testElement && 
+                (testElement.offsetHeight === 0 ||
+                 window.getComputedStyle(testElement).display === 'none');
+        },
 
-                result.style.fontWeight = 'bold';
-                result.style.padding = '20px';
-                result.style.borderRadius = '8px';
-                result.style.backgroundColor = '#f5f5f5';
-                result.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-            }, 2500);
-        })();
+        detectBrowserFeatures: function() {
+            return {
+                isBrave: !!window.navigator.brave,
+                isOpera: !!window.opr,
+                isEdge: !!window.chrome && !!window.chrome.webstore
+            };
+        },
+
+        checkChromeExtensions: async function() {
+            if (typeof chrome === 'undefined') return [];
+            
+            const detected = [];
+            for (const [name, id] of Object.entries(this.chromeExtensions)) {
+                const exists = await new Promise(resolve => {
+                    chrome.runtime.sendMessage(id, {}, (response) => {
+                        resolve(chrome.runtime.lastError ? false : true);
+                    });
+                });
+                if (exists) detected.push(name);
+            }
+            return detected;
+        }
+    };
+
+    async function comprehensiveCheck() {
+        const results = await Promise.all([
+            detectors.checkNetworkBlocks(),
+            detectors.checkElementHiding(),
+            detectors.checkChromeExtensions(),
+            Object.entries(detectors.extensionSignatures)
+                .filter(([_, check]) => check())
+                .map(([name]) => name)
+        ]);
+
+        const [networkBlocked, elementHidden, chromeExts, signatureMatches] = results;
+        const browserFeatures = detectors.detectBrowserFeatures();
+
+        return {
+            detected: networkBlocked || elementHidden || chromeExts.length > 0 || signatureMatches.length > 0,
+            extensions: [...new Set([...chromeExts, ...signatureMatches])],
+            browserFeatures
+        };
+    }
+
+    function showAdblockModal(detectedExtensions) {
+        const modal = document.getElementById('adblockModal');
+        const overlay = document.getElementById('adblockOverlay');
+        
+        if(detectedExtensions.length > 0) {
+            modal.innerHTML += `<p>Detected: ${detectedExtensions.join(', ')}</p>`;
+        }
+        
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Modified display results function
+    async function checkAndShowModal() {
+        const { detected, extensions } = await comprehensiveCheck();
+        if(detected) {
+            showAdblockModal(extensions);
+            // Periodic recheck every 30 seconds
+            setInterval(async () => {
+                const { detected: recheck } = await comprehensiveCheck();
+                if(recheck) showAdblockModal(extensions);
+            }, 30000);
+        }
+    }
+
+    // Initial check
+    setTimeout(checkAndShowModal, 2500);
+})();
+    
+})();
 
         
         const clickSound = document.getElementById('clickSound');
