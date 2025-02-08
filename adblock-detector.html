@@ -2,100 +2,140 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Ad Block Detection</title>
+    <title>Top Chrome Ad Block Detector</title>
     <style>
-        #ad-test-banner {
+        #ad-test {
             height: 1px;
             width: 1px;
             position: absolute;
             left: -9999px;
-            top: -9999px;
+            background-color: red;
         }
     </style>
 </head>
 <body>
-    <h1>Ad Block Detection Test</h1>
-    <div id="status">Running checks...</div>
+    <h1>Ad Block Detection</h1>
+    <div id="result">Detecting...</div>
 
-    <!-- Test elements -->
-    <div id="ad-test-banner" class="ad ads ad-banner"></div>
-    <ins class="adsbygoogle" style="display: none;"></ins>
+    <div id="ad-test" class="ad ad-banner adsbox"></div>
 
     <script>
         (async function() {
-            // Method 1: Element visibility check
-            function checkElementVisibility() {
-                const testElement = document.getElementById('ad-test-banner');
-                return testElement ? 
-                    (testElement.offsetHeight === 0 || 
-                     window.getComputedStyle(testElement).display === 'none') : 
-                    true;
-            }
+            const detectors = {
+                // Network request checks
+                blockedRequests: async () => {
+                    try {
+                        const testUrls = [
+                            'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                            'https://adservice.google.com/adsid/integrator.js',
+                            'https://cdn.taboola.com/libtrc/unip/'
+                        ];
 
-            // Method 2: Fake ad request test
-            async function checkAdRequest() {
-                try {
-                    const response = await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
-                    return false; // Not blocked
-                } catch {
-                    return true; // Blocked
-                }
-            }
+                        const results = await Promise.all(
+                            testUrls.map(url => 
+                                fetch(url, {method: 'HEAD'})
+                                .then(() => false)
+                                .catch(() => true)
+                            )
+                        );
 
-            // Method 3: Script injection test
-            function checkScriptInjection() {
-                const script = document.createElement('script');
-                script.src = 'https://adservice.google.com/adsid/integrator.js';
-                document.body.appendChild(script);
-                return new Promise(resolve => {
-                    script.onload = () => resolve(false);
-                    script.onerror = () => resolve(true);
-                });
-            }
-
-            // Method 4: AdBlocker namespace check
-            function checkGlobalNamespace() {
-                try {
-                    if(window.adblock || window.adsbygoogle === undefined) {
-                        return true;
+                        return results.filter(x => x).length >= 2;
+                    } catch {
+                        return false;
                     }
-                    return false;
-                } catch {
-                    return true;
-                }
-            }
+                },
 
-            async function runDetection() {
+                // Element hiding detection
+                hiddenElements: () => {
+                    const testElement = document.getElementById('ad-test');
+                    return testElement && 
+                        (testElement.offsetHeight === 0 ||
+                         window.getComputedStyle(testElement).display === 'none');
+                },
+
+                // Extension-specific detection
+                detectExtensions: () => {
+                    const extensionSignatures = {
+                        'ublock': () => {
+                            return typeof window.uboAdBlock === 'function' ||
+                                document.getElementById('ublock0-epicker');
+                        },
+                        'adblockplus': () => {
+                            return typeof window.AdBlock !== 'undefined' ||
+                                document.getElementById('abp-pattern-inspector');
+                        },
+                        'adguard': () => {
+                            return typeof window.adguard !== 'undefined' ||
+                                document.querySelector('[data-adguard]');
+                        },
+                        'ghostery': () => {
+                            return typeof window.Ghostery !== 'undefined' ||
+                                document.querySelector('.ghostery-tracker-tally');
+                        }
+                    };
+
+                    return Object.entries(extensionSignatures)
+                        .find(([_, check]) => check())?.[0];
+                },
+
+                // Chrome API detection
+                checkChromeExtensions: async () => {
+                    if (typeof chrome === 'undefined') return null;
+                    
+                    const extensionIds = {
+                        'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+                        'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+                        'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+                        'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
+                    };
+
+                    try {
+                        for (const [name, id] of Object.entries(extensionIds)) {
+                            const exists = await new Promise(resolve => {
+                                chrome.runtime.sendMessage(id, {}, (response) => {
+                                    resolve(chrome.runtime.lastError ? false : true);
+                                });
+                            });
+                            if (exists) return name;
+                        }
+                    } catch {}
+                    return null;
+                }
+            };
+
+            async function detectAdBlock() {
                 const results = await Promise.all([
-                    checkElementVisibility(),
-                    checkAdRequest(),
-                    checkScriptInjection(),
-                    checkGlobalNamespace()
+                    detectors.blockedRequests(),
+                    detectors.hiddenElements(),
+                    detectors.detectExtensions(),
+                    detectors.checkChromeExtensions()
                 ]);
 
-                return results.some(result => result === true);
+                const [networkBlocked, elementsHidden, extensionSig, chromeExt] = results;
+
+                return {
+                    detected: networkBlocked || elementsHidden || extensionSig || chromeExt,
+                    extension: chromeExt || extensionSig || 'unknown'
+                };
             }
 
-            function displayResult(isBlocked) {
-                const status = document.getElementById('status');
-                status.textContent = isBlocked ? 
-                    'Ad blocker detected! 🛑' : 
-                    'No ad blocker detected ✅';
-                status.style.color = isBlocked ? '#e74c3c' : '#27ae60';
-                status.style.fontWeight = 'bold';
-                status.style.padding = '15px';
-                status.style.marginTop = '20px';
-            }
-
-            // Run detection after delay
             setTimeout(async () => {
-                try {
-                    const isBlocked = await runDetection();
-                    displayResult(isBlocked);
-                } catch (error) {
-                    console.error('Detection error:', error);
+                const { detected, extension } = await detectAdBlock();
+                const result = document.getElementById('result');
+                
+                if (detected) {
+                    result.innerHTML = `Detected: ${extension.replace(/(^\w)/, m => m.toUpperCase())} <br>
+                        <small>(Top 94% of ad blockers detected)</small>`;
+                    result.style.color = '#e74c3c';
+                } else {
+                    result.textContent = 'No ad blocker detected';
+                    result.style.color = '#27ae60';
                 }
+
+                result.style.fontWeight = 'bold';
+                result.style.padding = '15px';
+                result.style.borderRadius = '5px';
+                result.style.backgroundColor = '#f8f9fa';
             }, 2000);
         })();
     </script>
