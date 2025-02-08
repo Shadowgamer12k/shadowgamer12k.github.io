@@ -790,145 +790,120 @@
             </ul>
         </div>
     <script>
-// Advanced Ad Block Detection System
-const adDetection = {
-    // Configuration
-    debugMode: true, // Set to false for production
-    checkInterval: 3000,
-    requiredDetectionCount: 2,
-
-    // Detection Methods
-    methods: {
-        // Method 1: Fake Ad Element
-        elementCheck: () => {
-            const testElem = document.createElement('div');
-            testElem.className = 'pub_300x250 pub_300x250m pub_728x90 ad-unit';
-            testElem.innerHTML = '&nbsp;';
-            document.body.appendChild(testElem);
-            
-            const isHidden = testElem.offsetHeight === 0 || 
-                           getComputedStyle(testElem).display === 'none';
-            document.body.removeChild(testElem);
-            return isHidden;
-        },
-
-        // Method 2: Blocked Request Check
-        requestCheck: async () => {
+(function() {
+    const detectors = {
+        blockedRequests: async () => {
             try {
-                const testURLs = [
+                const testUrls = [
                     'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
                     'https://adservice.google.com/adsid/integrator.js',
-                    'https://sprungextraordinaryhonorary.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js'
+                    'https://cdn.taboola.com/libtrc/unip/'
                 ];
 
                 const results = await Promise.all(
-                    testURLs.map(url => 
-                        fetch(url, {method: 'HEAD', mode: 'no-cors'})
+                    testUrls.map(url => 
+                        fetch(url, {method: 'HEAD'})
                         .then(() => false)
                         .catch(() => true)
                     )
                 );
 
-                return results.filter(Boolean).length >= 2;
+                return results.filter(x => x).length >= 2;
             } catch {
                 return false;
             }
         },
 
-        // Method 3: Ad Blocker API Detection
-        apiCheck: () => {
-            return new Promise(resolve => {
-                if(window.adblockDetector || window.brave?.isBrave) {
-                    resolve(true);
-                    return;
+        hiddenElements: () => {
+            const testElement = document.getElementById('ad-test');
+            return testElement && 
+                (testElement.offsetHeight === 0 ||
+                 window.getComputedStyle(testElement).display === 'none');
+        },
+
+        detectExtensions: () => {
+            const extensionSignatures = {
+                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
+                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
+                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
+                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
+            };
+
+            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
+        },
+
+        checkChromeExtensions: async () => {
+            if (typeof chrome === 'undefined') return null;
+            
+            const extensionIds = {
+                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
+            };
+
+            try {
+                for (const [name, id] of Object.entries(extensionIds)) {
+                    const exists = await new Promise(resolve => {
+                        chrome.runtime.sendMessage(id, {}, (response) => {
+                            resolve(chrome.runtime.lastError ? false : true);
+                        });
+                    });
+                    if (exists) return name;
                 }
-
-                const fakeAd = document.createElement('div');
-                fakeAd.id = 'detectadblock';
-                fakeAd.style.height = '1px';
-                document.body.appendChild(fakeAd);
-
-                setTimeout(() => {
-                    resolve(fakeAd.offsetHeight === 0);
-                    document.body.removeChild(fakeAd);
-                }, 100);
-            });
+            } catch {}
+            return null;
         }
-    },
+    };
 
-    // Detection System
-    async runDetection() {
-        try {
-            const results = await Promise.all([
-                this.methods.elementCheck(),
-                this.methods.requestCheck(),
-                this.methods.apiCheck()
-            ]);
+    async function detectAdBlock() {
+        const results = await Promise.all([
+            detectors.blockedRequests(),
+            detectors.hiddenElements(),
+            detectors.detectExtensions(),
+            detectors.checkChromeExtensions()
+        ]);
 
-            if(this.debugMode) {
-                console.log('[Ad Detection Debug]', 
-                    `Element Check: ${results[0]}`, 
-                    `Request Check: ${results[1]}`, 
-                    `API Check: ${results[2]}`
-                );
-            }
-
-            return results.filter(Boolean).length >= this.requiredDetectionCount;
-        } catch (error) {
-            if(this.debugMode) console.error('[Ad Detection Error]', error);
-            return false;
-        }
-    },
-
-    // Modal Control
-    showModal() {
-        document.querySelector('.adblock-modal').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        this.startAutoCheck();
-    },
-
-    hideModal() {
-        document.querySelector('.adblock-modal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        this.stopAutoCheck();
-    },
-
-    // Auto-Check System
-    startAutoCheck() {
-        this.intervalId = setInterval(async () => {
-            const isBlocked = await this.runDetection();
-            if(!isBlocked) this.hideModal();
-        }, this.checkInterval);
-    },
-
-    stopAutoCheck() {
-        clearInterval(this.intervalId);
+        return {
+            detected: results.some(r => r),
+            extension: results.find(r => typeof r === 'string') || 'unknown'
+        };
     }
-};
 
-// Initialization
-document.addEventListener('DOMContentLoaded', async () => {
-    // First check after 2 seconds to let page load
+    function showAdblockModal(extension) {
+        const modal = document.querySelector('.adblock-modal');
+        const resultDiv = document.getElementById('adblock-result');
+        
+        resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                             <small>(Please disable to continue)</small>`;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('recheck-button').addEventListener('click', async () => {
+        const { detected, extension } = await detectAdBlock();
+        if (!detected) {
+            document.querySelector('.adblock-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Initial check
     setTimeout(async () => {
-        const initialCheck = await adDetection.runDetection();
-        if(initialCheck) adDetection.showModal();
+        const { detected, extension } = await detectAdBlock();
+        if (detected) showAdblockModal(extension);
     }, 2000);
 
-    // Periodic background checks
+    // Continuous background check
     setInterval(async () => {
-        const backgroundCheck = await adDetection.runDetection();
-        if(backgroundCheck) adDetection.showModal();
-    }, 10000);
-});
-
-// Manual Recheck Button
-document.getElementById('recheckButton').addEventListener('click', async () => {
-    const currentState = await adDetection.runDetection();
-    if(!currentState) {
-        adDetection.hideModal();
-        sessionStorage.setItem('adblockVerified', Date.now());
-    }
-});
+        const { detected, extension } = await detectAdBlock();
+        const modal = document.querySelector('.adblock-modal');
+        
+        if (detected && modal.style.display === 'none') {
+            showAdblockModal(extension);
+        }
+    }, 5000);
+})();
         
         const clickSound = document.getElementById('clickSound');
         
