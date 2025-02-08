@@ -3,48 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Blocker Detector - Improved Version</title>
+    <title>Advanced Ad Blocker Detector</title>
 </head>
 <body>
     <h1>Ad Blocker Detection Test</h1>
     <div id="status">Checking for ad blocker...</div>
 
-    <!-- Test element that ad blockers typically hide -->
-    <div id="ad-banner" style="height: 1px; width: 1px; position: absolute; left: -999px; top: -999px;">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
-             width="1" 
-             height="1" 
-             class="ad-element">
-    </div>
+    <!-- Multiple test elements with common ad patterns -->
+    <div class="advertisement" style="display: none !important"></div>
+    <div id="ad-container" style="height: 0; width: 0; position: absolute;"></div>
+    <div class="adsbox" style="opacity: 0;"></div>
+    <ins class="adsbygoogle" style="display: none;"></ins>
+    <div id="banner-ad" style="visibility: hidden;"></div>
+    <iframe id="ad-frame" src="about:blank" style="display: none;"></iframe>
 
-    <!-- Ad block detection script -->
     <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const testElement = document.querySelector('.ad-element');
-                const adBanner = document.getElementById('ad-banner');
-                const status = document.getElementById('status');
+        (function() {
+            // Common ad server URL patterns
+            const adUrls = [
+                '/advertisement.js',
+                'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                'https://ad.doubleclick.net/',
+                'https://ads.example.com/fake-ad'
+            ];
 
-                // Check multiple conditions for more accurate detection
-                const isAdBlockEnabled = (
-                    !testElement || 
-                    !adBanner || 
-                    testElement.offsetHeight === 0 ||
-                    adBanner.offsetHeight === 0 ||
-                    window.getComputedStyle(testElement).display === 'none' ||
-                    window.getComputedStyle(adBanner).display === 'none'
-                );
+            // Create test elements
+            const createTestElements = () => {
+                const testElements = [];
+                
+                // Create fake ad elements
+                const ad = document.createElement('div');
+                ad.className = 'ad';
+                testElements.push(ad);
 
-                status.innerHTML = isAdBlockEnabled 
-                    ? 'Ad blocker is enabled' 
-                    : 'No ad blocker detected';
+                const adBanner = document.createElement('div');
+                adBanner.id = 'ad-banner';
+                testElements.push(adBanner);
 
-                // Add styling to make the result more visible
-                status.style.color = isAdBlockEnabled ? '#e74c3c' : '#27ae60';
-                status.style.fontWeight = 'bold';
-                status.style.marginTop = '20px';
-            }, 100); // Small delay to ensure DOM is fully loaded
-        });
+                // Create fake ad iframe
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://ad.doubleclick.net/abc';
+                testElements.push(iframe);
+
+                // Append all elements to body
+                testElements.forEach(el => {
+                    el.style.cssText = 'position: absolute; left: -9999px; top: -9999px;';
+                    document.body.appendChild(el);
+                });
+            };
+
+            // Check blocked requests
+            const checkBlockedRequests = () => {
+                const fakeAd = new Image();
+                fakeAd.src = 'https://ad.doubleclick.net/fake.jpg';
+                fakeAd.onerror = () => true;
+                fakeAd.onload = () => false;
+                return fakeAd.height === 0 || fakeAd.width === 0;
+            };
+
+            // Check element visibility
+            const checkElements = () => {
+                const selectors = [
+                    '.ad-element',
+                    '#ad-banner',
+                    '.advertisement',
+                    '#ad-container',
+                    '.adsbox',
+                    '.adsbygoogle',
+                    '#banner-ad',
+                    '#ad-frame',
+                    '.ad',
+                    '#ad-banner'
+                ];
+
+                return selectors.some(selector => {
+                    const el = document.querySelector(selector);
+                    return !el || 
+                        el.offsetHeight === 0 ||
+                        el.offsetWidth === 0 ||
+                        window.getComputedStyle(el).display === 'none' ||
+                        window.getComputedStyle(el).visibility === 'hidden';
+                });
+            };
+
+            // Check blocked scripts
+            const checkScripts = () => {
+                try {
+                    // Check for ad-related properties
+                    if (window.ads === undefined || 
+                        window.google_analytics === undefined || 
+                        window.adsbygoogle === undefined) {
+                        return true;
+                    }
+                } catch (e) {
+                    return true;
+                }
+                return false;
+            };
+
+            // Main detection function
+            const detectAdBlock = () => {
+                const methods = [
+                    checkElements,
+                    checkBlockedRequests,
+                    checkScripts,
+                    () => adUrls.some(url => {
+                        const req = new XMLHttpRequest();
+                        req.open('HEAD', url, false);
+                        try { req.send(); } catch(e) { return true; }
+                        return req.status >= 400;
+                    })
+                ];
+
+                return methods.some(method => method());
+            };
+
+            // Initialize detection
+            window.addEventListener('DOMContentLoaded', () => {
+                createTestElements();
+                setTimeout(() => {
+                    const status = document.getElementById('status');
+                    const isBlocked = detectAdBlock();
+                    
+                    status.innerHTML = isBlocked 
+                        ? 'Ad blocker detected! 🙅♂️' 
+                        : 'No ad blocker detected 👍';
+                    
+                    status.style.color = isBlocked ? '#e74c3c' : '#27ae60';
+                    status.style.fontWeight = 'bold';
+                    status.style.padding = '15px';
+                    status.style.borderRadius = '5px';
+                    status.style.backgroundColor = isBlocked ? '#f9ebec' : '#eaf7ee';
+                    status.style.marginTop = '20px';
+                    status.style.transition = 'all 0.3s ease';
+                }, 300); // Increased delay for better detection
+            });
+        })();
     </script>
 </body>
 </html>
