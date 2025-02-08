@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precision Ad Block Detector</title>
+    <title>GitHub Pages Ad Block Detector</title>
     <style>
-        #test-element {
+        #testElement {
             position: absolute;
             left: -9999px;
             height: 1px;
@@ -18,73 +18,72 @@
     <h1>Ad Block Detection Test</h1>
     <div id="status">Initializing checks...</div>
 
-    <div id="test-element" class="detection-box"></div>
+    <div id="testElement" class="ad-test"></div>
 
     <script>
         (async function() {
-            // 1. Server files configuration (MUST CREATE THESE)
-            const TEST_FILE = '/test-file-123.js'; // Update path
-            const CONTROL_FILE = './control-file-456.js'; // Update path
+            // GitHub Pages-specific configuration
+            const REPO_NAME = window.location.pathname.split('/')[1] || '';
+            const BASE_PATH = REPO_NAME ? `/${REPO_NAME}/` : '/';
+            
+            // Test files (MUST create these in your repository)
+            const TEST_FILE = `${BASE_PATH}github-ads-test.js`;
+            const CONTROL_FILE = `${BASE_PATH}github-control-file.js`;
 
-            // 2. Verify server configuration
-            async function verifyServer() {
-                try {
-                    const [testResponse, controlResponse] = await Promise.all([
-                        fetch(TEST_FILE, {method: 'HEAD'}),
-                        fetch(CONTROL_FILE, {method: 'HEAD'})
-                    ]);
-                    return testResponse.ok && controlResponse.ok;
-                } catch {
-                    return false;
-                }
-            }
+            // Detection logic
+            async function runDetection() {
+                // 1. Verify files exist
+                const [testExists, controlExists] = await Promise.all([
+                    fetch(TEST_FILE, {method: 'HEAD'}),
+                    fetch(CONTROL_FILE, {method: 'HEAD'})
+                ]);
 
-            // 3. Main detection logic
-            async function detectAdBlock() {
-                if (!await verifyServer()) {
-                    throw new Error('Server configuration error');
+                if (!testExists.ok || !controlExists.ok) {
+                    throw new Error('Missing test files - Add these to your repository:');
                 }
 
-                // 4. Network request checks
-                const [testRequest, controlRequest] = await Promise.all([
+                // 2. Test file loading
+                const [testLoaded, controlLoaded] = await Promise.all([
                     fetch(TEST_FILE + '?rand=' + Math.random()),
                     fetch(CONTROL_FILE + '?rand=' + Math.random())
                 ]);
 
-                // 5. Shadow DOM element check
-                const shadowHost = document.createElement('div');
-                const shadow = shadowHost.attachShadow({mode: 'open'});
-                shadow.innerHTML = `<div class="test-ad" style="height:1px"></div>`;
-                document.body.appendChild(shadowHost);
-                const elementVisible = shadow.firstChild.offsetHeight > 0;
-                document.body.removeChild(shadowHost);
+                // 3. Element visibility check
+                const testDiv = document.createElement('div');
+                testDiv.className = 'ad-box';
+                testDiv.style.height = '1px';
+                document.body.appendChild(testDiv);
+                const isHidden = testDiv.offsetHeight === 0;
+                document.body.removeChild(testDiv);
 
                 return {
-                    testBlocked: !testRequest.ok,
-                    controlBlocked: !controlRequest.ok,
-                    elementHidden: !elementVisible
+                    testBlocked: !testLoaded.ok,
+                    controlBlocked: !controlLoaded.ok,
+                    elementHidden: isHidden
                 };
             }
 
-            // 6. Display results
+            // Display results
             async function showResults() {
                 const status = document.getElementById('status');
                 
                 try {
-                    const {testBlocked, controlBlocked, elementHidden} = await detectAdBlock();
+                    const {testBlocked, controlBlocked, elementHidden} = await runDetection();
                     
                     if (controlBlocked) {
-                        status.textContent = "Network error detected";
-                        status.style.color = "#f39c12";
+                        status.textContent = "Network issue detected";
+                        status.style.color = "#f1c40f";
                     } else if (testBlocked || elementHidden) {
-                        status.textContent = "Ad blocking detected!";
+                        status.textContent = "Ad blocker detected!";
                         status.style.color = "#e74c3c";
                     } else {
-                        status.textContent = "No ad blocking detected";
+                        status.textContent = "No ad blocker found";
                         status.style.color = "#2ecc71";
                     }
                 } catch (error) {
-                    status.textContent = error.message;
+                    status.innerHTML = `${error.message}<br>
+                        <a href="${TEST_FILE}" target="_blank">Test File</a> | 
+                        <a href="${CONTROL_FILE}" target="_blank">Control File</a>`;
                     status.style.color = "#e67e22";
                 }
 
@@ -93,7 +92,7 @@
                 status.style.marginTop = "20px";
             }
 
-            setTimeout(showResults, 1500);
+            setTimeout(showResults, 2000);
         })();
     </script>
 </body>
