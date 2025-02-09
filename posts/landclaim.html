@@ -152,7 +152,7 @@
 
     <main class="container">
         <section class="feature-box">
-            <h2 class="feature-title">ADDON SHOWCASE</h2>
+            <h2 class="feature-title">SHOWCASE</h2>
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/CVGW_bdpdhc" 
                         frameborder="0" 
@@ -187,11 +187,13 @@
         <section class="feature-box">
             <h2 class="feature-title">DOWNLOAD</h2>
             <div class="download-buttons">
-                <a href="#behavior-pack" class="download-button">
-                    <span>⬇️</span> Behavior Pack (v1.2.0)
+                <a href="redirect.html?url=https://direct-link.net/642753/landclaim" 
+                   class="download-button">
+                    <span>⬇️</span> Behavior Pack (+1.20)
                 </a>
-                <a href="#resource-pack" class="download-button">
-                    <span>⬇️</span> Resource Pack (v1.1.5)
+                <a href="redirect.html?url=https://direct-link.net/642753/landclaimrs" 
+                   class="download-button">
+                    <span>⬇️</span> Resource Pack (+1.20)
                 </a>
             </div>
             <p>Requires Minecraft Bedrock 1.20+</p>
@@ -210,17 +212,128 @@
     <footer>
         <p>© 2023 Land Claim Add-on | Follow updates on Discord!</p>
     </footer>
+<script>
 
-    <script>
-        document.querySelectorAll('.download-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const packType = this.textContent.includes('Behavior') ? 'Behavior' : 'Resource';
-                if(confirm(`Download ${packType} Pack?`)) {
-                    window.location.href = this.href;
+        function playClickSound() {
+            const clickSound = document.getElementById('clickSound');
+            try {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            } catch(error) {
+                console.log('Sound playback error:', error);
+            }
+        }
+        // Improved ad blocker detection
+        function detectAdBlock() {
+            return new Promise((resolve) => {
+                const fakeAd = document.createElement('div');
+                fakeAd.innerHTML = '&nbsp;';
+                fakeAd.className = 'adsbox';
+                fakeAd.style.height = '1px';
+                document.body.appendChild(fakeAd);
+                
+                setTimeout(() => {
+                    const isBlocked = fakeAd.offsetHeight === 0;
+                    document.body.removeChild(fakeAd);
+                    resolve(isBlocked);
+                }, 100);
+            });
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const targetURL = decodeURIComponent(params.get("url"));
+        let tasksCompleted = 0;
+
+        function taskCompleted() {
+            tasksCompleted++;
+            if (tasksCompleted === 4) {
+                if (!targetURL) {
+                    showError("Invalid redirect link.");
+                    return;
                 }
+                showRedirectMessage();
+                startRedirectCountdown();
+            }
+        }
+
+        function showRedirectMessage() {
+            document.getElementById("message").textContent = "Redirecting you...";
+            document.querySelector(".loadingspinner").style.display = "block";
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.style.display = "none";
+            });
+        }
+
+        function startRedirectCountdown() {
+            let seconds = 5;
+            const countdownElement = document.createElement("div");
+            countdownElement.id = "countdown";
+            document.querySelector(".loadingspinner").after(countdownElement);
+            
+            const interval = setInterval(() => {
+                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
+                if (seconds-- <= 0) {
+                    clearInterval(interval);
+                    window.location.href = targetURL;
+                }
+            }, 1000);
+        }
+
+        function showError(message) {
+            document.getElementById("message").textContent = message;
+            document.querySelector(".error").style.display = "block";
+        }
+
+        async function startCountdown(button) {
+            if (button.classList.contains('completed')) return;
+
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                showError("Ad blocker detected! Please disable to continue.");
+                return;
+            }
+
+            const originalText = button.textContent;
+            const adWindow = window.open(button.href, '_blank');
+            
+            let countdown = 5;
+            button.style.pointerEvents = 'none';
+
+            const interval = setInterval(() => {
+                if (countdown > 0) {
+                    button.textContent = `${originalText} (${countdown}s)`;
+                    countdown--;
+                } else {
+                    clearInterval(interval);
+                    button.classList.add("completed");
+                    button.textContent = `✔ ${originalText} Completed`;
+                    taskCompleted();
+                }
+            }, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                document.getElementById('adblock-warning').style.display = 'block';
+                document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
+                document.getElementById('message').style.display = 'none';
+                return;
+            }
+
+            if (!targetURL) {
+                showError("Missing redirect URL!");
+                return;
+            }
+            
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    startCountdown(button);
+                });
             });
         });
-    </script>
+    
+</script>
 </body>
 </html>
