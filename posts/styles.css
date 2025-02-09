@@ -1,14 +1,5 @@
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    @font-face {
-    font-family: 'Minecraft';
-    src: url('minecraft-font.ttf') format('truetype');
-}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.description {
-    font-family: 'Minecraft', sans-serif;
-    font-size: 16px; /* يمكنك تعديل الحجم */
-    color: white; /* اللون حسب التصميم */
-}
 
 body {
     background-color: #313131;
@@ -24,15 +15,28 @@ body {
     overflow-x: hidden; /* منع التمرير الأفقي */
 }
 
-.download-button {
-    flex: 1; /* يجعل الأزرار تتساوى في الحجم */
-    height: 60px; /* تعديل هذا الرقم لتغيير الطول */
-    max-width: 45%; /* يمنع الأزرار من أن تصبح طويلة جدًا */
-    text-align: center;
-    padding: 1rem;
+a.download-button {
     font-size: 10px;
+    background-color: #008542;
+    color: #fff;
+    text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 0;
+    z-index: 1;
+    user-select: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: unset;
+    margin: 9px;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    font-weight: 900;
+    transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
 }
-
 
 a.download-button:before {
     position: absolute;
@@ -45,10 +49,10 @@ a.download-button:before {
     content: "";
     transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
     z-index: -1;
-    background-color: #d0d6d3 !important;
-    box-shadow: 0 -4px rgba(119, 120, 119, 0.5) inset,
-        0 4px rgba(36, 37, 36, 0.99) inset, -4px 0 rgba(138, 141, 137, 0.5) inset,
-        4px 0 rgba(60, 61, 59, 0.5) inset;
+    background-color: #008542 !important;
+    box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+        0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+        4px 0 rgb(21 108 0 / 50%) inset;
 }
 
 a.download-button:after {
@@ -159,22 +163,6 @@ a.close-button:active:after {
     box-shadow: 0px 0px 10px black;
 }
 
-.video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* نسبة العرض إلى الارتفاع (16:9) */
-    height: 0;
-    overflow: hidden;
-}
-
-.video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
 .box {
     background: #222;
     padding: 15px;
@@ -182,12 +170,7 @@ a.close-button:active:after {
     margin-bottom: 15px;
     text-align: left;
 }
-.box.feature.buttons-container {
-    margin-top: 20px; /* مسافة بين البوكس السابق وبوكس الأزرار */
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* تباعد بين الأزرار */
-}
+
 .feature {
     background: #333;
     padding: 10px;
@@ -220,3 +203,5 @@ ul li {
     margin-top: 20px;
     border: 4px solid gray;
 }
+
+
