@@ -1,4 +1,4 @@
-
+ 
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
         :root {
@@ -582,6 +582,30 @@
             font-size: 1.5em;
             margin-bottom: 15px;
             text-transform: uppercase;
+        }
+        .mod-item-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .mod-item-link:hover {
+            transform: translateY(-3px);
+        }
+
+        .mod-item-link:active {
+            transform: translateY(0);
+        }
+
+        .mod-item {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            position: relative;
+        }
+
+        .mod-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .adblock-modal p {
