@@ -3,169 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Claim add-on</title>
+    <meta name="description" content="Minecraft Land Claim Add-on - Protect your builds from griefers!">
+    <title>Minecraft Land Claim Add-on | Protect Your Builds</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         @font-face {
             font-family: 'Minecraft';
-            src: url('./minecraft-font.ttf') format('truetype');
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css') format('truetype');
         }
 
-        .description {
-            font-family: 'Minecraft', sans-serif;
-            font-size: 16px;
-            color: white;
+        :root {
+            --mc-green: #55FF55;
+            --mc-dark: #2D2D2D;
+            --mc-border: #555555;
         }
 
         body {
-            background-color: #313131;
-           
-            background-size: 30px 30px;
-            background-position: -5px -5px;
+            background-color: #1a1a1a;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                            linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                            linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
             font-family: 'Press Start 2P', cursive;
             color: white;
-            text-align: center;
-            background-attachment: fixed;
-            min-height: 100vh;
+            line-height: 1.6;
             margin: 0;
-            overflow-x: hidden; /* منع التمرير الأفقي */
+            min-height: 100vh;
         }
 
-        .download-button {
-            flex: 1;
-            height: 60px;
-            max-width: 45%;
-            text-align: center;
-            padding: 1rem;
-            font-size: 14px;
-            background-color: #060606;
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+        .header {
+            padding: 2rem 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-bottom: 4px solid var(--mc-border);
         }
 
-        .download-button:hover {
-            background-color: #7a7e80;
-        }
-
-        .download-button:active {
-            transform: translateY(4px);
+        .header img {
+            max-width: 600px;
+            width: 90%;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 8px var(--mc-green));
         }
 
         .container {
-            background-color: #66696b;
-            padding: 20px;
             max-width: 800px;
-            margin: auto;
-            border: 4px solid #666;
-            box-shadow: 0px 0px 10px black;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .feature-box {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--mc-border);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-title {
+            color: var(--mc-green);
+            font-size: 1.2rem;
+            margin: -1rem 0 1rem 0;
+            background: var(--mc-dark);
+            padding: 0.5rem;
+            display: inline-block;
+            border: 2px solid var(--mc-border);
+        }
+
+        .download-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .download-button {
+            background: var(--mc-dark);
+            color: white;
+            padding: 1.5rem;
+            text-decoration: none;
+            border: 3px solid var(--mc-border);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .download-button:hover {
+            background: var(--mc-green);
+            color: black;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(85, 255, 85, 0.3);
+        }
+
+        .download-button:active {
+            transform: translateY(0);
         }
 
         .video-container {
             position: relative;
-            width: 100%;
             padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
+            margin: 1.5rem 0;
         }
 
         .video-container iframe {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
+            border: 3px solid var(--mc-border);
         }
 
-        .box {
-            background: #222;
-            padding: 15px;
-            border: 3px solid gray;
-            margin-bottom: 15px;
-            text-align: left;
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0;
         }
 
-        .box.feature.buttons-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-left: 4px solid var(--mc-green);
         }
 
-        .feature {
-            background: #333;
-            padding: 10px;
-            margin: 10px 0;
-            border-left: 5px solid #777;
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            text-align: center;
+            border-top: 4px solid var(--mc-border);
+            margin-top: 3rem;
         }
 
-        .feature-title {
-            display: block;
-            background: gray;
-            color: black;
-            padding: 5px;
-            font-weight: bold;
-            text-align: left;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul li {
-            text-align: left;
-            margin: 5px 0;
-        }
-
-        .mod-image {
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
-            border: 4px solid gray;
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .download-button {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <p></p>
-        <img src="../assets/images/land-claim-logo.png" alt="" style="max-width: 100%; height: auto;">
-        <p></p>
-    </header>
-    <main>
-        <section class="container">
-            <!-- Addon Showcase -->
-            <div class="box feature responsive-video">
-                <span class="feature-title">ADDON SHOWCASE :</span>
-                <p></p>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/CVGW_bdpdhc?si=3Ju_JICpJVNSCb_V"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
+ 
+
+    <main class="container">
+        <section class="feature-box">
+            <h2 class="feature-title">ADDON SHOWCASE</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/CVGW_bdpdhc" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope" 
                         allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-            <div class="box feature">
-                <span class="feature-title"> Description :</span>
-                <ul class="description">
-                    <li>This addon will protect your areas from other players. No one can break, place, or interact with blocks, and there are no explosions in your area. No one will be able to rob you or ruin your area!</li>
-                </ul>
-            </div>
-            <div class="box feature buttons-container">
-                <a href="" class="download-button" >Download Behavior Pack</a>
-                <a href="" class="download-button">Download Resource Pack</a>
+                </iframe>
             </div>
         </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">KEY FEATURES</h2>
+            <div class="features-list">
+                <div class="feature-item">
+                    <h3>Area Protection</h3>
+                    <p>Prevent block breaking/placing in your land</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Explosion Protection</h3>
+                    <p>No TNT or creeper damage in claimed areas</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Multiplayer Security</h3>
+                    <p>Keep your items safe from other players</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Easy Management</h3>
+                    <p>Simple form to manage your claims</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">DOWNLOAD</h2>
+            <div class="download-buttons">
+                <a href="#behavior-pack" class="download-button">
+                    <span>⬇️</span> Behavior Pack (v1.2.0)
+                </a>
+                <a href="#resource-pack" class="download-button">
+                    <span>⬇️</span> Resource Pack (v1.1.5)
+                </a>
+            </div>
+            <p>Requires Minecraft Bedrock 1.20+</p>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">INSTALLATION</h2>
+            <ol class="installation-steps">
+                <li>Download both packs</li>
+                <li>Import to Minecraft resource packs folder</li>
+                <li>Activate in world settings</li>
+            </ol>
+        </section>
     </main>
-</body>
+
+    <footer>
+        <p>© 2023 Land Claim Add-on | Follow updates on Discord!</p>
+    </footer>
+
     <script>
- function redirectToDownload(element, type) {
-            const url = type === 'behavior' ? modal.dataset.behavior : modal.dataset.resource;
-            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
-        }
-</script>
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const packType = this.textContent.includes('Behavior') ? 'Behavior' : 'Resource';
+                if(confirm(`Download ${packType} Pack?`)) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    </script>
+</body>
 </html>
