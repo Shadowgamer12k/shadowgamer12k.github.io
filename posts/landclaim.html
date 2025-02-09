@@ -1,149 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Epic Adventure Pack - Minecraft Addon</title>
-    <style>
-         
-        /* Responsive Additions */
-        @media (min-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 2fr 1fr;
-                gap: 40px;
-            }
-            
-            .download-card {
-                position: sticky;
-                top: 20px;
-                height: fit-content;
-            }
-            
-            .feature-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .image-gallery {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 1023px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .download-button span {
-                display: block;
-                margin-top: 5px;
-            }
-            
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <!-- Your original Minecraft style here -->
+    <title>Land Claim add-on</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container" style="max-width: 1200px; margin: 0 auto;">
-        <!-- Header -->
-        <header class="mod-item" style="padding: 2rem; text-align: center; margin-bottom: 2rem;">
-            <h1 style="color: var(--minecraft-green); margin: 0;">
-                Epic Adventure Pack
-                <span class="version-badge">v1.4.2</span>
-            </h1>
-            <p class="news-date" style="color: var(--minecraft-blue);">Last Updated: November 15, 2023</p>
-        </header>
+    <header>
+        <img src="assets/images/" alt="">
+    </header>
 
-        <!-- Main Grid -->
-        <div class="main-grid" style="display: grid; gap: 2rem;">
-            <!-- Left Column -->
-            <div>
-                <!-- Image Gallery -->
-                <div class="mod-item" style="padding: 1rem; margin-bottom: 2rem;">
-                    <div class="image-gallery" style="display: grid; gap: 1rem;">
-                        <img src="preview1.jpg" alt="Main Preview" class="mod-item">
-                        <img src="preview2.jpg" alt="Gameplay Preview" class="mod-item">
-                    </div>
-                </div>
+    
+    <main>
+        <section class="container">
 
-                <!-- Features -->
-                <div class="mod-item" style="padding: 2rem; margin-bottom: 2rem;">
-                    <h2 style="color: var(--minecraft-green);">Key Features</h2>
-                    <div class="feature-grid" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
-                        <div class="feature-card" style="padding: 1.5rem; border: 2px solid #555;">
-                            <h3 style="color: var(--minecraft-blue);">👹 50+ New Mobs</h3>
-                            <p style="font-size: 0.9rem;">Unique creatures with custom AI behaviors</p>
-                        </div>
-                        <div class="feature-card" style="padding: 1.5rem; border: 2px solid #555;">
-                            <h3 style="color: var(--minecraft-blue);">🌋 New Dimensions</h3>
-                            <p style="font-size: 0.9rem;">Explore mystical realms with unique challenges</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="mod-item" style="padding: 2rem;">
-                    <h2 style="color: var(--minecraft-green);">About This Pack</h2>
-                    <p style="font-size: 0.9rem; line-height: 1.6;">
-                        Transform your Minecraft experience with:
-                        <br><br>
-                        - Enhanced combat system<br>
-                        - Unique resources & tools<br>
-                        - Performance optimizations<br>
-                        - HD texture support
-                    </p>
+            <!-- Addon Showcase -->
+            <div class="box feature responsive-video">
+                <span class="feature-title">ADDON SHOWCASE :</span>
+                <p></p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/CVGW_bdpdhc?si=3Ju_JICpJVNSCb_V"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
 
-            <!-- Right Column -->
-            <div>
-                <!-- Download Card -->
-                <div class="download-card mod-item" style="padding: 2rem;">
-                    <h2 style="color: var(--minecraft-blue); text-align: center;">Download</h2>
-                    <div class="download-buttons" style="display: grid; gap: 1rem; margin-top: 1.5rem;">
-                        <a href="resource_pack.zip" class="download-button resource-pack-button">
-                            📦 Resource Pack
-                            <span style="font-size: 0.9rem;">(Visual Assets)</span>
-                        </a>
-                        
-                        <a href="behavior_pack.zip" class="download-button behavior-pack-button">
-                            ⚙️ Behavior Pack
-                            <span style="font-size: 0.9rem;">(Game Mechanics)</span>
-                        </a>
-                    </div>
+        
 
-                    <!-- Requirements -->
-                    <div style="margin-top: 2rem; padding: 1rem; background: #2d2d2d;">
-                        <h3 style="color: var(--minecraft-green); font-size: 0.9rem;">Requirements:</h3>
-                        <ul style="font-size: 0.9rem;">
-                            <li>▶ Minecraft 1.20+</li>
-                            <li>▶ 2GB RAM minimum</li>
-                            <li>▶ Latest Java Version</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Support -->
-                <div class="mod-item" style="padding: 2rem; margin-top: 2rem; text-align: center;">
-                    <h3 style="color: var(--minecraft-blue);">Support</h3>
-                    <p style="font-size: 0.9rem;">
-                        Need help? Contact us:<br>
-                        <a href="mailto:support@epicpack.com" style="color: var(--minecraft-green);">support@epicpack.com</a>
-                    </p>
-                </div>
+            <div class="box" class="feature">
+                <span class="feature-title">ADD-ON Description :</span>
+                <ul class="description">
+                    <li>This addon will protect your areas from other players. No one can break, place, or interact with blocks, and there are no explosions in your area. No one will be able to rob you or ruin your area!</li>
+                </ul>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <footer class="mod-item" style="margin-top: 3rem; padding: 1.5rem; text-align: center;">
-            <p style="font-size: 0.8rem; color: #666;">
-                © 2023 Epic Adventure Pack<br>
-                Not affiliated with Mojang/Microsoft
-            </p>
-        </footer>
-    </div>
+            <div class="box feature buttons-container" style="text-align: center;">
+                <a href="" class="download-button">Behavior Pack</a>
+                <a href="" class="download-button">Resource Pack</a>
+            </div>
+        </section>
+    </main>
+
+
+
 </body>
 </html>
