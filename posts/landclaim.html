@@ -162,4 +162,10 @@
         </section>
     </main>
 </body>
+    <script>
+ function redirectToDownload(element, type) {
+            const url = type === 'behavior' ? modal.dataset.behavior : modal.dataset.resource;
+            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
+        }
+</script>
 </html>
