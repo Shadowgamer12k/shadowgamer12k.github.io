@@ -101,7 +101,7 @@
                 </li>
 
                 <!-- Mob Catcher Post -->
-                <li class="mod-item" 
+                <li id='mobcatcher' class="mod-item" 
                     data-video="https://www.youtube.com/embed/_UETSrlvAPc?si=2tv55zLf68xrmETM"
                     data-description="TThis addon will help you move monsters and mobs, especially the mobs that will help you, such as villagers, or if you want, for example, to move a group of cows in order to make such-and-such a farm out of them, something like that."
                     data-behavior="https://link-center.net/642753/mobcatcher"
@@ -332,20 +332,39 @@
             });
         });
 
-        // Modal functionality
-                const modItems = document.querySelectorAll('.mod-item');
-        const modal = document.querySelector('.modal');
+        //links avaible 
+const redirectLinks = {
+    'landclaim': 'https://shadowgamer12k.github.io/shadow/posts/landclaim.html',
+    'mobcatcher': 'https://shadowgamer12k.github.io/shadow/posts/mobcatcher.html',
+};
+      // Modal functionality
+const modItems = document.querySelectorAll('.mod-item');
+const modal = document.querySelector('.modal');
 
-    modItems.forEach(mod => {
+// قم بوضع روابط التحويل هنا حسب ال IDs
+const redirectLinks = {
+    'landclaim': 'https://your-redirect-link-here.com'
+};
+
+modItems.forEach(mod => {
     mod.addEventListener('click', () => {
         playClickSound();
+        
+        // التحقق من وجود ال ID في قائمة الروابط
+        const redirectUrl = redirectLinks[mod.id];
+        
+        if (redirectUrl) {
+            // إذا كان ال ID موجودًا، قم بالتحويل
+            window.location.href = redirectUrl;
+            return; // إيقاف التنفيذ هنا لمنع فتح المودال
+        }
+
+        // إذا لم يكن هناك تحويل، استمر في فتح المودال
         const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
-        const modal = document.querySelector('.modal');
         
         modal.querySelector('.modal-video').src = videoSrc;
         modal.querySelector('.modal-description').textContent = mod.dataset.description;
         
-        // تحديث روابط التحويل لاستخدام صفحة redirect.html
         const behaviorURL = encodeURIComponent(mod.dataset.behavior);
         const resourceURL = encodeURIComponent(mod.dataset.resource);
         
