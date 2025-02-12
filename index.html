@@ -57,7 +57,7 @@
                 <ul class="mod-list">
 
                      <!-- Advanced Waypoint Post -->
-                     <li class="mod-item" 
+                     <li id='advancedwaypoint' class="mod-item" 
                     data-video="https://www.youtube.com/embed/j3P6ysWfg-A?si=F2RSn01tbbXsZToG"
                     data-description="Tired of traveling the great distances to return home or to your village in Minecraft? Today I made the solution for you with my advanced waypoint. It won't run anymore because it will enable you to easily teleport between places and also the dimensions. I didn't tell you that you could teleport to the last place you died"
                     data-behavior="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypoint"
@@ -68,7 +68,7 @@
                 </li>
                     
                     <!-- Land claim Post -->
-                     <li class="mod-item" 
+                     <li id='landclaim' class="mod-item" 
                     data-video="https://youtu.be/k0GzCw3DSMQ"
                     data-description="Addon description..."
                     data-behavior="https://direct-link.net/642753/landclaim"
@@ -79,7 +79,7 @@
                 </li>
              
                 <!-- Item Carrier Post -->
-                <li class="mod-item" 
+                <li id='itemcarrier' class="mod-item" 
                     data-video="https://www.youtube.com/embed/fByEnsAay7s?si=ZuKCc6-eoeo7UOx9"
                     data-description="Just hold the item in your hand, sneak, and click on the first chest or container from which you want to take the items. Then you go to the other empty chest or container in which you want to put the items that you took from the first chest. Then click on it too, and a menu will appear for you containing a button with the confirmation of the transfer. Press the button. The items will be transferred automatically"
                     data-behavior="https://link-target.net/642753/itemcarrier"
@@ -90,7 +90,7 @@
                 </li>
                 
                 <!-- Health Bar Post -->
-                <li class="mod-item" 
+                <li id='healthbar' class="mod-item" 
                     data-video="https://www.youtube.com/embed/mgb34IVpKh8?si=bGelnBlgVsjYsjDw"
                     data-description="This addon will literally help you and will benefit you a lot in Survival. Suppose you have added mobs or bosses from other addons to your world, but you want to know how much health this mob or boss has left so that it dies, and here comes the role of my addon, which will give you the number of hearts of all the mobs. Not only Minecraft mobs, but even mobs and monsters that you add through other addons"
                     data-behavior="https://direct-link.net/642753/healthbar"
@@ -122,7 +122,7 @@
                     <p>This addon will facilitate trade on your server and will make your server the best server for selling...see more</p>
                 </li>
                  <!-- night vision Post -->
-                     <li class="mod-item" 
+                     <li id='nightvision' class="mod-item" 
                     data-video="#"
                     data-description="This tool will give you night vision for your server players, but not all players"
                     data-behavior="https://direct-link.net/642753/healthbar-no-bh"
@@ -342,6 +342,9 @@ const modal = document.querySelector('.modal');
 const redirectLinks = {
     'landclaim': 'https://shadowgamer12k.github.io/shadow/posts/landclaim.html',
     'mobcatcher': 'https://shadowgamer12k.github.io/shadow/posts/mobcatcher.html',
+    'healthbar': 'https://shadowgamer12k.github.io/shadow/posts/healthbar.html',
+    'itemcarrier': 'https://shadowgamer12k.github.io/shadow/posts/itemcarrier.html',
+    'nightvision': 'https://shadowgamer12k.github.io/shadow/posts/nightvision.html',
 };
 
 modItems.forEach(mod => {
