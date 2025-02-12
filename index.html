@@ -314,10 +314,14 @@
         
         const clickSound = document.getElementById('clickSound');
         
-        function playClickSound() {
-            clickSound.currentTime = 0;
-            clickSound.play().catch(error => console.log('Audio error:', error));
-        }
+       async function playClickSound() {
+    try {
+        clickSound.currentTime = 0;
+        await clickSound.play();
+    } catch (error) {
+        console.log('Audio error:', error);
+    }
+}
 
         // Tab functionality
         document.querySelectorAll('[role="tab"]').forEach(tab => {
@@ -338,7 +342,6 @@
 const modItems = document.querySelectorAll('.mod-item');
 const modal = document.querySelector('.modal');
 
-// قم بوضع روابط التحويل هنا حسب ال IDs
 const redirectLinks = {
     'landclaim': 'https://shadowgamer12k.github.io/shadow/posts/landclaim.html',
     'mobcatcher': 'https://shadowgamer12k.github.io/shadow/posts/mobcatcher.html',
@@ -347,20 +350,23 @@ const redirectLinks = {
     'nightvision': 'https://shadowgamer12k.github.io/shadow/posts/nightvision.html',
 };
 
+
+
 modItems.forEach(mod => {
-    mod.addEventListener('click', () => {
-        playClickSound();
+    mod.addEventListener('click', async () => {
+        await playClickSound(); // انتظار تشغيل الصوت
         
-        // التحقق من وجود ال ID في قائمة الروابط
         const redirectUrl = redirectLinks[mod.id];
         
         if (redirectUrl) {
-            // إذا كان ال ID موجودًا، قم بالتحويل
-            window.location.href = redirectUrl;
-            return; // إيقاف التنفيذ هنا لمنع فتح المودال
+            // إضافة تأخير 500ms قبل التحويل
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 500);
+            return;
         }
 
-        // إذا لم يكن هناك تحويل، استمر في فتح المودال
+        // الكود الخاص بفتح المودال
         const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
         
         modal.querySelector('.modal-video').src = videoSrc;
