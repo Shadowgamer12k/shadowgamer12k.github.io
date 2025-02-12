@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sneaking Bedo</title>
+  <style>
+    body {
+      background-color: #121212;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    #word-container {
+      font-family: Arial, sans-serif;
+      font-size: 64px;
+      font-weight: bold;
+      color: #00ff99;
+      display: flex;
+    }
+    .letter {
+      position: relative;
+      display: inline-block;
+      animation: sneak 1s infinite;
+    }
+    @keyframes sneak {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="word-container"></div>
+
+  <script>
+    // The word to be displayed
+    const word = "Bedo";
+
+    // Container for the word
+    const container = document.getElementById("word-container");
+
+    // Add each letter to the container with a "sneaking" effect
+    word.split("").forEach((letter, index) => {
+      const span = document.createElement("span");
+      span.textContent = letter;
+      span.classList.add("letter");
+
+      // Create a delay for each letter to stagger the animation
+      span.style.animationDelay = `${index * 0.2}s`;
+
+      container.appendChild(span);
+    });
+  </script>
+</body>
+</html>
