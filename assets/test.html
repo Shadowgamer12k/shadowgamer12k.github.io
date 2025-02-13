@@ -5,82 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Accounts Generator</title>
     <style>
-       * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: #141414;
-            color: white;
-        }
-
-        .header {
-            background-color: #E50914;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .account-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .account-card {
-            background: #2F2F2F;
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.3s;
-        }
-
-        .account-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .account-type {
-            color: #E50914;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .account-details {
-            margin: 15px 0;
-        }
-
-        .reload-btn {
-            background: #E50914;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 30px auto;
-            display: block;
-        }
-
-        footer {
-            background-color: #000;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-        }
-
-        @media (max-width: 768px) {
-            .account-grid {
-                grid-template-columns: 1fr;
-            }
-        }
         * {
             margin: 0;
             padding: 0;
@@ -98,6 +22,7 @@
             padding: 20px;
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
         }
 
         .container {
@@ -117,6 +42,7 @@
             border-radius: 10px;
             padding: 20px;
             transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .account-card:hover {
@@ -127,10 +53,12 @@
             color: #E50914;
             font-weight: bold;
             margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
         .account-details {
             margin: 15px 0;
+            line-height: 1.6;
         }
 
         .reload-btn {
@@ -143,6 +71,11 @@
             font-size: 16px;
             margin: 30px auto;
             display: block;
+            transition: opacity 0.3s;
+        }
+
+        .reload-btn:hover {
+            opacity: 0.9;
         }
 
         footer {
@@ -150,20 +83,41 @@
             text-align: center;
             padding: 20px;
             margin-top: 50px;
+            font-size: 0.9em;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #E50914;
+            font-weight: bold;
         }
 
         @media (max-width: 768px) {
             .account-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
         }
 
-        /* New timer styles */
-        .timer {
-            text-align: center;
-            font-size: 1.2em;
-            margin: 20px 0;
-            color: #E50914;
+        .copy-btn {
+            background: #E50914;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #C40811;
         }
     </style>
 </head>
@@ -175,9 +129,7 @@
     </div>
 
     <div class="container">
-        <div class="account-grid" id="accountsContainer">
-            <!-- Accounts will be injected here via JavaScript -->
-        </div>
+        <div class="account-grid" id="accountsContainer"></div>
         <button class="reload-btn" onclick="refreshAll()">Refresh Accounts ♻️</button>
     </div>
 
@@ -187,6 +139,7 @@
     </footer>
 
     <script>
+        // Fake accounts data
         const fakeAccounts = [
             {type: "Premium", email: "premium01@netflix.com", password: "XyZ12!@#", expiry: "2024-03-01"},
             {type: "Standard", email: "family_account@mail.com", password: "Family1234", expiry: "2023-12-15"},
@@ -197,7 +150,8 @@
         ];
 
         // Timer functionality
-        let countDownDate = localStorage.getItem('countDownDate') || new Date().getTime() + 24 * 60 * 60 * 1000;
+        let countDownDate = localStorage.getItem('countDownDate') || 
+            (new Date().getTime() + 24 * 60 * 60 * 1000);
 
         function updateTimer() {
             const now = new Date().getTime();
@@ -213,19 +167,25 @@
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             document.getElementById("timer").innerHTML = 
-                `Next refresh in: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `Next refresh in: ${hours.toString().padStart(2, '0')}:` +
+                `${minutes.toString().padStart(2, '0')}:` +
+                `${seconds.toString().padStart(2, '0')}`;
         }
 
         // Copy to clipboard function
         function copyToClipboard(email, password) {
             const text = `Email: ${email}\nPassword: ${password}`;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Account details copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-            });
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    alert('✅ Account details copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('❌ Error copying to clipboard!');
+                });
         }
 
+        // Generate account cards
         function generateAccounts() {
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
@@ -240,9 +200,8 @@
                         <p>🔑 Password: ${account.password}</p>
                         <p>📅 Expiry Date: ${account.expiry}</p>
                     </div>
-                    <button 
-                        onclick="copyToClipboard('${account.email}', '${account.password}')" 
-                        style="background: #E50914; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-top: 10px; cursor: pointer;">
+                    <button class="copy-btn" 
+                        onclick="copyToClipboard('${account.email}', '${account.password}')">
                         Copy Account
                     </button>
                 `;
@@ -250,16 +209,20 @@
             });
         }
 
+        // Refresh all accounts and timer
         function refreshAll() {
             countDownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
             localStorage.setItem('countDownDate', countDownDate);
             generateAccounts();
+            updateTimer();
         }
 
-        // Initial setup
-        generateAccounts();
-        setInterval(updateTimer, 1000);
-        updateTimer(); // Initial timer call
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            generateAccounts();
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        });
     </script>
 </body>
 </html>
