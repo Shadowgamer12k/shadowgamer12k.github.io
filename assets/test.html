@@ -5,6 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Accounts Generator</title>
     <style>
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: white;
+        }
+
+        .header {
+            background-color: #E50914;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .account-card {
+            background: #2F2F2F;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .account-type {
+            color: #E50914;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .account-details {
+            margin: 15px 0;
+        }
+
+        .reload-btn {
+            background: #E50914;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 30px auto;
+            display: block;
+        }
+
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+        }
         * {
             margin: 0;
             padding: 0;
@@ -81,19 +157,28 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* New timer styles */
+        .timer {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #E50914;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Premium Netflix Accounts</h1>
         <p>Auto-refresh every 24 hours</p>
+        <div class="timer" id="timer">Next refresh in: 24:00:00</div>
     </div>
 
     <div class="container">
         <div class="account-grid" id="accountsContainer">
             <!-- Accounts will be injected here via JavaScript -->
         </div>
-        <button class="reload-btn" onclick="generateAccounts()">Refresh Accounts ♻️</button>
+        <button class="reload-btn" onclick="refreshAll()">Refresh Accounts ♻️</button>
     </div>
 
     <footer>
@@ -111,6 +196,36 @@
             {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2024-01-05"}
         ];
 
+        // Timer functionality
+        let countDownDate = localStorage.getItem('countDownDate') || new Date().getTime() + 24 * 60 * 60 * 1000;
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            if (distance < 0) {
+                refreshAll();
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = 
+                `Next refresh in: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(email, password) {
+            const text = `Email: ${email}\nPassword: ${password}`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Account details copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
         function generateAccounts() {
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
@@ -125,14 +240,26 @@
                         <p>🔑 Password: ${account.password}</p>
                         <p>📅 Expiry Date: ${account.expiry}</p>
                     </div>
-                    <button style="background: #E50914; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-top: 10px;">Copy Account</button>
+                    <button 
+                        onclick="copyToClipboard('${account.email}', '${account.password}')" 
+                        style="background: #E50914; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-top: 10px; cursor: pointer;">
+                        Copy Account
+                    </button>
                 `;
                 container.appendChild(accountCard);
             });
         }
 
-        // Generate accounts on page load
+        function refreshAll() {
+            countDownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
+            localStorage.setItem('countDownDate', countDownDate);
+            generateAccounts();
+        }
+
+        // Initial setup
         generateAccounts();
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Initial timer call
     </script>
 </body>
 </html>
