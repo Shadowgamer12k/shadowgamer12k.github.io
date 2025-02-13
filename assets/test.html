@@ -162,12 +162,12 @@
 
     <script>
         const fakeAccounts = [
-            {type: "Premium", email: "premium01@netflix.com", password: "XyZ12!@#", expiry: "2024-03-01"},
-            {type: "Standard", email: "family_account@mail.com", password: "Family1234", expiry: "2023-12-15"},
-            {type: "Basic", email: "basic_user@fake.com", password: "BasicPass987", expiry: "2024-01-10"},
-            {type: "Premium", email: "vip_account@example.net", password: "V!P@9876", expiry: "2024-02-28"},
-            {type: "Standard", email: "movie_lover@mail.com", password: "Movies2023!", expiry: "2023-11-30"},
-            {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2024-01-05"}
+            {type: "Premium", email: "premium01@netflix.com", password: "XyZ12!@#", expiry: "2026-03-01"},
+            {type: "Standard", email: "family_account@mail.com", password: "Family1234", expiry: "2027-12-15"},
+            {type: "Basic", email: "basic_user@fake.com", password: "BasicPass987", expiry: "2028-01-10"},
+            {type: "Premium", email: "vip_account@example.net", password: "V!P@9876", expiry: "2029-02-28"},
+            {type: "Standard", email: "movie_lover@mail.com", password: "Movies2023!", expiry: "2026-11-30"},
+            {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2030-01-05"}
         ];
 
         function getRandomAccount() {
@@ -190,7 +190,7 @@
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
 
-            // Generate new random accounts on each refresh
+            // Generate new random accounts with future expiration dates
             for(let i = 0; i < 6; i++) {
                 const account = getRandomAccount();
                 const accountCard = document.createElement('div');
