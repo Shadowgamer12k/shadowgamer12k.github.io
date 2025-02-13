@@ -4,25 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Netflix Accounts Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
         }
 
         body {
             background-color: #141414;
             color: white;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
         }
 
         .header {
             background-color: #E50914;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
         }
 
         .container {
@@ -40,7 +56,7 @@
         .account-card {
             background: #2F2F2F;
             border-radius: 10px;
-            padding: 20px;
+            padding: 25px;
             transition: transform 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -51,14 +67,19 @@
 
         .account-type {
             color: #E50914;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
 
         .account-details {
             margin: 15px 0;
-            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .account-details p {
+            margin: 10px 0;
         }
 
         .reload-btn {
@@ -72,6 +93,9 @@
             margin: 30px auto;
             display: block;
             transition: opacity 0.3s;
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1px;
+            font-size: 1.2rem;
         }
 
         .reload-btn:hover {
@@ -84,6 +108,7 @@
             padding: 20px;
             margin-top: 50px;
             font-size: 0.9em;
+            font-weight: 300;
         }
 
         .timer {
@@ -91,17 +116,9 @@
             font-size: 1.2em;
             margin: 20px 0;
             color: #E50914;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .account-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 1.5em;
-            }
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
         }
 
         .copy-btn {
@@ -114,10 +131,26 @@
             cursor: pointer;
             width: 100%;
             transition: background 0.3s;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
         }
 
         .copy-btn:hover {
             background: #C40811;
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .account-type {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -139,7 +172,6 @@
     </footer>
 
     <script>
-        // Fake accounts data
         const fakeAccounts = [
             {type: "Premium", email: "premium01@netflix.com", password: "XyZ12!@#", expiry: "2024-03-01"},
             {type: "Standard", email: "family_account@mail.com", password: "Family1234", expiry: "2023-12-15"},
@@ -149,7 +181,6 @@
             {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2024-01-05"}
         ];
 
-        // Timer functionality
         let countDownDate = localStorage.getItem('countDownDate') || 
             (new Date().getTime() + 24 * 60 * 60 * 1000);
 
@@ -172,7 +203,6 @@
                 `${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Copy to clipboard function
         function copyToClipboard(email, password) {
             const text = `Email: ${email}\nPassword: ${password}`;
             navigator.clipboard.writeText(text)
@@ -185,7 +215,6 @@
                 });
         }
 
-        // Generate account cards
         function generateAccounts() {
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
@@ -209,7 +238,6 @@
             });
         }
 
-        // Refresh all accounts and timer
         function refreshAll() {
             countDownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
             localStorage.setItem('countDownDate', countDownDate);
@@ -217,7 +245,6 @@
             updateTimer();
         }
 
-        // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             generateAccounts();
             setInterval(updateTimer, 1000);
