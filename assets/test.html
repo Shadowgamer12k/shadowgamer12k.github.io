@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Accounts Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: white;
+        }
+
+        .header {
+            background-color: #E50914;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .account-card {
+            background: #2F2F2F;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .account-type {
+            color: #E50914;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .account-details {
+            margin: 15px 0;
+        }
+
+        .reload-btn {
+            background: #E50914;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 30px auto;
+            display: block;
+        }
+
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Premium Netflix Accounts</h1>
+        <p>Auto-refresh every 24 hours</p>
+    </div>
+
+    <div class="container">
+        <div class="account-grid" id="accountsContainer">
+            <!-- Accounts will be injected here via JavaScript -->
+        </div>
+        <button class="reload-btn" onclick="generateAccounts()">Refresh Accounts ♻️</button>
+    </div>
+
+    <footer>
+        <p>⚠️ Disclaimer: These accounts are for educational purposes only</p>
+        <p>© 2023 All Rights Reserved</p>
+    </footer>
+
+    <script>
+        const fakeAccounts = [
+            {type: "Premium", email: "premium01@netflix.com", password: "XyZ12!@#", expiry: "2024-03-01"},
+            {type: "Standard", email: "family_account@mail.com", password: "Family1234", expiry: "2023-12-15"},
+            {type: "Basic", email: "basic_user@fake.com", password: "BasicPass987", expiry: "2024-01-10"},
+            {type: "Premium", email: "vip_account@example.net", password: "V!P@9876", expiry: "2024-02-28"},
+            {type: "Standard", email: "movie_lover@mail.com", password: "Movies2023!", expiry: "2023-11-30"},
+            {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2024-01-05"}
+        ];
+
+        function generateAccounts() {
+            const container = document.getElementById('accountsContainer');
+            container.innerHTML = '';
+
+            fakeAccounts.forEach(account => {
+                const accountCard = document.createElement('div');
+                accountCard.className = 'account-card';
+                accountCard.innerHTML = `
+                    <div class="account-type">${account.type}</div>
+                    <div class="account-details">
+                        <p>📧 Email: ${account.email}</p>
+                        <p>🔑 Password: ${account.password}</p>
+                        <p>📅 Expiry Date: ${account.expiry}</p>
+                    </div>
+                    <button style="background: #E50914; color: white; padding: 8px 20px; border: none; border-radius: 4px; margin-top: 10px;">Copy Account</button>
+                `;
+                container.appendChild(accountCard);
+            });
+        }
+
+        // Generate accounts on page load
+        generateAccounts();
+    </script>
+</body>
+</html>
