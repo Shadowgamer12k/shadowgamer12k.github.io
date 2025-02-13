@@ -111,16 +111,6 @@
             font-weight: 300;
         }
 
-        .timer {
-            text-align: center;
-            font-size: 1.2em;
-            margin: 20px 0;
-            color: #E50914;
-            font-family: 'Bebas Neue', cursive;
-            letter-spacing: 1px;
-            font-size: 1.5rem;
-        }
-
         .copy-btn {
             background: #E50914;
             color: white;
@@ -157,13 +147,12 @@
 <body>
     <div class="header">
         <h1>Premium Netflix Accounts</h1>
-        <p>Auto-refresh every 24 hours</p>
-        <div class="timer" id="timer">Next refresh in: 24:00:00</div>
+        <p>Instant refresh available</p>
     </div>
 
     <div class="container">
         <div class="account-grid" id="accountsContainer"></div>
-        <button class="reload-btn" onclick="refreshAll()">Refresh Accounts ♻️</button>
+        <button class="reload-btn" onclick="refreshAll()">Instant Refresh ♻️</button>
     </div>
 
     <footer>
@@ -181,26 +170,8 @@
             {type: "Basic", email: "testuser456@fake.com", password: "Test@4567", expiry: "2024-01-05"}
         ];
 
-        let countDownDate = localStorage.getItem('countDownDate') || 
-            (new Date().getTime() + 24 * 60 * 60 * 1000);
-
-        function updateTimer() {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-
-            if (distance < 0) {
-                refreshAll();
-                return;
-            }
-
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("timer").innerHTML = 
-                `Next refresh in: ${hours.toString().padStart(2, '0')}:` +
-                `${minutes.toString().padStart(2, '0')}:` +
-                `${seconds.toString().padStart(2, '0')}`;
+        function getRandomAccount() {
+            return fakeAccounts[Math.floor(Math.random() * fakeAccounts.length)];
         }
 
         function copyToClipboard(email, password) {
@@ -219,7 +190,9 @@
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
 
-            fakeAccounts.forEach(account => {
+            // Generate new random accounts on each refresh
+            for(let i = 0; i < 6; i++) {
+                const account = getRandomAccount();
                 const accountCard = document.createElement('div');
                 accountCard.className = 'account-card';
                 accountCard.innerHTML = `
@@ -235,21 +208,15 @@
                     </button>
                 `;
                 container.appendChild(accountCard);
-            });
+            }
         }
 
         function refreshAll() {
-            countDownDate = new Date().getTime() + 24 * 60 * 60 * 1000;
-            localStorage.setItem('countDownDate', countDownDate);
             generateAccounts();
-            updateTimer();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            generateAccounts();
-            setInterval(updateTimer, 1000);
-            updateTimer();
-        });
+        // Initial load
+        generateAccounts();
     </script>
 </body>
 </html>
