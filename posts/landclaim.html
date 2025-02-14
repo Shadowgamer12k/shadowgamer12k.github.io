@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <script>
-  let lastPopupTime = 0; 
+<script>
+  let lastPopupTime = 0;
+  const links = [
+    "https://theeghumoaps.com/4/8936599",
+    "https://theeghumoaps.com/4/8936543",
+    "https://theeghumoaps.com/4/8773883"
+  ];
 
   document.addEventListener("click", function () {
     const currentTime = Date.now();
-    const timeSinceLastPopup = currentTime - lastPopupTime;
-
-    if (timeSinceLastPopup >= 10000) {
-      window.open(
-        "https://mostourigoatik.com/4/8773883",
-        "popupWindow",
-        "width=600,height=400,scrollbars=yes"
-      );
+    if (currentTime - lastPopupTime >= 10000) {
+      const randomLink = links[Math.floor(Math.random() * links.length)];
+      window.open(randomLink, "popupWindow", "width=600,height=400,scrollbars=yes");
       lastPopupTime = currentTime;
     }
   });
 </script>
+
 
 
     <script type='text/javascript' src='//sprungextraordinaryhonorary.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js'></script>
