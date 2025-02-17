@@ -90,14 +90,14 @@
     background-color: #000; /* لإضافة خلفية سوداء حول الصورة إذا لم تملأ المساحة بالكامل */
 }
 
-      .card-content {
+  .card-content {
     padding: 1rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* ضع المحتوى في المنتصف عموديًا */
-    align-items: center; /* ضع المحتوى في المنتصف أفقيًا */
+    flex-direction: column; /* توزيع العناصر عموديًا */
+    justify-content: center; /* محاذاة عمودية للعناصر في الوسط */
+    align-items: center; /* محاذاة أفقية للعناصر في الوسط */
     height: 100%;
-    text-align: center; /* تأكد من محاذاة النصوص */
+    text-align: center;
 }
 
         h3 {
@@ -132,10 +132,10 @@
     align-self: center; /* محاذاة في وسط البطاقة */
 }
 
-        .download-button:hover {
-            background: var(--mc-hover);
-            color: white;
-        }
+       .download-button:hover {
+    background: var(--mc-hover);
+    color: white;
+}
 
         @media (max-width: 768px) {
             header {
