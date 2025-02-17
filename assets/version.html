@@ -6,8 +6,114 @@
     <title>Minecraft Version 1.20</title>
     <link href='https://fonts.cdnfonts.com/css/minecraft-4' rel='stylesheet'>
     <style>
-        /* All previous styles from index.html */
-        /* Add version page specific styles */
+         :root {
+            --mc-green: #55FF55;
+            --mc-dark: #2D2D2D;
+            --mc-border: #555555;
+            --mc-gold: #fed83d;
+            --mc-background: #1a1a1a;
+        }
+
+        body {
+            background-color: var(--mc-background);
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+            font-family: 'Minecraft', Arial, sans-serif;
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--mc-border);
+        }
+
+        .header-logo {
+            max-width: 600px;
+            width: 90%;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 15px var(--mc-green));
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .version-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--mc-border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .version-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.2);
+        }
+
+        .version-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--mc-border);
+        }
+
+        .download-button {
+            background: var(--mc-dark);
+            color: white;
+            padding: 1rem 2rem;
+            border: 3px solid var(--mc-border);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin: 1rem;
+        }
+
+        .download-button:hover {
+            background: var(--mc-green);
+            color: var(--mc-dark);
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            text-align: center;
+            border-top: 4px solid var(--mc-border);
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .version-thumbnail {
+                height: 150px;
+            }
+            
+            .download-button {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
         
         .version-container {
             max-width: 1200px;
