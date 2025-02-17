@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container version-page">
+        <a href="index.html" class="btn">Back to Main</a>
+        <h2>Version 1.20 Features</h2>
+        <p>Educational features and improvements...</p>
+        
+        <div class="image-grid">
+            <img src="feature1.jpg" alt="Feature 1">
+            <img src="feature2.jpg" alt="Feature 2">
+        </div>
+
+        <button class="btn" onclick="showLink()">Get Download Link</button>
+        <div id="linkContainer" class="hidden">
+            <p>Direct link: <a href="#" id="directLink">https://example.com</a></p>
+            <div class="timer">
+                Download available in <span id="countdown">10</span>s
+            </div>
+            <a href="YOUR_MEDIAFIRE_LINK" class="btn hidden" id="downloadBtn">Download Now</a>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
