@@ -2,22 +2,21 @@
 <html lang="en">
 <head>
   <script>
-  let lastPopupTime = 0;
   const links = [
     "https://theeghumoaps.com/4/8936599",
     "https://theeghumoaps.com/4/8936543",
     "https://theeghumoaps.com/4/8773883"
   ];
 
-  document.addEventListener("click", function () {
-    const currentTime = Date.now();
-    if (currentTime - lastPopupTime >= 10000) {
+  // Check if the popup has already been shown in this session
+  if (!sessionStorage.getItem("popupShown")) {
+    document.addEventListener("click", function () {
       const randomLink = links[Math.floor(Math.random() * links.length)];
       window.open(randomLink, "popupWindow", "width=600,height=400,scrollbars=yes");
-      lastPopupTime = currentTime;
-    }
-  });
-</script>
+      sessionStorage.setItem("popupShown", "true"); // Mark as shown
+    });
+  }
+  </script>
 
 
    
