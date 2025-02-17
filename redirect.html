@@ -458,60 +458,49 @@
             });
         }
 
-      const params = new URLSearchParams(window.location.search);
-const encodedURL = params.get("url");
+     const params = new URLSearchParams(window.location.search);
+        const targetURL = decodeURIComponent(params.get("url"));
+        let tasksCompleted = 0;
 
-// فك تشفير Base64
-function decodeBase64(encoded) {
-    try {
-        return atob(encoded);
-    } catch (e) {
-        return null;
-    }
-}
-
-const targetURL = decodeBase64(encodedURL);
-let tasksCompleted = 0;
-
-  function taskCompleted() {
-    tasksCompleted++;
-    if (tasksCompleted === 4) {
-        if (!targetURL) {
-            showError("Invalid redirect link.");
-            return;
+        function taskCompleted() {
+            tasksCompleted++;
+            if (tasksCompleted === 4) {
+                if (!targetURL) {
+                    showError("Invalid redirect link.");
+                    return;
+                }
+                showRedirectMessage();
+                startRedirectCountdown();
+            }
         }
-        showRedirectMessage();
-        startRedirectCountdown();
-    }
-}
 
-    function showRedirectMessage() {
-    document.getElementById("message").textContent = "Redirecting you...";
-    document.querySelector(".loadingspinner").style.display = "block";
-    document.querySelectorAll(".task-button").forEach(button => {
-        button.style.display = "none";
-    });
-}
-
- function startRedirectCountdown() {
-    let seconds = 5;
-    const countdownElement = document.createElement("div");
-    countdownElement.id = "countdown";
-    document.querySelector(".loadingspinner").after(countdownElement);
-    
-    const interval = setInterval(() => {
-        countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
-        if (seconds-- <= 0) {
-            clearInterval(interval);
-            window.location.href = targetURL;
+        function showRedirectMessage() {
+            document.getElementById("message").textContent = "Redirecting you...";
+            document.querySelector(".loadingspinner").style.display = "block";
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.style.display = "none";
+            });
         }
-    }, 1000);
-}
 
-    function showError(message) {
-    document.getElementById("message").textContent = message;
-    document.querySelector(".error").style.display = "block";
-}
+        function startRedirectCountdown() {
+            let seconds = 5;
+            const countdownElement = document.createElement("div");
+            countdownElement.id = "countdown";
+            document.querySelector(".loadingspinner").after(countdownElement);
+            
+            const interval = setInterval(() => {
+                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
+                if (seconds-- <= 0) {
+                    clearInterval(interval);
+                    window.location.href = targetURL;
+                }
+            }, 1000);
+        }
+
+        function showError(message) {
+            document.getElementById("message").textContent = message;
+            document.querySelector(".error").style.display = "block";
+        }
 
         async function startCountdown(button) {
             if (button.classList.contains('completed')) return;
