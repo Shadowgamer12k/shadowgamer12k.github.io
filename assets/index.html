@@ -1,156 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type='text/javascript' src='//sprungextraordinaryhonorary.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft Education Downloads</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-     <style>
+    <link href='https://fonts.cdnfonts.com/css/minecraft-4' rel='stylesheet'>
+    <style>
         :root {
-            --mc-dark: #1a1a1a;
-            --mc-green: #3b8526;
-            --mc-light: #f0f0f0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            --mc-green: #55FF55;
+            --mc-dark: #2D2D2D;
+            --mc-border: #555555;
+            --mc-gold: #fed83d;
+            --mc-background: #1a1a1a;
         }
 
         body {
-            background-color: var(--mc-dark);
-            color: var(--mc-light);
+            background-color: var(--mc-background);
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+            font-family: 'Minecraft', Arial, sans-serif;
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            margin: 0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background-color: var(--mc-green);
-            padding: 1rem;
+        .header {
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 2rem;
+            border-bottom: 4px solid var(--mc-border);
+        }
+
+        .header-logo {
+            max-width: 600px;
+            width: 90%;
+            image-rendering: pixelated;
+            filter: drop-shadow(0 0 15px var(--mc-green));
         }
 
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 1rem;
+            padding: 2rem;
         }
 
-        .card {
-            background: #2a2a2a;
+        .version-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--mc-border);
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s;
         }
 
-        .card:hover {
+        .version-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.2);
         }
 
-        .card img {
+        .version-thumbnail {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            border-bottom: 4px solid var(--mc-border);
         }
 
-        .card-content {
-            padding: 1rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: var(--mc-green);
+        .download-button {
+            background: var(--mc-dark);
             color: white;
-            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 3px solid var(--mc-border);
             border-radius: 5px;
-            margin-top: 1rem;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin: 1rem;
         }
 
-        .btn:hover {
-            background-color: #2b6c1c;
+        .download-button:hover {
+            background: var(--mc-green);
+            color: var(--mc-dark);
+            transform: scale(1.05);
         }
 
-        .version-page {
-            padding: 2rem;
-        }
-
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .timer {
-            font-size: 1.5rem;
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
             text-align: center;
-            margin: 2rem 0;
-        }
-
-        .hidden {
-            display: none;
+            border-top: 4px solid var(--mc-border);
+            margin-top: 3rem;
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
+            .card-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
             }
             
-            .card {
-                margin: 10px;
+            .version-thumbnail {
+                height: 150px;
+            }
+            
+            .download-button {
+                width: 100%;
+                margin: 0.5rem 0;
             }
         }
     </style>
+</head>
 <body>
-    <header>
-        <h1>Minecraft Education Edition</h1>
-        <p>Official Download Portal</p>
+    <header class="header">
+        <img src="minecraft-logo.png" alt="Minecraft Education" class="header-logo">
     </header>
 
-    <div class="container">
-        <div class="card-grid">
-            <div class="card">
-                <img src="placeholder-version1.jpg" alt="Version 1.20">
-                <div class="card-content">
-                    <h3>Version 1.20</h3>
-                    <a href="version.html" class="btn">View Details</a>
-                </div>
+    <main class="card-grid">
+        <div class="version-card">
+            <img src="version-1.20.jpg" alt="Version 1.20" class="version-thumbnail">
+            <div style="padding: 1.5rem; text-align: center;">
+                <h3>Bedrock Edition 1.20</h3>
+                <p>Education Features Update</p>
+                <a href="version.html" class="download-button">
+                    <span>📘</span> View Details
+                </a>
             </div>
-            <!-- Add more cards -->
         </div>
-    </div>
+    </main>
+
+    <footer>
+        <p>© 2023 Minecraft Education | Educational use only</p>
+    </footer>
+
     <script>
-        function showLink() {
-            document.getElementById('linkContainer').classList.remove('hidden');
-            startTimer();
-        }
+        // Adblock Detection
+        (function() {
+            const adBlockModal = document.createElement('div');
+            adBlockModal.innerHTML = `
+                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                    background: #2d2d2d; padding: 2rem; border: 4px solid #55ff55; text-align: center;">
+                    <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
+                    <p>Please disable ad blocker to continue</p>
+                    <button onclick="this.parentElement.style.display='none'">Continue</button>
+                </div>
+            `;
 
-        function startTimer() {
-            let seconds = 10;
-            const countdownElement = document.getElementById('countdown');
-            const downloadBtn = document.getElementById('downloadBtn');
-
-            const timer = setInterval(() => {
-                seconds--;
-                countdownElement.textContent = seconds;
-                
-                if(seconds <= 0) {
-                    clearInterval(timer);
-                    downloadBtn.classList.remove('hidden');
+            async function detectAdBlock() {
+                try {
+                    await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', { 
+                        method: 'HEAD', 
+                        mode: 'no-cors'
+                    });
+                    return false;
+                } catch(e) {
+                    return true;
                 }
-            }, 1000);
-        }
+            }
+
+            async function checkAdBlock() {
+                const isBlocked = await detectAdBlock();
+                if(isBlocked) {
+                    document.body.appendChild(adBlockModal);
+                }
+            }
+
+            setTimeout(checkAdBlock, 2000);
+            setInterval(checkAdBlock, 5000);
+        })();
     </script>
 </body>
 </html>
