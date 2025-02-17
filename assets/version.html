@@ -3,135 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Version Details</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-     <style>
-        :root {
-            --mc-dark: #1a1a1a;
-            --mc-green: #3b8526;
-            --mc-light: #f0f0f0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            background-color: var(--mc-dark);
-            color: var(--mc-light);
-        }
-
-        .container {
+    <title>Minecraft Version 1.20</title>
+    <link href='https://fonts.cdnfonts.com/css/minecraft-4' rel='stylesheet'>
+    <style>
+        /* All previous styles from index.html */
+        /* Add version page specific styles */
+        
+        .version-container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background-color: var(--mc-green);
-            padding: 1rem;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 1rem;
-        }
-
-        .card {
-            background: #2a2a2a;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 1rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: var(--mc-green);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2b6c1c;
-        }
-
-        .version-page {
+            margin: 2rem auto;
             padding: 2rem;
         }
 
-        .image-grid {
+        .version-media {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
             margin: 2rem 0;
         }
 
-        .timer {
-            font-size: 1.5rem;
+        .version-media img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border: 4px solid var(--mc-border);
+        }
+
+        .timer-box {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
             text-align: center;
+            border: 4px solid var(--mc-green);
             margin: 2rem 0;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--mc-green);
+            width: 100%;
+            animation: countdown 10s linear forwards;
+        }
+
+        @keyframes countdown {
+            from { width: 100%; }
+            to { width: 0; }
         }
 
         .hidden {
             display: none;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .card {
-                margin: 10px;
-            }
-        }
     </style>
+</head>
 <body>
-    <div class="container version-page">
-        <a href="index.html" class="btn">Back to Main</a>
-        <h2>Version 1.20 Features</h2>
-        <p>Educational features and improvements...</p>
-        
-        <div class="image-grid">
-            <img src="feature1.jpg" alt="Feature 1">
-            <img src="feature2.jpg" alt="Feature 2">
+    <header class="header">
+        <img src="minecraft-logo.png" alt="Minecraft Education" class="header-logo">
+    </header>
+
+    <main class="version-container">
+        <a href="index.html" class="download-button">
+            <span>◀</span> All Versions
+        </a>
+
+        <div class="version-header">
+            <h1>Version 1.20</h1>
+            <p>Educational Features Edition</p>
         </div>
 
-        <button class="btn" onclick="showLink()">Get Download Link</button>
-        <div id="linkContainer" class="hidden">
-            <p>Direct link: <a href="#" id="directLink">https://example.com</a></p>
-            <div class="timer">
-                Download available in <span id="countdown">10</span>s
-            </div>
-            <a href="YOUR_MEDIAFIRE_LINK" class="btn hidden" id="downloadBtn">Download Now</a>
+        <div class="version-media">
+            <img src="version1-preview1.jpg" alt="Preview 1">
+            <img src="version1-preview2.jpg" alt="Preview 2">
         </div>
-    </div>
-    <script src="script.js"></script>
+
+        <div class="timer-box">
+            <button class="download-button" onclick="startDownloadTimer()">
+                <span>⏳</span> Generate Download Link
+            </button>
+            <div id="timer-display" class="hidden">
+                <p>Link available in <span id="countdown">10</span> seconds</p>
+                <div class="progress-bar"></div>
+                <a href="YOUR_MEDIAFIRE_LINK" id="download-link" class="hidden">
+                    <span>⬇</span> Start Download
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let timerInterval;
+
+        function startDownloadTimer() {
+            const timerDisplay = document.getElementById('timer-display');
+            const countdownElement = document.getElementById('countdown');
+            const downloadLink = document.getElementById('download-link');
+            const downloadButton = document.querySelector('.download-button');
+            
+            downloadButton.classList.add('hidden');
+            timerDisplay.classList.remove('hidden');
+            
+            let seconds = 10;
+            
+            timerInterval = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = seconds;
+                
+                if(seconds <= 0) {
+                    clearInterval(timerInterval);
+                    downloadLink.classList.remove('hidden');
+                    timerDisplay.classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        window.addEventListener('beforeunload', () => {
+            if(timerInterval) clearInterval(timerInterval);
+        });
+    </script>
 </body>
 </html>
