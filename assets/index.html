@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script type='text/javascript' src='//sprungextraordinaryhonorary.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Education Downloads</title>
-    <link href='https://fonts.cdnfonts.com/css/minecraft-4' rel='stylesheet'>
+    <title>Minecraft Downloads</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     <style>
         :root {
             --mc-green: #55FF55;
@@ -13,257 +12,161 @@
             --mc-border: #555555;
             --mc-gold: #fed83d;
             --mc-background: #1a1a1a;
+            --mc-hover: #444444;
         }
 
         body {
             background-color: var(--mc-background);
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
             font-family: 'Minecraft', Arial, sans-serif;
             color: white;
-            line-height: 1.6;
-            min-height: 100vh;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .header {
-            padding: 2rem;
+        header {
+            width: 100%;
+            padding: 2rem 1rem;
             text-align: center;
             border-bottom: 4px solid var(--mc-border);
         }
 
         .header-logo {
-            max-width: 600px;
+            max-width: 300px;
             width: 90%;
             image-rendering: pixelated;
-            filter: drop-shadow(0 0 15px var(--mc-green));
         }
 
-           .card-grid {
+        .main-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             padding: 2rem;
+            width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
+            box-sizing: border-box;
         }
 
-        .version-card {
-            background: rgba(0, 0, 0, 0.8);
-            border: 4px solid var(--mc-border);
+        .card {
+            background: var(--mc-dark);
+            border: 3px solid var(--mc-border);
             border-radius: 8px;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
         }
 
-        .image-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
-            overflow: hidden;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
         }
 
-        .version-thumbnail {
+        .image-container {
+            width: 100%;
+            padding-top: 56.25%;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .card img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-bottom: 4px solid var(--mc-border);
             image-rendering: pixelated;
         }
 
         .card-content {
-            padding: 1.5rem;
-            text-align: center;
-            flex: 1;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            height: 100%;
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--mc-gold);
+            text-align: center;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #ccc;
+            text-align: center;
+            margin: 0.5rem 0 1rem;
         }
 
         .download-button {
-            background: var(--mc-dark);
-            color: white;
-            padding: 1rem 2rem;
-            border: 3px solid var(--mc-border);
+            background: var(--mc-green);
+            color: #000;
+            padding: 0.75rem 1.5rem;
+            border: none;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
             text-decoration: none;
-            margin-top: auto;
-            width: fit-content;
-            align-self: center;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: background 0.3s;
+        }
+
+        .download-button:hover {
+            background: var(--mc-hover);
+            color: white;
         }
 
         @media (max-width: 768px) {
-            .card-grid {
-                grid-template-columns: 1fr;
+            header {
                 padding: 1rem;
             }
-            
-            .image-container {
-                padding-top: 75%; /* 4:3 aspect ratio for mobile */
+
+            .header-logo {
+                max-width: 200px;
             }
-            
+
             .download-button {
                 width: 100%;
-                margin: 0.5rem 0;
-                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <img src="minecraft-logo.png" alt="Minecraft Education" class="header-logo">
+    <header>
+        <img src="minecraft-logo.png" alt="Minecraft Logo" class="header-logo">
     </header>
 
-    <main class="card-grid">
-        <div class="version-card">
+    <main class="main-content">
+        <div class="card">
             <div class="image-container">
-                <img src="./images/mc1.21.60.png" alt="Version 1.20" class="version-thumbnail">
+                <img src="./images/mc1.21.60.png" alt="Minecraft Bedrock 1.21.60">
             </div>
             <div class="card-content">
                 <h3>Bedrock Edition 1.21.60</h3>
-                <p>New Minecraft Version is here</p>
-                <a href="version.html" class="download-button">
-                    <span>📘</span> Click To Download
-                </a>
+                <p>Experience the latest Minecraft version now!</p>
+                <a href="version.html" class="download-button">Download Now</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-container">
+                <img src="./images/mc1.21.50.png" alt="Minecraft Bedrock 1.21.50">
+            </div>
+            <div class="card-content">
+                <h3>Bedrock Edition 1.21.50</h3>
+                <p>Explore new features and improvements!</p>
+                <a href="version.html" class="download-button">Download Now</a>
             </div>
         </div>
     </main>
-
-
-    <script>
-      (function() {
-    const detectors = {
-        blockedRequests: async () => {
-            try {
-                const testUrls = [
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                    'https://adservice.google.com/adsid/integrator.js',
-                    'https://cdn.taboola.com/libtrc/unip/'
-                ];
-
-                const results = await Promise.all(
-                    testUrls.map(url => 
-                        fetch(url, {method: 'HEAD'})
-                        .then(() => false)
-                        .catch(() => true)
-                    )
-                );
-
-                return results.filter(x => x).length >= 2;
-            } catch {
-                return false;
-            }
-        },
-
-        hiddenElements: () => {
-            const testElement = document.getElementById('ad-test');
-            return testElement && 
-                (testElement.offsetHeight === 0 ||
-                 window.getComputedStyle(testElement).display === 'none');
-        },
-
-        detectExtensions: () => {
-            const extensionSignatures = {
-                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
-                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
-                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
-                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
-            };
-
-            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
-        },
-
-        checkChromeExtensions: async () => {
-            if (typeof chrome === 'undefined') return null;
-            
-            const extensionIds = {
-                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
-            };
-
-            try {
-                for (const [name, id] of Object.entries(extensionIds)) {
-                    const exists = await new Promise(resolve => {
-                        chrome.runtime.sendMessage(id, {}, (response) => {
-                            resolve(chrome.runtime.lastError ? false : true);
-                        });
-                    });
-                    if (exists) return name;
-                }
-            } catch {}
-            return null;
-        }
-    };
-
-    async function detectAdBlock() {
-        const results = await Promise.all([
-            detectors.blockedRequests(),
-            detectors.hiddenElements(),
-            detectors.detectExtensions(),
-            detectors.checkChromeExtensions()
-        ]);
-
-        return {
-            detected: results.some(r => r),
-            extension: results.find(r => typeof r === 'string') || 'unknown'
-        };
-    }
-
-    function showAdblockModal(extension) {
-            const modal = document.querySelector('.adblock-modal');
-            const overlay = document.querySelector('.adblock-overlay');
-            const resultDiv = document.getElementById('adblock-result');
-            
-            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                                <small>(Please disable to continue)</small>`;
-            modal.style.display = 'block';
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        document.getElementById('recheck-button').addEventListener('click', async () => {
-            const { detected, extension } = await detectAdBlock();
-            if (!detected) {
-                document.querySelector('.adblock-modal').style.display = 'none';
-                document.querySelector('.adblock-overlay').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-    // Initial check
-    setTimeout(async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (detected) showAdblockModal(extension);
-    }, 2000);
-
-    // Continuous background check
-    setInterval(async () => {
-        const { detected, extension } = await detectAdBlock();
-        const modal = document.querySelector('.adblock-modal');
-        
-        if (detected && modal.style.display === 'none') {
-            showAdblockModal(extension);
-        }
-    }, 5000);
-})();
-    </script>
 </body>
 </html>
