@@ -90,7 +90,7 @@
     background-color: #000; /* لإضافة خلفية سوداء حول الصورة إذا لم تملأ المساحة بالكامل */
 }
 
-  .card-content {
+.card-content {
     padding: 1rem;
     display: flex;
     flex-direction: column; /* توزيع العناصر عموديًا */
@@ -114,7 +114,7 @@
             margin: 0.5rem 0 1rem;
         }
 
-      .download-button {
+   .download-button {
     background: var(--mc-green);
     color: #000;
     padding: 0.75rem 1.5rem;
@@ -132,24 +132,25 @@
     align-self: center; /* محاذاة في وسط البطاقة */
 }
 
-       .download-button:hover {
+.download-button:hover {
     background: var(--mc-hover);
     color: white;
 }
 
-        @media (max-width: 768px) {
-            header {
-                padding: 1rem;
-            }
+       @media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
 
-            .header-logo {
-                max-width: 200px;
-            }
+    .header-logo {
+        max-width: 200px;
+    }
 
-            .download-button {
-                width: 100%;
-            }
-        }
+    .download-button {
+        /* إزالة العرض الكامل */
+        width: fit-content; 
+    }
+}
     </style>
 </head>
 <body>
