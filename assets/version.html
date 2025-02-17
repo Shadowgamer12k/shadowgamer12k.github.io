@@ -195,6 +195,125 @@
     </main>
 
     <script>
+        (function() {
+    const detectors = {
+        blockedRequests: async () => {
+            try {
+                const testUrls = [
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                    'https://adservice.google.com/adsid/integrator.js',
+                    'https://cdn.taboola.com/libtrc/unip/'
+                ];
+
+                const results = await Promise.all(
+                    testUrls.map(url => 
+                        fetch(url, {method: 'HEAD'})
+                        .then(() => false)
+                        .catch(() => true)
+                    )
+                );
+
+                return results.filter(x => x).length >= 2;
+            } catch {
+                return false;
+            }
+        },
+
+        hiddenElements: () => {
+            const testElement = document.getElementById('ad-test');
+            return testElement && 
+                (testElement.offsetHeight === 0 ||
+                 window.getComputedStyle(testElement).display === 'none');
+        },
+
+        detectExtensions: () => {
+            const extensionSignatures = {
+                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
+                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
+                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
+                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
+            };
+
+            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
+        },
+
+        checkChromeExtensions: async () => {
+            if (typeof chrome === 'undefined') return null;
+            
+            const extensionIds = {
+                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
+            };
+
+            try {
+                for (const [name, id] of Object.entries(extensionIds)) {
+                    const exists = await new Promise(resolve => {
+                        chrome.runtime.sendMessage(id, {}, (response) => {
+                            resolve(chrome.runtime.lastError ? false : true);
+                        });
+                    });
+                    if (exists) return name;
+                }
+            } catch {}
+            return null;
+        }
+    };
+
+    async function detectAdBlock() {
+        const results = await Promise.all([
+            detectors.blockedRequests(),
+            detectors.hiddenElements(),
+            detectors.detectExtensions(),
+            detectors.checkChromeExtensions()
+        ]);
+
+        return {
+            detected: results.some(r => r),
+            extension: results.find(r => typeof r === 'string') || 'unknown'
+        };
+    }
+
+    function showAdblockModal(extension) {
+            const modal = document.querySelector('.adblock-modal');
+            const overlay = document.querySelector('.adblock-overlay');
+            const resultDiv = document.getElementById('adblock-result');
+            
+            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                                <small>(Please disable to continue)</small>`;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('recheck-button').addEventListener('click', async () => {
+            const { detected, extension } = await detectAdBlock();
+            if (!detected) {
+                document.querySelector('.adblock-modal').style.display = 'none';
+                document.querySelector('.adblock-overlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+    // Initial check
+    setTimeout(async () => {
+        const { detected, extension } = await detectAdBlock();
+        if (detected) showAdblockModal(extension);
+    }, 2000);
+
+    // Continuous background check
+    setInterval(async () => {
+        const { detected, extension } = await detectAdBlock();
+        const modal = document.querySelector('.adblock-modal');
+        
+        if (detected && modal.style.display === 'none') {
+            showAdblockModal(extension);
+        }
+    }, 5000);
+})();
+
+        
         let timerInterval;
 
         function startDownloadTimer() {
