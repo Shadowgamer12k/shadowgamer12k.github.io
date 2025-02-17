@@ -24,5 +24,27 @@
             <!-- Add more cards -->
         </div>
     </div>
+    <script>
+        function showLink() {
+            document.getElementById('linkContainer').classList.remove('hidden');
+            startTimer();
+        }
+
+        function startTimer() {
+            let seconds = 10;
+            const countdownElement = document.getElementById('countdown');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            const timer = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = seconds;
+                
+                if(seconds <= 0) {
+                    clearInterval(timer);
+                    downloadBtn.classList.remove('hidden');
+                }
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
