@@ -11,7 +11,7 @@
 
   document.addEventListener("click", function () {
     const currentTime = Date.now();
-    if (currentTime - lastPopupTime >= 10000) {
+    if (currentTime - lastPopupTime >= 30000) {
       const randomLink = links[Math.floor(Math.random() * links.length)];
       window.open(randomLink, "popupWindow", "width=600,height=400,scrollbars=yes");
       lastPopupTime = currentTime;
