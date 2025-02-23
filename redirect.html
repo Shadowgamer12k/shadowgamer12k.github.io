@@ -1,536 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <title>Redirecting...</title>
-  
-  <style>
-    @font-face {
-      font-family: 'Minecraft';
-      src: url('assets/fonts/minecraft.otf') format('truetype');
+
+<script>
+  let lastPopupTime = 0;
+  const links = [
+    "https://theeghumoaps.com/4/8936599",
+    "https://theeghumoaps.com/4/8936543",
+    "https://theeghumoaps.com/4/8773883"
+  ];
+
+  document.addEventListener("click", function () {
+    const currentTime = Date.now();
+    if (currentTime - lastPopupTime >= 20000) {
+      const randomLink = links[Math.floor(Math.random() * links.length)];
+      window.open(randomLink, "popupWindow", "width=600,height=400,scrollbars=yes");
+      lastPopupTime = currentTime;
     }
-    
-    body {
-      background-color: #313131;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
-      background-size: 30px 30px;
-      background-position: -5px -5px;
-      font-family: 'Minecraft', cursive;
-      color: white;
-      text-align: center;
-      background-attachment: fixed;
-      min-height: 100vh;
-      margin: 0;
-      overflow-x: hidden; /* منع التمرير الأفقي */
-    }
-    
-    .loadingspinner {
-      --square: 26px;
-      --offset: 30px;
-      width: calc(3 * var(--offset) + var(--square));
-      height: calc(2 * var(--offset) + var(--square));
-      margin: 20px auto;
-      position: relative;
-      display: none;
-    }
-    
-    .loadingspinner div {
-      display: inline-block;
-      background: #00ff00;
-      border: none;
-      border-radius: 2px;
-      width: var(--square);
-      height: var(--square);
-      position: absolute;
-      font-size: 6pt;
-      color: black;
-    }
-    
-    @keyframes square1 {
-      0% { left: 0; top: 0; }
-      8.333% { left: 0; top: 30px; }
-      100% { left: 0; top: 30px; }
-    }
-    @keyframes square2 {
-      0% { left: 0; top: 30px; }
-      8.333% { left: 0; top: 60px; }
-      16.67% { left: 30px; top: 60px; }
-      25.00% { left: 30px; top: 30px; }
-      83.33% { left: 30px; top: 30px; }
-      91.67% { left: 30px; top: 0; }
-      100% { left: 0; top: 0; }
-    }
-    @keyframes square3 {
-      0%, 100% { left: 30px; top: 30px; }
-      25.00% { left: 30px; top: 0; }
-      33.33% { left: 60px; top: 0; }
-      41.67% { left: 60px; top: 30px; }
-      75.00% { left: 60px; top: 60px; }
-      83.33% { left: 30px; top: 60px; }
-      91.67% { left: 30px; top: 30px; }
-    }
-    @keyframes square4 {
-      0% { left: 60px; top: 30px; }
-      41.67% { left: 60px; top: 60px; }
-      50.00% { left: 90px; top: 60px; }
-      58.33% { left: 90px; top: 30px; }
-      100% { left: 90px; top: 30px; }
-    }
-    @keyframes square5 {
-      0% { left: 90px; top: 30px; }
-      58.33% { left: 90px; top: 0; }
-      66.67% { left: 60px; top: 0; }
-      75.00% { left: 60px; top: 30px; }
-      100% { left: 60px; top: 30px; }
-    }
-    
-    .error {
-      color: #ff4444;
-      display: none;
-      margin-top: 20px;
-    }
-    
-    a.task-button {
-      font-size: 30px;
-      background-color: #008542;
-      color: #fff;
-      text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      z-index: 1;
-      user-select: none;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      white-space: unset;
-      margin: 9px;
-      padding: 0.8rem 1.5rem;
-      text-decoration: none;
-      font-weight: 900;
-      transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-    }
-    
-    a.task-button:before {
-      position: absolute;
-      pointer-events: none;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      content: "";
-      transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-      z-index: -1;
-      background-color: #008542 !important;
-      box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
-                  0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
-                  4px 0 rgb(21 108 0 / 50%) inset;
-    }
-    
-    a.task-button:after {
-      position: absolute;
-      pointer-events: none;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      content: "";
-      box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-      transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
-    }
-    
-    a.task-button:hover:before {
-      box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
-                  -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
-    }
-    
-    a.task-button:hover:after {
-      box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-    }
-    
-    a.task-button:active {
-      transform: translateY(4px);
-    }
-    
-    a.task-button:active:after {
-      box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
-    }
-    
-    #countdown {
-      color: #55ff55;
-      font-size: 1.2em;
-      margin: 20px;
-    }
-    
-    #adblock-warning {
-      display: none;
-      color: #ff4444;
-      padding: 20px;
-      border: 2px solid #ff4444;
-      margin: 20px auto;
-      max-width: 600px;
-    }
-    
-    /* Ad Block Detection Modal */
-    .adblock-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      z-index: 9998;
-      pointer-events: all;
-    }
-    
-    .adblock-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #2d2d2d;
-      border: 4px solid #55ff55;
-      padding: 20px;
-      z-index: 9999;
-      max-width: 600px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
-      border-radius: 10px;
-      pointer-events: all;
-    }
-    
-    .adblock-modal h2 {
-      color: #55ff55;
-      font-size: 1.5em;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-    }
-    
-    .adblock-modal p {
-      color: #fff;
-      font-size: 0.9em;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-    
-    .adblock-modal button {
-      background: #008542;
-      border: 2px solid #55ff55;
-      color: #fff;
-      padding: 10px 25px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 0 10px;
-    }
-    
-    .adblock-modal button:hover {
-      background: #00a550;
-      transform: scale(1.05);
-    }
-  </style>
-  
-  <!-- سكريبت إعلان adsteraa -->
-  <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1153078"></script>
-  <script type="text/javascript" data-cfasync="false">
-  /*<![CDATA[/* */
-  (function(){var b=window,n="a66d0aeec711a50b29d1533358007452",x=[["siteId",508+719+983+217+5175306],["minBid",0],["popundersPerIP","5,5"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],h=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20va2pjbGljLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbS93aGFtbC5taW4uanM="],o=-1,j,i,c=function(){clearTimeout(i);o++;if(h[o]&&!(1766229427000<(new Date).getTime()&&1<o)){j=b.document.createElement("script");j.type="text/javascript";j.async=!0;var p=b.document.getElementsByTagName("script")[0];j.src="https://"+atob(h[o]);j.crossOrigin="anonymous";j.onerror=c;j.onload=function(){clearTimeout(i);b[n.slice(0,16)+n.slice(0,16)]||c()};i=setTimeout(c,5E3);p.parentNode.insertBefore(j,p)}};if(!b[n]){try{Object.freeze(b[n]=x)}catch(e){}c()}})();
-  /*]]>/* */
-  </script>
-  
+  });
+</script>
+     <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1153078"></script>
+            <script type="text/javascript" data-cfasync="false">
+/*<![CDATA[/* */
+(function(){var b=window,n="a66d0aeec711a50b29d1533358007452",x=[["siteId",508+719+983+217+5175306],["minBid",0],["popundersPerIP","5,5"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],h=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20va2pjbGljLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbS93aGFtbC5taW4uanM="],o=-1,j,i,c=function(){clearTimeout(i);o++;if(h[o]&&!(1766229427000<(new Date).getTime()&&1<o)){j=b.document.createElement("script");j.type="text/javascript";j.async=!0;var p=b.document.getElementsByTagName("script")[0];j.src="https://"+atob(h[o]);j.crossOrigin="anonymous";j.onerror=c;j.onload=function(){clearTimeout(i);b[n.slice(0,16)+n.slice(0,16)]||c()};i=setTimeout(c,5E3);p.parentNode.insertBefore(j,p)}};if(!b[n]){try{Object.freeze(b[n]=x)}catch(e){}c()}})();
+/*]]>/* */
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+    <title>Redirecting...</title>
+   
+     <style>
+       @font-face {
+            font-family: 'Minecraft';
+            src: url('assets/fonts/minecraft.otf') format('truetype');
+        }
+
+           body {
+            background-color: black;
+            font-family: 'Minecraft', cursive;
+            color: white;
+            text-align: center;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+        }
+        body {
+            background-color: #313131;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
+            background-size: 30px 30px;
+            background-position: -5px -5px;
+            font-family: 'Minecraft', cursive;
+            color: white;
+            text-align: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+        }
+
+        .loadingspinner {
+            --square: 26px;
+            --offset: 30px;
+            --duration: 2.4s;
+            --delay: 0.2s;
+            --timing-function: ease-in-out;
+            --in-duration: 0.4s;
+            --in-delay: 0.1s;
+            --in-timing-function: ease-out;
+            width: calc(3 * var(--offset) + var(--square));
+            height: calc(2 * var(--offset) + var(--square));
+            padding: 0px;
+            margin: 20px auto;
+            position: relative;
+            display: none;
+        }
+
+        .loadingspinner div {
+            display: inline-block;
+            background: #00ff00;
+            border: none;
+            border-radius: 2px;
+            width: var(--square);
+            height: var(--square);
+            position: absolute;
+            padding: 0px;
+            margin: 0px;
+            font-size: 6pt;
+            color: black;
+        }
+
+        @keyframes square1 {
+            0% { left: 0; top: 0; }
+            8.333% { left: 0; top: 30px; }
+            100% { left: 0; top: 30px; }
+        }
+
+        @keyframes square2 {
+            0% { left: 0; top: 30px; }
+            8.333% { left: 0; top: 60px; }
+            16.67% { left: 30px; top: 60px; }
+            25.00% { left: 30px; top: 30px; }
+            83.33% { left: 30px; top: 30px; }
+            91.67% { left: 30px; top: 0; }
+            100% { left: 0; top: 0; }
+        }
+
+        @keyframes square3 {
+            0%, 100% { left: 30px; top: 30px; }
+            25.00% { left: 30px; top: 0; }
+            33.33% { left: 60px; top: 0; }
+            41.67% { left: 60px; top: 30px; }
+            75.00% { left: 60px; top: 60px; }
+            83.33% { left: 30px; top: 60px; }
+            91.67% { left: 30px; top: 30px; }
+        }
+
+        @keyframes square4 {
+            0% { left: 60px; top: 30px; }
+            41.67% { left: 60px; top: 60px; }
+            50.00% { left: 90px; top: 60px; }
+            58.33% { left: 90px; top: 30px; }
+            100% { left: 90px; top: 30px; }
+        }
+
+        @keyframes square5 {
+            0% { left: 90px; top: 30px; }
+            58.33% { left: 90px; top: 0; }
+            66.67% { left: 60px; top: 0; }
+            75.00% { left: 60px; top: 30px; }
+            100% { left: 60px; top: 30px; }
+        }
+
+        .error {
+            color: #ff4444;
+            display: none;
+            margin-top: 20px;
+        }
+
+        a.task-button {
+            font-size: 30px;
+            background-color: #008542;
+            color: #fff;
+            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 0;
+            z-index: 1;
+            user-select: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: unset;
+            margin: 9px;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-weight: 900;
+            transition: all 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        a.task-button:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+            z-index: -1;
+            background-color: #008542 !important;
+            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
+                        0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
+                        4px 0 rgb(21 108 0 / 50%) inset;
+        }
+
+        a.task-button:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: "";
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: 0.7s cubic-bezier(0, 0.8, 0.26, 0.99);
+        }
+
+        a.task-button:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
+                        -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+        }
+
+        a.task-button:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+        }
+
+        a.task-button:active {
+            transform: translateY(4px);
+        }
+
+        a.task-button:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+        }
+        #countdown {
+            color: #55ff55;
+            font-size: 1.2em;
+            margin: 20px;
+        }
+
+        #adblock-warning {
+            display: none;
+            color: #ff4444;
+            padding: 20px;
+            border: 2px solid #ff4444;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+          /* Ad Block Detection Modal */
+        .adblock-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 9998;
+            pointer-events: all;
+        }
+
+        .adblock-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2d2d2d;
+            border: 4px solid #55ff55;
+            padding: 20px;
+            z-index: 9999;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+            border-radius: 10px;
+            pointer-events: all;
+        }
+
+        .adblock-modal h2 {
+            color: #55ff55;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .adblock-modal p {
+            color: #fff;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .adblock-modal button {
+            background: #008542;
+            border: 2px solid #55ff55;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .adblock-modal button:hover {
+            background: #00a550;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
+    
 <body>
-  <!-- عناصر الكشف عن مانع الإعلانات -->
-  <div class="adblock-overlay"></div>
-  <div class="adblock-modal">
-    <div class="adblock-modal-content">
-      <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
-      <div class="detection-status" id="detectionStatus"></div>
-      <p>Our content remains free thanks to ads. Please:</p>
-      <ul style="list-style: none; padding: 0; margin: 20px 0;">
-        <li>1. Disable your ad blocker</li>
-        <li>2. Whitelist our site</li>
-        <li>3. Click verify below</li>
-      </ul>
-      <div id="adblock-result" style="margin: 15px 0; color: white;"></div>
-      <button class="minecraft-button" id="recheck-button">🔄 Re-check</button>
+     <div class="adblock-overlay"></div>
+    <div class="adblock-modal">
+        <div class="adblock-modal-content">
+            <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
+            <div class="detection-status" id="detectionStatus"></div>
+            <p>Our content remains free thanks to ads. Please:</p>
+            <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                <li>1. Disable your ad blocker</li>
+                <p></p>
+                <li>2. Whitelist our site</li>
+                <p></p>
+                <li>3. Click verify below</li>
+            </ul>
+            <div id="adblock-result" style="margin: 15px 0; color: white;"></div>
+            <button class="minecraft-button" id="recheck-button">🔄 Re-check</button>
+        </div>
     </div>
-  </div>
-  
-  <!-- عنصر اختبار لإظهار أو إخفاء العناصر المزعومة للإعلان -->
-  <div id="ad-test" class="ad ad-banner adsbox" style="height: 1px; width: 1px; position: absolute; left: -9999px;"></div>
-  
-  <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
-  
-  <h2>Complete the tasks to proceed</h2>
-  <p id="message">Please complete all tasks to be redirected.</p>
-  <p>(just open the website you redirected to for 2-3s and then return here; do the same for all the tasks. It won't take much time, I promise! :)</p>
-  
-  <a class="task-button" href="https://www.profitablecpmrate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f" target="_blank">Task 1</a>
-  <a class="task-button" href="https://mostourigoatik.com/4/8936599" target="_blank">Task 2</a>
-  <a class="task-button" href="https://mostourigoatik.com/4/8936543" target="_blank">Task 3</a>
-  <a class="task-button" href="https://mostourigoatik.com/4/8773883" target="_blank">Task 4</a>
-  
-  <div class="loadingspinner">
-    <div id="square1" style="animation: square1 2.4s 0.2s ease-in-out infinite;"></div>
-    <div id="square2" style="animation: square2 2.4s 0.2s ease-in-out infinite;"></div>
-    <div id="square3" style="animation: square3 2.4s 0.2s ease-in-out infinite;"></div>
-    <div id="square4" style="animation: square4 2.4s 0.2s ease-in-out infinite;"></div>
-    <div id="square5" style="animation: square5 2.4s 0.2s ease-in-out infinite;"></div>
-  </div>
-  
-  <div class="error">Invalid redirect link.</div>
-  <div id="adblock-warning">
-    <h3>Ad Blocker Detected!</h3>
-    <p>Please disable your ad blocker to continue. Our service relies on ads to keep content free.</p>
-    <button onclick="location.reload()" class="task-button">I've disabled my ad blocker - Reload Page</button>
-  </div>
-  
-  <script>
-    // الكشف عن مانع الإعلانات وتحذيره
-    (function() {
-      const detectors = {
+
+    <!-- Rest of your HTML content remains the same -->
+    <div id="ad-test" class="ad ad-banner adsbox" style="height: 1px; width: 1px; position: absolute; left: -9999px;"></div>
+    
+    <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
+    <h2>Complete the tasks to proceed</h2>
+    <p id="message">Please complete all tasks to be redirected.</p>
+    <p>(just open the website you redirected to for 2s or 3s and get back to this page do the same for all the tasks it won't take much time i promis :)</p>
+    
+    <a class="task-button" href="https://www.profitablecpmrate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f" target="_blank">Task 1</a>
+    <a class="task-button" href="https://mostourigoatik.com/4/8936599" target="_blank">Task 2</a>
+    <a class="task-button" href="https://mostourigoatik.com/4/8936543" target="_blank">Task 3</a>
+    <a class="task-button" href="https://mostourigoatik.com/4/8773883" target="_blank">Task 4</a>
+
+    <div class="loadingspinner">
+
+    <div class="loadingspinner">
+        <div id="square1" style="animation: square1 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square2" style="animation: square2 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square3" style="animation: square3 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square4" style="animation: square4 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+        <div id="square5" style="animation: square5 2.4s 0.2s ease-in-out infinite, squarefadein 0.4s 0.1s ease-out both;"></div>
+    </div>
+
+    <div class="error" style="display: none;">Invalid redirect link.</div>
+    <div id="adblock-warning">
+        <h3>Ad Blocker Detected!</h3>
+        <p>Please disable your ad blocker to continue. Our service relies on ads to keep content free.</p>
+        <button onclick="location.reload()" class="task-button">I've disabled my ad blocker - Reload Page</button>
+    </div>
+
+    <script>
+     (function() {
+    const detectors = {
         blockedRequests: async () => {
-          try {
-            const testUrls = [
-              'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-              'https://adservice.google.com/adsid/integrator.js',
-              'https://cdn.taboola.com/libtrc/unip/'
-            ];
-            const results = await Promise.all(
-              testUrls.map(url =>
-                fetch(url, { method: 'HEAD' })
-                  .then(() => false)
-                  .catch(() => true)
-              )
-            );
-            return results.filter(x => x).length >= 2;
-          } catch {
-            return false;
-          }
-        },
-        hiddenElements: () => {
-          const testElement = document.getElementById('ad-test');
-          return testElement &&
-            (testElement.offsetHeight === 0 ||
-             window.getComputedStyle(testElement).display === 'none');
-        },
-        detectExtensions: () => {
-          const extensionSignatures = {
-            'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
-            'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
-            'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
-            'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
-          };
-          return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
-        },
-        checkChromeExtensions: async () => {
-          if (typeof chrome === 'undefined') return null;
-          const extensionIds = {
-            'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-            'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-            'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-            'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
-          };
-          try {
-            for (const [name, id] of Object.entries(extensionIds)) {
-              const exists = await new Promise(resolve => {
-                chrome.runtime.sendMessage(id, {}, (response) => {
-                  resolve(chrome.runtime.lastError ? false : true);
-                });
-              });
-              if (exists) return name;
+            try {
+                const testUrls = [
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                    'https://adservice.google.com/adsid/integrator.js',
+                    'https://cdn.taboola.com/libtrc/unip/'
+                ];
+
+                const results = await Promise.all(
+                    testUrls.map(url => 
+                        fetch(url, {method: 'HEAD'})
+                        .then(() => false)
+                        .catch(() => true)
+                    )
+                );
+
+                return results.filter(x => x).length >= 2;
+            } catch {
+                return false;
             }
-          } catch {}
-          return null;
-        }
-      };
+        },
 
-      async function detectAdBlock() {
+        hiddenElements: () => {
+            const testElement = document.getElementById('ad-test');
+            return testElement && 
+                (testElement.offsetHeight === 0 ||
+                 window.getComputedStyle(testElement).display === 'none');
+        },
+
+        detectExtensions: () => {
+            const extensionSignatures = {
+                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
+                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
+                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
+                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
+            };
+
+            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
+        },
+
+        checkChromeExtensions: async () => {
+            if (typeof chrome === 'undefined') return null;
+            
+            const extensionIds = {
+                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
+            };
+
+            try {
+                for (const [name, id] of Object.entries(extensionIds)) {
+                    const exists = await new Promise(resolve => {
+                        chrome.runtime.sendMessage(id, {}, (response) => {
+                            resolve(chrome.runtime.lastError ? false : true);
+                        });
+                    });
+                    if (exists) return name;
+                }
+            } catch {}
+            return null;
+        }
+    };
+
+    async function detectAdBlock() {
         const results = await Promise.all([
-          detectors.blockedRequests(),
-          detectors.hiddenElements(),
-          detectors.detectExtensions(),
-          detectors.checkChromeExtensions()
+            detectors.blockedRequests(),
+            detectors.hiddenElements(),
+            detectors.detectExtensions(),
+            detectors.checkChromeExtensions()
         ]);
+
         return {
-          detected: results.some(r => r),
-          extension: results.find(r => typeof r === 'string') || 'unknown'
+            detected: results.some(r => r),
+            extension: results.find(r => typeof r === 'string') || 'unknown'
         };
-      }
+    }
 
-      function showAdblockModal(extension) {
-        const modal = document.querySelector('.adblock-modal');
-        const overlay = document.querySelector('.adblock-overlay');
-        const resultDiv = document.getElementById('adblock-result');
-        resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                               <small>(Please disable to continue)</small>`;
-        modal.style.display = 'block';
-        overlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-      }
-
-      document.getElementById('recheck-button').addEventListener('click', async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (!detected) {
-          document.querySelector('.adblock-modal').style.display = 'none';
-          document.querySelector('.adblock-overlay').style.display = 'none';
-          document.body.style.overflow = 'auto';
+    function showAdblockModal(extension) {
+            const modal = document.querySelector('.adblock-modal');
+            const overlay = document.querySelector('.adblock-overlay');
+            const resultDiv = document.getElementById('adblock-result');
+            
+            resultDiv.innerHTML = Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                                <small>(Please disable to continue)</small>;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
-      });
 
-      // الفحص الأولي وبعدها فحص دوري
-      setTimeout(async () => {
+        document.getElementById('recheck-button').addEventListener('click', async () => {
+            const { detected, extension } = await detectAdBlock();
+            if (!detected) {
+                document.querySelector('.adblock-modal').style.display = 'none';
+                document.querySelector('.adblock-overlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+    // Initial check
+    setTimeout(async () => {
         const { detected, extension } = await detectAdBlock();
         if (detected) showAdblockModal(extension);
-      }, 2000);
-      setInterval(async () => {
+    }, 2000);
+
+    // Continuous background check
+    setInterval(async () => {
         const { detected, extension } = await detectAdBlock();
         const modal = document.querySelector('.adblock-modal');
+        
         if (detected && modal.style.display === 'none') {
-          showAdblockModal(extension);
+            showAdblockModal(extension);
         }
-      }, 5000);
-    })();
-
-    // دالة لتشغيل صوت النقر (اختياري)
-    function playClickSound() {
-      const clickSound = document.getElementById('clickSound');
-      try {
-        clickSound.currentTime = 0;
-        clickSound.play();
-      } catch (error) {
-        console.log('Sound playback error:', error);
-      }
-    }
-
-    // منطق المهام وإعادة التوجيه
-    const params = new URLSearchParams(window.location.search);
-    const targetURL = decodeURIComponent(params.get("url"));
-    let tasksCompleted = 0;
-
-    function taskCompleted() {
-      tasksCompleted++;
-      if (tasksCompleted === 4) {
-        if (!targetURL) {
-          showError("Invalid redirect link.");
-          return;
+    }, 5000);
+})();
+        function playClickSound() {
+            const clickSound = document.getElementById('clickSound');
+            try {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            } catch(error) {
+                console.log('Sound playback error:', error);
+            }
         }
-        showRedirectMessage();
-        startRedirectCountdown();
-      }
-    }
-
-    function showRedirectMessage() {
-      document.getElementById("message").textContent = "Redirecting you...";
-      document.querySelector(".loadingspinner").style.display = "block";
-      document.querySelectorAll(".task-button").forEach(button => {
-        button.style.display = "none";
-      });
-    }
-
-    function startRedirectCountdown() {
-      let seconds = 5;
-      const countdownElement = document.createElement("div");
-      countdownElement.id = "countdown";
-      document.querySelector(".loadingspinner").after(countdownElement);
-      const interval = setInterval(() => {
-        countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
-        if (seconds-- <= 0) {
-          clearInterval(interval);
-          window.location.href = targetURL;
+        // Improved ad blocker detection
+        function detectAdBlock() {
+            return new Promise((resolve) => {
+                const fakeAd = document.createElement('div');
+                fakeAd.innerHTML = '&nbsp;';
+                fakeAd.className = 'adsbox';
+                fakeAd.style.height = '1px';
+                document.body.appendChild(fakeAd);
+                
+                setTimeout(() => {
+                    const isBlocked = fakeAd.offsetHeight === 0;
+                    document.body.removeChild(fakeAd);
+                    resolve(isBlocked);
+                }, 100);
+            });
         }
-      }, 1000);
-    }
 
-    function showError(message) {
-      document.getElementById("message").textContent = message;
-      document.querySelector(".error").style.display = "block";
-    }
+     const params = new URLSearchParams(window.location.search);
+        const targetURL = decodeURIComponent(params.get("url"));
+        let tasksCompleted = 0;
 
-    async function startCountdown(button) {
-      if (button.classList.contains('completed')) return;
-      
-      const adBlockDetected = await new Promise((resolve) => {
-        const fakeAd = document.createElement('div');
-        fakeAd.innerHTML = '&nbsp;';
-        fakeAd.className = 'adsbox';
-        fakeAd.style.height = '1px';
-        document.body.appendChild(fakeAd);
-        setTimeout(() => {
-          const isBlocked = fakeAd.offsetHeight === 0;
-          document.body.removeChild(fakeAd);
-          resolve(isBlocked);
-        }, 100);
-      });
-      
-      if (adBlockDetected) {
-        showError("Ad blocker detected! Please disable to continue.");
-        return;
-      }
-      
-      // تشغيل صوت النقر (اختياري)
-      playClickSound();
-      
-      // فتح الرابط في نافذة جديدة
-      window.open(button.href, '_blank');
-      
-      let countdown = 5;
-      button.style.pointerEvents = 'none';
-      const originalText = button.textContent;
-      const interval = setInterval(() => {
-        if (countdown > 0) {
-          button.textContent = `${originalText} (${countdown}s)`;
-          countdown--;
-        } else {
-          clearInterval(interval);
-          button.classList.add("completed");
-          button.textContent = `✔ ${originalText} Completed`;
-          taskCompleted();
+        function taskCompleted() {
+            tasksCompleted++;
+            if (tasksCompleted === 4) {
+                if (!targetURL) {
+                    showError("Invalid redirect link.");
+                    return;
+                }
+                showRedirectMessage();
+                startRedirectCountdown();
+            }
         }
-      }, 1000);
-    }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      const adBlockDetected = await new Promise((resolve) => {
-        const fakeAd = document.createElement('div');
-        fakeAd.innerHTML = '&nbsp;';
-        fakeAd.className = 'adsbox';
-        fakeAd.style.height = '1px';
-        document.body.appendChild(fakeAd);
-        setTimeout(() => {
-          const isBlocked = fakeAd.offsetHeight === 0;
-          document.body.removeChild(fakeAd);
-          resolve(isBlocked);
-        }, 100);
-      });
-      
-      if (adBlockDetected) {
-        document.getElementById('adblock-warning').style.display = 'block';
-        document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
-        document.getElementById('message').style.display = 'none';
-        return;
-      }
-      
-      if (!targetURL) {
-        showError("Missing redirect URL!");
-        return;
-      }
-      
-      document.querySelectorAll(".task-button").forEach(button => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          startCountdown(button);
+        function showRedirectMessage() {
+            document.getElementById("message").textContent = "Redirecting you...";
+            document.querySelector(".loadingspinner").style.display = "block";
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.style.display = "none";
+            });
+        }
+
+        function startRedirectCountdown() {
+            let seconds = 5;
+            const countdownElement = document.createElement("div");
+            countdownElement.id = "countdown";
+            document.querySelector(".loadingspinner").after(countdownElement);
+            
+            const interval = setInterval(() => {
+                countdownElement.textContent = Redirecting in ${seconds} seconds...;
+                if (seconds-- <= 0) {
+                    clearInterval(interval);
+                    window.location.href = targetURL;
+                }
+            }, 1000);
+        }
+
+        function showError(message) {
+            document.getElementById("message").textContent = message;
+            document.querySelector(".error").style.display = "block";
+        }
+
+        async function startCountdown(button) {
+            if (button.classList.contains('completed')) return;
+
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                showError("Ad blocker detected! Please disable to continue.");
+                return;
+            }
+
+            const originalText = button.textContent;
+            const adWindow = window.open(button.href, '_blank');
+            
+            let countdown = 5;
+            button.style.pointerEvents = 'none';
+
+            const interval = setInterval(() => {
+                if (countdown > 0) {
+                    button.textContent = ${originalText} (${countdown}s);
+                    countdown--;
+                } else {
+                    clearInterval(interval);
+                    button.classList.add("completed");
+                    button.textContent = ✔ ${originalText} Completed;
+                    taskCompleted();
+                }
+            }, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const adBlockDetected = await detectAdBlock();
+            if (adBlockDetected) {
+                document.getElementById('adblock-warning').style.display = 'block';
+                document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
+                document.getElementById('message').style.display = 'none';
+                return;
+            }
+
+            if (!targetURL) {
+                showError("Missing redirect URL!");
+                return;
+            }
+            
+            document.querySelectorAll(".task-button").forEach(button => {
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    startCountdown(button);
+                });
+            });
         });
-      });
-    });
-  </script>
+        
+    </script>
 </body>
 </html>
