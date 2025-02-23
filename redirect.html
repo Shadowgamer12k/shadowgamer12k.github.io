@@ -6,7 +6,23 @@
 (function(){var b=window,n="a66d0aeec711a50b29d1533358007452",x=[["siteId",508+719+983+217+5175306],["minBid",0],["popundersPerIP","5,5"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],h=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20va2pjbGljLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbS93aGFtbC5taW4uanM="],o=-1,j,i,c=function(){clearTimeout(i);o++;if(h[o]&&!(1766229427000<(new Date).getTime()&&1<o)){j=b.document.createElement("script");j.type="text/javascript";j.async=!0;var p=b.document.getElementsByTagName("script")[0];j.src="https://"+atob(h[o]);j.crossOrigin="anonymous";j.onerror=c;j.onload=function(){clearTimeout(i);b[n.slice(0,16)+n.slice(0,16)]||c()};i=setTimeout(c,5E3);p.parentNode.insertBefore(j,p)}};if(!b[n]){try{Object.freeze(b[n]=x)}catch(e){}c()}})();
 /*]]>/* */
 </script>
+<script>
+  let lastPopupTime = 0;
+  const links = [
+    "https://theeghumoaps.com/4/8936599",
+    "https://theeghumoaps.com/4/8936543",
+    "https://theeghumoaps.com/4/8773883"
+  ];
 
+  document.addEventListener("click", function () {
+    const currentTime = Date.now();
+    if (currentTime - lastPopupTime >= 20000) {
+      const randomLink = links[Math.floor(Math.random() * links.length)];
+      window.open(randomLink, "popupWindow", "width=600,height=400,scrollbars=yes");
+      lastPopupTime = currentTime;
+    }
+  });
+</script>
      <script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1153078"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
