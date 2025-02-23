@@ -402,8 +402,8 @@
             const overlay = document.querySelector('.adblock-overlay');
             const resultDiv = document.getElementById('adblock-result');
             
-            resultDiv.innerHTML = Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                                <small>(Please disable to continue)</small>;
+            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                                <small>(Please disable to continue)</small>`;
             modal.style.display = 'block';
             overlay.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -491,7 +491,7 @@
             document.querySelector(".loadingspinner").after(countdownElement);
             
             const interval = setInterval(() => {
-                countdownElement.textContent = Redirecting in ${seconds} seconds...;
+                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
                 if (seconds-- <= 0) {
                     clearInterval(interval);
                     window.location.href = targetURL;
@@ -521,12 +521,12 @@
 
             const interval = setInterval(() => {
                 if (countdown > 0) {
-                    button.textContent = ${originalText} (${countdown}s);
+                    button.textContent = `${originalText} (${countdown}s)`;
                     countdown--;
                 } else {
                     clearInterval(interval);
                     button.classList.add("completed");
-                    button.textContent = ✔ ${originalText} Completed;
+                    button.textContent = `✔ ${originalText} Completed`;
                     taskCompleted();
                 }
             }, 1000);
