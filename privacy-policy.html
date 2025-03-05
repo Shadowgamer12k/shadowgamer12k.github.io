@@ -18,43 +18,42 @@
             --mc-border: #555555;
         }
 
-        body {
-            background-color: #1a1a1a;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                              linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-            background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-            font-family: 'Press Start 2P', cursive;
-            color: white;
-            line-height: 1.6;
-            margin: 0;
-            min-height: 100vh;
-            font-size: 16px;
-        }
+         body {
+  background-color: #1a1a1a;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                  linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                  linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  font-size: 16px;
+}
+     h1 {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  line-height: 1.2;
+  margin: 0.5em 0;
+}
+     h2, .feature-title {
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  margin: 0.8em 0;
+}
 
-        h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            line-height: 1.2;
-            margin: 0.5em 0;
-        }
-
-        h2, .feature-title {
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            margin: 0.8em 0;
-        }
-
-        p, .feature-item, .faq-answer {
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            line-height: 1.5;
-        }
+p, .feature-item, .faq-answer {
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  line-height: 1.5;
+}
+     
 
         .header {
-            padding: 2rem 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            border-bottom: 4px solid var(--mc-border);
-            text-align: center;
-        }
+  padding: 2rem 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-bottom: 4px solid var(--mc-border);
+  text-align: center;
+}
 
         .header img {
             max-width: 600px;
@@ -63,20 +62,20 @@
             filter: drop-shadow(0 0 8px var(--mc-green));
         }
 
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1rem;
-        }
+    .container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
 
-        .feature-box {
-            background: rgba(0, 0, 0, 0.8);
-            border: 4px solid var(--mc-border);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            position: relative;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
+         .feature-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid var(--mc-border);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
 
         .feature-title {
             color: var(--mc-green);
@@ -88,7 +87,7 @@
             border: 2px solid var(--mc-border);
         }
 
-        footer {
+       footer {
             background: rgba(0, 0, 0, 0.9);
             padding: 1rem;
             text-align: center;
@@ -106,6 +105,40 @@
             text-shadow: 0 0 8px var(--mc-green);
             text-decoration: underline;
         }
+         @media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 0.5rem;
+  }
+
+  .feature-box {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .features-list, .testimonials {
+    grid-template-columns: 1fr;
+  }
+
+  .download-button {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  p, li {
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+        
     </style>
 </head>
 <body>
