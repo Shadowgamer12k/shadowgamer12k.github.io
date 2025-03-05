@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta name="description" content="Minecraft Advanced Waypoint Add-on - get back">
     <title>Minecraft Advanced Waypoint Add-on | get back</title>
-    <style>
+   <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         @font-face {
             font-family: 'Minecraft';
@@ -43,6 +43,7 @@
             padding: 2rem 1rem;
             background: rgba(0, 0, 0, 0.7);
             border-bottom: 4px solid var(--mc-border);
+            text-align: center;
         }
 
         .header img {
@@ -134,12 +135,125 @@
             border-left: 4px solid var(--mc-green);
         }
 
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .screenshot {
+            border: 3px solid var(--mc-border);
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .testimonial {
+            background: rgba(85, 255, 85, 0.05);
+            padding: 1rem;
+            border-left: 4px solid var(--mc-green);
+            font-style: italic;
+        }
+
+        .compatibility-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .compatibility-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compatibility-item.compatible::before {
+            content: "✓";
+            color: var(--mc-green);
+        }
+
+        .compatibility-item.incompatible::before {
+            content: "✗";
+            color: #FF5555;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-question {
+            color: var(--mc-green);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-box {
+            background: #000;
+            border: 2px solid var(--mc-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .command-prefix {
+            color: var(--mc-green);
+        }
+
         footer {
             background: rgba(0, 0, 0, 0.9);
             padding: 1rem;
             text-align: center;
             border-top: 4px solid var(--mc-border);
             margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--mc-green);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        footer a:hover {
+            text-shadow: 0 0 8px var(--mc-green);
+            text-decoration: underline;
+        }
+        
+        .whats-new {
+            background: rgba(85, 255, 85, 0.05);
+            padding: 1.5rem;
+            border-left: 4px solid var(--mc-green);
+            margin: 1.5rem 0;
+        }
+        
+        .whats-new h3 {
+            color: var(--mc-green);
+            margin-top: 0;
+        }
+        
+        .whats-new ul {
+            list-style-type: none;
+            padding-left: 0.5rem;
+        }
+        
+        .whats-new li {
+            margin-bottom: 0.8rem;
+            font-style: italic;
         }
 
         @media (max-width: 768px) {
@@ -240,24 +354,11 @@
     </style>
 </head>
 <body>
- 
-    <div class="adblock-overlay"></div>
-    <div class="adblock-modal">
-        <div class="adblock-modal-content">
-            <h2>⚠️ AD BLOCKER DETECTED ⚠️</h2>
-            <div class="detection-status" id="detectionStatus"></div>
-            <p>Our content remains free thanks to ads. Please:</p>
-            <ul style="list-style: none; padding: 0; margin: 20px 0;">
-                <li>1. Disable your ad blocker</li>
-                <p></p>
-                <li>2. Whitelist our site</li>
-                <p></p>
-                <li>3. Click verify below</li>
-            </ul>
-            <div id="adblock-result" style="margin: 15px 0; color: white;"></div>
-            <button class="minecraft-button" id="recheck-button">🔄 Re-check</button>
-        </div>
-    </div>
+    <header class="header">
+        <h1>Advanced Waypoint Add-on</h1>
+        <p>Navigate your Minecraft worlds with ease</p>
+    </header>
+
     <main class="container">
         <section class="feature-box">
             <h2 class="feature-title">SHOWCASE</h2>
@@ -271,30 +372,154 @@
         </section>
 
         <section class="feature-box">
+            <h2 class="feature-title">ABOUT</h2>
+            <p>Advanced Waypoint Add-on brings a sophisticated navigation system to your Minecraft Bedrock experience. Whether you're exploring far from home, managing multiple bases, or playing with friends, this add-on ensures you'll never lose your way again.</p>
+            <p>Built specifically for Minecraft Bedrock Edition 1.20 and above, this add-on integrates seamlessly with your gameplay, providing an intuitive interface for creating, managing, and navigating between important locations in your world.</p>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">WHAT'S NEW</h2>
+            <div class="whats-new">
+                <h3>What's new ✨?</h3>
+                <ul>
+                    <li>🎉 New, The size of the addon has become small.</li>
+                    <li>🎉 New, Gui new button icons.</li>
+                    <li>🎉 New, Feature access: waypoint now you can share your waypoint with your friends.</li>
+                    <li>🎉 New, Flags colors.</li>
+                    <li>🎉 New, I added icons, now you can add an icon for your waypoint.</li>
+                    <li>🎉 New, Now you can select the flag of the waypoint.</li>
+                    <li>🎉 New, More settings...</li>
+                    <li>🎉 New, Admin panel: you can manage the waypoints of your server.</li>
+                    <li>🎉 New, The admin can set the limit of the waypoints that's the players can create.</li>
+                    <li>🎉 New, Now you can make more than 999999 wapoints.</li>
+                    <li>🎉 New, Removed the points system, just for now.</li>
+                </ul>
+                <h3>What has been fixed 🔧?</h3>
+                <ul>
+                    <li>🔨 Fixed, An issue where the player would not be teleported.</li>
+                    <li>🔨 Fixed, The problem of waypoint disappearing from other players when moving away from it.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="feature-box">
             <h2 class="feature-title">KEY FEATURES</h2>
             <div class="features-list">
                 <div class="feature-item">
-                    <h3>Waypoints</h3>
-                    <p>save your fav places and get back to them</p>
+                    <h3>Custom Waypoints</h3>
+                    <p>Save important locations with custom names and colors. Create up to 30 waypoints per player.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>last death teleport</h3>
-                    <p>you can teleport to your last death place</p>
+                    <h3>Death Waypoints</h3>
+                    <p>Automatically create a waypoint at your last death location, making item recovery easy.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>Multiplayer</h3>
-                    <p>you can see the public waypoints and you can make yours private</p>
+                    <h3>Teleportation</h3>
+                    <p>Teleport directly to any of your waypoints with a simple command or through the interface.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>Easy Management</h3>
-                    <p>Simple form to manage your waypoints</p>
+                    <h3>Multiplayer Support</h3>
+                    <p>Share waypoints with friends or keep them private. See other players' public waypoints.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Distance Tracking</h3>
+                    <p>Display distance to selected waypoints in real-time as you move through your world.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Compass Integration</h3>
+                    <p>Your compass will point to your selected waypoint for easy navigation.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>User-Friendly Management</h3>
+                    <p>Intuitive form interface makes creating, editing, and deleting waypoints simple.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Dimension Support</h3>
+                    <p>Create waypoints across different dimensions (Overworld, Nether, End).</p>
                 </div>
             </div>
         </section>
 
         <section class="feature-box">
-         
-           
+            <h2 class="feature-title">HOW TO USE</h2>
+            <p>The Advanced Waypoint Add-on is designed to be simple and intuitive. Here's how to use the main features:</p>
+            
+            <h3>Creating Waypoints</h3>
+            <p>Use the following command to create a new waypoint at your current location:</p>
+            <div class="command-box">
+                <span class="command-prefix">/waypoint create</span> [name]
+            </div>
+            
+            <h3>Managing Waypoints</h3>
+            <p>Open the waypoint management form with:</p>
+            <div class="command-box">
+                <span class="command-prefix">/waypoint manage</span>
+            </div>
+            
+            <h3>Teleporting to Waypoints</h3>
+            <p>Teleport to any of your waypoints using:</p>
+            <div class="command-box">
+                <span class="command-prefix">/waypoint tp</span> [waypoint_name]
+            </div>
+            
+            <h3>Death Waypoint</h3>
+            <p>After you die, use this command to teleport back to your death location:</p>
+            <div class="command-box">
+                <span class="command-prefix">/waypoint lastdeath</span>
+            </div>
+            
+            <h3>Sharing Waypoints</h3>
+            <p>Toggle a waypoint's visibility for other players:</p>
+            <div class="command-box">
+                <span class="command-prefix">/waypoint toggle</span> [waypoint_name]
+            </div>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">COMPATIBILITY</h2>
+            <div class="compatibility-list">
+                <div class="compatibility-item compatible">Minecraft 1.20.0+</div>
+                <div class="compatibility-item compatible">Survival Mode</div>
+                <div class="compatibility-item compatible">Creative Mode</div>
+                <div class="compatibility-item compatible">Adventure Mode</div>
+                <div class="compatibility-item compatible">Multiplayer Realms</div>
+                <div class="compatibility-item compatible">Local Multiplayer</div>
+                <div class="compatibility-item compatible">Most Texture Packs</div>
+                <div class="compatibility-item incompatible">Minecraft Java Edition</div>
+                <div class="compatibility-item incompatible">Minecraft Below 1.20</div>
+            </div>
+            <p>This add-on has been extensively tested with various other popular add-ons and should work seamlessly with most gameplay enhancement packs.</p>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">FREQUENTLY ASKED QUESTIONS</h2>
+            <div class="faq-item">
+                <div class="faq-question">How many waypoints can I create?</div>
+                <div class="faq-answer">You can create up to 30 waypoints per player. Server admins can adjust this limit as needed.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Will my waypoints stay after I close the game?</div>
+                <div class="faq-answer">Yes, all waypoints are saved permanently until you delete them.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I use this in multiplayer?</div>
+                <div class="faq-answer">Yes, Advanced Waypoint Add-on works perfectly in multiplayer environments, including Realms.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Does the teleport feature work in survival mode?</div>
+                <div class="faq-answer">Yes, the teleport feature works in all game modes, but server admins can disable it if desired.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How do I update to a newer version?</div>
+                <div class="faq-answer">Simply download the new version and replace the old files. Your waypoints will be preserved.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I customize the appearance of waypoints?</div>
+                <div class="faq-answer">Yes, you can select different colors for each waypoint, choose custom flags, and add icons to help categorize them.</div>
+            </div>
+        </section>
+
+        <section class="feature-box">
             <h2 class="feature-title">DOWNLOAD - linkvertise</h2>
             <div class="download-buttons">
                 <a href="https://shadowgamer12k.github.io/redirect.html?url=https://direct-link.net/642753/advancedwaypoint" 
@@ -306,26 +531,55 @@
                     <span>⬇️</span> Resource Pack (+1.20)
                 </a>
             </div>
-
-      
-         
-         
-
-            <p>Requires Minecraft Bedrock 1.20+</p>
+            <p>Requires Minecraft Bedrock 1.20 or higher. Both packs must be installed for full functionality.</p>
         </section>
 
         <section class="feature-box">
-            <h2 class="feature-title">INSTALLATION</h2>
+            <h2 class="feature-title">INSTALLATION GUIDE</h2>
             <ol class="installation-steps">
-                <li>Download both packs</li>
-                <li>Import to Minecraft resource packs folder</li>
-                <li>Activate in world settings</li>
+                <li>Download both the Behavior Pack and Resource Pack</li>
+                <li>Open Minecraft and navigate to Settings > Global Resources</li>
+                <li>Click on "Import" and select the downloaded .mcpack files</li>
+                <li>Create a new world or edit an existing one</li>
+                <li>Under world settings, enable both the Advanced Waypoint Behavior Pack and Resource Pack</li>
+                <li>Ensure "Require Trusted Packages" is disabled if you encounter any issues</li>
+                <li>Start your world and use /waypoint help to begin</li>
             </ol>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">FUTURE UPDATES</h2>
+            <p>We're constantly working to improve the Advanced Waypoint Add-on. Here are some features planned for upcoming releases:</p>
+            <ul>
+                <li>In-game minimap integration</li>
+                <li>Waypoint categories and folders</li>
+                <li>Route planning between multiple waypoints</li>
+                <li>Enhanced multiplayer permissions</li>
+                <li>Performance optimizations</li>
+                <li>More customization options</li>
+                <li>Return of the points system with new features</li>
+            </ul>
+            <p>Follow our updates on Discord for the latest news and feature announcements!</p>
+        </section>
+
+        <section class="feature-box">
+            <h2 class="feature-title">SUPPORT</h2>
+            <p>Having trouble with the Advanced Waypoint Add-on? Here are some common troubleshooting steps:</p>
+            <ul>
+                <li>Ensure both the Behavior Pack and Resource Pack are activated</li>
+                <li>Check that you're running Minecraft Bedrock 1.20 or higher</li>
+                <li>Verify that experimental features are enabled in your world settings</li>
+                <li>Try reinstalling both packs if commands aren't working</li>
+                <li>For multiplayer issues, make sure all players have the add-on installed</li>
+            </ul>
+            <p>If you continue to experience problems, please join our Discord community for direct support.</p>
         </section>
     </main>
 
     <footer>
-        <p>© 2023 Advanced Waypoint Add-on | Follow updates on Discord!</p>
+        <p>© 2023 Advanced Waypoint Add-on | <a href="https://discord.gg/waypoints" target="_blank">Follow updates on Discord!</a></p>
+        <p>For bug reports, suggestions, or support, <a href="https://discord.gg/waypoints" target="_blank">join our community</a></p>
+        <p>This add-on is not affiliated with Mojang or Microsoft</p>
     </footer>
 <script>
 (function() {
