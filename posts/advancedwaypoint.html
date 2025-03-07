@@ -412,6 +412,56 @@ p, .feature-item, .faq-answer {
             background: #00a550;
             transform: scale(1.05);
         }
+      /* Lightbox Styles */
+    .lightbox {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        cursor: zoom-out;
+    }
+
+    .lightbox-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .lightbox-img {
+        max-height: 80vh;
+        max-width: 90vw;
+        border: 3px solid var(--mc-border);
+        box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: var(--mc-green);
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        text-shadow: 0 0 10px rgba(85, 255, 85, 0.5);
+        transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+        transform: scale(1.2);
+    }
+
+    /* Add cursor pointer to gallery images */
+    .screenshot {
+        cursor: zoom-in;
+    }
     </style>
 </head>
 <body>
@@ -648,6 +698,14 @@ p, .feature-item, .faq-answer {
             <p>If you continue to experience problems, please join our Discord community for direct support.</p>
         </section>
     </main>
+
+   <div class="lightbox" onclick="closeLightbox()">
+    <span class="close-btn">&times;</span>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img src="" alt="Enlarged view" class="lightbox-img">
+    </div>
+   </div>
+
 
     <footer>
     <p>&copy; 2025 shadowGamer12k. All rights reserved. 
@@ -893,7 +951,31 @@ p, .feature-item, .faq-answer {
                 });
             });
         });
-    
+     // Lightbox functionality
+    function openLightbox(src) {
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = lightbox.querySelector('.lightbox-img');
+        lightbox.style.display = 'block';
+        lightboxImg.src = src;
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    function closeLightbox() {
+        document.querySelector('.lightbox').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+
+    // Add click handlers to all gallery images
+    document.querySelectorAll('.screenshot').forEach(img => {
+        img.addEventListener('click', (e) => {
+            openLightbox(e.target.src);
+        });
+    });
+
+    // Close with ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
 </script>
 </body>
 </html>
