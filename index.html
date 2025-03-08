@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="styles.css">
 
   <style>
-/* ======== Minecraft Navbar Styles ======== */
+/* Minecraft Navbar Styles */
 .minecraft-navbar {
     display: flex;
     justify-content: space-between;
@@ -33,11 +33,9 @@
     position: relative;
 }
 
-/* ======== Logo Section ======== */
 .navbar-logo {
     display: flex;
     align-items: center;
-    position: relative;
     cursor: pointer;
 }
 
@@ -53,18 +51,15 @@
     font-weight: bold;
     font-size: 1.2rem;
     text-shadow: 2px 2px 0px #000;
-    display: flex;
-    align-items: center;
-    gap: 5px; /* يترك مسافة صغيرة بين النص والسهم */
 }
 
-/* ======== Dropdown Arrow (داخل النص) ======== */
-.dropdown-arrow {
-    font-size: 14px;
+#dropdown-arrow {
+    display: none; /* Hide by default on desktop */
+    font-size: 12px;
     transition: transform 0.3s ease;
+    vertical-align: middle;
 }
 
-/* ======== Navbar Menu Styles ======== */
 .navbar-menu {
     display: flex;
     gap: 10px;
@@ -95,7 +90,14 @@
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-/* ======== Responsive Navbar (Mobile) ======== */
+/* Desktop - nothing changes here */
+@media screen and (min-width: 769px) {
+    .navbar-logo {
+        cursor: default;
+    }
+}
+
+/* Responsive styles for mobile */
 @media screen and (max-width: 768px) {
     .navbar-menu {
         position: absolute;
@@ -123,19 +125,19 @@
         text-align: center;
         font-family: 'Press Start 2P', cursive;
     }
-
-    /* تغيير شكل السهم عند فتح القائمة */
-    .navbar-logo.active .dropdown-arrow {
-        transform: rotate(180deg);
+    
+    /* Show dropdown arrow on mobile */
+    #dropdown-arrow {
+        display: inline-block;
+        margin-left: 5px;
     }
-
+    
     /* Animation for dropdown */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
 }
-
 </style>
 </head>
 <body>
@@ -169,7 +171,7 @@
 <nav class="minecraft-navbar">
     <div class="navbar-logo" id="navbarLogo">
         <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
-        <span class="logo-text">shadowGamer100k <span class="dropdown-arrow">▼</span></span>
+        <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼</span></span>
     </div>
     
     <div class="navbar-menu" id="navbarMenu">
@@ -322,10 +324,10 @@
             </ul>
         </div>
     <script>
-// Logo dropdown functionality
 document.addEventListener('DOMContentLoaded', function() {
     const navbarLogo = document.getElementById('navbarLogo');
     const navbarMenu = document.getElementById('navbarMenu');
+    const dropdownArrow = document.getElementById('dropdown-arrow');
     
     if (navbarLogo && navbarMenu) {
         // Only add click functionality on mobile
@@ -335,7 +337,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     playClickSound();
                 }
                 navbarMenu.classList.toggle('show');
-                navbarLogo.classList.toggle('active');
+                
+                // Rotate the arrow
+                if (navbarMenu.classList.contains('show')) {
+                    dropdownArrow.style.transform = 'rotate(180deg)';
+                } else {
+                    dropdownArrow.style.transform = 'rotate(0deg)';
+                }
             }
         });
     }
@@ -345,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth <= 768) {
             if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
                 navbarMenu.classList.remove('show');
-                navbarLogo.classList.remove('active');
+                dropdownArrow.style.transform = 'rotate(0deg)';
             }
         }
     });
@@ -374,15 +382,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetContent.classList.add('active');
             }
             
-            // Update tab title if it exists
-            const tabTitle = document.getElementById('tab-title');
-            if (tabTitle) {
-                tabTitle.textContent = this.textContent;
-            }
-            
             // Close mobile menu
             navbarMenu.classList.remove('show');
-            navbarLogo.classList.remove('active');
+            dropdownArrow.style.transform = 'rotate(0deg)';
         });
     });
     
@@ -390,29 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
             navbarMenu.classList.remove('show');
-            navbarLogo.classList.remove('active');
-        }
-    });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const navbarLogo = document.getElementById("navbarLogo");
-    const navbarMenu = document.getElementById("navbarMenu");
-    const dropdownArrow = document.querySelector(".dropdown-arrow");
-
-    navbarLogo.addEventListener("click", function () {
-        navbarMenu.classList.toggle("show");
-        navbarLogo.classList.toggle("active");
-
-        // تغيير اتجاه السهم بناءً على حالة القائمة
-        dropdownArrow.textContent = navbarMenu.classList.contains("show") ? "▲" : "▼";
-    });
-
-    // إغلاق القائمة عند الضغط خارجها
-    document.addEventListener("click", function (event) {
-        if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
-            navbarMenu.classList.remove("show");
-            navbarLogo.classList.remove("active");
-            dropdownArrow.textContent = "▼"; // يرجع السهم لحالته الطبيعية
+            dropdownArrow.style.transform = 'rotate(0deg)';
         }
     });
 });
