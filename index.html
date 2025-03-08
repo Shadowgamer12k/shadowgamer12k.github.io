@@ -318,6 +318,58 @@
             </ul>
         </div>
     <script>
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggle = document.getElementById('navbarToggle');
+    const navbarMenu = document.getElementById('navbarMenu');
+    
+    navbarToggle.addEventListener('click', function() {
+        playClickSound(); // Use your existing click sound
+        navbarMenu.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!navbarMenu.contains(event.target) && !navbarToggle.contains(event.target) && navbarMenu.classList.contains('active')) {
+            navbarMenu.classList.remove('active');
+        }
+    });
+    
+    // Update your existing tab functionality to work with the new nav-item class
+    document.querySelectorAll('.nav-item').forEach(tab => {
+        tab.addEventListener('click', () => {
+            playClickSound();
+            const target = tab.dataset.target;
+            document.querySelectorAll('.nav-item, .tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            tab.classList.add('active');
+            document.getElementById(target).classList.add('active');
+            
+            // Update tab title
+            document.getElementById('tab-title').textContent = tab.textContent;
+            
+            // Close mobile menu when an item is clicked
+            if (window.innerWidth <= 768) {
+                navbarMenu.classList.remove('active');
+            }
+        });
+    });
+    
+    // Update function to work with nav-item class
+    function updateTabTitle() {
+        const activeTab = document.querySelector('.nav-item.active');
+        const tabTitle = activeTab ? activeTab.textContent : 'PROJECTS';
+        document.getElementById('tab-title').textContent = tabTitle;
+    }
+    
+    // Call the function initially to set the title
+    updateTabTitle();
+});
+
+
+
+       
 (function() {
     const detectors = {
         blockedRequests: async () => {
