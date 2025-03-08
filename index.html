@@ -107,11 +107,7 @@
         display: none;
         animation: fadeIn 0.3s ease-in-out;
     }
-
-   .navbar-logo {
-        position: relative;
-        padding-right: 20px; /* Add some padding for the arrow */
-    }
+    
     .navbar-menu.show {
         display: flex;
     }
@@ -120,11 +116,16 @@
         width: 90%;
         margin: 5px auto;
         text-align: center;
-      font-family: 'Press Start 2P', cursive;
+        font-family: 'Press Start 2P', cursive;
     }
     
-    /* Add a small indicator on mobile to show it's clickable */
-   .navbar-logo::after {
+    /* Fix for arrow positioning on mobile */
+    .navbar-logo {
+        position: relative;
+        padding-right: 20px; /* Add some padding for the arrow */
+    }
+    
+    .navbar-logo::after {
         content: "▼";
         color: #fff;
         position: absolute;
@@ -136,7 +137,7 @@
     }
     
     .navbar-logo.active::after {
-        transform: rotate(180deg);
+        transform: translateY(-50%) rotate(180deg);
     }
     
     /* Animation for dropdown */
