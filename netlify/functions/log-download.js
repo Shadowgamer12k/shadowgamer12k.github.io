@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 exports.handler = async (event) => {
   // Securely get the webhook URL from Netlify's environment variables
-  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1348057847350427648/dqZ7atMQRtKmTc08nWiV2Pdh8tp89OQnCoIJtRzBnEDpDPLWmkwwHnCT2l8aeneFKq8L';
+   const WEBHOOK_URL = process.env.DISCORD_WEBHOOK;
 
   // Extract mod name from the request
   const { modName } = JSON.parse(event.body);
