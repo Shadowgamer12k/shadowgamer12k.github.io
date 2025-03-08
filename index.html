@@ -119,25 +119,29 @@
         font-family: 'Press Start 2P', cursive;
     }
     
-    /* Fix for arrow positioning on mobile */
+    /* Completely new approach for the arrow */
     .navbar-logo {
         position: relative;
-        padding-right: 20px; /* Add some padding for the arrow */
+        display: flex;
+        align-items: center;
     }
     
+    /* Remove the ::after pseudo-element entirely */
     .navbar-logo::after {
-        content: "▼";
+        content: none;
+    }
+    
+    /* Add an actual span element for the arrow instead */
+    .navbar-logo .dropdown-arrow {
+        margin-left: 8px;
         color: #fff;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
         font-size: 12px;
         transition: transform 0.3s ease;
+        display: inline-block;
     }
     
-    .navbar-logo.active::after {
-        transform: translateY(-50%) rotate(180deg);
+    .navbar-logo.active .dropdown-arrow {
+        transform: rotate(180deg);
     }
     
     /* Animation for dropdown */
@@ -176,11 +180,11 @@
     <!-- Click sound element -->
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
 
-<!-- New Responsive Navbar with Logo Dropdown on Mobile -->
 <nav class="minecraft-navbar">
     <div class="navbar-logo" id="navbarLogo">
         <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
         <span class="logo-text">shadowGamer100k</span>
+        <span class="dropdown-arrow">▼</span>
     </div>
     
     <div class="navbar-menu" id="navbarMenu">
