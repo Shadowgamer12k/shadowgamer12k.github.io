@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-
-
-
-
-
-
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>shadowGamer100k - Minecraft Add-ons</title>
@@ -27,7 +18,117 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="styles.css">
 
-   
+   <style>
+/* Minecraft Navbar Styles */
+.minecraft-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c2c2c;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #555;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    position: relative;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-item {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 2px solid #555;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.nav-item:hover {
+    background-color: #4a4a4a;
+    transform: translateY(-2px);
+}
+
+.nav-item.active {
+    background-color: #555555;
+    border-color: #7e7e7e;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.toggle-bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 3px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .navbar-toggle {
+        display: flex;
+    }
+    
+    .navbar-menu {
+        position: absolute;
+        flex-direction: column;
+        width: 100%;
+        top: 100%;
+        left: 0;
+        background-color: #2c2c2c;
+        z-index: 100;
+        padding: 10px 0;
+        border-radius: 0 0 4px 4px;
+        border-top: 1px solid #555;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        display: none;
+    }
+    
+    .navbar-menu.active {
+        display: flex;
+    }
+    
+    .nav-item {
+        width: 90%;
+        margin: 5px auto;
+        text-align: center;
+    }
+}
+</style>
 </head>
 <body>
     <div class="adblock-overlay"></div>
@@ -57,16 +158,26 @@
     <!-- Click sound element -->
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
 
+   <nav class="minecraft-navbar">
+    <div class="navbar-logo">
+        <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
+        <span class="logo-text">shadowGamer100k</span>
+    </div>
+    
+    <div class="navbar-toggle" id="navbarToggle">
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+    </div>
+    
+    <div class="navbar-menu" id="navbarMenu">
+        <button role="tab" class="nav-item active" data-target="projects">PROJECTS</button>
+        <button role="tab" class="nav-item" data-target="social">SOCIAL</button>
+        <button role="tab" class="nav-item" data-target="news">NEWS</button>
+    </div>
+</nav>
+   
     <div class="container">
-        <h1 id="tab-title">PROJECTS</h1>
-        
-        <!-- Tabs -->
-        <div role="tablist" class="tabs">
-            <button role="tab" class="tab active" data-target="projects">PROJECTS</button>
-            <button role="tab" class="tab" data-target="social">SOCIAL</button>
-            <button role="tab" class="tab" data-target="news">NEWS</button>
-        </div>
-
         <!-- Projects Tab Content -->
         <div id="projects" class="tab-content active">
             <ul class="mod-list">
