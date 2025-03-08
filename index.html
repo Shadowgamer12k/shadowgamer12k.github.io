@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="styles.css">
 
   <style>
-/* Minecraft Navbar Styles */
+/* ======== Minecraft Navbar Styles ======== */
 .minecraft-navbar {
     display: flex;
     justify-content: space-between;
@@ -33,11 +33,11 @@
     position: relative;
 }
 
+/* ======== Logo Section ======== */
 .navbar-logo {
     display: flex;
     align-items: center;
     position: relative;
-    gap: 5px; /* يجعل السهم قريباً من النص */
     cursor: pointer;
 }
 
@@ -53,18 +53,18 @@
     font-weight: bold;
     font-size: 1.2rem;
     text-shadow: 2px 2px 0px #000;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* يترك مسافة صغيرة بين النص والسهم */
 }
 
-/* السهم */
-.navbar-logo .dropdown-arrow {
+/* ======== Dropdown Arrow (داخل النص) ======== */
+.dropdown-arrow {
     font-size: 14px;
     transition: transform 0.3s ease;
-    position: relative;
-    top: 1px; /* ضبط الارتفاع */
-    margin-left: 2px; /* تقليل المسافة بين السهم والنص */
-    transform-origin: center;
 }
 
+/* ======== Navbar Menu Styles ======== */
 .navbar-menu {
     display: flex;
     gap: 10px;
@@ -95,7 +95,7 @@
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsive styles for mobile */
+/* ======== Responsive Navbar (Mobile) ======== */
 @media screen and (max-width: 768px) {
     .navbar-menu {
         position: absolute;
@@ -123,25 +123,13 @@
         text-align: center;
         font-family: 'Press Start 2P', cursive;
     }
-    
-    .navbar-logo {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-    
-    .navbar-logo .dropdown-arrow {
-        margin-left: 5px;
-        color: #fff;
-        font-size: 12px;
-        transition: transform 0.3s ease;
-        display: inline-block;
-    }
-    
+
+    /* تغيير شكل السهم عند فتح القائمة */
     .navbar-logo.active .dropdown-arrow {
         transform: rotate(180deg);
     }
-    
+
+    /* Animation for dropdown */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -181,8 +169,7 @@
 <nav class="minecraft-navbar">
     <div class="navbar-logo" id="navbarLogo">
         <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
-        <span class="logo-text">shadowGamer100k</span>
-        <span class="dropdown-arrow">▼</span>
+        <span class="logo-text">shadowGamer100k <span class="dropdown-arrow">▼</span></span>
     </div>
     
     <div class="navbar-menu" id="navbarMenu">
@@ -191,6 +178,7 @@
         <button role="tab" class="nav-item" data-target="news">NEWS</button>
     </div>
 </nav>
+
 
    
     <div class="container">
@@ -406,6 +394,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const navbarLogo = document.getElementById("navbarLogo");
+    const navbarMenu = document.getElementById("navbarMenu");
+    const dropdownArrow = document.querySelector(".dropdown-arrow");
+
+    navbarLogo.addEventListener("click", function () {
+        navbarMenu.classList.toggle("show");
+        navbarLogo.classList.toggle("active");
+
+        // تغيير اتجاه السهم بناءً على حالة القائمة
+        dropdownArrow.textContent = navbarMenu.classList.contains("show") ? "▲" : "▼";
+    });
+
+    // إغلاق القائمة عند الضغط خارجها
+    document.addEventListener("click", function (event) {
+        if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
+            navbarMenu.classList.remove("show");
+            navbarLogo.classList.remove("active");
+            dropdownArrow.textContent = "▼"; // يرجع السهم لحالته الطبيعية
+        }
+    });
+});
 
 
        
@@ -551,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        //links avaible 
+  
 
       // Modal functionality
 const modItems = document.querySelectorAll('.mod-item');
