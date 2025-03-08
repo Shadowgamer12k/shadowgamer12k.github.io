@@ -107,7 +107,11 @@
         display: none;
         animation: fadeIn 0.3s ease-in-out;
     }
-    
+
+   .navbar-logo {
+        position: relative;
+        padding-right: 20px; /* Add some padding for the arrow */
+    }
     .navbar-menu.show {
         display: flex;
     }
@@ -120,10 +124,13 @@
     }
     
     /* Add a small indicator on mobile to show it's clickable */
-    .navbar-logo::after {
+   .navbar-logo::after {
         content: "▼";
         color: #fff;
-        margin-left: 8px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
         font-size: 12px;
         transition: transform 0.3s ease;
     }
