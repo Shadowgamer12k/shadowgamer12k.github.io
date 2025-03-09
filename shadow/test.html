@@ -19,68 +19,92 @@
 <link rel="stylesheet" href="styles.css">
 
   <style>
-     /* Search Container Styles */
+     /* Mobile-First Search Styles */
     .search-container {
-        max-width: 600px;
-        margin: 20px auto;
         padding: 0 15px;
+        margin: 15px auto;
+        max-width: 800px;
     }
 
     .minecraft-search {
         position: relative;
-        width: 100%;
+        background: #2a2a2a;
+        border: 3px solid #3a3a3a;
+        border-radius: 4px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .minecraft-input {
         width: 100%;
-        padding: 12px 40px 12px 15px;
-        background: #2a2a2a;
-        border: 3px solid #3a3a3a;
+        padding: 14px 20px;
+        background: transparent;
+        border: 0;
         color: #fff;
         font-family: 'Minecraft', sans-serif;
         font-size: 16px;
-        text-shadow: 1px 1px 0 #000;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 
     .minecraft-input:focus {
         outline: none;
-        border-color: #5a5a5a;
-        box-shadow: 0 0 8px rgba(90,90,90,0.5),
-                   inset 0 2px 4px rgba(0,0,0,0.3);
-        background: #323232;
+        box-shadow: 0 0 8px rgba(90,90,90,0.3);
     }
 
-    .minecraft-input::placeholder {
-        color: #7a7a7a;
-        font-style: italic;
-        text-shadow: none;
-    }
-
-    .search-icon {
+    /* Loading Animation */
+    .search-loading {
         position: absolute;
         right: 15px;
         top: 50%;
         transform: translateY(-50%);
-        color: #5a5a5a;
-        pointer-events: none;
-        transition: color 0.3s ease;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #5a5a5a;
+        border-top-color: #7a7a7a;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s;
     }
 
-    .minecraft-input:focus + .search-icon {
+    .search-loading.active {
+        opacity: 1;
+    }
+
+    .results-counter {
+        text-align: center;
         color: #7a7a7a;
+        font-size: 0.9em;
+        margin-top: 8px;
+        display: none;
+    }
+
+    @keyframes spin {
+        to { transform: translateY(-50%) rotate(360deg); }
     }
 
     @media (max-width: 768px) {
         .minecraft-input {
-            padding: 10px 35px 10px 12px;
-            font-size: 14px;
+            padding: 16px 20px;
+            font-size: 18px;
         }
-        
-        .search-icon {
-            right: 12px;
-            font-size: 14px;
+
+        .search-container {
+            margin: 10px 0;
+            padding: 0 10px;
+        }
+
+        .minecraft-search {
+            border-width: 2px;
+        }
+
+        /* Mobile Keyboard Optimization */
+        @media (max-height: 600px) {
+            .minecraft-input {
+                font-size: 16px;
+                padding: 12px 16px;
+            }
         }
     }
     
@@ -377,19 +401,60 @@
             </ul>
         </div>
     <script>
- // Search functionality
-    document.getElementById('modSearch').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
+ let searchTimeout;
+    const searchInput = document.getElementById('modSearch');
+    const resultsCounter = document.getElementById('searchResultsCount');
+    const loadingIndicator = document.querySelector('.search-loading');
+
+    function performSearch() {
+        const searchTerm = searchInput.value.trim().toLowerCase();
         const modItems = document.querySelectorAll('.mod-item');
-        
+        let visibleCount = 0;
+
+        loadingIndicator.classList.add('active');
+
         modItems.forEach(item => {
             const title = item.querySelector('h3').textContent.toLowerCase();
             const description = item.querySelector('p').textContent.toLowerCase();
             const matches = title.includes(searchTerm) || description.includes(searchTerm);
             
-            item.style.display = matches ? 'block' : 'none';
-            item.classList.toggle('search-match', matches);
+            item.style.display = matches ? '' : 'none';
+            if(matches) visibleCount++;
         });
+
+        // Update results counter
+        resultsCounter.style.display = 'block';
+        resultsCounter.textContent = visibleCount 
+            ? `${visibleCount} mod${visibleCount !== 1 ? 's' : ''} found`
+            : 'No matching mods found';
+
+        // Hide counter when search is empty
+        if(!searchTerm) resultsCounter.style.display = 'none';
+
+        loadingIndicator.classList.remove('active');
+    }
+
+    // Optimized for mobile typing
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        loadingIndicator.classList.add('active');
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    // Handle mobile keyboard events
+    searchInput.addEventListener('focus', () => {
+        window.requestAnimationFrame(() => {
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    // Clear search on escape
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') {
+            searchInput.value = '';
+            performSearch();
+            searchInput.blur();
+        }
     });
       
 document.addEventListener('DOMContentLoaded', function() {
