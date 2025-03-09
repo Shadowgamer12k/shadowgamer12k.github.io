@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Enhanced Security Features -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdn.example.com; img-src *; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>shadowGamer100k - Minecraft Add-ons</title>
+  
+  <!-- SEO & Accessibility -->
+  <meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources to enhance your gaming experience.">
+  <meta name="keywords" content="Minecraft mods, survival mods, resource packs, shadowGamer100k, Minecraft add-ons, Bedrock Edition, Java Edition, mods download">
+  <meta name="author" content="shadowGamer100k">
+  <link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Dark Mode CSS -->
+  <style>
+    .dark-mode {
+      background: #1a1a1a;
+      color: white;
+    }
+    .version-badge {
+      background: #4CAF50;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 3px;
+    }
+    .social-badge {
+      background: #2196F3;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+  </style>
+
+  <!-- Critical CSS Inlining -->
+  <style>
+    .minecraft-navbar { display: flex; justify-content: space-between; align-items: center; background: #2c2c2c; padding: 10px 15px; margin-bottom: 20px; border: 2px solid #555; box-shadow: 0 2px 10px rgba(0,0,0,0.5); border-radius: 4px; position: relative; }
+    /* ... (all original navbar styles) ... */
+    @media (max-width: 768px) { /* ... (original mobile styles) ... */ }
+  </style>
+
+  <!-- Trusted Scripts -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712825263997446"
+          integrity="sha384-..." crossorigin="anonymous"></script>
+</head>
+<body class="dark-mode">
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="search" id="mod-search" placeholder="🔍 Search mods...">
+  </div>
+
+  <!-- Dark Mode Toggle -->
+  <button onclick="toggleDarkMode()" class="dark-mode-toggle">🌙</button>
+
+  <!-- Enhanced Navbar -->
+  <nav class="minecraft-navbar">
+    <div class="navbar-logo" 
+         id="navbarLogo" 
+         aria-haspopup="true" 
+         aria-controls="navbarMenu"
+         role="button">
+      <img src="assets/images/avatarHead3.png" alt="shadowGamer100k Logo" class="nav-logo">
+      <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼</span></span>
+    </div>
+    <div class="navbar-menu" id="navbarMenu">
+      <button role="tab" class="nav-item active" data-target="projects">PROJECTS</button>
+      <button role="tab" class="nav-item" data-target="social">SOCIAL</button>
+      <button role="tab" class="nav-item" data-target="news">NEWS</button>
+    </div>
+  </nav>
+
+  <!-- Mod List with Lazy Loading -->
+  <div class="container">
+    <div id="projects" class="tab-content active">
+      <ul class="mod-list">
+        <li class="mod-item" id="advancedwaypoint">
+          <img src="assets/images/waypoint.webp" 
+               alt="Advanced Waypoint Mod" 
+               loading="lazy">
+          <h3>Advanced Waypoint <span class="version-badge">1.21.60+</span></h3>
+          <p>Tired of traveling the great distances...</p>
+        </li>
+        <!-- ... (all other mod items with loading="lazy") ... -->
+      </ul>
+    </div>
+    
+    <!-- Social Tab -->
+    <div id="social" class="tab-content">
+      <ul class="mod-list">
+        <li class="mod-item social-item">
+          <a href="https://www.youtube.com/@shadowgamer100k" 
+             aria-label="Visit our YouTube channel">
+            <img src="assets/images/youtube.png" 
+                 alt="YouTube Channel Logo" 
+                 loading="lazy">
+          </a>
+          <h3>YouTube <span class="social-badge">Videos</span></h3>
+          <p>Watch our tutorials</p>
+          <a href="https://www.youtube.com/@shadowgamer100k" 
+             class="social-link" 
+             target="_blank" 
+             rel="noopener noreferrer">Go to Channel</a>
+        </li>
+        <!-- ... (other social items) ... -->
+      </ul>
+    </div>
+    
+    <!-- News Tab -->
+    <div id="news" class="tab-content">
+      <ul class="mod-list">
+        <li class="mod-item">
+          <img src="assets/images/news.png" 
+               alt="News 1" 
+               loading="lazy">
+          <h3>addon updates <span class="version-badge">start</span></h3>
+          <span class="news-date">13 Feb 2024</span>
+          <p>all the addons has updated to 1.21.60 except for advanced shop</p>
+        </li>
+        <!-- ... (other news items) ... -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mod Preview Modal -->
+  <div class="mod-modal" style="display: none;">
+    <button onclick="closeModal()">X</button>
+    <h3>Mod Name</h3>
+    <p>Description...</p>
+    <a href="#" class="download-link">Download</a>
+  </div>
+
+  <!-- Footer with Accessibility -->
+  <footer>
+    <p>© 2024 shadowGamer100k. All rights reserved. 
+      <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         aria-label="Privacy Policy">Privacy Policy</a> | 
+      <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         aria-label="Terms of Use">Terms of Use</a>
+    </p>
+  </footer>
+
+  <!-- Optimized JavaScript -->
+  <script>
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Search Bar Implementation
+    document.getElementById('mod-search').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.mod-item').forEach(mod => {
+        mod.style.display = mod.textContent.toLowerCase().includes(query) ? 'block' : 'none';
+      });
+    });
+
+    // Navbar Mobile Menu
+    document.getElementById('navbarLogo').addEventListener('click', () => {
+      const menu = document.getElementById('navbarMenu');
+      menu.classList.toggle('show');
+      document.getElementById('dropdown-arrow').style.transform = 
+        menu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    // Mod Preview Modal
+    document.querySelectorAll('.mod-item').forEach(mod => {
+      mod.addEventListener('click', () => {
+        const modal = document.querySelector('.mod-modal');
+        modal.querySelector('h3').textContent = mod.querySelector('h3').textContent;
+        modal.querySelector('p').textContent = mod.querySelector('p').textContent;
+        modal.querySelector('.download-link').href = redirectLinks[mod.id];
+        modal.style.display = 'block';
+      });
+    });
+
+    // Removed obfuscated scripts and replaced with trusted analytics
+    (function() {
+      // Minimal ad-block check (one-time)
+      const testAd = document.getElementById('ad-test');
+      if (testAd.offsetHeight === 0) {
+        document.querySelector('.adblock-overlay').style.display = 'flex';
+      }
+    })();
+  </script>
+
+  <!-- Trusted Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TRACKING_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'YOUR_TRACKING_ID');
+  </script>
+
+  <!-- Accessibility Enhancements -->
+  <script>
+    // Keyboard Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') item.click();
+      });
+    });
+  </script>
+
+  <!-- Error Handling -->
+  <noscript>
+    <div class="error-message">
+      JavaScript is disabled. Some features may not work properly.
+    </div>
+  </noscript>
+</body>
+</html>
