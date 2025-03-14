@@ -1,0 +1,173 @@
+/* Blog specific styles that complement the main styles.css */
+
+.page-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.8rem;
+  margin: 20px 0;
+  color: var(--minecraft-green);
+  text-shadow: 2px 2px 0px #000;
+  letter-spacing: 2px;
+}
+
+.blog-item {
+  background: #333;
+  padding: 15px;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  text-align: left;
+  transition: transform 0.2s;
+  border: 2px solid #55aa55; /* Green border for blog items */
+  cursor: pointer;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.blog-item:hover {
+  transform: translateY(-5px);
+  background-color: rgba(85, 170, 85, 0.1);
+}
+
+.blog-badge {
+  background: #55aa55;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin-left: 10px;
+}
+
+.blog-date {
+  color: #55aaff;
+  font-size: 0.8em;
+  margin: 10px 0;
+  display: block;
+}
+
+.blog-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: var(--minecraft-green);
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  background-color: rgba(85, 255, 85, 0.1);
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--minecraft-green);
+}
+
+.blog-link:hover {
+  text-decoration: none;
+  transform: scale(1.05);
+  background-color: rgba(85, 255, 85, 0.2);
+  text-shadow: 0 0 5px var(--minecraft-green);
+}
+
+/* Blog content styles for individual blog posts */
+.blog-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid #55aa55;
+  text-align: left;
+}
+
+.blog-content h1 {
+  color: var(--minecraft-green);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.blog-content .blog-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 0.8rem;
+  color: #aaa;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.blog-content img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin: 20px 0;
+  border: 2px solid #444;
+}
+
+.blog-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.blog-content h2 {
+  color: var(--minecraft-blue);
+  font-size: 1.2rem;
+  margin: 25px 0 15px;
+}
+
+.blog-content ul, .blog-content ol {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.blog-content li {
+  margin-bottom: 10px;
+}
+
+.blog-content code {
+  background: #444;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.blog-content pre {
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  border-left: 3px solid var(--minecraft-green);
+  margin: 20px 0;
+}
+
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background-color: #555;
+  padding: 8px 15px;
+  border-radius: 3px;
+  border: 1px solid #777;
+}
+
+.back-button:hover {
+  background-color: #666;
+  transform: translateX(-5px);
+}
+
+/* Responsive design for blog pages */
+@media (max-width: 768px) {
+  .blog-content {
+    padding: 15px;
+    margin: 0 10px;
+  }
+  
+  .blog-content h1 {
+    font-size: 1.2rem;
+  }
+  
+  .blog-item {
+    width: 100%;
+    max-width: 300px;
+  }
+}
