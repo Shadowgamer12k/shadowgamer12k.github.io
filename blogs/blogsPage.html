@@ -1,126 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Blogs - shadowGamer100k</title>
-    <meta name="description" content="Read the latest blogs about Minecraft and its best add-ons!">
-    <style>
-/* Blog Page Styles */
-.blog-header {
-    text-align: center;
-    background-color: #2c2c2c;
-    color: #55ff55;
-    padding: 20px;
-    font-family: 'Press Start 2P', cursive;
-    border-bottom: 4px solid #55ff55;
-}
-
-.blog-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
-
-.blog-post {
-    background: #333;
-    border: 2px solid #555;
-    border-radius: 8px;
-    padding: 15px;
-    width: 320px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    text-align: left;
-    transition: transform 0.3s ease;
-}
-
-.blog-post:hover {
-    transform: translateY(-5px);
-    border-color: #55ff55;
-}
-
-.blog-post img {
-    width: 100%;
-    border-radius: 5px;
-    object-fit: cover;
-}
-
-.blog-post h2 {
-    font-size: 18px;
-    color: #55ff55;
-    margin: 10px 0;
-}
-
-.blog-post p {
-    font-size: 14px;
-    color: #ddd;
-}
-
-.read-more {
-    display: inline-block;
-    margin-top: 10px;
-    color: #55aaff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.read-more:hover {
-    text-decoration: underline;
-    transform: scale(1.05);
-}
-
-/* Responsive Design for Mobile */
-@media (max-width: 768px) {
-    .blog-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .blog-post {
-        width: 90%;
-        max-width: 400px;
-        padding: 10px;
-    }
-
-    .blog-post h2 {
-        font-size: 16px;
-    }
-
-    .blog-post p {
-        font-size: 13px;
-    }
-}
-
-
-   </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shadowGamer100k - Minecraft Blogs</title>
+  <meta name="description" content="Read the latest Minecraft blogs by shadowGamer100k with tips, tutorials, and updates about Minecraft add-ons.">
+  <meta name="keywords" content="Minecraft, blogs, shadowGamer100k, Minecraft tutorials, Minecraft tips, Minecraft updates">
+  <meta name="author" content="shadowGamer100k">
+  <link rel="icon" href="../assets/images/avatarHead3.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="blogs.css">
 </head>
 <body>
-    <header class="blog-header">
-        <h1>Minecraft Add-ons & Tips</h1>
-        <p>Explore the best add-ons and guides for Minecraft!</p>
-    </header>
-    
-    <div class="blog-container">
-        <article class="blog-post">
-            <h2>Top 5 Minecraft Add-ons You Must Try</h2>
-            <img src="assets/images/blog1.jpg" alt="Minecraft Add-ons">
-            <p>Minecraft add-ons allow you to customize your game experience like never before. Here are the top 5 add-ons you should check out...</p>
-            <a href="#" class="read-more">Read More</a>
-        </article>
-        
-        <article class="blog-post">
-            <h2>How to Install Minecraft Add-ons Easily</h2>
-            <img src="assets/images/blog2.jpg" alt="Install Add-ons">
-            <p>Installing add-ons can be tricky for beginners. This guide will walk you through the easiest way to get started...</p>
-            <a href="#" class="read-more">Read More</a>
-        </article>
+  <!-- Click sound element -->
+  <audio id="clickSound" src="../assets/sounds/pop.mp3" preload="auto"></audio>
+
+  <nav class="minecraft-navbar">
+    <div class="navbar-logo" id="navbarLogo">
+      <img src="../assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
+      <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼</span></span>
     </div>
     
-    <footer>
-        <p>&copy; 2025 shadowGamer100k. All rights reserved.</p>
-    </footer>
+    <div class="navbar-menu" id="navbarMenu">
+      <button role="tab" class="nav-item" onclick="window.location.href='https://shadowgamer12k.github.io/'">PROJECTS</button>
+      <button role="tab" class="nav-item" onclick="window.location.href='https://shadowgamer12k.github.io/#social'">SOCIAL</button>
+      <button role="tab" class="nav-item" onclick="window.location.href='https://shadowgamer12k.github.io/#news'">NEWS</button>
+      <button role="tab" class="nav-item active">BLOGS</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="blogs" class="tab-content active">
+      <h1 class="page-title">MINECRAFT BLOGS</h1>
+      <ul class="mod-list">
+        <!-- Blog Post 1 -->
+        <li class="mod-item blog-item">
+          <img src="../assets/images/blog1.webp" alt="How to install Minecraft add-ons">
+          <h3>How to install Minecraft add-ons <span class="blog-badge">TUTORIAL</span></h3>
+          <span class="blog-date">March 10, 2025</span>
+          <p>Learn how to easily install any Minecraft add-on on your device in just a few simple steps...</p>
+          <a href="how-to-install-addons.html" class="blog-link">Read More</a>
+        </li>
+        
+        <!-- Blog Post 2 -->
+        <li class="mod-item blog-item">
+          <img src="../assets/images/blog2.webp" alt="Best Minecraft add-ons 2025">
+          <h3>Best Minecraft add-ons 2025 <span class="blog-badge">GUIDE</span></h3>
+          <span class="blog-date">February 25, 2025</span>
+          <p>Discover the top Minecraft add-ons this year that will transform your gameplay experience...</p>
+          <a href="best-addons-2025.html" class="blog-link">Read More</a>
+        </li>
+        
+        <!-- Blog Post 3 -->
+        <li class="mod-item blog-item">
+          <img src="../assets/images/blog3.webp" alt="Creating your first Minecraft add-on">
+          <h3>Creating your first Minecraft add-on <span class="blog-badge">DEV</span></h3>
+          <span class="blog-date">February 12, 2025</span>
+          <p>Follow this step-by-step guide to create your very own Minecraft add-on from scratch...</p>
+          <a href="create-first-addon.html" class="blog-link">Read More</a>
+        </li>
+        
+        <!-- Blog Post 4 -->
+        <li class="mod-item blog-item">
+          <img src="../assets/images/blog4.webp" alt="Minecraft 1.21.60 changes">
+          <h3>Minecraft 1.21.60 changes <span class="blog-badge">UPDATE</span></h3>
+          <span class="blog-date">February 2, 2025</span>
+          <p>Everything you need to know about the latest Minecraft update and how it affects add-ons...</p>
+          <a href="minecraft-latest-update.html" class="blog-link">Read More</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 shadowGamer12k. All rights reserved. 
+      <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
+      <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
+    </p>
+  </footer>
+
+  <script>
+    const clickSound = document.getElementById('clickSound');
+    
+    async function playClickSound() {
+      try {
+        clickSound.currentTime = 0;
+        await clickSound.play();
+      } catch (error) {
+        console.log('Audio error:', error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarLogo = document.getElementById('navbarLogo');
+      const navbarMenu = document.getElementById('navbarMenu');
+      const dropdownArrow = document.getElementById('dropdown-arrow');
+      
+      if (navbarLogo && navbarMenu) {
+        // Only add click functionality on mobile
+        navbarLogo.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            if (typeof playClickSound === 'function') {
+              playClickSound();
+            }
+            navbarMenu.classList.toggle('show');
+            
+            // Rotate the arrow
+            if (navbarMenu.classList.contains('show')) {
+              dropdownArrow.style.transform = 'rotate(180deg)';
+            } else {
+              dropdownArrow.style.transform = 'rotate(0deg)';
+            }
+          }
+        });
+      }
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+          if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
+            navbarMenu.classList.remove('show');
+            dropdownArrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+      
+      // Handle nav item clicks
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          playClickSound();
+        });
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          navbarMenu.classList.remove('show');
+          dropdownArrow.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // Add click sound to blog links
+      document.querySelectorAll('.blog-link').forEach(link => {
+        link.addEventListener('click', function() {
+          playClickSound();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
