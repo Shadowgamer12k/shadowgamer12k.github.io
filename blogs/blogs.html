@@ -81,19 +81,19 @@
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Accessibility improvements
-      const navItems = document.querySelectorAll('[role="tab"]');
-      const clickSound = document.getElementById('clickSound');
-      
-      // Tab navigation
-      navItems.forEach(item => {
-        item.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.target.click();
-          }
-        });
-      });
+document.addEventListener('DOMContentLoaded', function() {
+  const navbarLogo = document.getElementById('navbarLogo');
+  const navbarMenu = document.getElementById('navbarMenu');
+  const navCube = document.getElementById('navCube');
+
+  navbarLogo.addEventListener('click', function() {
+    if (window.innerWidth <= 768) {
+      playClickSound();
+      const isExpanded = navbarMenu.classList.toggle('show');
+      navCube.classList.toggle('active', isExpanded);
+      navbarLogo.setAttribute('aria-expanded', isExpanded);
+    }
+  });
 
       // Audio handling
       async function playClickSound() {
@@ -125,13 +125,15 @@
         }
       });
 
-      // Click outside to close
-      document.addEventListener('click', e => {
-        if (!navbarLogo.contains(e.target) && !navbarMenu.contains(e.target)) {
-          navbarMenu.classList.remove('show');
-          navbarLogo.setAttribute('aria-expanded', 'false');
-        }
-      });
+      // Add cube animation on menu close
+  document.addEventListener('click', function(event) {
+    if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
+      navbarMenu.classList.remove('show');
+      navCube.classList.remove('active');
+      navbarLogo.setAttribute('aria-expanded', 'false');
+    }
+  });
+});
     });
   </script>
 </body>
