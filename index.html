@@ -1,341 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>shadowGamer100k - Minecraft Add-ons</title>
-  <meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources to enhance your gaming experience.">
-  <meta name="keywords" content="Minecraft, add-ons, mods, resources, shadowGamer100k, gaming, download Minecraft mods, best Minecraft add-ons">
-  <meta name="author" content="shadowGamer100k">
-  <link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+
+
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shadowGamer100k - Minecraft Add-ons</title>
+<meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources to enhance your gaming experience.">
+<meta name="keywords" content="Minecraft, add-ons, mods, resources, shadowGamer100k, gaming, download Minecraft mods, best Minecraft add-ons, Minecraft add-ons for mobile, Minecraft bedrock mods, Minecraft Java Edition, top Minecraft mods, Minecraft tools, Minecraft skins, Minecraft textures, Minecraft gameplay, Minecraft tips, Minecraft guides, Minecraft latest mods, Minecraft resource packs, Minecraft furniture mods, Minecraft adventure maps, Minecraft survival mods, Minecraft PvP mods, Minecraft shaders, Minecraft optimization mods, Minecraft world-building mods, Minecraft world mods, Minecraft texture packs, Minecraft map downloads, Minecraft add-ons for Android, Minecraft best add-ons, Minecraft best mods, Minecraft community mods, Minecraft creator mods, Minecraft mods for iOS, Minecraft adventure maps, Minecraft modding community, Minecraft plugins, Minecraft server mods, Minecraft multiplayer mods, Minecraft building mods, Minecraft upgrades, Minecraft 1.20 add-ons, Minecraft 1.20 mods, Minecraft 1.21 mods, Minecraft mods download links, Minecraft modding tools, Minecraft Bedrock Edition, Minecraft Java mods, Minecraft creative mode mods, Minecraft building tools, Minecraft farming mods, Minecraft texture creators, Minecraft tutorial mods, Minecraft challenge mods, Minecraft multiplayer plugins, Minecraft server resources, Minecraft mod installation guides, Minecraft combat mods, Minecraft crafting recipes, Minecraft custom items, Minecraft item packs, Minecraft modding tutorials, Minecraft advanced add-ons, Minecraft premium mods, Minecraft unique mods, Minecraft gear mods, Minecraft weapons mods, Minecraft vehicle mods, Minecraft furniture items, Minecraft sandbox mods, Minecraft environmental mods, Minecraft upgrade mods, Minecraft story mods, Minecraft official mods, Minecraft custom game modes, Minecraft modding software, Minecraft modding tutorial for beginners, Minecraft modder tools, Minecraft mod installation guides, Minecraft modded servers, Minecraft modding plugins, Minecraft graphical mods, Minecraft downloadable content, Minecraft premium add-ons, Minecraft new mods, Minecraft 2025 mods, Minecraft skin creators, Minecraft sound packs, Minecraft music mods, Minecraft texture editors, Minecraft game modes, Minecraft custom textures, Minecraft realistic mods, Minecraft fantasy mods, Minecraft creative items, Minecraft resource creators, Minecraft hidden mods, Minecraft experimental mods">
+<meta name="author" content="shadowGamer100k">
+<link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
 
   <style>
-    /* Base styles */
-    :root {
-      --mc-green: #55FF55;
-      --mc-dark: #1D1D1D;
-      --mc-border: #555555;
-      --mc-highlight: #8DD8FF;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 15px;
-    }
-
-    /* Minecraft Navbar Styles */
-    .minecraft-navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #2c2c2c;
-      padding: 10px 15px;
-      margin-bottom: 20px;
-      border: 2px solid #555;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .navbar-logo {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .nav-logo {
-      width: 36px;
-      height: 36px;
-      margin-right: 10px;
-      image-rendering: pixelated;
-    }
-
-    .logo-text {
-      color: #fff;
-      font-weight: bold;
-      font-size: 1.2rem;
-      text-shadow: 2px 2px 0px #000;
-    }
-
-    #dropdown-arrow {
-      display: none; /* Hide by default on desktop */
-      font-size: 12px;
-      transition: transform 0.3s ease;
-      vertical-align: middle;
-    }
-
-    .navbar-menu {
-      display: flex;
-      gap: 10px;
-    }
-
-    .nav-item {
-      background-color: #3a3a3a;
-      color: #ffffff;
-      border: 2px solid #555;
-      padding: 8px 16px;
-      font-weight: bold;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      font-size: 14px;
-      letter-spacing: 1px;
-      text-shadow: 1px 1px 0px #000;
-    }
-
-    .nav-item:hover {
-      background-color: #4a4a4a;
-      transform: translateY(-2px);
-    }
-
-    .nav-item.active {
-      background-color: #555555;
-      border-color: #7e7e7e;
-      box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    }
-
-    /* Tab Content */
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.5s ease;
-    }
-
-    /* Mod List */
-    .mod-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      list-style: none;
-    }
-
-    .mod-item {
-      background: #2a2a2a;
-      border: 2px solid #444;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-
-    .mod-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .mod-item img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-bottom: 1px solid #444;
-    }
-
-    .mod-item h3 {
-      padding: 15px 15px 5px;
-      font-size: 18px;
-      color: var(--mc-green);
-    }
-
-    .mod-item p {
-      padding: 0 15px 15px;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    .version-badge {
-      background: rgba(85, 255, 85, 0.2);
-      color: var(--mc-green);
-      font-size: 12px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-left: 8px;
-      font-weight: normal;
-    }
-
-    /* Social items */
-    .social-item {
-      text-align: center;
-    }
-
-    .social-badge {
-      background: rgba(141, 216, 255, 0.2);
-      color: var(--mc-highlight);
-      font-size: 12px;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-left: 8px;
-      font-weight: normal;
-    }
-
-    .social-link {
-      display: inline-block;
-      background: #3a3a3a;
-      color: #ffffff;
-      padding: 8px 16px;
-      text-decoration: none;
-      border-radius: 4px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    .social-link:hover {
-      background: #4a4a4a;
-      transform: translateY(-2px);
-    }
-
-    /* News date */
-    .news-date {
-      display: block;
-      padding: 0 15px;
-      font-size: 12px;
-      color: #999;
-      margin-bottom: 5px;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal.active {
-      opacity: 1;
-    }
-
-    .modal-content {
-      background: #2a2a2a;
-      width: 90%;
-      max-width: 800px;
-      border-radius: 8px;
-      position: relative;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 16px;
-      color: #fff;
-      text-decoration: none;
-      background: #444;
-      padding: 5px 10px;
-      border-radius: 4px;
-    }
-
-    .close-button:hover {
-      background: #666;
-    }
-
-    .modal-video {
-      width: 100%;
-      height: 400px;
-      margin-bottom: 20px;
-    }
-
-    .modal-description {
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-
-    .download-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .download-button {
-      flex: 1;
-      background: #3a3a3a;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    .download-button:hover {
-      background: #4a4a4a;
-    }
-
-    .behavior-pack {
-      background: #336633;
-    }
-
-    .behavior-pack:hover {
-      background: #448844;
-    }
-
-    .resource-pack {
-      background: #663333;
-    }
-
-    .resource-pack:hover {
-      background: #884444;
-    }
-
-    /* Footer */
     footer {
-      background: rgba(0, 0, 0, 0.9);
-      padding: 1rem;
-      text-align: center;
-      border-top: 4px solid var(--mc-border);
-      margin-top: 3rem;
-    }
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            text-align: center;
+            border-top: 4px solid var(--mc-border);
+            margin-top: 3rem;
+        }
 
-    footer a {
-      color: var(--mc-green);
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
+        footer a {
+            color: var(--mc-green);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
 
-    footer a:hover {
-      text-shadow: 0 0 8px var(--mc-green);
-      text-decoration: underline;
-    }
+        footer a:hover {
+            text-shadow: 0 0 8px var(--mc-green);
+            text-decoration: underline;
+        }
+/* Minecraft Navbar Styles */
+.minecraft-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c2c2c;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #555;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    position: relative;
+}
 
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
 
-    /* Responsive styles for mobile */
-    @media screen and (max-width: 768px) {
-      .navbar-menu {
+.nav-logo {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+    image-rendering: pixelated;
+}
+
+.logo-text {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 2px 2px 0px #000;
+}
+
+#dropdown-arrow {
+    display: none; /* Hide by default on desktop */
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    vertical-align: middle;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-item {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 2px solid #555;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.nav-item:hover {
+    background-color: #4a4a4a;
+    transform: translateY(-2px);
+}
+
+.nav-item.active {
+    background-color: #555555;
+    border-color: #7e7e7e;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* Desktop - nothing changes here */
+@media screen and (min-width: 769px) {
+    .navbar-logo {
+        cursor: default;
+    }
+}
+
+/* Responsive styles for mobile */
+@media screen and (max-width: 768px) {
+    .navbar-menu {
         position: absolute;
         flex-direction: column;
         width: 100%;
@@ -349,368 +127,527 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         display: none;
         animation: fadeIn 0.3s ease-in-out;
-      }
-      
-      .navbar-menu.show {
+    }
+    
+    .navbar-menu.show {
         display: flex;
-      }
-      
-      .nav-item {
+    }
+    
+    .nav-item {
         width: 90%;
         margin: 5px auto;
         text-align: center;
-      }
-      
-      /* Show dropdown arrow on mobile */
-      #dropdown-arrow {
+        font-family: 'Press Start 2P', cursive;
+    }
+    
+    /* Show dropdown arrow on mobile */
+    #dropdown-arrow {
         display: inline-block;
         margin-left: 5px;
-      }
-      
-      .mod-list {
-        grid-template-columns: 1fr;
-      }
-      
-      .modal-video {
-        height: 250px;
-      }
-      
-      .download-buttons {
-        flex-direction: column;
-      }
     }
-  </style>
+    
+    /* Animation for dropdown */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
+</style>
 </head>
 <body>
-  <!-- Click sound element -->
-  <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
+   
 
-  <nav class="minecraft-navbar">
+
+    
+
+    
+    <!-- Click sound element -->
+    <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
+
+<nav class="minecraft-navbar">
     <div class="navbar-logo" id="navbarLogo">
-      <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
-      <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼</span></span>
+        <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
+        <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼</span></span>
     </div>
     
     <div class="navbar-menu" id="navbarMenu">
-      <button role="tab" class="nav-item active" data-target="projects">PROJECTS</button>
-      <button role="tab" class="nav-item" data-target="social">SOCIAL</button>
-      <button role="tab" class="nav-item" data-target="news">NEWS</button>
-      <button role="tab" class="nav-item" onclick="window.location.href='https://shadowgamer12k.github.io/blogs/blogs.html'">BLOGS</button>
+        <button role="tab" class="nav-item active" data-target="projects">PROJECTS</button>
+        <button role="tab" class="nav-item" data-target="social">SOCIAL</button>
+        <button role="tab" class="nav-item" data-target="news">NEWS</button>
+       <button role="tab" class="nav-item" onclick="window.location.href='https://shadowgamer12k.github.io/blogs/blogs.html'">BLOGS</button>
     </div>
-  </nav>
+</nav>
 
-  <div class="container">
-    <!-- Projects Tab Content -->
-    <div id="projects" class="tab-content active">
-      <ul class="mod-list">
-        <!-- Wireless Hopper Post -->
-        <li id="wirlesshopper" class="mod-item" 
-          data-video="https://www.youtube.com/embed/b6ps6cF3ha0?si=0x9GdzzYu97-mbXr"
-          data-description="Tired of cluttered hoppers and complex redstone setups? The Wireless Hopper Addon introduces an advanced auto-collection system, allowing items to teleport directly to linked containers."
-          data-behavior="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypoint"
-          data-resource="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypointrs">
-          <img src="assets/images/hopper.webp" alt="Wireless Hopper">
-          <h3>Wireless Hopper<span class="version-badge">support 1.21.70</span></h3>
-          <p>Tired of cluttered hoppers and complex redstone setups?...see more</p>
-        </li>
-              
-        <!-- Advanced Waypoint Post -->
-        <li id="advancedwaypoint" class="mod-item" 
-          data-video="https://www.youtube.com/embed/j3P6ysWfg-A?si=F2RSn01tbbXsZToG"
-          data-description="Tired of traveling the great distances to return home or to your village in Minecraft? Today I made the solution for you with my advanced waypoint. It won't run anymore because it will enable you to easily teleport between places and also the dimensions. I didn't tell you that you could teleport to the last place you died"
-          data-behavior="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypoint"
-          data-resource="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypointrs">
-          <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
-          <h3>Advanced Waypoint<span class="version-badge">support 1.21.70</span></h3>
-          <p>Tired of traveling the great distances to return home or to your village in Minecraft?...see more</p>
-        </li>
-               
-        <!-- Land claim Post -->
-        <li id="landclaim" class="mod-item" 
-          data-video="https://www.youtube.com/embed/k0GzCw3DSMQ"
-          data-description="Protect your areas from other players with the Land Claim addon. Set boundaries, customize permissions, and ensure your builds remain secure."
-          data-behavior="https://direct-link.net/642753/landclaim"
-          data-resource="https://direct-link.net/642753/landclaimrs">
-          <img src="assets/images/landClaim.webp" alt="Land Claim">
-          <h3>Land Claim <span class="version-badge">support 1.21.70</span></h3>
-          <p>Protect your areas from other players...see more</p>
-        </li>
-    
-        <!-- Item Carrier Post -->
-        <li id="itemcarrier" class="mod-item" 
-          data-video="https://www.youtube.com/embed/fByEnsAay7s?si=ZuKCc6-eoeo7UOx9"
-          data-description="Just hold the item in your hand, sneak, and click on the first chest or container from which you want to take the items. Then you go to the other empty chest or container in which you want to put the items that you took from the first chest. Then click on it too, and a menu will appear for you containing a button with the confirmation of the transfer. Press the button. The items will be transferred automatically"
-          data-behavior="https://link-target.net/642753/itemcarrier"
-          data-resource="https://link-hub.net/642753/itemscarrierrs">
-          <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
-          <h3>Items Carrier <span class="version-badge">support 1.21.70</span></h3>
-          <p>This addon will help you move items from one chest to another...see more</p>
-        </li>
-       
-        <!-- Health Bar Post -->
-        <li id="healthbar" class="mod-item" 
-          data-video="https://www.youtube.com/embed/mgb34IVpKh8?si=bGelnBlgVsjYsjDw"
-          data-description="This addon will literally help you and will benefit you a lot in Survival. Suppose you have added mobs or bosses from other addons to your world, but you want to know how much health this mob or boss has left so that it dies, and here comes the role of my addon, which will give you the number of hearts of all the mobs. Not only Minecraft mobs, but even mobs and monsters that you add through other addons"
-          data-behavior="https://direct-link.net/642753/healthbar"
-          data-resource="https://link-center.net/642753/healthbarrs">
-          <img src="assets/images/HealthBar.webp" alt="Health Bar">
-          <h3>Health Bar <span class="version-badge">support 1.21.70</span></h3>
-          <p>This addon will show you a heart counter for monsters and mobs....see more</p>
-        </li>
 
-        <!-- Mob Catcher Post -->
-        <li id="mobcatcher" class="mod-item" 
-          data-video="https://www.youtube.com/embed/_UETSrlvAPc?si=2tv55zLf68xrmETM"
-          data-description="This addon will help you move monsters and mobs, especially the mobs that will help you, such as villagers, or if you want, for example, to move a group of cows in order to make such-and-such a farm out of them, something like that."
-          data-behavior="https://link-center.net/642753/mobcatcher"
-          data-resource="https://link-target.net/642753/mobcatcherrs">
-          <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
-          <h3>Mob Catcher <span class="version-badge">support 1.21.70</span></h3>
-          <p>This addon will help you move monsters and mobs...see more</p>
-        </li>
-      </ul>
-    </div>
+ 
+    <div class="container">
+        <!-- Projects Tab Content -->
+        <div id="projects" class="tab-content active">
+            <ul class="mod-list">
+                <ul class="mod-list">
+  <div data-banner-id="6062006"></div>
 
-    <!-- Social Tab Content -->
-    <div id="social" class="tab-content">
-      <ul class="mod-list">
-        <li class="mod-item social-item">
-          <img src="assets/images/youtube.png" alt="YouTube">
-          <h3>YouTube <span class="social-badge">Videos</span></h3>
-          <p>Watch our tutorials</p>
-          <a href="https://www.youtube.com/@shadowgamer100k" rel="noopener noreferrer" target="_blank" class="social-link">Click here to Visit Channel</a>
-        </li>
+           
+
+                   <!-- Wireless Hopper Post -->
+                     <li id='wirlesshopper' class="mod-item" 
+                    data-video="https://www.youtube.com/embed/b6ps6cF3ha0?si=0x9GdzzYu97-mbXr"
+                    data-description="Tired of cluttered hoppers and complex redstone setups? The Wireless Hopper Addon introduces an advanced auto-collection system, allowing items to teleport directly to linked containers."
+                    data-behavior="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypoint"
+                    data-resource="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypointrs">
+                    <img src="assets/images/hopper.webp" alt="wirlesshopper">
+                    <h3>Wireless Hopper<span class="version-badge">support 1.21.70</span></h3>
+                    <p>Tired of cluttered hoppers and complex redstone setups?...see more</p>
+                </li>
+                  
+                      <!-- Advanced Waypoint Post -->
+                     <li id='advancedwaypoint' class="mod-item" 
+                    data-video="https://www.youtube.com/embed/j3P6ysWfg-A?si=F2RSn01tbbXsZToG"
+                     data-description="Tired of traveling the great distances to return home or to your village in Minecraft? Today I made the solution for you with my advanced waypoint. It won't run anymore because it will enable you to easily teleport between places and also the dimensions. I didn't tell you that you could teleport to the last place you died"
+                    data-behavior="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypoint"
+                    data-resource="https://shadowgamer12k.github.io/shadow/https://direct-link.net/642753/advancedwaypointrs">
+                    <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
+                    <h3>Advanced Waypoint<span class="version-badge">support 1.21.70</span></h3>
+                    <p>Tired of traveling the great distances to return home or to your village in Minecraft?...see more</p>
+                </li>
+                   
+                    <!-- Land claim Post -->
+                     <li id='landclaim' class="mod-item" 
+                    data-video="https://youtu.be/k0GzCw3DSMQ"
+                    data-description="Addon description..."
+                    data-behavior="https://direct-link.net/642753/landclaim"
+                    data-resource="https://direct-link.net/642753/landclaimrs">
+                    <img src="assets/images/landClaim.webp" alt="Land Claim">
+                    <h3>Land Claim <span class="version-badge">support 1.21.70</span></h3>
+                    <p>Protect your areas from other players...see more</p>
+                </li>
         
-        <li class="mod-item social-item">
-          <img src="assets/images/discord.png" alt="Discord">
-          <h3>Discord <span class="social-badge">Community</span></h3>
-          <p>Join our server</p>
-          <a href="http://bit.ly/4fUVc9H" class="social-link">Click here to Join Server</a>
-        </li>
+                <!-- Item Carrier Post -->
+                <li id='itemcarrier' class="mod-item" 
+                    data-video="https://www.youtube.com/embed/fByEnsAay7s?si=ZuKCc6-eoeo7UOx9"
+                    data-description="Just hold the item in your hand, sneak, and click on the first chest or container from which you want to take the items. Then you go to the other empty chest or container in which you want to put the items that you took from the first chest. Then click on it too, and a menu will appear for you containing a button with the confirmation of the transfer. Press the button. The items will be transferred automatically"
+                    data-behavior="https://link-target.net/642753/itemcarrier"
+                    data-resource="https://link-hub.net/642753/itemscarrierrs">
+                    <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
+                    <h3>Items Carrier <span class="version-badge">support 1.21.70</span></h3>
+                    <p>This addon will help you move items from one chest to another...see more</p>
+                </li>
+           
+                <!-- Health Bar Post -->
+                <li id='healthbar' class="mod-item" 
+                    data-video="https://www.youtube.com/embed/mgb34IVpKh8?si=bGelnBlgVsjYsjDw"
+                    data-description="This addon will literally help you and will benefit you a lot in Survival. Suppose you have added mobs or bosses from other addons to your world, but you want to know how much health this mob or boss has left so that it dies, and here comes the role of my addon, which will give you the number of hearts of all the mobs. Not only Minecraft mobs, but even mobs and monsters that you add through other addons"
+                    data-behavior="https://direct-link.net/642753/healthbar"
+                    data-resource="https://link-center.net/642753/healthbarrs">
+                    <img src="assets/images/HealthBar.webp" alt="Health Bar">
+                    <h3>Health Bar <span class="version-badge">support 1.21.70</span></h3>
+                    <p>This addon will show you a heart counter for monsters and mobs....see more</p>
+                </li>
 
-        <li class="mod-item social-item">
-          <img src="assets/images/paypal.png" alt="PayPal">
-          <h3>PayPal <span class="social-badge">Support</span></h3>
-          <p>Support me :P</p>
-          <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" class="social-link">Click here to Support</a>
-        </li>
+                <!-- Mob Catcher Post -->
+                <li id='mobcatcher' class="mod-item" 
+                    data-video="https://www.youtube.com/embed/_UETSrlvAPc?si=2tv55zLf68xrmETM"
+                    data-description="TThis addon will help you move monsters and mobs, especially the mobs that will help you, such as villagers, or if you want, for example, to move a group of cows in order to make such-and-such a farm out of them, something like that."
+                    data-behavior="https://link-center.net/642753/mobcatcher"
+                    data-resource="https://link-target.net/642753/mobcatcherrs">
+                    <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
+                    <h3>Mob Catcher <span class="version-badge">support 1.21.70</span></h3>
+                    <p>This addon will help you move monsters and mobs...see more</p>
+                </li>
 
-        <li class="mod-item social-item">
-          <img src="assets/images/coffe.png" alt="Buy me a Coffee">
-          <h3>Buy me a Coffee <span class="social-badge">Support</span></h3>
-          <p>Buy me a Coffee</p>
-          <a href="https://buymeacoffee.com/shadowjamak" class="social-link">Click here to Support</a>
-        </li>
-      </ul>
+                <!-- Advanced store Post -->
+              <!--  <li class="mod-item" 
+                    data-video="https://www.youtube.com/embed/gGJXHF2DGnw?si=9GwytgP8P3kpyI16"
+                    data-description="This addon will facilitate trade on your server and will make your server the best server for selling, as well as provide protection to protect the goods and make the buyer pay accordingly"
+                    data-behavior="https://direct-link.net/642753/advancedstore"
+                    data-resource="https://link-target.net/642753/adcanedstorers">
+                    <img src="assets/images/AdvancedStore.webp" alt="Mob Catcher">
+                    <h3>Advanced store <span class="version-badge">v2.5.3</span></h3>
+                    <p>This addon will facilitate trade on your server and will make your server the best server for selling...see more</p>
+                </li> -->
+                   
+            </ul>
+        </div>
+
+        <!-- Social Tab Content -->
+        <div id="social" class="tab-content">
+            <ul class="mod-list">
+                <li class="mod-item social-item">
+                    <img src="assets/images/youtube.png" alt="YouTube">
+                    <h3>YouTube <span class="social-badge">Videos</span></h3>
+                    <p>Watch our tutorials</p>
+                    <a href="https://www.youtube.com/@shadowgamer100k" rel="noopener noreferrer" target="_blank" class="social-link">click here to Visit Channel</a>
+                </li>
+                
+                <li class="mod-item social-item">
+                    <img src="assets/images/discord.png" alt="Discord">
+                    <h3>Discord <span class="social-badge">Community</span></h3>
+                    <p>Join our server</p>
+                    <a href="http://bit.ly/4fUVc9H" class="social-link">click here to Join Server</a>
+                </li>
+
+                <li class="mod-item social-item">
+                    <img src="assets/images/paypal.png" alt="Discord">
+                    <h3>PayPal <span class="social-badge">support</span></h3>
+                    <p>support me :P</p>
+                    <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" class="social-link">click here to support</a>
+                </li>
+
+                 <li class="mod-item social-item">
+                    <img src="assets/images/coffe.png" alt="Discord">
+                    <h3>Buy me a Coffee <span class="social-badge">support</span></h3>
+                    <p>Buy me a Coffee</p>
+                    <a href="https://buymeacoffee.com/shadowjamak" class="social-link">click here to support</a>
+                </li>
+            </ul>
+        </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal">
+        <div class="modal-content">
+            <a href="#" class="close-button">Close</a>
+             <p></p> 
+            <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
+            <div class="modal-description"></div>
+            <div class="download-buttons">
+                <a href="#" class="download-button behavior-pack">Behavior Pack</a>
+                <a href="#" class="download-button resource-pack">Resource Pack</a>
+            </div>
+        </div>
+    </div>
+
+ <!-- News Tab Content -->
+        <div id="news" class="tab-content">
+            <ul class="mod-list">
+                 <li class="mod-item">
+                    <img src="assets/images/news.png" alt="News 1">
+                    <h3>addon updates <span class="version-badge">start</span></h3>
+                    <span class="news-date">13 Feb 2025</span>
+                    <p>all the addons has updated to 1.21.60 execpt for advanced shop</p>
+                </li>
+                <li class="mod-item">
+                    <img src="assets/images/news.png" alt="News 1">
+                    <h3>Official Website <span class="version-badge">start</span></h3>
+                    <span class="news-date">3 Feb 2025</span>
+                    <p>Today is the first day of the site's creation</p>
+                </li>
+            </ul>
+        </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarLogo = document.getElementById('navbarLogo');
+    const navbarMenu = document.getElementById('navbarMenu');
+    const dropdownArrow = document.getElementById('dropdown-arrow');
     
-    <!-- News Tab Content -->
-    <div id="news" class="tab-content">
-      <ul class="mod-list">
-        <li class="mod-item">
-          <img src="assets/images/news.png" alt="News 1">
-          <h3>Addon Updates <span class="version-badge">Update</span></h3>
-          <span class="news-date">13 Feb 2025</span>
-          <p>All addons have been updated to 1.21.70 except for Advanced Shop</p>
-        </li>
-        <li class="mod-item">
-          <img src="assets/images/news.png" alt="News 2">
-          <h3>Official Website <span class="version-badge">Launch</span></h3>
-          <span class="news-date">3 Feb 2025</span>
-          <p>Today is the first day of the site's creation</p>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal">
-    <div class="modal-content">
-      <a href="#" class="close-button">Close</a>
-      <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
-      <div class="modal-description"></div>
-      <div class="download-buttons">
-        <a href="#" class="download-button behavior-pack">Behavior Pack</a>
-        <a href="#" class="download-button resource-pack">Resource Pack</a>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 shadowGamer100k. All rights reserved. 
-      <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
-      <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
-    </p>
-  </footer>
-
-  <script>
-    // Click sound function
-    const clickSound = document.getElementById('clickSound');
-        
-    async function playClickSound() {
-      try {
-        clickSound.currentTime = 0;
-        await clickSound.play();
-      } catch (error) {
-        console.log('Audio error:', error);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Navbar mobile functionality
-      const navbarLogo = document.getElementById('navbarLogo');
-      const navbarMenu = document.getElementById('navbarMenu');
-      const dropdownArrow = document.getElementById('dropdown-arrow');
-      
-      if (navbarLogo && navbarMenu) {
+    if (navbarLogo && navbarMenu) {
         // Only add click functionality on mobile
         navbarLogo.addEventListener('click', function() {
-          if (window.innerWidth <= 768) {
-            playClickSound();
-            navbarMenu.classList.toggle('show');
-            
-            // Rotate the arrow
-            if (navbarMenu.classList.contains('show')) {
-              dropdownArrow.style.transform = 'rotate(180deg)';
-            } else {
-              dropdownArrow.style.transform = 'rotate(0deg)';
+            if (window.innerWidth <= 768) {
+                if (typeof playClickSound === 'function') {
+                    playClickSound();
+                }
+                navbarMenu.classList.toggle('show');
+                
+                // Rotate the arrow
+                if (navbarMenu.classList.contains('show')) {
+                    dropdownArrow.style.transform = 'rotate(180deg)';
+                } else {
+                    dropdownArrow.style.transform = 'rotate(0deg)';
+                }
             }
-          }
         });
-      }
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
         if (window.innerWidth <= 768) {
-          if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
+            if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
+                navbarMenu.classList.remove('show');
+                dropdownArrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    });
+    
+    // Handle tab clicks
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            if (typeof playClickSound === 'function') {
+                playClickSound();
+            }
+            
+            // Remove active class from all tabs and tab contents
+            navItems.forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Activate corresponding tab content
+            const target = this.getAttribute('data-target');
+            const targetContent = document.getElementById(target);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Close mobile menu
             navbarMenu.classList.remove('show');
             dropdownArrow.style.transform = 'rotate(0deg)';
-          }
-        }
-      });
-      
-      // Handle tab clicks
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach(item => {
-        item.addEventListener('click', function() {
-          playClickSound();
-          
-          // Skip if this is a direct link button
-          if (this.hasAttribute('onclick')) {
-            return;
-          }
-          
-          // Remove active class from all tabs and tab contents
-          navItems.forEach(tab => tab.classList.remove('active'));
-          document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-          });
-          
-          // Add active class to clicked tab
-          this.classList.add('active');
-          
-          // Activate corresponding tab content
-          const target = this.getAttribute('data-target');
-          const targetContent = document.getElementById(target);
-          if (targetContent) {
-            targetContent.classList.add('active');
-          }
-          
-          // Close mobile menu
-          navbarMenu.classList.remove('show');
-          dropdownArrow.style.transform = 'rotate(0deg)';
         });
-      });
-      
-      // Handle window resize
-      window.addEventListener('resize', function() {
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
-          navbarMenu.classList.remove('show');
-          dropdownArrow.style.transform = 'rotate(0deg)';
+            navbarMenu.classList.remove('show');
+            dropdownArrow.style.transform = 'rotate(0deg)';
         }
-      });
+    });
+});
+
+
+       
+(function() {
+    const detectors = {
+        blockedRequests: async () => {
+            try {
+                const testUrls = [
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+                    'https://adservice.google.com/adsid/integrator.js',
+                    'https://cdn.taboola.com/libtrc/unip/'
+                ];
+
+                const results = await Promise.all(
+                    testUrls.map(url => 
+                        fetch(url, {method: 'HEAD'})
+                        .then(() => false)
+                        .catch(() => true)
+                    )
+                );
+
+                return results.filter(x => x).length >= 2;
+            } catch {
+                return false;
+            }
+        },
+
+        hiddenElements: () => {
+            const testElement = document.getElementById('ad-test');
+            return testElement && 
+                (testElement.offsetHeight === 0 ||
+                 window.getComputedStyle(testElement).display === 'none');
+        },
+
+        detectExtensions: () => {
+            const extensionSignatures = {
+                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
+                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
+                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
+                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
+            };
+
+            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
+        },
+
+        checkChromeExtensions: async () => {
+            if (typeof chrome === 'undefined') return null;
+            
+            const extensionIds = {
+                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
+                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
+                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
+                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
+            };
+
+            try {
+                for (const [name, id] of Object.entries(extensionIds)) {
+                    const exists = await new Promise(resolve => {
+                        chrome.runtime.sendMessage(id, {}, (response) => {
+                            resolve(chrome.runtime.lastError ? false : true);
+                        });
+                    });
+                    if (exists) return name;
+                }
+            } catch {}
+            return null;
+        }
+    };
+
+    async function detectAdBlock() {
+        const results = await Promise.all([
+            detectors.blockedRequests(),
+            detectors.hiddenElements(),
+            detectors.detectExtensions(),
+            detectors.checkChromeExtensions()
+        ]);
+
+        return {
+            detected: results.some(r => r),
+            extension: results.find(r => typeof r === 'string') || 'unknown'
+        };
+    }
+
+    function showAdblockModal(extension) {
+            const modal = document.querySelector('.adblock-modal');
+            const overlay = document.querySelector('.adblock-overlay');
+            const resultDiv = document.getElementById('adblock-result');
+            
+            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
+                                <small>(Please disable to continue)</small>`;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('recheck-button').addEventListener('click', async () => {
+            const { detected, extension } = await detectAdBlock();
+            if (!detected) {
+                document.querySelector('.adblock-modal').style.display = 'none';
+                document.querySelector('.adblock-overlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+    // Initial check
+    setTimeout(async () => {
+        const { detected, extension } = await detectAdBlock();
+        if (detected) showAdblockModal(extension);
+    }, 2000);
+
+    // Continuous background check
+    setInterval(async () => {
+        const { detected, extension } = await detectAdBlock();
+        const modal = document.querySelector('.adblock-modal');
+        
+        if (detected && modal.style.display === 'none') {
+            showAdblockModal(extension);
+        }
+    }, 5000);
+})();
+        
+        const clickSound = document.getElementById('clickSound');
+        
+       async function playClickSound() {
+    try {
+        clickSound.currentTime = 0;
+        await clickSound.play();
+    } catch (error) {
+        console.log('Audio error:', error);
+    }
+}
+
+        // Tab functionality
+        document.querySelectorAll('[role="tab"]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                playClickSound();
+                const target = tab.dataset.target;
+                document.querySelectorAll('[role="tab"], .tab-content').forEach(el => {
+                    el.classList.remove('active');
+                });
+                tab.classList.add('active');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+  
 
       // Modal functionality
-      const modItems = document.querySelectorAll('.mod-item');
-      const modal = document.querySelector('.modal');
+const modItems = document.querySelectorAll('.mod-item');
+const modal = document.querySelector('.modal');
 
-      const redirectLinks = {
-        'wirlesshopper': 'https://shadowgamer12k.github.io/posts/wirlessHopper.html',
-        'landclaim': 'https://shadowgamer12k.github.io/posts/landclaim.html',
-        'mobcatcher': 'https://shadowgamer12k.github.io/posts/mobcatcher.html',
-        'healthbar': 'https://shadowgamer12k.github.io/posts/healthbar.html',
-        'itemcarrier': 'https://shadowgamer12k.github.io/posts/itemcarrier.html',
-        'advancedwaypoint': 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html',
-      };
+const redirectLinks = {
+    'wirlesshopper': 'https://shadowgamer12k.github.io/posts/wirlessHopper.html',
+    'landclaim': 'https://shadowgamer12k.github.io/posts/landclaim.html',
+    'mobcatcher': 'https://shadowgamer12k.github.io/posts/mobcatcher.html',
+    'healthbar': 'https://shadowgamer12k.github.io/posts/healthbar.html',
+    'itemcarrier': 'https://shadowgamer12k.github.io/posts/itemcarrier.html',
+    'nightvision': 'https://shadowgamer12k.github.io/posts/nightvision.html',
+    'advancedwaypoint': 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html',
+};
 
-      modItems.forEach(mod => {
-        mod.addEventListener('click', async () => {
-          await playClickSound();
-          
-          // Don't process clicks on social items
-          if (mod.classList.contains('social-item')) {
-            return;
-          }
-          
-          const redirectUrl = redirectLinks[mod.id];
-          
-          if (redirectUrl) {
-            // Add a delay before redirect
+
+
+modItems.forEach(mod => {
+    mod.addEventListener('click', async () => {
+        await playClickSound(); // انتظار تشغيل الصوت
+        
+        const redirectUrl = redirectLinks[mod.id];
+        
+        if (redirectUrl) {
+            // إضافة تأخير 500ms قبل التحويل
             setTimeout(() => {
-              window.location.href = redirectUrl;
+                window.location.href = redirectUrl;
             }, 500);
             return;
-          }
+        }
 
-          // Modal opening code
-          const videoSrc = mod.dataset.video;
-          if (!videoSrc) return;
-          
-          // Fix YouTube links if needed
-          const fixedVideoSrc = videoSrc.replace("youtu.be/", "youtube.com/embed/");
-          
-          modal.querySelector('.modal-video').src = fixedVideoSrc;
-          modal.querySelector('.modal-description').textContent = mod.dataset.description;
-          
-          const behaviorURL = encodeURIComponent(mod.dataset.behavior);
-          const resourceURL = encodeURIComponent(mod.dataset.resource);
-          
-          modal.querySelector('.behavior-pack').href = `redirect.html?url=${behaviorURL}`;
-          modal.querySelector('.resource-pack').href = `redirect.html?url=${resourceURL}`;
-          
-          modal.style.display = 'flex';
-          setTimeout(() => modal.classList.add('active'), 10);
-          document.body.style.overflow = 'hidden';
-        });
-      });
-
-      // Close modal functionality
-      function closeModal() {
-        modal.classList.remove('active');
-        setTimeout(() => {
-          modal.style.display = 'none';
-          modal.querySelector('.modal-video').src = '';
-          document.body.style.overflow = 'auto';
-        }, 300);
-      }
-
-      const closeButton = document.querySelector('.close-button');
-      if (closeButton) {
-        closeButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          playClickSound();
-          closeModal();
-        });
-      }
-
-      window.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-      });
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-      });
+        // الكود الخاص بفتح المودال
+        const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
+        
+        modal.querySelector('.modal-video').src = videoSrc;
+        modal.querySelector('.modal-description').textContent = mod.dataset.description;
+        
+        const behaviorURL = encodeURIComponent(mod.dataset.behavior);
+        const resourceURL = encodeURIComponent(mod.dataset.resource);
+        
+        modal.querySelector('.behavior-pack').href = `redirect.html?url=${behaviorURL}`;
+        modal.querySelector('.resource-pack').href = `redirect.html?url=${resourceURL}`;
+        
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+        document.body.style.overflow = 'hidden';
     });
-  </script>
+});
+
+        function redirectToDownload(element, type) {
+            const url = type === 'behavior' ? modal.dataset.behavior : modal.dataset.resource;
+            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
+        }
+
+        // Close modal functionality
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.querySelector('.modal-video').src = '';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        document.querySelector('.close-button').addEventListener('click', () => {
+            playClickSound();
+            closeModal();
+        });
+
+        window.addEventListener('click', (e) => e.target === modal && closeModal());
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+    </script>
+    <script>
+        function updateTabTitle() {
+            const activeTab = document.querySelector('.tab.active');
+            const tabTitle = activeTab ? activeTab.textContent : 'PROJECTS';
+            document.getElementById('tab-title').textContent = tabTitle;
+        }
+
+        // Call the function initially to set the title
+        updateTabTitle();
+
+        // Update the title whenever a tab is clicked
+        document.querySelectorAll('[role="tab"]').forEach(tab => {
+            tab.addEventListener('click', updateTabTitle);
+        });
+    </script>
+        <footer>
+    <p>&copy; 2025 shadowGamer12k. All rights reserved. 
+        <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
+        <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
+    </p>
+</footer>
+</body>
+   
+</html>
 </body>
 </html>
