@@ -554,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   
 
-      // Modal functionality
+// Modal functionality
 const modItems = document.querySelectorAll('.mod-item');
 const modal = document.querySelector('.modal');
 
@@ -568,23 +568,20 @@ const redirectLinks = {
     'advancedwaypoint': 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html',
 };
 
-
-
 modItems.forEach(mod => {
     mod.addEventListener('click', async () => {
-        await playClickSound(); // انتظار تشغيل الصوت
+        await playClickSound(); // Wait for sound to play
         
-        const redirectUrl = redirectLinks[mod.id];
-        
-        if (redirectUrl) {
-            // إضافة تأخير 500ms قبل التحويل
+        // Check if this mod item has an ID that should redirect
+        if (mod.id && redirectLinks[mod.id]) {
+            // Add a small delay before redirecting
             setTimeout(() => {
-                window.location.href = redirectUrl;
+                window.location.href = redirectLinks[mod.id];
             }, 500);
-            return;
+            return; // Exit early to prevent modal code from running
         }
-
-        // الكود الخاص بفتح المودال
+        
+        // For mod items without specific redirects, show the modal
         const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
         
         modal.querySelector('.modal-video').src = videoSrc;
