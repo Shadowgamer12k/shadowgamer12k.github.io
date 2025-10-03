@@ -6,41 +6,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Complete Tasks to Continue</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
         @font-face {
             font-family: 'Minecraft';
             src: url('assets/fonts/minecraft.otf') format('truetype');
         }
-
+        
         body {
             background-color: #313131;
             background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
             background-size: 30px 30px;
             background-position: -5px -5px;
-            font-family: 'Minecraft', sans-serif;
+            font-family: 'Minecraft', Arial, sans-serif;
             color: white;
             text-align: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
-
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
-
+        
         h1 {
             color: #55ff55;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+            font-size: clamp(1.5rem, 5vw, 2rem);
         }
-
+        
         .subtitle {
             color: #cccccc;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: clamp(0.85rem, 3vw, 1rem);
         }
-
+        
         .progress-container {
             width: 100%;
             background-color: rgba(0, 0, 0, 0.3);
@@ -49,7 +55,7 @@
             margin: 20px 0;
             border: 2px solid #55ff5550;
         }
-
+        
         .progress-bar {
             height: 24px;
             background-color: #55ff55;
@@ -60,17 +66,18 @@
             font-weight: bold;
             transition: width 0.5s ease;
             width: 0%;
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
         }
-
+        
         .task-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: 15px;
+            margin: 25px 0;
         }
-
+        
         .task-button {
-            font-size: 18px;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             background-color: #008542;
             color: #fff;
             text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
@@ -84,15 +91,15 @@
             user-select: none;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 20px;
+            letter-spacing: 0.5px;
+            padding: 12px 10px;
             text-decoration: none;
             font-weight: 900;
             transition: all 0.3s cubic-bezier(0, 0.8, 0.26, 0.99);
-            height: 100px;
+            min-height: 70px;
             border-radius: 4px;
         }
-
+        
         .task-button:before {
             position: absolute;
             pointer-events: none;
@@ -110,7 +117,7 @@
                         4px 0 rgb(21 108 0 / 50%) inset;
             border-radius: 4px;
         }
-
+        
         .task-button:after {
             position: absolute;
             pointer-events: none;
@@ -124,55 +131,56 @@
             transition: 0.3s cubic-bezier(0, 0.8, 0.26, 0.99);
             border-radius: 4px;
         }
-
+        
         .task-button:hover:before {
             box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
                         -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
         }
-
+        
         .task-button:hover:after {
             box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
         }
-
+        
         .task-button:active {
             transform: translateY(4px);
         }
-
+        
         .task-button:active:after {
             box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
         }
-
+        
         .task-button.completed {
             background-color: #004020;
             cursor: default;
         }
-
+        
         .task-button.completed:before {
             background-color: #004020 !important;
             box-shadow: 0 -2px rgb(0 50 0 / 50%) inset,
                         0 2px rgb(50 150 20 / 99%) inset, -2px 0 rgb(50 150 20 / 50%) inset,
                         2px 0 rgb(0 50 0 / 50%) inset;
         }
-
+        
         .task-status {
-            font-size: 14px;
-            margin-top: 10px;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            margin-top: 8px;
         }
-
+        
         .task-time {
-            font-size: 16px;
+            font-size: clamp(0.85rem, 3vw, 1rem);
             font-weight: bold;
             margin-top: 5px;
         }
-
+        
         .continue-button {
-            font-size: 22px;
+            font-size: clamp(1rem, 3.5vw, 1.3rem);
             background-color: #55aa55;
-            padding: 15px 40px;
+            padding: 15px 30px;
             margin: 20px auto;
             display: none;
+            max-width: 100%;
         }
-
+        
         .spinner {
             border: 4px solid rgba(85, 255, 85, 0.3);
             border-radius: 50%;
@@ -183,37 +191,74 @@
             margin: 20px auto;
             display: none;
         }
-
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
+        
         .countdown {
             color: #55ff55;
-            font-size: 1.2em;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             margin: 15px 0;
         }
-
+        
         .instructions {
             background-color: rgba(0, 0, 0, 0.2);
             border: 1px solid #55ff5550;
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
-            font-size: 0.9em;
-            line-height: 1.5;
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+            line-height: 1.6;
+            text-align: left;
         }
-
+        
+        .instructions p {
+            margin: 8px 0;
+        }
+        
         .checkmark {
             color: #55ff55;
             margin-right: 5px;
         }
-
-        /* For mobile devices */
+        
+        /* Mobile optimizations */
         @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 5px;
+            }
+            
             .task-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .task-button {
+                min-height: 85px;
+                padding: 12px 8px;
+            }
+            
+            .instructions {
+                padding: 12px;
+                margin: 15px 0;
+            }
+            
+            .progress-container {
+                margin: 15px 0;
+            }
+        }
+        
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .task-button {
+                min-height: 80px;
+                padding: 10px 8px;
+                letter-spacing: 0.3px;
             }
         }
     </style>
@@ -224,7 +269,7 @@
         <p class="subtitle">Please visit each sponsor to unlock your content</p>
         
         <div class="instructions">
-            <p>For each task:</p>
+            <p><strong>For each task:</strong></p>
             <p>1. Click the task button</p>
             <p>2. Visit the sponsor page for at least 5 seconds</p>
             <p>3. Return to this page to register completion</p>
@@ -268,13 +313,11 @@
         <div class="spinner" id="loading-spinner"></div>
         <div class="countdown" id="redirect-countdown" style="display:none;"></div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const params = new URLSearchParams(window.location.search);
             let targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
             
-            // Replace these URLs with your actual sponsor links
             const sponsorUrls = {
                 "task1": "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
                 "task2": "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
@@ -282,7 +325,6 @@
                 "task4": "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
             };
             
-            // Update task URLs from the data attributes
             Object.keys(sponsorUrls).forEach(taskId => {
                 const taskElement = document.getElementById(taskId);
                 if (taskElement) {
@@ -299,7 +341,6 @@
             let completedTasks = 0;
             let taskWindows = {};
             
-            // Handle task button clicks
             tasks.forEach(task => {
                 task.addEventListener("click", function() {
                     if (this.classList.contains("completed")) return;
@@ -309,10 +350,8 @@
                     const statusElement = this.querySelector(".task-status");
                     const timeElement = this.querySelector(".task-time");
                     
-                    // Open sponsor in new tab/window
                     taskWindows[taskId] = window.open(sponsorUrl, "_blank");
                     
-                    // Start countdown
                     let countdown = 5;
                     timeElement.style.display = "block";
                     statusElement.textContent = "Visiting...";
@@ -334,8 +373,7 @@
                 const statusElement = task.querySelector(".task-status");
                 const timeElement = task.querySelector(".task-time");
                 
-                statusElement.textContent = "✓ Completed";
-                statusElement.classList.add("checkmark");
+                statusElement.innerHTML = '<span class="checkmark">✓</span> Completed';
                 timeElement.style.display = "none";
                 
                 completedTasks++;
@@ -358,11 +396,9 @@
             }
             
             function initiateRedirect() {
-                // Hide task grid and continue button
                 document.querySelector(".task-grid").style.display = "none";
                 continueButton.style.display = "none";
                 
-                // Show loading spinner and countdown
                 spinner.style.display = "block";
                 redirectCountdown.style.display = "block";
                 
@@ -375,18 +411,15 @@
                     
                     if (countdown <= 0) {
                         clearInterval(interval);
-                        // Redirect to target URL
                         window.location.href = targetURL;
                     }
                 }, 1000);
             }
             
-            // Check if the page is opened by a task window to mark it as viewed
             window.addEventListener("focus", function() {
                 tasks.forEach(task => {
                     const taskId = task.id;
                     if (taskWindows[taskId] && !task.classList.contains("completed")) {
-                        // If the task window exists and the user came back, consider starting the completion process
                         if (!task.classList.contains("in-progress")) {
                             task.classList.add("in-progress");
                         }
@@ -397,4 +430,3 @@
     </script>
 </body>
 </html>
-
