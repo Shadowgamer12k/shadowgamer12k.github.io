@@ -168,6 +168,135 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         to { opacity: 1; transform: translateY(0); }
     }
 }
+    /* Search Bar Styles */
+.search-container {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    padding: 0 15px;
+    position: relative;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #2c2c2c;
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 12px 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+    border-color: #7e7e7e;
+    box-shadow: 0 0 15px rgba(126, 126, 126, 0.4);
+}
+
+.search-icon {
+    color: #888;
+    font-size: 18px;
+    margin-right: 12px;
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+
+.search-input::placeholder {
+    color: #666;
+}
+
+.clear-search {
+    background: #444;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.clear-search:hover {
+    background: #555;
+    transform: scale(1.1);
+}
+
+.search-results {
+    position: absolute;
+    background-color: #2c2c2c;
+    border: 2px solid #555;
+    border-radius: 8px;
+    margin-top: 5px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+    width: calc(100% - 30px);
+    left: 15px;
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-result-item:hover {
+    background-color: #3a3a3a;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 2px solid #555;
+}
+
+.search-result-info {
+    flex: 1;
+}
+
+.search-result-info h4 {
+    margin: 0 0 5px 0;
+    color: #fff;
+    font-size: 14px;
+}
+
+.search-result-info p {
+    margin: 0;
+    color: #aaa;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+}
+
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
 </style>
 </head>
 <body>
@@ -196,7 +325,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button role="tab" class="nav-item" data-target="news">NEWS</button>
     </div>
 </nav>
-
+<!-- Search Bar -->
+<div class="search-container">
+    <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
+        <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+</div>
 
  
     <div class="container">
@@ -366,6 +503,185 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </ul>
         </div>
     <script>
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const searchResults = document.getElementById('searchResults');
+    
+    // All addon data
+    const addons = [
+        {
+            id: 'souleggs',
+            name: 'Soul Eggs',
+            description: 'Ever dreamed of catching mobs just like Pokémon? With SoulEggs, now you can catch and collect mobs!',
+            img: 'assets/images/postsImages/souleggs.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/soulEggs.html'
+        },
+        {
+            id: 'mobHider',
+            name: 'Mob Hider',
+            description: 'This addon adds a tool that lets you hide inside any mob you want, perfect for trolling friends',
+            img: 'assets/images/postsImages/MobHider.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/mobHider.html'
+        },
+        {
+            id: 'enderGuardian',
+            name: 'Ender Guardian',
+            description: 'This addon will save your life when you are in battle with mobs or dying in silly ways',
+            img: 'assets/images/postsImages/enderGuardian.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/enderGuardian.html'
+        },
+        {
+            id: 'pocketwaypoint',
+            name: 'Pocket Waypoint',
+            description: 'Pocket Waypoint is a Minecraft PE addon that allows players to save and teleport to locations',
+            img: 'assets/images/pocketwaypoint.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/pocketwaypoint.html'
+        },
+        {
+            id: 'wirlesshopper',
+            name: 'Wireless Hopper',
+            description: 'Tired of cluttered hoppers and complex redstone setups? This addon is for you!',
+            img: 'assets/images/hopper.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/wirlesshopper.html'
+        },
+        {
+            id: 'advancedwaypoint',
+            name: 'Advanced Waypoint',
+            description: 'Tired of traveling great distances to return home or to your village in Minecraft?',
+            img: 'assets/images/waypoint.webp',
+            version: 'support 1.21.70',
+            link: 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html'
+        },
+        {
+            id: 'landclaim',
+            name: 'Land Claim',
+            description: 'Protect your areas from other players with this powerful land protection addon',
+            img: 'assets/images/landClaim.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/landclaim.html'
+        },
+        {
+            id: 'itemcarrier',
+            name: 'Items Carrier',
+            description: 'This addon will help you move items from one chest to another easily',
+            img: 'assets/images/ItemsCarrier.webp',
+            version: 'support 1.21.70',
+            link: 'https://shadowgamer12k.github.io/posts/itemcarrier.html'
+        },
+        {
+            id: 'healthbar',
+            name: 'Health Bar',
+            description: 'This addon will show you a heart counter for monsters and mobs',
+            img: 'assets/images/HealthBar.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/healthbar.html'
+        },
+        {
+            id: 'mobcatcher',
+            name: 'Mob Catcher',
+            description: 'This addon will help you catch and move monsters and mobs anywhere',
+            img: 'assets/images/MobCatcher.webp',
+            version: 'support 1.21.111',
+            link: 'https://shadowgamer12k.github.io/posts/mobcatcher.html'
+        }
+    ];
+    
+    // Filter addons based on search
+    function filterAddons(query) {
+        query = query.toLowerCase().trim();
+        
+        if (!query) {
+            return [];
+        }
+        
+        return addons.filter(addon => 
+            addon.name.toLowerCase().includes(query) ||
+            addon.description.toLowerCase().includes(query) ||
+            addon.id.toLowerCase().includes(query)
+        );
+    }
+    
+    // Display search results
+    function displayResults(results) {
+        searchResults.innerHTML = '';
+        
+        if (results.length === 0) {
+            searchResults.innerHTML = '<div class="no-results">No addons found</div>';
+            searchResults.classList.add('active');
+            return;
+        }
+        
+        results.forEach(addon => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'search-result-item';
+            resultItem.innerHTML = `
+                <img src="${addon.img}" alt="${addon.name}" class="search-result-img">
+                <div class="search-result-info">
+                    <h4>${addon.name} <span style="color: #888; font-size: 10px;">${addon.version}</span></h4>
+                    <p>${addon.description}</p>
+                </div>
+            `;
+            
+            resultItem.addEventListener('click', () => {
+                playClickSound();
+                window.location.href = addon.link;
+            });
+            
+            searchResults.appendChild(resultItem);
+        });
+        
+        searchResults.classList.add('active');
+    }
+    
+    // Search input event
+    searchInput.addEventListener('input', function() {
+        const query = this.value;
+        
+        if (query.trim()) {
+            clearSearch.style.display = 'block';
+            const results = filterAddons(query);
+            displayResults(results);
+        } else {
+            clearSearch.style.display = 'none';
+            searchResults.classList.remove('active');
+        }
+    });
+    
+    // Clear search
+    clearSearch.addEventListener('click', function() {
+        playClickSound();
+        searchInput.value = '';
+        clearSearch.style.display = 'none';
+        searchResults.classList.remove('active');
+        searchInput.focus();
+    });
+    
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !clearSearch.contains(e.target)) {
+            searchResults.classList.remove('active');
+        }
+    });
+    
+    // Close search results on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            searchResults.classList.remove('active');
+            searchInput.blur();
+        }
+    });
+});
+
+
+      
 document.addEventListener('DOMContentLoaded', function() {
     const navbarLogo = document.getElementById('navbarLogo');
     const navbarMenu = document.getElementById('navbarMenu');
@@ -802,6 +1118,7 @@ document.addEventListener('click', (e) => {
 </html>
 </body>
 </html>
+
 
 
 
