@@ -3,314 +3,357 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Complete Tasks to Continue</title>
+  <title>Pocket Waypoint RS - Unlock Content</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
-    @font-face {
-      font-family: "Minecraft";
-      src: url("assets/fonts/minecraft.otf") format("truetype");
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     body {
-      background-color: #1e1e1e;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 0);
-      background-size: 30px 30px;
-      color: #fff;
-      font-family: "Minecraft", Arial, sans-serif;
+      background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
+      color: #000;
+      font-family: 'Press Start 2P', monospace;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .wrapper {
+    .container {
       width: 100%;
-      max-width: 750px;
-      background: rgba(30, 30, 30, 0.95);
-      border: 2px solid #55ff5580;
-      border-radius: 16px;
-      box-shadow: 0 0 25px rgba(85, 255, 85, 0.15);
+      max-width: 650px;
+      background: #e8e8e8;
+      border: 4px solid #000;
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
+      padding: 0;
+    }
+
+    .header {
+      background: #fff;
       padding: 25px;
       text-align: center;
-      backdrop-filter: blur(6px);
+      border-bottom: 3px solid #000;
     }
 
     h1 {
-      color: #55ff55;
-      margin-bottom: 10px;
-      font-size: clamp(1.5rem, 5vw, 2rem);
-      text-shadow: 0 0 10px #55ff5550;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      margin: 0 0 20px 0;
+      line-height: 1.4;
     }
 
     .subtitle {
-      color: #cccccc;
-      margin-bottom: 25px;
-      font-size: 1rem;
-    }
-
-    .progress-container {
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 25px;
-      border: 1px solid #55ff5520;
-    }
-
-    .progress-bar {
-      height: 24px;
-      width: 0%;
-      background: linear-gradient(90deg, #55ff55, #00cc66);
-      color: #003300;
-      font-weight: bold;
-      font-size: 0.9rem;
-      line-height: 24px;
-      border-radius: 12px;
-      transition: width 0.5s ease;
-    }
-
-    .instructions {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid #55ff5530;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: left;
-      margin-bottom: 25px;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
       line-height: 1.6;
-      font-size: 0.95rem;
+      margin: 0;
     }
 
-    .task-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    .main-content {
+      padding: 30px 25px;
+    }
+
+    .download-btn {
+      background: #4a9eff;
+      border: 3px solid #000;
+      color: #fff;
+      padding: 18px 25px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.6rem, 2vw, 0.9rem);
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 15px;
+      transition: all 0.2s;
+      margin-bottom: 25px;
+      text-transform: uppercase;
     }
 
-    .task-card {
-      background: #222;
-      border: 1px solid #55ff5530;
-      border-radius: 10px;
+    .download-btn:hover {
+      background: #357abd;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 #000;
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .progress-section {
+      margin-bottom: 25px;
+    }
+
+    .progress-label {
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      margin-bottom: 15px;
+    }
+
+    .unlock-btn {
+      background: #d3d3d3;
+      border: 3px solid #000;
+      color: #888;
+      padding: 15px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      width: 100%;
+      cursor: not-allowed;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .unlock-btn.active {
+      background: #4a9eff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .unlock-btn.active:hover {
+      background: #357abd;
+    }
+
+    .support-text {
+      background: #fff;
+      border: 2px solid #000;
+      padding: 15px;
+      font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .footer {
+      background: #fff;
+      border-top: 2px solid #000;
+      padding: 15px;
+      font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .task-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .task-item {
+      background: #fff;
+      border: 3px solid #000;
       padding: 15px;
       text-align: center;
-      transition: all 0.3s ease;
       cursor: pointer;
+      transition: all 0.2s;
       position: relative;
-      overflow: hidden;
     }
 
-    .task-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 10px #55ff5530;
-      border-color: #55ff55;
+    .task-item:hover:not(.completed) {
+      background: #f5f5f5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 #000;
     }
 
-    .task-card.completed {
-      background: #003311;
-      color: #55ff55;
+    .task-item.completed {
+      background: #90EE90;
       cursor: default;
     }
 
-    .task-card h3 {
-      margin: 0;
-      font-size: 1.1rem;
+    .task-item.visiting {
+      background: #fff3cd;
+    }
+
+    .task-title {
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      margin-bottom: 10px;
     }
 
     .task-status {
-      font-size: 0.85rem;
-      margin-top: 6px;
+      font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+      color: #666;
     }
 
-    .task-time {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #55ff55;
-      margin-top: 4px;
+    .task-item.completed .task-status {
+      color: #006400;
+    }
+
+    .task-timer {
+      font-size: clamp(0.6rem, 1.8vw, 0.75rem);
+      color: #ff6b6b;
+      margin-top: 8px;
       display: none;
-    }
-
-    .continue-btn {
-      display: none;
-      background-color: #55ff55;
-      color: #003300;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      padding: 14px 28px;
-      margin-top: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .continue-btn:hover {
-      background-color: #66ff66;
-      transform: scale(1.05);
     }
 
     .spinner {
-      border: 4px solid rgba(85, 255, 85, 0.3);
-      border-top: 4px solid #55ff55;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4a9eff;
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       animation: spin 1s linear infinite;
-      margin: 25px auto;
-      display: none;
-    }
-
-    .countdown {
-      color: #55ff55;
-      font-size: 1rem;
-      margin-top: 10px;
+      margin: 20px auto;
       display: none;
     }
 
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .redirect-message {
+      text-align: center;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      margin-top: 15px;
+      display: none;
     }
 
     @media (max-width: 600px) {
-      .wrapper {
-        padding: 20px;
+      .task-list {
+        grid-template-columns: 1fr;
       }
-      .task-card {
-        padding: 12px;
+      
+      .footer {
+        flex-direction: column;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <h1>Complete Tasks to Continue</h1>
-    <div class="subtitle">Visit each sponsor to unlock your content</div>
-
-    <div class="instructions">
-      <p>1️⃣ Click each task button.</p>
-      <p>2️⃣ Stay on the sponsor page for 5 seconds.</p>
-      <p>3️⃣ Come back here — the task will be marked as completed.</p>
-      <p>After all tasks are done, you'll unlock the content.</p>
+  <div class="container">
+    <div class="header">
+      <h1>Pocket Waypoint RS</h1>
+      <p class="subtitle">Complete the actions and unlock the link</p>
     </div>
 
-    <div class="progress-container">
-      <div class="progress-bar" id="progress-bar">0% Complete</div>
-    </div>
+    <div class="main-content">
+      <div class="progress-section">
+        <div class="progress-label">UNLOCK PROGRESS: <span id="progress">0/4</span></div>
+      </div>
 
-    <div class="task-grid">
-      <div class="task-card" id="task1" data-url="#">
-        <h3>Task 1</h3>
-        <div class="task-status">Not Completed</div>
-        <div class="task-time">5s</div>
+      <div class="task-list">
+        <div class="task-item" id="task1">
+          <div class="task-title">TASK 1</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task2">
+          <div class="task-title">TASK 2</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task3">
+          <div class="task-title">TASK 3</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task4">
+          <div class="task-title">TASK 4</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
       </div>
-      <div class="task-card" id="task2" data-url="#">
-        <h3>Task 2</h3>
-        <div class="task-status">Not Completed</div>
-        <div class="task-time">5s</div>
-      </div>
-      <div class="task-card" id="task3" data-url="#">
-        <h3>Task 3</h3>
-        <div class="task-status">Not Completed</div>
-        <div class="task-time">5s</div>
-      </div>
-      <div class="task-card" id="task4" data-url="#">
-        <h3>Task 4</h3>
-        <div class="task-status">Not Completed</div>
-        <div class="task-time">5s</div>
-      </div>
-    </div>
 
-    <button class="continue-btn" id="continue-btn">Continue</button>
-    <div class="spinner" id="spinner"></div>
-    <div class="countdown" id="countdown"></div>
+      <button class="unlock-btn" id="unlock-btn">Unlock Content</button>
+
+      <div class="support-text">
+        have fun with the addon :)
+      </div>
+
+      <div class="spinner" id="spinner"></div>
+      <div class="redirect-message" id="redirect-msg"></div>
+    </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      const targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
+    const params = new URLSearchParams(window.location.search);
+    const targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
 
-      const sponsorUrls = {
-        task1: "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
-        task2: "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
-        task3: "https://www.revenuecpmgate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38",
-        task4: "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
-      };
+    const sponsorUrls = {
+      task1: "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
+      task2: "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
+      task3: "https://www.revenuecpmgate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38",
+      task4: "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
+    };
 
-      const tasks = document.querySelectorAll(".task-card");
-      const progressBar = document.getElementById("progress-bar");
-      const continueBtn = document.getElementById("continue-btn");
-      const spinner = document.getElementById("spinner");
-      const countdown = document.getElementById("countdown");
+    let completedCount = 0;
+    const totalTasks = 4;
+    const unlockBtn = document.getElementById("unlock-btn");
+    const progressSpan = document.getElementById("progress");
 
-      let completed = 0;
+    document.querySelectorAll(".task-item").forEach(task => {
+      task.addEventListener("click", function() {
+        if (this.classList.contains("completed") || this.classList.contains("visiting")) return;
 
-      tasks.forEach((task) => {
-        const url = sponsorUrls[task.id];
-        task.dataset.url = url;
+        const taskId = this.id;
+        const url = sponsorUrls[taskId];
+        const statusEl = this.querySelector(".task-status");
+        const timerEl = this.querySelector(".task-timer");
 
-        task.addEventListener("click", () => {
-          if (task.classList.contains("completed")) return;
+        this.classList.add("visiting");
+        statusEl.textContent = "Visiting...";
+        timerEl.style.display = "block";
 
-          const status = task.querySelector(".task-status");
-          const timeDisplay = task.querySelector(".task-time");
-          timeDisplay.style.display = "block";
-          status.textContent = "Visiting...";
+        window.open(url, "_blank");
 
-          window.open(url, "_blank");
+        let timeLeft = 5;
+        timerEl.textContent = `${timeLeft}s`;
 
-          let time = 5;
-          const timer = setInterval(() => {
-            timeDisplay.textContent = `${time}s`;
-            time--;
-            if (time < 0) {
-              clearInterval(timer);
-              completeTask(task);
-            }
-          }, 1000);
-        });
+        const timer = setInterval(() => {
+          timeLeft--;
+          timerEl.textContent = `${timeLeft}s`;
+          
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            completeTask(this, timerEl, statusEl);
+          }
+        }, 1000);
       });
+    });
 
-      function completeTask(task) {
-        task.classList.add("completed");
-        const status = task.querySelector(".task-status");
-        const timeDisplay = task.querySelector(".task-time");
-        timeDisplay.style.display = "none";
-        status.innerHTML = "<i class='fa-solid fa-check'></i> Completed";
-        completed++;
-        updateProgress();
-        if (completed === tasks.length) showContinue();
+    function completeTask(taskEl, timerEl, statusEl) {
+      taskEl.classList.remove("visiting");
+      taskEl.classList.add("completed");
+      timerEl.style.display = "none";
+      statusEl.innerHTML = "<i class='fas fa-check'></i> Completed";
+      
+      completedCount++;
+      progressSpan.textContent = `${completedCount}/${totalTasks}`;
+
+      if (completedCount === totalTasks) {
+        unlockBtn.classList.add("active");
+        unlockBtn.disabled = false;
+        unlockBtn.style.cursor = "pointer";
       }
+    }
 
-      function updateProgress() {
-        const percent = Math.round((completed / tasks.length) * 100);
-        progressBar.style.width = `${percent}%`;
-        progressBar.textContent = `${percent}% Complete`;
-      }
+    unlockBtn.addEventListener("click", function() {
+      if (!this.classList.contains("active")) return;
 
-      function showContinue() {
-        continueBtn.style.display = "inline-block";
-        continueBtn.onclick = () => {
-          document.querySelector(".task-grid").style.display = "none";
-          continueBtn.style.display = "none";
-          spinner.style.display = "block";
-          countdown.style.display = "block";
+      document.querySelector(".task-list").style.display = "none";
+      this.style.display = "none";
+      document.querySelector(".support-text").style.display = "none";
+      document.getElementById("spinner").style.display = "block";
+      
+      const redirectMsg = document.getElementById("redirect-msg");
+      redirectMsg.style.display = "block";
 
-          let t = 3;
-          countdown.textContent = `Redirecting in ${t}s...`;
-          const redirectTimer = setInterval(() => {
-            t--;
-            countdown.textContent = `Redirecting in ${t}s...`;
-            if (t <= 0) {
-              clearInterval(redirectTimer);
-              window.location.href = targetURL;
-            }
-          }, 1000);
-        };
-      }
+      let countdown = 3;
+      redirectMsg.textContent = `Redirecting in ${countdown}s...`;
+
+      const redirectTimer = setInterval(() => {
+        countdown--;
+        redirectMsg.textContent = `Redirecting in ${countdown}s...`;
+        
+        if (countdown <= 0) {
+          clearInterval(redirectTimer);
+          window.location.href = targetURL;
+        }
+      }, 1000);
     });
   </script>
 </body>
