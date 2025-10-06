@@ -1,442 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Tasks to Continue</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-  gtag('config', 'G-JKTG6N0GFN');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Complete Tasks to Continue</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('assets/fonts/minecraft.otf') format('truetype');
-        }
-        
-        body {
-            background-color: #313131;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
-            background-size: 30px 30px;
-            background-position: -5px -5px;
-            font-family: 'Minecraft', Arial, sans-serif;
-            color: white;
-            text-align: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 15px;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-        
-        h1 {
-            color: #55ff55;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-            font-size: clamp(1.5rem, 5vw, 2rem);
-        }
-        
-        .subtitle {
-            color: #cccccc;
-            margin-bottom: 20px;
-            font-size: clamp(0.85rem, 3vw, 1rem);
-        }
-        
-        .progress-container {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 3px;
-            margin: 20px 0;
-            border: 2px solid #55ff5550;
-        }
-        
-        .progress-bar {
-            height: 24px;
-            background-color: #55ff55;
-            border-radius: 6px;
-            text-align: center;
-            line-height: 24px;
-            color: #005500;
-            font-weight: bold;
-            transition: width 0.5s ease;
-            width: 0%;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-        }
-        
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-            gap: 15px;
-            margin: 25px 0;
-        }
-        
-        .task-button {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            background-color: #008542;
-            color: #fff;
-            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border: 0;
-            z-index: 1;
-            user-select: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 12px 10px;
-            text-decoration: none;
-            font-weight: 900;
-            transition: all 0.3s cubic-bezier(0, 0.8, 0.26, 0.99);
-            min-height: 70px;
-            border-radius: 4px;
-        }
-        
-        .task-button:before {
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 100%;
-            height: 100%;
-            content: "";
-            transition: 0.3s cubic-bezier(0, 0.8, 0.26, 0.99);
-            z-index: -1;
-            background-color: #008542 !important;
-            box-shadow: 0 -4px rgb(21 108 0 / 50%) inset,
-                        0 4px rgb(100 253 31 / 99%) inset, -4px 0 rgb(100 253 31 / 50%) inset,
-                        4px 0 rgb(21 108 0 / 50%) inset;
-            border-radius: 4px;
-        }
-        
-        .task-button:after {
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 100%;
-            height: 100%;
-            content: "";
-            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-            transition: 0.3s cubic-bezier(0, 0.8, 0.26, 0.99);
-            border-radius: 4px;
-        }
-        
-        .task-button:hover:before {
-            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset,
-                        -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
-        }
-        
-        .task-button:hover:after {
-            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-        }
-        
-        .task-button:active {
-            transform: translateY(4px);
-        }
-        
-        .task-button:active:after {
-            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
-        }
-        
-        .task-button.completed {
-            background-color: #004020;
-            cursor: default;
-        }
-        
-        .task-button.completed:before {
-            background-color: #004020 !important;
-            box-shadow: 0 -2px rgb(0 50 0 / 50%) inset,
-                        0 2px rgb(50 150 20 / 99%) inset, -2px 0 rgb(50 150 20 / 50%) inset,
-                        2px 0 rgb(0 50 0 / 50%) inset;
-        }
-        
-        .task-status {
-            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-            margin-top: 8px;
-        }
-        
-        .task-time {
-            font-size: clamp(0.85rem, 3vw, 1rem);
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        
-        .continue-button {
-            font-size: clamp(1rem, 3.5vw, 1.3rem);
-            background-color: #55aa55;
-            padding: 15px 30px;
-            margin: 20px auto;
-            display: none;
-            max-width: 100%;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(85, 255, 85, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #55ff55;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .countdown {
-            color: #55ff55;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            margin: 15px 0;
-        }
-        
-        .instructions {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid #55ff5550;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-            line-height: 1.6;
-            text-align: left;
-        }
-        
-        .instructions p {
-            margin: 8px 0;
-        }
-        
-        .checkmark {
-            color: #55ff55;
-            margin-right: 5px;
-        }
-        
-        /* Mobile optimizations */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 5px;
-            }
-            
-            .task-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .task-button {
-                min-height: 85px;
-                padding: 12px 8px;
-            }
-            
-            .instructions {
-                padding: 12px;
-                margin: 15px 0;
-            }
-            
-            .progress-container {
-                margin: 15px 0;
-            }
-        }
-        
-        /* Very small screens */
-        @media (max-width: 360px) {
-            .task-button {
-                min-height: 80px;
-                padding: 10px 8px;
-                letter-spacing: 0.3px;
-            }
-        }
-    </style>
+  <style>
+    @font-face {
+      font-family: "Minecraft";
+      src: url("assets/fonts/minecraft.otf") format("truetype");
+    }
+
+    body {
+      background-color: #1e1e1e;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 0);
+      background-size: 30px 30px;
+      color: #fff;
+      font-family: "Minecraft", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 750px;
+      background: rgba(30, 30, 30, 0.95);
+      border: 2px solid #55ff5580;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(85, 255, 85, 0.15);
+      padding: 25px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      color: #55ff55;
+      margin-bottom: 10px;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      text-shadow: 0 0 10px #55ff5550;
+    }
+
+    .subtitle {
+      color: #cccccc;
+      margin-bottom: 25px;
+      font-size: 1rem;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      border: 1px solid #55ff5520;
+    }
+
+    .progress-bar {
+      height: 24px;
+      width: 0%;
+      background: linear-gradient(90deg, #55ff55, #00cc66);
+      color: #003300;
+      font-weight: bold;
+      font-size: 0.9rem;
+      line-height: 24px;
+      border-radius: 12px;
+      transition: width 0.5s ease;
+    }
+
+    .instructions {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #55ff5530;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: left;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .task-card {
+      background: #222;
+      border: 1px solid #55ff5530;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 10px #55ff5530;
+      border-color: #55ff55;
+    }
+
+    .task-card.completed {
+      background: #003311;
+      color: #55ff55;
+      cursor: default;
+    }
+
+    .task-card h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .task-status {
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    .task-time {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #55ff55;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .continue-btn {
+      display: none;
+      background-color: #55ff55;
+      color: #003300;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      margin-top: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .continue-btn:hover {
+      background-color: #66ff66;
+      transform: scale(1.05);
+    }
+
+    .spinner {
+      border: 4px solid rgba(85, 255, 85, 0.3);
+      border-top: 4px solid #55ff55;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      animation: spin 1s linear infinite;
+      margin: 25px auto;
+      display: none;
+    }
+
+    .countdown {
+      color: #55ff55;
+      font-size: 1rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      .wrapper {
+        padding: 20px;
+      }
+      .task-card {
+        padding: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Complete Tasks to Continue</h1>
-        <p class="subtitle">Please visit each sponsor to unlock your content</p>
-        
-        <div class="instructions">
-            <p><strong>For each task:</strong></p>
-            <p>1. Click the task button</p>
-            <p>2. Visit the sponsor page for at least 5 seconds</p>
-            <p>3. Return to this page to register completion</p>
-            <p>After completing all tasks, you'll be redirected to your content.</p>
-        </div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar">0% Complete</div>
-        </div>
-        
-        <div class="task-grid">
-            <div class="task-button" id="task1" data-url="https://example.com/sponsor1">
-                Task 1
-                <div class="task-status">Not Completed</div>
-                <div class="task-time" style="display:none;">5s</div>
-            </div>
-            
-            <div class="task-button" id="task2" data-url="https://example.com/sponsor2">
-                Task 2
-                <div class="task-status">Not Completed</div>
-                <div class="task-time" style="display:none;">5s</div>
-            </div>
-            
-            <div class="task-button" id="task3" data-url="https://example.com/sponsor3">
-                Task 3
-                <div class="task-status">Not Completed</div>
-                <div class="task-time" style="display:none;">5s</div>
-            </div>
-            
-            <div class="task-button" id="task4" data-url="https://example.com/sponsor4">
-                Task 4
-                <div class="task-status">Not Completed</div>
-                <div class="task-time" style="display:none;">5s</div>
-            </div>
-        </div>
-        
-        <div class="task-button continue-button" id="continue-button">
-            Continue to Content
-        </div>
-        
-        <div class="spinner" id="loading-spinner"></div>
-        <div class="countdown" id="redirect-countdown" style="display:none;"></div>
+  <div class="wrapper">
+    <h1>Complete Tasks to Continue</h1>
+    <div class="subtitle">Visit each sponsor to unlock your content</div>
+
+    <div class="instructions">
+      <p>1️⃣ Click each task button.</p>
+      <p>2️⃣ Stay on the sponsor page for 5 seconds.</p>
+      <p>3️⃣ Come back here — the task will be marked as completed.</p>
+      <p>After all tasks are done, you'll unlock the content.</p>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const params = new URLSearchParams(window.location.search);
-            let targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
-            
-            const sponsorUrls = {
-                "task1": "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
-                "task2": "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
-                "task3": "https://www.revenuecpmgate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38",
-                "task4": "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
-            };
-            
-            Object.keys(sponsorUrls).forEach(taskId => {
-                const taskElement = document.getElementById(taskId);
-                if (taskElement) {
-                    taskElement.setAttribute("data-url", sponsorUrls[taskId]);
-                }
-            });
-            
-            const tasks = document.querySelectorAll(".task-button:not(.continue-button)");
-            const progressBar = document.getElementById("progress-bar");
-            const continueButton = document.getElementById("continue-button");
-            const spinner = document.getElementById("loading-spinner");
-            const redirectCountdown = document.getElementById("redirect-countdown");
-            
-            let completedTasks = 0;
-            let taskWindows = {};
-            
-            tasks.forEach(task => {
-                task.addEventListener("click", function() {
-                    if (this.classList.contains("completed")) return;
-                    
-                    const taskId = this.id;
-                    const sponsorUrl = this.getAttribute("data-url");
-                    const statusElement = this.querySelector(".task-status");
-                    const timeElement = this.querySelector(".task-time");
-                    
-                    taskWindows[taskId] = window.open(sponsorUrl, "_blank");
-                    
-                    let countdown = 5;
-                    timeElement.style.display = "block";
-                    statusElement.textContent = "Visiting...";
-                    
-                    const interval = setInterval(() => {
-                        timeElement.textContent = `${countdown}s`;
-                        countdown--;
-                        
-                        if (countdown < 0) {
-                            clearInterval(interval);
-                            markTaskComplete(task);
-                        }
-                    }, 1000);
-                });
-            });
-            
-            function markTaskComplete(task) {
-                task.classList.add("completed");
-                const statusElement = task.querySelector(".task-status");
-                const timeElement = task.querySelector(".task-time");
-                
-                statusElement.innerHTML = '<span class="checkmark">✓</span> Completed';
-                timeElement.style.display = "none";
-                
-                completedTasks++;
-                updateProgress();
-                
-                if (completedTasks === tasks.length) {
-                    activateContinueButton();
-                }
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar">0% Complete</div>
+    </div>
+
+    <div class="task-grid">
+      <div class="task-card" id="task1" data-url="#">
+        <h3>Task 1</h3>
+        <div class="task-status">Not Completed</div>
+        <div class="task-time">5s</div>
+      </div>
+      <div class="task-card" id="task2" data-url="#">
+        <h3>Task 2</h3>
+        <div class="task-status">Not Completed</div>
+        <div class="task-time">5s</div>
+      </div>
+      <div class="task-card" id="task3" data-url="#">
+        <h3>Task 3</h3>
+        <div class="task-status">Not Completed</div>
+        <div class="task-time">5s</div>
+      </div>
+      <div class="task-card" id="task4" data-url="#">
+        <h3>Task 4</h3>
+        <div class="task-status">Not Completed</div>
+        <div class="task-time">5s</div>
+      </div>
+    </div>
+
+    <button class="continue-btn" id="continue-btn">Continue</button>
+    <div class="spinner" id="spinner"></div>
+    <div class="countdown" id="countdown"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
+
+      const sponsorUrls = {
+        task1: "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
+        task2: "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
+        task3: "https://www.revenuecpmgate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38",
+        task4: "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
+      };
+
+      const tasks = document.querySelectorAll(".task-card");
+      const progressBar = document.getElementById("progress-bar");
+      const continueBtn = document.getElementById("continue-btn");
+      const spinner = document.getElementById("spinner");
+      const countdown = document.getElementById("countdown");
+
+      let completed = 0;
+
+      tasks.forEach((task) => {
+        const url = sponsorUrls[task.id];
+        task.dataset.url = url;
+
+        task.addEventListener("click", () => {
+          if (task.classList.contains("completed")) return;
+
+          const status = task.querySelector(".task-status");
+          const timeDisplay = task.querySelector(".task-time");
+          timeDisplay.style.display = "block";
+          status.textContent = "Visiting...";
+
+          window.open(url, "_blank");
+
+          let time = 5;
+          const timer = setInterval(() => {
+            timeDisplay.textContent = `${time}s`;
+            time--;
+            if (time < 0) {
+              clearInterval(timer);
+              completeTask(task);
             }
-            
-            function updateProgress() {
-                const percentage = Math.round((completedTasks / tasks.length) * 100);
-                progressBar.style.width = `${percentage}%`;
-                progressBar.textContent = `${percentage}% Complete`;
-            }
-            
-            function activateContinueButton() {
-                continueButton.style.display = "block";
-                continueButton.addEventListener("click", initiateRedirect);
-            }
-            
-            function initiateRedirect() {
-                document.querySelector(".task-grid").style.display = "none";
-                continueButton.style.display = "none";
-                
-                spinner.style.display = "block";
-                redirectCountdown.style.display = "block";
-                
-                let countdown = 3;
-                redirectCountdown.textContent = `Redirecting in ${countdown} seconds...`;
-                
-                const interval = setInterval(() => {
-                    countdown--;
-                    redirectCountdown.textContent = `Redirecting in ${countdown} seconds...`;
-                    
-                    if (countdown <= 0) {
-                        clearInterval(interval);
-                        window.location.href = targetURL;
-                    }
-                }, 1000);
-            }
-            
-            window.addEventListener("focus", function() {
-                tasks.forEach(task => {
-                    const taskId = task.id;
-                    if (taskWindows[taskId] && !task.classList.contains("completed")) {
-                        if (!task.classList.contains("in-progress")) {
-                            task.classList.add("in-progress");
-                        }
-                    }
-                });
-            });
+          }, 1000);
         });
-    </script>
+      });
+
+      function completeTask(task) {
+        task.classList.add("completed");
+        const status = task.querySelector(".task-status");
+        const timeDisplay = task.querySelector(".task-time");
+        timeDisplay.style.display = "none";
+        status.innerHTML = "<i class='fa-solid fa-check'></i> Completed";
+        completed++;
+        updateProgress();
+        if (completed === tasks.length) showContinue();
+      }
+
+      function updateProgress() {
+        const percent = Math.round((completed / tasks.length) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressBar.textContent = `${percent}% Complete`;
+      }
+
+      function showContinue() {
+        continueBtn.style.display = "inline-block";
+        continueBtn.onclick = () => {
+          document.querySelector(".task-grid").style.display = "none";
+          continueBtn.style.display = "none";
+          spinner.style.display = "block";
+          countdown.style.display = "block";
+
+          let t = 3;
+          countdown.textContent = `Redirecting in ${t}s...`;
+          const redirectTimer = setInterval(() => {
+            t--;
+            countdown.textContent = `Redirecting in ${t}s...`;
+            if (t <= 0) {
+              clearInterval(redirectTimer);
+              window.location.href = targetURL;
+            }
+          }, 1000);
+        };
+      }
+    });
+  </script>
 </body>
 </html>
-
