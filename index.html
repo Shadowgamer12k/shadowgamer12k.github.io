@@ -671,7 +671,7 @@ modItems.forEach(mod => {
             tab.addEventListener('click', updateTabTitle);
         });
     </script>
- <!-- Sidebar Index -->
+<!-- Sidebar Index -->
 <div id="sidebar">
     <h3>Site Index</h3>
     <ul>
@@ -693,23 +693,24 @@ modItems.forEach(mod => {
 <div id="toggleSidebarBtn">☰ Index</div>
 
 <style>
+/* Sidebar itself */
 #sidebar {
     position: fixed;
-    left: -300px; /* completely off screen */
+    right: -300px; /* Hidden off-screen to the right */
     top: 0;
     width: 260px;
     height: 100%;
     background-color: #1c1c1c;
     color: #fff;
     padding: 20px;
-    box-shadow: 2px 0 12px rgba(0,0,0,0.5);
-    transition: left 0.3s;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.5);
+    transition: right 0.3s;
     z-index: 9999;
     overflow-y: auto;
-    visibility: hidden; /* hide until toggle */
+    visibility: hidden;
 }
 #sidebar.show {
-    left: 0;
+    right: 0;
     visibility: visible;
 }
 #sidebar h3 {
@@ -735,18 +736,23 @@ modItems.forEach(mod => {
     text-decoration: underline;
 }
 
+/* Floating button (bottom right) */
 #toggleSidebarBtn {
     position: fixed;
-    top: 15px;
-    left: 15px;
+    bottom: 20px;
+    right: 20px;
     background-color: #2c2c2c;
     color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
     z-index: 10000;
     font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+}
+#toggleSidebarBtn:hover {
+    transform: scale(1.05);
 }
 </style>
 
@@ -754,7 +760,8 @@ modItems.forEach(mod => {
 const sidebar = document.getElementById('sidebar');
 const toggleBtn = document.getElementById('toggleSidebarBtn');
 
-toggleBtn.addEventListener('click', () => {
+toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent closing immediately
     sidebar.classList.toggle('show');
 });
 
@@ -765,6 +772,7 @@ document.addEventListener('click', (e) => {
     }
 });
 </script>
+
 
 
 <script>
@@ -794,6 +802,7 @@ document.addEventListener('click', (e) => {
 </html>
 </body>
 </html>
+
 
 
 
