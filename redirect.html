@@ -9,9 +9,21 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+    :root {
+      --mc-green: #55ff55;
+      --mc-border: #555;
+      --mc-bg: #2c2c2c;
+      --mc-bg-dark: #1a1a1a;
+      --mc-hover: #3a3a3a;
+    }
+
     body {
-      background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%);
-      color: #000;
+      background: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
+        linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+      background-size: 40px 40px, 100% 100%;
+      background-position: 0 0, 0 0;
+      color: #fff;
       font-family: 'Press Start 2P', monospace;
       margin: 0;
       padding: 20px;
@@ -24,29 +36,32 @@
     .container {
       width: 100%;
       max-width: 650px;
-      background: #e8e8e8;
-      border: 4px solid #000;
-      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
+      background: var(--mc-bg);
+      border: 4px solid var(--mc-border);
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
       padding: 0;
     }
 
     .header {
-      background: #fff;
+      background: rgba(0, 0, 0, 0.5);
       padding: 25px;
       text-align: center;
-      border-bottom: 3px solid #000;
+      border-bottom: 3px solid var(--mc-border);
     }
 
     h1 {
       font-size: clamp(1.2rem, 4vw, 1.8rem);
       margin: 0 0 20px 0;
       line-height: 1.4;
+      color: var(--mc-green);
+      text-shadow: 2px 2px 0px #000;
     }
 
     .subtitle {
       font-size: clamp(0.6rem, 2vw, 0.8rem);
       line-height: 1.6;
       margin: 0;
+      color: #aaa;
     }
 
     .main-content {
@@ -54,9 +69,9 @@
     }
 
     .download-btn {
-      background: #4a9eff;
+      background: var(--mc-green);
       border: 3px solid #000;
-      color: #fff;
+      color: #000;
       padding: 18px 25px;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(0.6rem, 2vw, 0.9rem);
@@ -69,12 +84,13 @@
       transition: all 0.2s;
       margin-bottom: 25px;
       text-transform: uppercase;
+      font-weight: bold;
     }
 
     .download-btn:hover {
-      background: #357abd;
+      background: #44dd44;
       transform: translateY(-2px);
-      box-shadow: 0 4px 0 #000;
+      box-shadow: 0 4px 0 #000, 0 0 15px var(--mc-green);
     }
 
     .download-btn:active {
@@ -89,12 +105,13 @@
     .progress-label {
       font-size: clamp(0.7rem, 2vw, 0.9rem);
       margin-bottom: 15px;
+      color: #fff;
     }
 
     .unlock-btn {
-      background: #d3d3d3;
-      border: 3px solid #000;
-      color: #888;
+      background: var(--mc-hover);
+      border: 3px solid var(--mc-border);
+      color: #666;
       padding: 15px;
       font-family: 'Press Start 2P', monospace;
       font-size: clamp(0.6rem, 2vw, 0.8rem);
@@ -105,27 +122,31 @@
     }
 
     .unlock-btn.active {
-      background: #4a9eff;
-      color: #fff;
+      background: var(--mc-green);
+      color: #000;
       cursor: pointer;
+      font-weight: bold;
+      border-color: #000;
     }
 
     .unlock-btn.active:hover {
-      background: #357abd;
+      background: #44dd44;
+      box-shadow: 0 0 15px var(--mc-green);
     }
 
     .support-text {
-      background: #fff;
-      border: 2px solid #000;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--mc-border);
       padding: 15px;
       font-size: clamp(0.5rem, 1.5vw, 0.65rem);
       line-height: 1.8;
       margin-bottom: 20px;
+      color: #ccc;
     }
 
     .footer {
-      background: #fff;
-      border-top: 2px solid #000;
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid var(--mc-border);
       padding: 15px;
       font-size: clamp(0.5rem, 1.5vw, 0.6rem);
       display: flex;
@@ -133,6 +154,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+      color: #aaa;
     }
 
     .task-list {
@@ -143,8 +165,8 @@
     }
 
     .task-item {
-      background: #fff;
-      border: 3px solid #000;
+      background: var(--mc-hover);
+      border: 3px solid var(--mc-border);
       padding: 15px;
       text-align: center;
       cursor: pointer;
@@ -153,44 +175,59 @@
     }
 
     .task-item:hover:not(.completed) {
-      background: #f5f5f5;
+      background: #4a4a4a;
       transform: translateY(-2px);
-      box-shadow: 0 4px 0 #000;
+      box-shadow: 0 4px 0 var(--mc-border);
     }
 
     .task-item.completed {
-      background: #90EE90;
+      background: var(--mc-green);
+      color: #000;
       cursor: default;
+      border-color: #000;
     }
 
     .task-item.visiting {
-      background: #fff3cd;
+      background: #ffaa00;
+      color: #000;
     }
 
     .task-title {
       font-size: clamp(0.7rem, 2vw, 0.9rem);
       margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .task-item.completed .task-title,
+    .task-item.visiting .task-title {
+      color: #000;
     }
 
     .task-status {
       font-size: clamp(0.5rem, 1.5vw, 0.65rem);
-      color: #666;
+      color: #aaa;
     }
 
     .task-item.completed .task-status {
-      color: #006400;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .task-item.visiting .task-status {
+      color: #000;
     }
 
     .task-timer {
       font-size: clamp(0.6rem, 1.8vw, 0.75rem);
-      color: #ff6b6b;
+      color: #ff0000;
       margin-top: 8px;
       display: none;
+      font-weight: bold;
     }
 
     .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #4a9eff;
+      border: 4px solid var(--mc-border);
+      border-top: 4px solid var(--mc-green);
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -209,6 +246,7 @@
       font-size: clamp(0.6rem, 2vw, 0.8rem);
       margin-top: 15px;
       display: none;
+      color: var(--mc-green);
     }
 
     @media (max-width: 600px) {
@@ -260,10 +298,9 @@
 
       <button class="unlock-btn" id="unlock-btn">Unlock Content</button>
 
-    <div class="support-text">
-  Thank you for downloading my add-on! If you encounter any bugs, issues, or have suggestions for improvement, feel free to reach out through the comments or on my official Discord channel.
-</div>
-
+      <div class="support-text">
+        Thank you for downloading my add-on! If you encounter any bugs, issues, or have suggestions for improvement, feel free to reach out through the comments or on my official Discord channel.
+      </div>
 
       <div class="spinner" id="spinner"></div>
       <div class="redirect-message" id="redirect-msg"></div>
@@ -359,4 +396,3 @@
   </script>
 </body>
 </html>
-
