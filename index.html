@@ -671,7 +671,7 @@ modItems.forEach(mod => {
             tab.addEventListener('click', updateTabTitle);
         });
     </script>
-  <!-- Sidebar Index -->
+ <!-- Sidebar Index -->
 <div id="sidebar">
     <h3>Site Index</h3>
     <ul>
@@ -695,7 +695,7 @@ modItems.forEach(mod => {
 <style>
 #sidebar {
     position: fixed;
-    left: -260px;
+    left: -300px; /* completely off screen */
     top: 0;
     width: 260px;
     height: 100%;
@@ -706,6 +706,11 @@ modItems.forEach(mod => {
     transition: left 0.3s;
     z-index: 9999;
     overflow-y: auto;
+    visibility: hidden; /* hide until toggle */
+}
+#sidebar.show {
+    left: 0;
+    visibility: visible;
 }
 #sidebar h3 {
     margin-top: 0;
@@ -729,6 +734,7 @@ modItems.forEach(mod => {
     color: #00ff00;
     text-decoration: underline;
 }
+
 #toggleSidebarBtn {
     position: fixed;
     top: 15px;
@@ -742,10 +748,24 @@ modItems.forEach(mod => {
     font-weight: bold;
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
-#sidebar.show {
-    left: 0;
-}
 </style>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('toggleSidebarBtn');
+
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+});
+
+// Close sidebar when clicking outside
+document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        sidebar.classList.remove('show');
+    }
+});
+</script>
+
 
 <script>
 const sidebar = document.getElementById('sidebar');
@@ -774,6 +794,7 @@ document.addEventListener('click', (e) => {
 </html>
 </body>
 </html>
+
 
 
 
