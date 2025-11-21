@@ -1,398 +1,803 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-@font-face {
-    font-family: 'Minecraft';
-    src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css') format('truetype');
+ <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        @font-face {
+
+            font-family: 'Minecraft';
+
+            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css') format('truetype');
+
+        }
+
+
+
+        :root {
+
+            --mc-green: #55FF55;
+
+            --mc-dark: #2D2D2D;
+
+            --mc-border: #555555;
+
+        }
+
+
+
+       body {
+
+  background-color: #1a1a1a;
+
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+
+                  linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+
+                  linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+
+                  linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+
+  font-family: 'Press Start 2P', cursive;
+
+  color: white;
+
+  line-height: 1.6;
+
+  margin: 0;
+
+  min-height: 100vh;
+
+  font-size: 16px;
+
 }
 
-:root {
-    --mc-green: #55FF55;
-    --mc-dark: #2D2D2D;
-    --mc-border: #555555;
+     h1 {
+
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+
+  line-height: 1.2;
+
+  margin: 0.5em 0;
+
 }
 
-body {
-    background-color: #1a1a1a;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                      linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                      linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-    font-family: 'Press Start 2P', cursive;
-    color: white;
-    line-height: 1.6;
-    margin: 0;
-    min-height: 100vh;
-    font-size: 16px;
+     h2, .feature-title {
+
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+
+  margin: 0.8em 0;
+
 }
-h1 {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-    line-height: 1.2;
-    margin: 0.5em 0;
-}
-h2, .feature-title {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-    margin: 0.8em 0;
-}
+
+
 
 p, .feature-item, .faq-answer {
-    font-size: clamp(0.9rem, 3vw, 1rem);
-    line-height: 1.5;
-}
-      
-.header {
-    padding: 2rem 1rem;
-    background: rgba(0, 0, 0, 0.7);
-    border-bottom: 4px solid var(--mc-border);
-    text-align: center;
+
+  font-size: clamp(0.9rem, 3vw, 1rem);
+
+  line-height: 1.5;
+
 }
 
-.header img {
-    max-width: 600px;
-    width: 90%;
-    image-rendering: pixelated;
-    filter: drop-shadow(0 0 8px var(--mc-green));
+     
+
+
+
+        .header {
+
+  padding: 2rem 1rem;
+
+  background: rgba(0, 0, 0, 0.7);
+
+  border-bottom: 4px solid var(--mc-border);
+
+  text-align: center;
+
 }
 
-.container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
-}
 
-.feature-box {
-    background: rgba(0, 0, 0, 0.8);
-    border: 4px solid var(--mc-border);
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    position: relative;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
 
-.feature-title {
-    color: var(--mc-green);
-    font-size: 1.2rem;
-    margin: -1rem 0 1rem 0;
-    background: var(--mc-dark);
-    padding: 0.5rem;
-    display: inline-block;
-    border: 2px solid var(--mc-border);
-}
+        .header img {
 
-.download-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin: 2rem 0;
-}
+            max-width: 600px;
 
-.download-button {
-    font-size: clamp(0.8rem, 3vw, 1rem);
-    background: var(--mc-dark);
-    color: white;
-    padding: 1.5rem;
-    text-decoration: none;
-    border: 3px solid var(--mc-border);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
+            width: 90%;
 
-.download-button:hover {
-    background: var(--mc-green);
-    color: black;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(85, 255, 85, 0.3);
-}
+            image-rendering: pixelated;
 
-.download-button:active {
-    transform: translateY(0);
-}
+            filter: drop-shadow(0 0 8px var(--mc-green));
 
-.video-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    margin: 1.5rem 0;
-}
+        }
 
-.video-container iframe {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 3px solid var(--mc-border);
-}
 
-.features-list, .testimonials {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    padding: 1rem 0;
-}
-.feature-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1rem;
-    border-left: 4px solid var(--mc-green);
-}
-
-.screenshot-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin: 1.5rem 0;
-}
-
-.screenshot {
-    border: 3px solid var(--mc-border);
-    width: 100%;
-    height: auto;
-    transition: transform 0.3s ease;
-}
-
-.screenshot:hover {
-    transform: scale(1.05);
-}
-
-.testimonials {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-}
-
-.testimonial {
-    background: rgba(85, 255, 85, 0.05);
-    padding: 1rem;
-    border-left: 4px solid var(--mc-green);
-    font-style: italic;
-}
-
-.compatibility-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.5rem;
-    margin: 1rem 0;
-}
-
-.compatibility-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.compatibility-item.compatible::before {
-    content: "✓";
-    color: var(--mc-green);
-}
-
-.compatibility-item.incompatible::before {
-    content: "✗";
-    color: #FF5555;
-}
-
-.faq-item {
-    margin-bottom: 1.5rem;
-}
-
-.faq-question {
-    color: var(--mc-green);
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.command-box {
-    background: #000;
-    border: 2px solid var(--mc-border);
-    padding: 1rem;
-    margin: 1rem 0;
-    font-family: monospace;
-    overflow-x: auto;
-}
-
-.command-prefix {
-    color: var(--mc-green);
-}
-
-footer {
-    background: rgba(0, 0, 0, 0.9);
-    padding: 1rem;
-    text-align: center;
-    border-top: 4px solid var(--mc-border);
-    margin-top: 3rem;
-}
-
-footer a {
-    color: var(--mc-green);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-footer a:hover {
-    text-shadow: 0 0 8px var(--mc-green);
-    text-decoration: underline;
-}
-
-.whats-new {
-    background: rgba(85, 255, 85, 0.05);
-    padding: 1.5rem;
-    border-left: 4px solid var(--mc-green);
-    margin: 1.5rem 0;
-}
-
-.whats-new h3 {
-    color: var(--mc-green);
-    margin-top: 0;
-}
-
-.whats-new ul {
-    list-style-type: none;
-    padding-left: 0.5rem;
-}
-
-.whats-new li {
-    margin-bottom: 0.8rem;
-    font-style: italic;
-}
-
-@media (max-width: 768px) {
-    body {
-        font-size: 10px;
-        line-height: 1.5;
-    }
-
-    .header {
-        padding: 0.7rem;
-    }
 
     .container {
-        padding: 0.2rem;
-    }
 
-    .feature-box {
-        padding: 0.7rem;
-        margin: 0.7rem 0;
-    }
+  max-width: 800px;
 
-    .features-list, .testimonials {
-        grid-template-columns: 0.7fr;
-    }
+  margin: 2rem auto;
 
-    .download-button {
-        padding: 0.7rem;
-        font-size: 0.0.6rem;
-    }
+  padding: 1rem;
 
-    p, li {
-        word-break: break-word;
-        hyphens: auto;
-    }
-}
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.3rem;
-    }
-
-    h2, .feature-title {
-        font-size: 1.1rem;
-    }
-
-    .feature-box p {
-        font-size: 0.85rem;
-    }
-
-    .download-button {
-        font-size: 0.8rem;
-        padding: 0.8rem;
-    }
-
-    .video-container {
-        margin: 0.5rem 0;
-    }
-}
-/* Ad Block Detection Modal */
-.adblock-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 9998;
-    pointer-events: all;
 }
 
-.adblock-modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #2d2d2d;
-    border: 4px solid #55ff55;
-    padding: 20px;
-    z-index: 9999;
-    max-width: 600px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
-    border-radius: 10px;
-    pointer-events: all;
+
+
+        .feature-box {
+
+  background: rgba(0, 0, 0, 0.8);
+
+  border: 4px solid var(--mc-border);
+
+  padding: 1.5rem;
+
+  margin: 1.5rem 0;
+
+  position: relative;
+
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+
 }
 
-.adblock-modal h2 {
-    color: #55ff55;
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-}
-.mod-item-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s ease;
+
+
+        .feature-title {
+
+            color: var(--mc-green);
+
+            font-size: 1.2rem;
+
+            margin: -1rem 0 1rem 0;
+
+            background: var(--mc-dark);
+
+            padding: 0.5rem;
+
+            display: inline-block;
+
+            border: 2px solid var(--mc-border);
+
+        }
+
+
+
+        .download-buttons {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 1rem;
+
+            margin: 2rem 0;
+
+        }
+
+
+
+      .download-button {
+
+  font-size: clamp(0.8rem, 3vw, 1rem);
+
+  background: var(--mc-dark);
+
+  color: white;
+
+  padding: 1.5rem;
+
+  text-decoration: none;
+
+  border: 3px solid var(--mc-border);
+
+  transition: all 0.2s ease;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.5rem;
+
 }
 
-.mod-item-link:hover {
-    transform: translateY(-3px);
+
+
+        .download-button:hover {
+
+  background: var(--mc-green);
+
+  color: black;
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 5px 15px rgba(85, 255, 85, 0.3);
+
 }
 
-.mod-item-link:active {
-    transform: translateY(0);
+
+
+        .download-button:active {
+
+            transform: translateY(0);
+
+        }
+
+
+
+        .video-container {
+
+            position: relative;
+
+            padding-bottom: 56.25%;
+
+            margin: 1.5rem 0;
+
+        }
+
+
+
+        .video-container iframe {
+
+            position: absolute;
+
+            width: 100%;
+
+            height: 100%;
+
+            border: 3px solid var(--mc-border);
+
+        }
+
+
+
+       .features-list, .testimonials {
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 1rem;
+
+  padding: 1rem 0;
+
 }
 
-.mod-item {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    position: relative;
-}
+        .feature-item {
 
-.mod-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
+            background: rgba(255, 255, 255, 0.05);
 
-.adblock-modal p {
-    color: #fff;
-    font-size: 0.9em;
+            padding: 1rem;
+
+            border-left: 4px solid var(--mc-green);
+
+        }
+
+
+
+        .screenshot-gallery {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 1rem;
+
+            margin: 1.5rem 0;
+
+        }
+
+
+
+        .screenshot {
+
+            border: 3px solid var(--mc-border);
+
+            width: 100%;
+
+            height: auto;
+
+            transition: transform 0.3s ease;
+
+        }
+
+
+
+        .screenshot:hover {
+
+            transform: scale(1.05);
+
+        }
+
+
+
+        .testimonials {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 1.5rem;
+
+            margin: 1.5rem 0;
+
+        }
+
+
+
+        .testimonial {
+
+            background: rgba(85, 255, 85, 0.05);
+
+            padding: 1rem;
+
+            border-left: 4px solid var(--mc-green);
+
+            font-style: italic;
+
+        }
+
+
+
+        .compatibility-list {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+            gap: 0.5rem;
+
+            margin: 1rem 0;
+
+        }
+
+
+
+        .compatibility-item {
+
+            background: rgba(255, 255, 255, 0.05);
+
+            padding: 0.8rem;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 0.5rem;
+
+        }
+
+
+
+        .compatibility-item.compatible::before {
+
+            content: "✓";
+
+            color: var(--mc-green);
+
+        }
+
+
+
+        .compatibility-item.incompatible::before {
+
+            content: "✗";
+
+            color: #FF5555;
+
+        }
+
+
+
+        .faq-item {
+
+            margin-bottom: 1.5rem;
+
+        }
+
+
+
+        .faq-question {
+
+            color: var(--mc-green);
+
+            font-weight: bold;
+
+            margin-bottom: 0.5rem;
+
+        }
+
+
+
+        .command-box {
+
+            background: #000;
+
+            border: 2px solid var(--mc-border);
+
+            padding: 1rem;
+
+            margin: 1rem 0;
+
+            font-family: monospace;
+
+            overflow-x: auto;
+
+        }
+
+
+
+        .command-prefix {
+
+            color: var(--mc-green);
+
+        }
+
+
+
+        footer {
+
+            background: rgba(0, 0, 0, 0.9);
+
+            padding: 1rem;
+
+            text-align: center;
+
+            border-top: 4px solid var(--mc-border);
+
+            margin-top: 3rem;
+
+        }
+
+
+
+        footer a {
+
+            color: var(--mc-green);
+
+            text-decoration: none;
+
+            transition: all 0.2s ease;
+
+        }
+
+
+
+        footer a:hover {
+
+            text-shadow: 0 0 8px var(--mc-green);
+
+            text-decoration: underline;
+
+        }
+
+        
+
+        .whats-new {
+
+            background: rgba(85, 255, 85, 0.05);
+
+            padding: 1.5rem;
+
+            border-left: 4px solid var(--mc-green);
+
+            margin: 1.5rem 0;
+
+        }
+
+        
+
+        .whats-new h3 {
+
+            color: var(--mc-green);
+
+            margin-top: 0;
+
+        }
+
+        
+
+        .whats-new ul {
+
+            list-style-type: none;
+
+            padding-left: 0.5rem;
+
+        }
+
+        
+
+        .whats-new li {
+
+            margin-bottom: 0.8rem;
+
+            font-style: italic;
+
+        }
+
+
+
+      @media (max-width: 768px) {
+
+  body {
+
+    font-size: 10px;
+
     line-height: 1.5;
-    margin-bottom: 20px;
+
+  }
+
+
+
+  .header {
+
+    padding: 0.7rem;
+
+  }
+
+
+
+  .container {
+
+    padding: 0.2rem;
+
+  }
+
+
+
+  .feature-box {
+
+    padding: 0.7rem;
+
+    margin: 0.7rem 0;
+
+  }
+
+
+
+  .features-list, .testimonials {
+
+    grid-template-columns: 0.7fr;
+
+  }
+
+
+
+  .download-button {
+
+    padding: 0.7rem;
+
+    font-size: 0.0.6rem;
+
+  }
+
+
+
+  p, li {
+
+    word-break: break-word;
+
+    hyphens: auto;
+
+  }
+
 }
 
-.adblock-modal button {
-    background: #008542;
-    border: 2px solid #55ff55;
-    color: #fff;
-    padding: 10px 25px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 0 10px;
+     @media (max-width: 480px) {
+
+  h1 {
+
+    font-size: 1.3rem;
+
+  }
+
+  
+
+  h2, .feature-title {
+
+    font-size: 1.1rem;
+
+  }
+
+  
+
+  .feature-box p {
+
+    font-size: 0.85rem;
+
+  }
+
+  
+
+  .download-button {
+
+    font-size: 0.8rem;
+
+    padding: 0.8rem;
+
+  }
+
+
+
+  .video-container {
+
+    margin: 0.5rem 0;
+
+  }
+
 }
 
-.adblock-modal button:hover {
-    background: #00a550;
-    transform: scale(1.05);
-}
+           /* Ad Block Detection Modal */
+
+        .adblock-overlay {
+
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.7);
+
+            backdrop-filter: blur(5px);
+
+            -webkit-backdrop-filter: blur(5px);
+
+            z-index: 9998;
+
+            pointer-events: all;
+
+        }
+
+
+
+        .adblock-modal {
+
+            display: none;
+
+            position: fixed;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            background: #2d2d2d;
+
+            border: 4px solid #55ff55;
+
+            padding: 20px;
+
+            z-index: 9999;
+
+            max-width: 600px;
+
+            text-align: center;
+
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+
+            border-radius: 10px;
+
+            pointer-events: all;
+
+        }
+
+
+
+        .adblock-modal h2 {
+
+            color: #55ff55;
+
+            font-size: 1.5em;
+
+            margin-bottom: 15px;
+
+            text-transform: uppercase;
+
+        }
+
+        .mod-item-link {
+
+            text-decoration: none;
+
+            color: inherit;
+
+            display: block;
+
+            transition: transform 0.2s ease;
+
+        }
+
+
+
+        .mod-item-link:hover {
+
+            transform: translateY(-3px);
+
+        }
+
+
+
+        .mod-item-link:active {
+
+            transform: translateY(0);
+
+        }
+
+
+
+        .mod-item {
+
+            cursor: pointer;
+
+            transition: background-color 0.2s ease;
+
+            position: relative;
+
+        }
+
+
+
+        .mod-item:hover {
+
+            background-color: rgba(255, 255, 255, 0.1);
+
+        }
+
+
+
+        .adblock-modal p {
+
+            color: #fff;
+
+            font-size: 0.9em;
+
+            line-height: 1.5;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .adblock-modal button {
+
+            background: #008542;
+
+            border: 2px solid #55ff55;
+
+            color: #fff;
+
+            padding: 10px 25px;
+
+            font-size: 1em;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+            margin: 0 10px;
+
+        }
+
+
+
+        .adblock-modal button:hover {
+
+            background: #00a550;
+
+            transform: scale(1.05);
+
+        }
+
+     
+
+    </style>
