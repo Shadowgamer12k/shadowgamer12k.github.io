@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>shadowGamer100k - Minecraft Add-ons</title>
-    <meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources.">
+    <meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources to enhance your gaming experience.">
     <meta name="keywords" content="Minecraft, add-ons, mods, resources, shadowGamer100k, Bedrock">
     <meta name="author" content="shadowGamer100k">
     <link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
@@ -331,7 +331,7 @@
             line-height: 1.5;
         }
         
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; position: relative; }
         
         .form-label { 
             display: block; 
@@ -343,24 +343,91 @@
             text-shadow: 1px 1px 0 #000;
         }
         
-        .form-input, .form-select, .form-textarea {
+        .form-input, .form-textarea {
             width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff;
             border-radius: 0; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5;
             box-sizing: border-box; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
         }
         
-        .form-input:focus, .form-select:focus, .form-textarea:focus { 
+        .form-input:focus, .form-textarea:focus { 
             border-color: var(--mc-gold); outline: none; background-color: #000;
         }
         
         .form-textarea { resize: vertical; min-height: 120px; }
 
-        .form-select {
-            appearance: none; -webkit-appearance: none; -moz-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 10px center; background-size: 20px; cursor: pointer;
+        /* --- CUSTOM DROPDOWN STYLES (REPLACES SELECT) --- */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
         }
         
+        .custom-select-trigger {
+            position: relative;
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 2px solid #555;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            line-height: 1.5;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #777;
+        }
+
+        .custom-select-wrapper.open .custom-select-trigger {
+            border-color: var(--mc-gold);
+        }
+
+        .arrow {
+            width: 0; height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #fff;
+            margin-left: 10px;
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            background: #111;
+            border: 2px solid #555;
+            border-top: none;
+            z-index: 100;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .custom-select-wrapper.open .custom-options {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #222;
+        }
+
+        .custom-option:hover, .custom-option.selected {
+            background-color: #333;
+            color: var(--mc-gold);
+        }
+
         .send-btn {
             width: 100%; background: var(--mc-blue); color: white; padding: 12px; border: none;
             font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; margin-top: 10px;
@@ -837,7 +904,7 @@
         </div>
     </div>
     
-    <!-- FEEDBACK MODAL -->
+    <!-- FEEDBACK MODAL (NEW) -->
     <div class="modal" id="feedbackModal">
         <div class="modal-content">
             <a href="#" class="close-button" onclick="closeFeedbackModal(event)">✕</a>
@@ -848,11 +915,18 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Type</label>
-                <select id="feedbackType" class="form-select">
-                    <option value="Bug Report">🐛 Bug Report</option>
-                    <option value="Suggestion">💡 Suggestion</option>
-                    <option value="Feedback">💭 General Feedback</option>
-                </select>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select-trigger" id="customSelectTrigger">
+                        <span id="customSelectText">🐛 Bug Report</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="custom-options" id="customOptions">
+                        <div class="custom-option selected" data-value="Bug Report">🐛 Bug Report</div>
+                        <div class="custom-option" data-value="Suggestion">💡 Suggestion</div>
+                        <div class="custom-option" data-value="Feedback">💭 General Feedback</div>
+                    </div>
+                    <input type="hidden" id="feedbackType" value="Bug Report">
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Your Message</label>
@@ -870,7 +944,7 @@
         </p>
     </footer>
 
-    <!-- MENU OVERLAY -->
+    <!-- NEW MENU OVERLAY (Replaces Sidebar) -->
     <div class="menu-overlay" id="menuOverlay">
         <div class="menu-container">
             <div class="menu-header">
@@ -963,6 +1037,45 @@
             const feedbackAddonName = document.getElementById('feedbackAddonName');
             const feedbackMessage = document.getElementById('feedbackMessage');
             
+            // --- CUSTOM DROPDOWN LOGIC ---
+            const customSelectTrigger = document.getElementById('customSelectTrigger');
+            const customSelectWrapper = document.querySelector('.custom-select-wrapper');
+            const customOptions = document.querySelectorAll('.custom-option');
+            const customSelectText = document.getElementById('customSelectText');
+            const feedbackTypeInput = document.getElementById('feedbackType');
+
+            if(customSelectTrigger) {
+                customSelectTrigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    playClickSound();
+                    customSelectWrapper.classList.toggle('open');
+                });
+
+                customOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        playClickSound();
+                        customSelectWrapper.classList.remove('open');
+                        
+                        // Update visual selection
+                        customOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        
+                        // Update text and hidden input
+                        const value = this.getAttribute('data-value');
+                        const text = this.textContent;
+                        customSelectText.textContent = text;
+                        feedbackTypeInput.value = value;
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!customSelectWrapper.contains(e.target)) {
+                        customSelectWrapper.classList.remove('open');
+                    }
+                });
+            }
+
             window.openFeedbackModal = function(addonName) {
                 playClickSound();
                 feedbackAddonName.value = addonName;
@@ -981,7 +1094,8 @@
                 const btn = document.querySelector('.send-btn');
                 const originalText = btn.textContent;
                 const addon = feedbackAddonName.value;
-                const type = document.getElementById('feedbackType').value;
+                // Get value from HIDDEN input now
+                const type = feedbackTypeInput.value;
                 const message = feedbackMessage.value;
                 
                 if(!message.trim()) {
