@@ -1204,6 +1204,7 @@
             // --- NAVIGATION LOGIC ---
             const allNavItems = document.querySelectorAll('.nav-item, .nav-icon');
             const tabContents = document.querySelectorAll('.tab-content');
+            const logoText = document.querySelector('.logo-text'); // Select the logo text
 
             allNavItems.forEach(item => {
                 item.addEventListener('click', function() {
@@ -1218,6 +1219,12 @@
                     tabContents.forEach(content => content.classList.remove('active'));
                     const targetContent = document.getElementById(target);
                     if (targetContent) targetContent.classList.add('active');
+
+                    // Update Logo Text (Dynamic Title)
+                    if (logoText) {
+                        // Capitalize first letter
+                        logoText.textContent = target.charAt(0).toUpperCase() + target.slice(1);
+                    }
                 });
             });
 
