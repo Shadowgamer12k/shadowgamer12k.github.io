@@ -75,7 +75,7 @@
         }
 
         /* Diamond Sword / Hand Pointer on Links */
-        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option {
+        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, #mineableBlock {
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-0)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
         }
 
@@ -183,6 +183,121 @@
             z-index: 9999;
             transition: transform 0.6s ease-out, opacity 0.6s ease-out;
             box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+
+        /* ==================== MINEABLE BLOCK (NEW) ==================== */
+        .footer-mine {
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .mineable-block {
+            width: 64px;
+            height: 64px;
+            background-color: #333;
+            /* Simple bedrock-like pattern using gradients */
+            background-image: 
+                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
+                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+            background-size: 16px 16px;
+            border: 4px solid #000;
+            box-shadow: inset 0 0 10px #000;
+            transition: transform 0.1s, filter 0.2s;
+            cursor: pointer; /* Sword cursor applies here */
+            position: relative;
+        }
+
+        .mineable-block:active {
+            transform: scale(0.95);
+        }
+
+        .mineable-block.shake {
+            animation: shake 0.2s;
+        }
+
+        .block-reward {
+            display: none;
+            animation: bounceIn 0.5s;
+        }
+
+        .block-reward a {
+            color: #55ffff;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid #55ffff;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+        }
+
+        .block-reward a:hover {
+            background: #55ffff;
+            color: #000;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        /* ==================== HEROBRINE (NEW) ==================== */
+        .herobrine-entity {
+            position: fixed;
+            bottom: 150px; /* Floating somewhere in the background */
+            left: 50px;
+            width: 40px; 
+            height: 80px; /* 1:2 ratio for steve */
+            background-color: #00aaaa; /* Shirt */
+            display: none; /* Hidden by default */
+            z-index: 0; /* Behind content */
+            opacity: 0.4; /* Ghostly */
+            transition: opacity 0.5s ease;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Herobrine Head */
+        .herobrine-entity::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            width: 30px;
+            height: 30px;
+            background-color: #eebb88; /* Skin */
+            box-shadow: inset 0 0 0 2px #222; /* Hair hint */
+        }
+
+        /* Herobrine Eyes (Glowing White) */
+        .herobrine-entity::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 8px;
+            width: 24px;
+            height: 4px;
+            background: #fff; /* GLOWING EYES */
+            box-shadow: 0 0 5px #fff;
+        }
+
+        /* Pants */
+        .herobrine-pants {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40%;
+            background-color: #0000aa;
+        }
+
+        .herobrine-entity:hover {
+            opacity: 0 !important;
+            transition: opacity 0.2s;
         }
 
         /* ==================== EASTER EGG STYLES ==================== */
@@ -406,14 +521,64 @@
             .mod-item { width: 100%; max-width: 400px; }
             #biomeToggle, #menuTrigger { bottom: 10px; width: 40px; height: 40px; }
             .activity-feed { bottom: 70px; font-size: 8px; padding: 8px 12px; }
+            /* Stack footer on mobile */
+            footer { flex-direction: column; text-align: center !important; gap: 20px; }
         }
         @media (min-width: 769px) {
             .navbar-menu { display: flex !important; }
             .carousel-arrow { display: none !important; }
         }
         
-        footer { padding: 2rem; margin-top: 3rem; border-top: 4px solid var(--mc-border); background: rgba(0,0,0,0.8); font-size: 10px; }
+        /* UPDATED FOOTER LAYOUT */
+        footer { 
+            padding: 2rem; 
+            margin-top: 3rem; 
+            border-top: 4px solid var(--mc-border); 
+            background: rgba(0,0,0,0.9); 
+            font-size: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            text-align: left; 
+            position: relative;
+            z-index: 10;
+        }
         footer a { color: var(--mc-green); }
+
+        /* UPDATED MINEABLE BLOCK STYLES */
+        .footer-mine {
+            /* Removed auto margins to fit flex layout */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .mineable-block {
+            width: 64px;
+            height: 64px;
+            background-color: #222;
+            /* High quality pixel noise for Bedrock texture */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cg fill='%23444' fill-opacity='0.4'%3E%3Cpath d='M0 0h2v2H0zM4 0h2v2H4zM2 2h2v2H2zM6 2h2v2H6zM0 4h2v2H0zM4 4h2v2H4zM2 6h2v2H2zM6 6h2v2H6z'/%3E%3C/g%3E%3Cg fill='%23000' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v2H2zM6 0h2v2H6zM0 2h2v2H0zM4 2h2v2H4zM2 4h2v2H2zM6 4h2v2H6zM0 6h2v2H0zM4 6h2v2H4z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 16px 16px; /* Scale up the pixel pattern */
+            image-rendering: pixelated;
+            
+            /* 3D Block Borders */
+            border-top: 4px solid #555;
+            border-left: 4px solid #555;
+            border-right: 4px solid #111;
+            border-bottom: 4px solid #111;
+            
+            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+            transition: transform 0.1s, filter 0.2s;
+            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
+            position: relative;
+        }
+
+        .mineable-block:hover {
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
@@ -429,6 +594,11 @@
         <div id="weatherRain" class="weather-layer weather-rain"></div>
         <div id="weatherAsh" class="weather-layer weather-ash"></div>
         <div id="weatherEnd" class="weather-layer weather-end"></div>
+
+        <!-- HEROBRINE ENTITY (NEW) -->
+        <div id="herobrine" class="herobrine-entity">
+            <div class="herobrine-pants"></div>
+        </div>
 
         <!-- NAVIGATION -->
         <nav class="minecraft-navbar">
@@ -772,10 +942,22 @@
         
         <!-- FOOTER -->
         <footer>
-            <p>&copy; 2025 shadowGamer12k. All rights reserved. 
-                <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy</a> | 
-                <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms</a>
-            </p>
+            <!-- Text Section -->
+            <div class="footer-text">
+                <p>&copy; 2025 shadowGamer12k. All rights reserved.</p>
+                <p style="margin-top: 5px;">
+                    <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy</a> | 
+                    <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms</a>
+                </p>
+            </div>
+
+            <!-- Interactive Block Section -->
+            <div class="footer-mine">
+                <div id="mineableBlock" class="mineable-block" title="Bedrock. HP: 100"></div>
+                <div id="blockReward" class="block-reward">
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">💎 SECRET 💎</a>
+                </div>
+            </div>
         </footer>
     </div> <!-- END OF MAIN WRAPPER -->
 
@@ -1001,6 +1183,50 @@
                     setTimeout(() => {
                         particle.remove();
                     }, 600);
+                }
+            }
+
+            // ==================== MINEABLE BLOCK LOGIC (NEW) ====================
+            const mineableBlock = document.getElementById('mineableBlock');
+            const blockReward = document.getElementById('blockReward');
+            let blockHealth = 100;
+
+            if (mineableBlock) {
+                mineableBlock.addEventListener('click', function() {
+                    if (blockHealth <= 0) return; // Already broken
+
+                    blockHealth--;
+                    playClickSound();
+                    
+                    // Visual shake
+                    mineableBlock.classList.add('shake');
+                    setTimeout(() => mineableBlock.classList.remove('shake'), 200);
+
+                    // Visual damage (opacity fades slightly)
+                    mineableBlock.style.opacity = 0.5 + (blockHealth / 200);
+
+                    if (blockHealth <= 0) {
+                        // Break animation
+                        mineableBlock.style.display = 'none';
+                        blockReward.style.display = 'block';
+                        showAdvancement("We Need To Go Deeper");
+                        
+                        // Spawn many particles
+                        const rect = mineableBlock.getBoundingClientRect();
+                        for(let i=0; i<20; i++) {
+                            createClickParticles(rect.left + rect.width/2, rect.top + rect.height/2);
+                        }
+                    }
+                });
+            }
+
+            // ==================== HEROBRINE CHANCE (NEW) ====================
+            // 1 in 100 chance (0.01) to appear on load
+            if (Math.random() < 0.01) {
+                const herobrine = document.getElementById('herobrine');
+                if (herobrine) {
+                    herobrine.style.display = 'block';
+                    console.log("He is watching..."); // Console easter egg
                 }
             }
 
