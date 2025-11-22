@@ -1451,6 +1451,10 @@
 
             // Check Local Storage for saved preference
             let currentBiomeIndex = parseInt(localStorage.getItem('selectedBiomeIndex')) || 0;
+            
+            // Variables for Rainbow Easter Egg
+            let biomeClickCount = 0;
+            let biomeClickTimer;
 
             // Function to apply theme
             function applyBiome(index) {
@@ -1483,7 +1487,32 @@
                     e.stopPropagation(); // Prevent triggering other clicks
                     playClickSound();
                     
-                    // Cycle to next biome
+                    // --- EASTER EGG LOGIC: 5 Rapid Clicks ---
+                    biomeClickCount++;
+                    clearTimeout(biomeClickTimer);
+                    
+                    // Reset counter if not clicked again within 1 second
+                    biomeClickTimer = setTimeout(() => {
+                        biomeClickCount = 0;
+                    }, 1000);
+                    
+                    if (biomeClickCount >= 5) {
+                        biomeClickCount = 0; // Reset count
+                        document.body.classList.toggle("jeb-mode"); // Toggle Rainbow Mode
+                        
+                        // Feedback Toast
+                        if (document.body.classList.contains("jeb-mode")) {
+                            showAdvancement("Rainbow Mode Activated!");
+                        } else {
+                            showAdvancement("Rainbow Mode Deactivated");
+                        }
+                        // We return here so the 5th click doesn't also cycle the biome immediately,
+                        // giving better feedback that something special happened.
+                        // (Optional: remove return if you want it to keep cycling while activating)
+                        return; 
+                    }
+
+                    // Standard Logic: Cycle to next biome
                     currentBiomeIndex = (currentBiomeIndex + 1) % biomes.length;
                     applyBiome(currentBiomeIndex);
                 });
