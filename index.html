@@ -210,18 +210,44 @@
             color: #aaa;
         }
 
-        /* ==================== BUTTONS ==================== */
-        .social-link, button, .download-button, .close-button {
+        /* ==================== BUTTONS & ACTION GROUP ==================== */
+        /* New Action Buttons Container for card footer */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: auto; /* Pushes buttons to bottom */
+            width: 100%;
+        }
+
+        .social-link, button, .download-button, .close-button, .feedback-button {
             font-family: 'Press Start 2P', cursive;
             display: inline-block; text-decoration: none;
-            color: var(--mc-blue); font-size: 12px; transition: all 0.3s;
+            font-size: 12px; transition: all 0.3s;
         }
+
+        /* Main Download Button */
         .mod-item .social-link {
             display: block; text-align: center; padding: 10px; 
             background: #222; border: 2px solid #444; color: white;
-            margin-top: auto; /* Push to bottom */
+            flex-grow: 1; /* Take up most space */
+            color: var(--mc-blue);
         }
-        .mod-item .social-link:hover { background: var(--mc-green); color: black; text-decoration: none; transform: none; border-color: var(--mc-green); }
+        .mod-item .social-link:hover { 
+            background: var(--mc-green); color: black; text-decoration: none; 
+            transform: none; border-color: var(--mc-green); 
+        }
+
+        /* New Feedback Button */
+        .feedback-button {
+            display: flex; justify-content: center; align-items: center;
+            width: 45px; /* Square button */
+            background: #222; border: 2px solid #444; color: #ffaa00;
+            cursor: pointer;
+        }
+        
+        .feedback-button:hover {
+            background: #ffaa00; color: #222; border-color: #ffaa00;
+        }
 
         /* ==================== SEARCH RESULTS ==================== */
         .search-results {
@@ -249,6 +275,78 @@
             box-shadow: 0 -4px rgba(0,0,0,0.2) inset; position: relative;
         }
         .close-button { background: #e63946; position: absolute; top: -15px; right: -15px; padding: 10px; font-size: 10px; z-index: 10; }
+
+        /* ==================== FEEDBACK MODAL (UPDATED STYLE) ==================== */
+        #feedbackModal .modal-content { 
+            max-width: 500px; 
+            text-align: left; 
+            background-color: #222; /* Darker background */
+            border: 4px solid #fff; /* Minecraft style border */
+            box-shadow: 0 0 0 4px #555; /* Double border effect */
+        }
+        #feedbackModal h3 { 
+            color: var(--mc-gold); 
+            text-align: center; 
+            margin-bottom: 25px; 
+            text-shadow: 2px 2px 0 #000;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        .form-label { 
+            display: block; 
+            color: var(--mc-green); 
+            margin-bottom: 8px; 
+            font-size: 10px; 
+            font-family: 'Press Start 2P', cursive; 
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%; 
+            padding: 12px; 
+            background: #111; 
+            border: 2px solid #555; 
+            color: #fff;
+            border-radius: 0; /* Minecraft style is sharp */
+            font-family: 'Press Start 2P', cursive; /* Pixel font */
+            font-size: 10px; 
+            line-height: 1.5;
+            box-sizing: border-box;
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus { 
+            border-color: var(--mc-gold); 
+            outline: none; 
+            background-color: #000;
+        }
+        
+        .form-textarea { resize: vertical; min-height: 120px; }
+
+        /* Custom Select Styling */
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            /* Custom White Arrow SVG */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            cursor: pointer;
+        }
+        
+        .send-btn {
+            width: 100%; background: var(--mc-blue); color: white; padding: 12px; border: none;
+            font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; margin-top: 10px;
+            box-shadow: 0 -4px rgba(0,0,0,0.2) inset;
+        }
+        .send-btn:hover { background: #4499ee; }
+        .send-btn:disabled { background: #555; cursor: not-allowed; }
 
         /* ==================== NEW "PAUSE MENU" OVERLAY (Replaces Sidebar) ==================== */
         .menu-overlay {
@@ -430,22 +528,17 @@
                 <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
                     <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
                     <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
-                    
-                    <!-- RATING SYSTEM BLOCK -->
                     <div class="rating-container" data-mod-id="QuickPortItems">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
-                    <!-- END RATING SYSTEM BLOCK -->
-
                     <p>Automate item transfer between chests instantly.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('QuickPort Items')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
                 
                 <!-- Item 2 -->
@@ -454,16 +547,15 @@
                     <h3>Instant Teleport <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="instantTeleport">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Teleport anywhere instantly with style.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Instant Teleport')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 3 -->
@@ -472,16 +564,15 @@
                     <h3>Handy Crafting <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="handyCrafting">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Carry crafting tables as items and open them anywhere!</p>
-                    <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Handy Crafting')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 4 -->
@@ -490,16 +581,15 @@
                     <h3>Chained Hearts <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="chainedHearts">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Link your hearts with a friend, share damage and healing.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Chained Hearts')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 5 -->
@@ -508,16 +598,15 @@
                     <h3>Soul Eggs <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="souleggs">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Catch and collect mobs just like Pokémon.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Soul Eggs')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 6 -->
@@ -526,16 +615,15 @@
                     <h3>Mob Hider <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="mobHider">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Hide inside any mob to troll your friends.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Mob Hider')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 7 -->
@@ -544,16 +632,15 @@
                     <h3>Ender Guardian <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="enderGuardian">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Saves your life when in battle or dying in silly ways.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Ender Guardian')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 8 -->
@@ -562,16 +649,15 @@
                     <h3>Pocket Waypoint <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="pocketwaypoint">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Save locations and teleport easily.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Pocket Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 9 -->
@@ -580,16 +666,15 @@
                     <h3>Wireless Hopper <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="wirlesshopper">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>No more cluttered hoppers and complex redstone.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Wireless Hopper')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 10 -->
@@ -598,16 +683,15 @@
                     <h3>Advanced Waypoint <span class="version-badge">1.21.70</span></h3>
                     <div class="rating-container" data-mod-id="advancedwaypoint">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Return home from great distances easily.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Advanced Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 11 -->
@@ -616,16 +700,15 @@
                     <h3>Land Claim <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="landclaim">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Protect your areas from other players.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Land Claim')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
         
                 <!-- Item 12 -->
@@ -634,16 +717,15 @@
                     <h3>Items Carrier <span class="version-badge">1.21.70</span></h3>
                     <div class="rating-container" data-mod-id="itemcarrier">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Move items from one chest to another.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Items Carrier')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
            
                 <!-- Item 13 -->
@@ -652,16 +734,15 @@
                     <h3>Health Bar <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="healthbar">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Show a heart counter for monsters and mobs.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Health Bar')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
 
                 <!-- Item 14 -->
@@ -670,16 +751,15 @@
                     <h3>Mob Catcher <span class="version-badge">1.21.120</span></h3>
                     <div class="rating-container" data-mod-id="mobcatcher">
                         <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i>
-                            <i class="fas fa-star star-btn" data-value="4"></i>
-                            <i class="fas fa-star star-btn" data-value="3"></i>
-                            <i class="fas fa-star star-btn" data-value="2"></i>
-                            <i class="fas fa-star star-btn" data-value="1"></i>
+                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
                         </div>
                         <span class="rating-score">Rate this!</span>
                     </div>
                     <p>Help you move monsters and mobs easily.</p>
-                    <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
+                    <div class="action-buttons">
+                        <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
+                        <button class="feedback-button" onclick="openFeedbackModal('Mob Catcher')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -743,6 +823,31 @@
                 <a href="#" class="download-button behavior-pack">Behavior Pack</a>
                 <a href="#" class="download-button resource-pack">Resource Pack</a>
             </div>
+        </div>
+    </div>
+    
+    <!-- FEEDBACK MODAL (NEW) -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <a href="#" class="close-button" onclick="closeFeedbackModal(event)">✕</a>
+            <h3>Submit Feedback</h3>
+            <div class="form-group">
+                <label class="form-label">Addon Name</label>
+                <input type="text" id="feedbackAddonName" class="form-input" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Type</label>
+                <select id="feedbackType" class="form-select">
+                    <option value="Bug Report">🐛 Bug Report</option>
+                    <option value="Suggestion">💡 Suggestion</option>
+                    <option value="Feedback">💭 General Feedback</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Message</label>
+                <textarea id="feedbackMessage" class="form-textarea" placeholder="Describe the issue or your idea..."></textarea>
+            </div>
+            <button class="send-btn" onclick="sendFeedback()">Send to Developer</button>
         </div>
     </div>
     
@@ -837,6 +942,74 @@
                 if(clickSound) {
                     clickSound.currentTime = 0;
                     try { await clickSound.play(); } catch (e) {}
+                }
+            };
+
+            // --- FEEDBACK SYSTEM LOGIC (NEW) ---
+            // Webhook URL (Note: Exposed to client-side)
+            const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1441830441530294404/LWfl3eEZrLIDbDjq_UQra9zCaoAYZwPxd-_1PZmryavCIGqWe_hfBkBGJn5q7B4E6G3S";
+            const feedbackModal = document.getElementById('feedbackModal');
+            const feedbackAddonName = document.getElementById('feedbackAddonName');
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            
+            // Exposed to global scope for inline onclicks
+            window.openFeedbackModal = function(addonName) {
+                playClickSound();
+                feedbackAddonName.value = addonName;
+                feedbackMessage.value = ''; // Clear previous message
+                feedbackModal.classList.add('active');
+                feedbackModal.style.display = 'flex';
+            };
+            
+            window.closeFeedbackModal = function(e) {
+                if(e) e.preventDefault();
+                feedbackModal.classList.remove('active');
+                setTimeout(() => feedbackModal.style.display = 'none', 300);
+            };
+            
+            window.sendFeedback = async function() {
+                const btn = document.querySelector('.send-btn');
+                const originalText = btn.textContent;
+                const addon = feedbackAddonName.value;
+                const type = document.getElementById('feedbackType').value;
+                const message = feedbackMessage.value;
+                
+                if(!message.trim()) {
+                    alert("Please enter a message!");
+                    return;
+                }
+                
+                btn.disabled = true;
+                btn.textContent = "Sending...";
+                
+                const payload = {
+                    embeds: [{
+                        title: `${type} for ${addon}`,
+                        color: type === 'Bug Report' ? 16711680 : (type === 'Suggestion' ? 16776960 : 5500000),
+                        fields: [
+                            { name: "Addon", value: addon, inline: true },
+                            { name: "Type", value: type, inline: true },
+                            { name: "Message", value: message }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                
+                try {
+                    await fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    alert("Feedback sent successfully! Thank you.");
+                    closeFeedbackModal();
+                } catch(err) {
+                    console.error(err);
+                    alert("Failed to send feedback. Please try again later.");
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
                 }
             };
 
