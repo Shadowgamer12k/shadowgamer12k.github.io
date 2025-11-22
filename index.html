@@ -1,513 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shadowGamer100k - Minecraft Add-ons</title>
+    <meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources.">
+    <meta name="keywords" content="Minecraft, add-ons, mods, resources, shadowGamer100k, Bedrock">
+    <meta name="author" content="shadowGamer100k">
+    <link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
+    
+    <!-- EXTERNAL LIBS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- ANALYTICS (Kept as requested) -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M2P94THH');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JKTG6N0GFN');
+    </script>
+    
+    <style>
+        /* ==================== CORE FONTS & VARIABLES ==================== */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        :root {
+            --mc-green: #55ff55;
+            --mc-blue: #55aaff;
+            --mc-dark: #2d2d2d;
+            --mc-border: #555;
+            --mc-gold: #ffaa00;
+            --bg-color: #313131;
+            --text-color: white;
+        }
 
-
-  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>shadowGamer100k - Minecraft Add-ons</title>
-<meta name="description" content="Visit shadowGamer100k for the latest Minecraft add-ons, mods, and resources to enhance your gaming experience.">
-<meta name="keywords" content="Minecraft, add-ons, mods, resources, shadowGamer100k, gaming, download Minecraft mods, best Minecraft add-ons, Minecraft add-ons for mobile, Minecraft bedrock mods, Minecraft Java Edition, top Minecraft mods, Minecraft tools, Minecraft skins, Minecraft textures, Minecraft gameplay, Minecraft tips, Minecraft guides, Minecraft latest mods, Minecraft resource packs, Minecraft furniture mods, Minecraft adventure maps, Minecraft survival mods, Minecraft PvP mods, Minecraft shaders, Minecraft optimization mods, Minecraft world-building mods, Minecraft world mods, Minecraft texture packs, Minecraft map downloads, Minecraft add-ons for Android, Minecraft best add-ons, Minecraft best mods, Minecraft community mods, Minecraft creator mods, Minecraft mods for iOS, Minecraft adventure maps, Minecraft modding community, Minecraft plugins, Minecraft server mods, Minecraft multiplayer mods, Minecraft building mods, Minecraft upgrades, Minecraft 1.20 add-ons, Minecraft 1.20 mods, Minecraft 1.21 mods, Minecraft mods download links, Minecraft modding tools, Minecraft Bedrock Edition, Minecraft Java mods, Minecraft creative mode mods, Minecraft building tools, Minecraft farming mods, Minecraft texture creators, Minecraft tutorial mods, Minecraft challenge mods, Minecraft multiplayer plugins, Minecraft server resources, Minecraft mod installation guides, Minecraft combat mods, Minecraft crafting recipes, Minecraft custom items, Minecraft item packs, Minecraft modding tutorials, Minecraft advanced add-ons, Minecraft premium mods, Minecraft unique mods, Minecraft gear mods, Minecraft weapons mods, Minecraft vehicle mods, Minecraft furniture items, Minecraft sandbox mods, Minecraft environmental mods, Minecraft upgrade mods, Minecraft story mods, Minecraft official mods, Minecraft custom game modes, Minecraft modding software, Minecraft modding tutorial for beginners, Minecraft modder tools, Minecraft mod installation guides, Minecraft modded servers, Minecraft modding plugins, Minecraft graphical mods, Minecraft downloadable content, Minecraft premium add-ons, Minecraft new mods, Minecraft 2025 mods, Minecraft skin creators, Minecraft sound packs, Minecraft music mods, Minecraft texture editors, Minecraft game modes, Minecraft custom textures, Minecraft realistic mods, Minecraft fantasy mods, Minecraft creative items, Minecraft resource creators, Minecraft hidden mods, Minecraft experimental mods">
-<meta name="author" content="shadowGamer100k">
-<link rel="icon" href="assets/images/avatarHead3.png" type="image/x-icon">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="styles.css">
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M2P94THH');</script>
-<!-- End Google Tag Manager -->
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JKTG6N0GFN');
-</script>
-  
-  <style>
-    footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1rem;
+        /* ==================== GLOBAL STYLES ==================== */
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
+            background-size: 30px 30px;
+            background-position: -5px -5px;
+            font-family: 'Press Start 2P', cursive;
+            color: var(--text-color);
             text-align: center;
-            border-top: 4px solid var(--mc-border);
-            margin-top: 3rem;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        footer a {
-            color: var(--mc-green);
-            text-decoration: none;
-            transition: all 0.2s ease;
+        h1 { font-size: 2em; margin: 20px 0; }
+        a { text-decoration: none; color: inherit; }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
 
-        footer a:hover {
-            text-shadow: 0 0 8px var(--mc-green);
-            text-decoration: underline;
+        /* ==================== NAVIGATION ==================== */
+        .minecraft-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c2c2c;
+            padding: 10px 15px;
+            margin: 20px auto;
+            border: 2px solid #555;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            max-width: 1200px;
         }
-/* Minecraft Navbar Styles */
-.minecraft-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2c2c2c;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border: 2px solid #555;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
-    position: relative;
-}
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            cursor: default;
+        }
+        
+        .nav-logo { width: 36px; height: 36px; margin-right: 10px; image-rendering: pixelated; }
+        .logo-text { font-size: 1.2rem; text-shadow: 2px 2px 0px #000; }
+        
+        .navbar-menu, .mobile-nav-icons { display: flex; gap: 10px; }
+        .mobile-nav-icons { display: none; }
 
-.navbar-logo {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
+        .nav-item, .nav-icon {
+            background-color: #3a3a3a;
+            color: #fff;
+            border: 2px solid #555;
+            padding: 8px 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+        }
 
-.nav-logo {
-    width: 36px;
-    height: 36px;
-    margin-right: 10px;
-    image-rendering: pixelated;
-}
+        .nav-icon { width: 40px; height: 40px; padding: 8px; display: flex; align-items: center; justify-content: center; }
+        .nav-item.active, .nav-icon.active { background-color: #555; border-color: #7e7e7e; box-shadow: 0 0 5px rgba(255,255,255,0.3); }
 
-.logo-text {
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-shadow: 2px 2px 0px #000;
-}
+        /* ==================== SEARCH & FILTERS ==================== */
+        .search-container { max-width: 1200px; margin: 0 auto 10px; padding: 0 15px; position: relative; }
+        .search-box {
+            display: flex; align-items: center; background-color: #2c2c2c;
+            border: 2px solid #555; border-radius: 8px; padding: 12px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;
+        }
+        .search-box:focus-within { border-color: #7e7e7e; }
+        .search-icon { color: #888; margin-right: 12px; }
+        .search-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; outline: none; font-family: Arial, sans-serif; }
+        .clear-search { background: #444; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: none; }
+        
+        .filter-container { display: flex; justify-content: flex-end; max-width: 1200px; margin: 15px auto 20px; padding: 0 15px; }
+        .sort-dropdown { position: relative; display: inline-block; }
+        .sort-button { background: #3a3a3a; color: #fff; border: 2px solid #555; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Press Start 2P', cursive; display: flex; align-items: center; gap: 8px; }
+        .sort-options { display: none; position: absolute; right: 0; top: 100%; background: #2c2c2c; border: 2px solid #555; z-index: 50; min-width: 150px; }
+        .sort-options.show { display: block; }
+        .sort-option { padding: 10px 15px; cursor: pointer; font-size: 12px; font-family: Arial, sans-serif; border-bottom: 1px solid #333; text-align: left; }
+        .sort-option:hover { background-color: #444; color: var(--mc-green); }
 
-#dropdown-arrow {
-    display: none; /* Hide by default on desktop */
-    font-size: 12px;
-    transition: transform 0.3s ease;
-    vertical-align: middle;
-}
+        /* ==================== CAROUSEL ==================== */
+        .featured-carousel { max-width: 1200px; margin: 0 auto 30px; padding: 0 15px; position: relative; }
+        .carousel-track { display: flex; gap: 20px; padding-bottom: 15px; overflow-x: auto; scrollbar-width: none; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .featured-item {
+            flex-shrink: 0; width: 350px; height: 250px;
+            background-size: cover; background-position: center;
+            border: 4px solid var(--mc-green); border-radius: 8px;
+            position: relative; overflow: hidden; transition: transform 0.3s ease;
+        }
+        .featured-item:hover { transform: scale(1.02); }
+        .featured-item-overlay { position: absolute; bottom: 0; width: 100%; padding: 10px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); text-align: left; box-sizing: border-box; }
+        .featured-item h4 { color: var(--mc-green); margin: 0; font-size: 16px; text-shadow: 1px 1px 0 #000; }
+        .featured-item p { color: #ddd; margin: 5px 0 0; font-size: 12px; font-family: Arial, sans-serif; }
+        
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+            background: rgba(0,0,0,0.7); border: 2px solid var(--mc-green); color: var(--mc-green);
+            padding: 10px 15px; cursor: pointer; display: none;
+        }
+        .carousel-arrow.left { left: 20px; }
+        .carousel-arrow.right { right: 20px; }
 
-.navbar-menu {
-    display: flex;
-    gap: 10px;
-}
+        /* ==================== MOD LIST & CARDS ==================== */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .mod-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; list-style: none; padding: 0; margin-top: 20px; }
+        
+        .mod-item {
+            background: #333; padding: 15px; border-radius: 5px; width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5); text-align: left;
+            border: 2px solid #555; position: relative; transition: transform 0.2s;
+            display: flex; flex-direction: column;
+        }
+        .mod-item:hover { transform: translateY(-5px); background-color: #3a3a3a; }
+        .mod-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 5px; border: 2px solid #222; }
+        .mod-item h3 { font-size: 14px; margin: 10px 0; color: var(--mc-green); line-height: 1.4; }
+        .mod-item p { font-size: 12px; line-height: 1.5; color: #ccc; flex-grow: 1; margin-bottom: 15px; }
+        
+        .version-badge, .news-badge, .social-badge {
+            background: #555; padding: 2px 5px; border-radius: 3px; font-size: 9px; margin-left: 5px; vertical-align: middle; color: white;
+        }
+        .news-badge { background: #aa55ff; }
+        .social-badge { background: var(--mc-blue); }
 
-.nav-item {
-    background-color: #3a3a3a;
-    color: #ffffff;
-    border: 2px solid #555;
-    padding: 8px 16px;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-shadow: 1px 1px 0px #000;
-}
+        /* ==================== RATING SYSTEM STYLES (NEW) ==================== */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        .stars-wrapper {
+            display: flex;
+            flex-direction: row-reverse; /* Magic trick for CSS-only hover from right to left logic */
+            margin-right: 8px;
+        }
 
-.nav-item:hover {
-    background-color: #4a4a4a;
-    transform: translateY(-2px);
-}
+        .star-btn {
+            font-size: 16px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 2px;
+        }
 
-.nav-item.active {
-    background-color: #555555;
-    border-color: #7e7e7e;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
+        /* Hover Effects: Highlight all stars to the left (visually) of hovered star */
+        .star-btn:hover,
+        .star-btn:hover ~ .star-btn {
+            color: #ffe600; /* Bright yellow on hover */
+        }
 
-/* Desktop - nothing changes here */
-@media screen and (min-width: 769px) {
-    .navbar-logo {
-        cursor: default;
-    }
-}
+        /* Active State: Highlight stars based on selected value (handled by JS class) */
+        .star-btn.active {
+            color: var(--mc-gold);
+        }
 
-/* Responsive styles for mobile */
-@media screen and (max-width: 768px) {
-    .navbar-menu {
-        position: absolute;
-        flex-direction: column;
-        width: 100%;
-        top: 60px;
-        left: 0;
-        background-color: #2c2c2c;
-        z-index: 100;
-        padding: 10px 0;
-        border-radius: 0 0 4px 4px;
-        border-top: 1px solid #555;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        display: none;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    .navbar-menu.show {
-        display: flex;
-    }
-    
-    .nav-item {
-        width: 90%;
-        margin: 5px auto;
-        text-align: center;
-        font-family: 'Press Start 2P', cursive;
-    }
-    
-    /* Show dropdown arrow on mobile */
-    #dropdown-arrow {
-        display: inline-block;
-        margin-left: 5px;
-    }
-    
-    /* Animation for dropdown */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-}
-    /* Search Bar Styles */
-.search-container {
-    max-width: 1200px;
-    margin: 0 auto 20px;
-    padding: 0 15px;
-    position: relative;
-}
+        .rating-score {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: #aaa;
+        }
 
-.search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background-color: #2c2c2c;
-    border: 2px solid #555;
-    border-radius: 8px;
-    padding: 12px 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
+        /* ==================== BUTTONS ==================== */
+        .social-link, button, .download-button, .close-button {
+            font-family: 'Press Start 2P', cursive;
+            display: inline-block; text-decoration: none;
+            color: var(--mc-blue); font-size: 12px; transition: all 0.3s;
+        }
+        .mod-item .social-link {
+            display: block; text-align: center; padding: 10px; 
+            background: #222; border: 2px solid #444; color: white;
+            margin-top: auto; /* Push to bottom */
+        }
+        .mod-item .social-link:hover { background: var(--mc-green); color: black; text-decoration: none; transform: none; border-color: var(--mc-green); }
 
-.search-box:focus-within {
-    border-color: #7e7e7e;
-    box-shadow: 0 0 15px rgba(126, 126, 126, 0.4);
-}
+        /* ==================== SEARCH RESULTS ==================== */
+        .search-results {
+            position: absolute; background: #2c2c2c; border: 2px solid #555; border-radius: 8px;
+            margin-top: 5px; max-height: 400px; overflow-y: auto; z-index: 1000; width: calc(100% - 30px);
+            left: 15px; display: none;
+        }
+        .search-results.active { display: block; }
+        .search-result-item { padding: 15px; border-bottom: 1px solid #444; display: flex; gap: 15px; cursor: pointer; }
+        .search-result-item:hover { background: #3a3a3a; }
+        .search-result-img { width: 60px; height: 60px; object-fit: cover; border: 2px solid #555; }
+        .search-result-info h4 { margin: 0 0 5px; font-size: 14px; }
+        .search-result-info p { margin: 0; font-size: 11px; color: #aaa; font-family: Arial, sans-serif; }
+        .no-results { padding: 20px; color: #888; font-size: 12px; }
 
-.search-icon {
-    color: #888;
-    font-size: 18px;
-    margin-right: 12px;
-}
+        /* ==================== MODAL ==================== */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { opacity: 1; }
+        .modal-content { width: 90%; max-width: 800px; background: #333; border: 4px solid var(--mc-border); padding: 20px; border-radius: 5px; position: relative; }
+        .modal-video { width: 100%; height: 400px; border: 4px solid white; }
+        .download-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        
+        .download-button, .close-button {
+            padding: 10px 20px; background: #008542; color: white; border: none; 
+            box-shadow: 0 -4px rgba(0,0,0,0.2) inset; position: relative;
+        }
+        .close-button { background: #e63946; position: absolute; top: -15px; right: -15px; padding: 10px; font-size: 10px; z-index: 10; }
 
-.search-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    outline: none;
-    font-family: Arial, sans-serif;
-}
-
-.search-input::placeholder {
-    color: #666;
-}
-
-.clear-search {
-    background: #444;
-    border: none;
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease;
-}
-
-.clear-search:hover {
-    background: #555;
-    transform: scale(1.1);
-}
-
-.search-results {
-    position: absolute;
-    background-color: #2c2c2c;
-    border: 2px solid #555;
-    border-radius: 8px;
-    margin-top: 5px;
-    max-height: 400px;
-    overflow-y: auto;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1000;
-    width: calc(100% - 30px);
-    left: 15px;
-}
-
-.search-results.active {
-    display: block;
-}
-
-.search-result-item {
-    padding: 15px;
-    border-bottom: 1px solid #444;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.search-result-item:hover {
-    background-color: #3a3a3a;
-}
-
-.search-result-item:last-child {
-    border-bottom: none;
-}
-
-.search-result-img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 2px solid #555;
-}
-
-.search-result-info {
-    flex: 1;
-}
-
-.search-result-info h4 {
-    margin: 0 0 5px 0;
-    color: #fff;
-    font-size: 14px;
-}
-
-.search-result-info p {
-    margin: 0;
-    color: #aaa;
-    font-size: 11px;
-    font-family: Arial, sans-serif;
-}
-
-.no-results {
-    padding: 20px;
-    text-align: center;
-    color: #888;
-    font-size: 12px;
-}
-</style>
+        /* ==================== SIDEBAR ==================== */
+        #sidebar {
+            position: fixed; right: -300px; top: 0; width: 260px; height: 100%;
+            background: #1c1c1c; padding: 20px; z-index: 3000; transition: right 0.3s;
+            border-left: 2px solid var(--mc-border);
+        }
+        #sidebar.show { right: 0; }
+        #toggleSidebarBtn { position: fixed; bottom: 20px; right: 20px; padding: 15px; background: #333; border: 2px solid #fff; cursor: pointer; z-index: 3001; font-size: 20px; border-radius: 50%; }
+        
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .navbar-menu { display: none; }
+            .mobile-nav-icons { display: flex; }
+            .featured-item { width: 90vw; }
+            .carousel-arrow { display: block; }
+            .mod-item { width: 100%; max-width: 400px; }
+        }
+        @media (min-width: 769px) {
+            .navbar-menu { display: flex !important; }
+            .carousel-arrow { display: none !important; }
+        }
+        
+        footer { padding: 2rem; margin-top: 3rem; border-top: 4px solid var(--mc-border); background: rgba(0,0,0,0.8); font-size: 10px; }
+        footer a { color: var(--mc-green); }
+    </style>
 </head>
 <body>
-   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-
-
-    
-
-    
-    <!-- Click sound element -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
 
-<nav class="minecraft-navbar">
-    <div class="navbar-logo" id="navbarLogo">
-        <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
-        <span class="logo-text">shadowGamer100k <span id="dropdown-arrow">▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼</span></span>
+    <!-- NAVIGATION -->
+    <nav class="minecraft-navbar">
+        <div class="navbar-logo">
+            <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
+            <span class="logo-text">Projects</span>
+        </div>
+        <div class="mobile-nav-icons">
+            <button class="nav-icon active" data-target="projects"><i class="fas fa-scroll"></i></button>
+            <button class="nav-icon" data-target="social"><i class="fas fa-users"></i></button>
+            <button class="nav-icon" data-target="news"><i class="fas fa-newspaper"></i></button>
+        </div>
+        <div class="navbar-menu">
+            <button class="nav-item active" data-target="projects">PROJECTS</button>
+            <button class="nav-item" data-target="social">SOCIAL</button>
+            <button class="nav-item" data-target="news">NEWS</button>
+        </div>
+    </nav>
+    
+    <!-- SEARCH -->
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
+            <button id="clearSearch" class="clear-search">✕</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
     </div>
     
-    <div class="navbar-menu" id="navbarMenu">
-        <button role="tab" class="nav-item active" data-target="projects">PROJECTS</button>
-        <button role="tab" class="nav-item" data-target="social">SOCIAL</button>
-        <button role="tab" class="nav-item" data-target="news">NEWS</button>
-    </div>
-</nav>
-<!-- Search Bar -->
-<div class="search-container">
-    <div class="search-box">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
-        <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
-    </div>
-    <div id="searchResults" class="search-results"></div>
-</div>
-
- 
     <div class="container">
-        <!-- Projects Tab Content -->
+        <!-- PROJECTS TAB -->
         <div id="projects" class="tab-content active">
-           
-                <ul class="mod-list">
-  <div data-banner-id="6062006"></div>
+            <!-- Sorting -->
+            <div class="filter-container">
+                <div class="sort-dropdown">
+                    <button class="sort-button" id="sortButton">
+                        <i class="fas fa-fire"></i> Sort: <span id="currentSortText">Trending</span>
+                    </button>
+                    <div class="sort-options" id="sortOptions">
+                        <div class="sort-option" data-sort="trending"><i class="fas fa-fire"></i> Trending</div>
+                        <div class="sort-option" data-sort="newest"><i class="fas fa-star"></i> Newest</div>
+                        <div class="sort-option" data-sort="popular"><i class="fas fa-download"></i> Popular</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel -->
+            <div class="featured-carousel">
+                <button class="carousel-arrow left" id="carouselLeftArrow"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel-track" id="carouselTrack">
+                    <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" class="featured-item" style="background-image: url('assets/images/postsImages/QuickPortItems.webp');">
+                        <div class="featured-item-overlay"><h4>QuickPort Items <span class="version-badge">FEATURED</span></h4><p>Automate item transfer!</p></div>
+                    </a>
+                    <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" class="featured-item" style="background-image: url('assets/images/postsImages/instantTeleport.webp');">
+                        <div class="featured-item-overlay"><h4>Instant Teleport <span class="version-badge">HOT</span></h4><p>Teleport anywhere instantly.</p></div>
+                    </a>
+                    <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" class="featured-item" style="background-image: url('assets/images/postsImages/souleggs.webp');">
+                        <div class="featured-item-overlay"><h4>Soul Eggs <span class="version-badge">PICK</span></h4><p>Catch mobs like Pokémon.</p></div>
+                    </a>
+                </div>
+                <button class="carousel-arrow right" id="carouselRightArrow"><i class="fas fa-chevron-right"></i></button>
+            </div>
 
-                   <!-- QuickPortItems Post -->
-                     <li id='QuickPortItems' class="mod-item">
+            <!-- Mod List with Rating System -->
+            <ul class="mod-list" id="projectModList">
+                <!-- Item 1 -->
+                <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
                     <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
-                    <h3>QuickPort Items<span class="version-badge">support 1.21.120</span></h3>
-                    <p>This addon enables automatic item transfer between chests....</p>
-                      <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
+                    
+                    <!-- RATING SYSTEM BLOCK -->
+                    <div class="rating-container" data-mod-id="QuickPortItems">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <!-- END RATING SYSTEM BLOCK -->
+
+                    <p>Automate item transfer between chests instantly.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
                 </li>
-                  
-                    <!-- instantTeleport Post -->
-                     <li id='instantTeleport' class="mod-item">
+                
+                <!-- Item 2 -->
+                <li id='instantTeleport' class="mod-item" data-downloads="8000" data-date="2025-05-01">
                     <img src="assets/images/postsImages/instantTeleport.webp" alt="instantTeleport">
-                    <h3>Instant Teleport<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Instant Teleport is a powerful and stylish addon that gives players the ability to teleport anywhere instantly...</p>
-                      <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Instant Teleport <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="instantTeleport">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Teleport anywhere instantly with style.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
                 </li>
 
-                  <!-- Handy Crafting Post -->
-                     <li id='handyCrafting' class="mod-item">
+                <!-- Item 3 -->
+                <li id='handyCrafting' class="mod-item" data-downloads="4000" data-date="2025-04-20">
                     <img src="assets/images/postsImages/handyCrafting.webp" alt="handyCrafting">
-                    <h3>Handy Crafting<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Carry crafting tables as items and open them anywhere! Capture tables with a stick...</p>
-                      <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
-                </li>
-                  
-                   <!-- Chained Hearts Post -->
-                     <li id='chainedHearts' class="mod-item">
-                    <img src="assets/images/postsImages/chainedHearts.webp" alt="chainedHearts">
-                    <h3>Chained Hearts<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Link your hearts with a friend share damage and healing so you live and die together. Perfect for co-op challenges and Realms...</p>
-                      <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
-                </li>
-                  
-                    <!-- Soul eggs Post -->
-                     <li id='souleggs' class="mod-item">
-                    <img src="assets/images/postsImages/souleggs.webp" alt="souleggs">
-                    <h3>Soul Eggs<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Ever dreamed of catching mobs just like Pokémon? With SoulEggs, now...</p>
-                      <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
-                </li>
-                  
-                   <!-- Mob Hider Post -->
-                     <li id='mobHider' class="mod-item">
-                    <img src="assets/images/postsImages/MobHider.webp" alt="mobHider">
-                    <h3>Mob hider<span class="version-badge">support 1.21.120</span></h3>
-                    <p>this addon add a tool that lets you hide inside any mob you want even if it is in another addon this will help you hide and troll you friends</p>
-                      <a href="https://shadowgamer12k.github.io/posts/mobHider.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
-                </li>
-                  
-                   <!-- Ender Guardian Post -->
-                     <li id='enderGuardian' class="mod-item"> 
-                    <img src="assets/images/postsImages/enderGuardian.webp" alt="enderGuardian">
-                    <h3>Ender Guardian<span class="version-badge">support 1.21.120</span></h3>
-                    <p>This addon will save your life when you are in battle with mobs or dying in silly ways...see more</p>
-                  <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
-                </li>
-                  
-                   <!-- pocket waypointr Post -->
-                     <li id='pocketwaypoint' class="mod-item"> 
-                    <img src="assets/images/pocketwaypoint.webp" alt="pocketwaypoint">
-                    <h3>Pocket Waypoint<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Pocket Waypoint is a Minecraft PE addon that allows players to save and teleport...see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Handy Crafting <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="handyCrafting">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Carry crafting tables as items and open them anywhere!</p>
+                    <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
                 </li>
 
-                   <!-- Wireless Hopper Post -->
-                     <li id='wirlesshopper' class="mod-item"> 
+                <!-- Item 4 -->
+                <li id='chainedHearts' class="mod-item" data-downloads="2500" data-date="2025-04-10">
+                    <img src="assets/images/postsImages/chainedHearts.webp" alt="chainedHearts">
+                    <h3>Chained Hearts <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="chainedHearts">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Link your hearts with a friend, share damage and healing.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
+                </li>
+
+                <!-- Item 5 -->
+                <li id='souleggs' class="mod-item" data-downloads="10000" data-date="2025-03-25">
+                    <img src="assets/images/postsImages/souleggs.webp" alt="souleggs">
+                    <h3>Soul Eggs <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="souleggs">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Catch and collect mobs just like Pokémon.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
+                </li>
+
+                <!-- Item 6 -->
+                <li id='mobHider' class="mod-item" data-downloads="3000" data-date="2025-03-15">
+                    <img src="assets/images/postsImages/MobHider.webp" alt="mobHider">
+                    <h3>Mob Hider <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="mobHider">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Hide inside any mob to troll your friends.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
+                </li>
+
+                <!-- Item 7 -->
+                <li id='enderGuardian' class="mod-item" data-downloads="1200" data-date="2025-03-05"> 
+                    <img src="assets/images/postsImages/enderGuardian.webp" alt="enderGuardian">
+                    <h3>Ender Guardian <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="enderGuardian">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Saves your life when in battle or dying in silly ways.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
+                </li>
+
+                <!-- Item 8 -->
+                <li id='pocketwaypoint' class="mod-item" data-downloads="7000" data-date="2025-02-20"> 
+                    <img src="assets/images/pocketwaypoint.webp" alt="pocketwaypoint">
+                    <h3>Pocket Waypoint <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="pocketwaypoint">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Save locations and teleport easily.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
+                </li>
+
+                <!-- Item 9 -->
+                <li id='wirlesshopper' class="mod-item" data-downloads="12000" data-date="2025-02-10"> 
                     <img src="assets/images/hopper.webp" alt="wirlesshopper">
-                    <h3>Wireless Hopper<span class="version-badge">support 1.21.120</span></h3>
-                    <p>Tired of cluttered hoppers and complex redstone setups?...see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Wireless Hopper <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="wirlesshopper">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>No more cluttered hoppers and complex redstone.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
                 </li>
-                  
-                      <!-- Advanced Waypoint Post -->
-                     <li id='advancedwaypoint' class="mod-item"> 
+
+                <!-- Item 10 -->
+                <li id='advancedwaypoint' class="mod-item" data-downloads="1500" data-date="2025-02-01"> 
                     <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
-                    <h3>Advanced Waypoint<span class="version-badge">support 1.21.70</span></h3>
-                    <p>Tired of traveling the great distances to return home or to your village in Minecraft?...see more</p>
-                   <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Advanced Waypoint <span class="version-badge">1.21.70</span></h3>
+                    <div class="rating-container" data-mod-id="advancedwaypoint">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Return home from great distances easily.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
                 </li>
-                   
-                    <!-- Land claim Post -->
-                     <li id='landclaim' class="mod-item"> 
+
+                <!-- Item 11 -->
+                <li id='landclaim' class="mod-item" data-downloads="900" data-date="2025-01-25"> 
                     <img src="assets/images/landClaim.webp" alt="Land Claim">
-                    <h3>Land Claim <span class="version-badge">support 1.21.120</span></h3>
-                    <p>Protect your areas from other players...see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/landclaim.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Land Claim <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="landclaim">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Protect your areas from other players.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
                 </li>
         
-                <!-- Item Carrier Post -->
-                <li id='itemcarrier' class="mod-item"> 
+                <!-- Item 12 -->
+                <li id='itemcarrier' class="mod-item" data-downloads="500" data-date="2025-01-15"> 
                     <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
-                    <h3>Items Carrier <span class="version-badge">support 1.21.70</span></h3>
-                    <p>This addon will help you move items from one chest to another...see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Items Carrier <span class="version-badge">1.21.70</span></h3>
+                    <div class="rating-container" data-mod-id="itemcarrier">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Move items from one chest to another.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
                 </li>
            
-                <!-- Health Bar Post -->
-                <li id='healthbar' class="mod-item">
+                <!-- Item 13 -->
+                <li id='healthbar' class="mod-item" data-downloads="1100" data-date="2025-01-05">
                     <img src="assets/images/HealthBar.webp" alt="Health Bar">
-                    <h3>Health Bar <span class="version-badge">support 1.21.120</span></h3>
-                    <p>This addon will show you a heart counter for monsters and mobs....see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/healthbar.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Health Bar <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="healthbar">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Show a heart counter for monsters and mobs.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
                 </li>
 
-                <!-- Mob Catcher Post -->
-                <li id='mobcatcher' class="mod-item"> 
+                <!-- Item 14 -->
+                <li id='mobcatcher' class="mod-item" data-downloads="2000" data-date="2025-01-01"> 
                     <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
-                    <h3>Mob Catcher <span class="version-badge">support 1.21.120</span></h3>
-                    <p>This addon will help you move monsters and mobs...see more</p>
-                 <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" rel="noopener noreferrer" target="_blank" class="social-link">Click To Downlaod</a>
+                    <h3>Mob Catcher <span class="version-badge">1.21.120</span></h3>
+                    <div class="rating-container" data-mod-id="mobcatcher">
+                        <div class="stars-wrapper">
+                            <i class="fas fa-star star-btn" data-value="5"></i>
+                            <i class="fas fa-star star-btn" data-value="4"></i>
+                            <i class="fas fa-star star-btn" data-value="3"></i>
+                            <i class="fas fa-star star-btn" data-value="2"></i>
+                            <i class="fas fa-star star-btn" data-value="1"></i>
+                        </div>
+                        <span class="rating-score">Rate this!</span>
+                    </div>
+                    <p>Help you move monsters and mobs easily.</p>
+                    <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
                 </li>
-
-                <!-- Advanced store Post -->
-              <!--  <li class="mod-item" 
-                    data-video="https://www.youtube.com/embed/gGJXHF2DGnw?si=9GwytgP8P3kpyI16"
-                    data-description="This addon will facilitate trade on your server and will make your server the best server for selling, as well as provide protection to protect the goods and make the buyer pay accordingly"
-                    data-behavior="https://direct-link.net/642753/advancedstore"
-                    data-resource="https://link-target.net/642753/adcanedstorers">
-                    <img src="assets/images/AdvancedStore.webp" alt="Mob Catcher">
-                    <h3>Advanced store <span class="version-badge">v2.5.3</span></h3>
-                    <p>This addon will facilitate trade on your server and will make your server the best server for selling...see more</p>
-                </li> -->
-                   
             </ul>
         </div>
 
-        <!-- Social Tab Content -->
+        <!-- SOCIAL TAB -->
         <div id="social" class="tab-content">
             <ul class="mod-list">
                 <li class="mod-item social-item">
                     <img src="assets/images/youtube.png" alt="YouTube">
                     <h3>YouTube <span class="social-badge">Videos</span></h3>
                     <p>Watch our tutorials</p>
-                    <a href="https://www.youtube.com/@shadowgamer100k" rel="noopener noreferrer" target="_blank" class="social-link">click here to Visit Channel</a>
+                    <a href="https://www.youtube.com/@shadowgamer100k" target="_blank" class="social-link">Visit Channel</a>
                 </li>
-                
                 <li class="mod-item social-item">
                     <img src="assets/images/discord.png" alt="Discord">
                     <h3>Discord <span class="social-badge">Community</span></h3>
                     <p>Join our server</p>
-                    <a href="http://bit.ly/4fUVc9H" class="social-link">click here to Join Server</a>
+                    <a href="http://bit.ly/4fUVc9H" target="_blank" class="social-link">Join Server</a>
                 </li>
-
                 <li class="mod-item social-item">
-                    <img src="assets/images/paypal.png" alt="Discord">
-                    <h3>PayPal <span class="social-badge">support</span></h3>
-                    <p>support me :P</p>
-                    <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" class="social-link">click here to support</a>
+                    <img src="assets/images/paypal.png" alt="PayPal">
+                    <h3>PayPal <span class="social-badge">Support</span></h3>
+                    <p>Support the creator</p>
+                    <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" target="_blank" class="social-link">Donate</a>
                 </li>
-
                  <li class="mod-item social-item">
-                    <img src="assets/images/coffe.png" alt="Discord">
-                    <h3>Buy me a Coffee <span class="social-badge">support</span></h3>
+                    <img src="assets/images/coffe.png" alt="Buy me a Coffee">
+                    <h3>Buy me a Coffee <span class="social-badge">Support</span></h3>
                     <p>Buy me a Coffee</p>
-                    <a href="https://buymeacoffee.com/shadowjamak" class="social-link">click here to support</a>
+                    <a href="https://buymeacoffee.com/shadowjamak" target="_blank" class="social-link">Donate</a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- NEWS TAB -->
+        <div id="news" class="tab-content">
+            <ul class="mod-list">
+                 <li class="mod-item news-item">
+                    <img src="assets/images/news.png" alt="Addon Updates">
+                    <h3>Addon Updates <span class="news-badge">Update</span></h3>
+                    <span class="news-date">13 Feb 2025</span>
+                    <p>All addons updated to 1.21.60 except advanced shop.</p>
+                </li>
+                <li class="mod-item news-item">
+                    <img src="assets/images/news.png" alt="Official Website Launch">
+                    <h3>Website Launch <span class="news-badge">New</span></h3>
+                    <span class="news-date">3 Feb 2025</span>
+                    <p>Today is the first day of the site's creation.</p>
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- MODAL -->
     <div class="modal">
         <div class="modal-content">
-            <a href="#" class="close-button">Close</a>
-             <p></p> 
+            <a href="#" class="close-button">✕</a>
             <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
             <div class="modal-description"></div>
             <div class="download-buttons">
@@ -516,666 +665,256 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
     </div>
+    
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 shadowGamer12k. All rights reserved. 
+            <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy</a> | 
+            <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms</a>
+        </p>
+    </footer>
 
- <!-- News Tab Content -->
-        <div id="news" class="tab-content">
-            <ul class="mod-list">
-                 <li class="mod-item">
-                    <img src="assets/images/news.png" alt="News 1">
-                    <h3>addon updates <span class="version-badge">start</span></h3>
-                    <span class="news-date">13 Feb 2025</span>
-                    <p>all the addons has updated to 1.21.60 execpt for advanced shop</p>
-                </li>
-                <li class="mod-item">
-                    <img src="assets/images/news.png" alt="News 1">
-                    <h3>Official Website <span class="version-badge">start</span></h3>
-                    <span class="news-date">3 Feb 2025</span>
-                    <p>Today is the first day of the site's creation</p>
-                </li>
-            </ul>
-        </div>
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <h3>Site Index</h3>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="posts/soulEggs.html">Soul Eggs</a></li>
+            <li><a href="posts/mobHider.html">Mob Hider</a></li>
+            <li><a href="posts/enderGuardian.html">Ender Guardian</a></li>
+            <li><a href="posts/pocketwaypoint.html">Pocket Waypoint</a></li>
+            <li><a href="posts/wirlesshopper.html">Wireless Hopper</a></li>
+            <li><a href="posts/advancedwaypoint.html">Advanced Waypoint</a></li>
+            <li><a href="posts/landclaim.html">Land Claim</a></li>
+            <li><a href="posts/itemcarrier.html">Items Carrier</a></li>
+            <li><a href="posts/healthbar.html">Health Bar</a></li>
+            <li><a href="posts/mobcatcher.html">Mob Catcher</a></li>
+        </ul>
+    </div>
+    <div id="toggleSidebarBtn">☰</div>
+
+    <!-- SCRIPTS -->
     <script>
-
-// Search functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const clearSearch = document.getElementById('clearSearch');
-    const searchResults = document.getElementById('searchResults');
-    
-    // All addon data
-    const addons = [
-        {
-            id: 'souleggs',
-            name: 'Soul Eggs',
-            description: 'Ever dreamed of catching mobs just like Pokémon? With SoulEggs, now you can catch and collect mobs!',
-            img: 'assets/images/postsImages/souleggs.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/soulEggs.html'
-        },
-        {
-            id: 'mobHider',
-            name: 'Mob Hider',
-            description: 'This addon adds a tool that lets you hide inside any mob you want, perfect for trolling friends',
-            img: 'assets/images/postsImages/MobHider.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/mobHider.html'
-        },
-        {
-            id: 'enderGuardian',
-            name: 'Ender Guardian',
-            description: 'This addon will save your life when you are in battle with mobs or dying in silly ways',
-            img: 'assets/images/postsImages/enderGuardian.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/enderGuardian.html'
-        },
-        {
-            id: 'pocketwaypoint',
-            name: 'Pocket Waypoint',
-            description: 'Pocket Waypoint is a Minecraft PE addon that allows players to save and teleport to locations',
-            img: 'assets/images/pocketwaypoint.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/pocketwaypoint.html'
-        },
-        {
-            id: 'wirlesshopper',
-            name: 'Wireless Hopper',
-            description: 'Tired of cluttered hoppers and complex redstone setups? This addon is for you!',
-            img: 'assets/images/hopper.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/wirlesshopper.html'
-        },
-        {
-            id: 'advancedwaypoint',
-            name: 'Advanced Waypoint',
-            description: 'Tired of traveling great distances to return home or to your village in Minecraft?',
-            img: 'assets/images/waypoint.webp',
-            version: 'support 1.21.70',
-            link: 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html'
-        },
-        {
-            id: 'landclaim',
-            name: 'Land Claim',
-            description: 'Protect your areas from other players with this powerful land protection addon',
-            img: 'assets/images/landClaim.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/landclaim.html'
-        },
-        {
-            id: 'itemcarrier',
-            name: 'Items Carrier',
-            description: 'This addon will help you move items from one chest to another easily',
-            img: 'assets/images/ItemsCarrier.webp',
-            version: 'support 1.21.70',
-            link: 'https://shadowgamer12k.github.io/posts/itemcarrier.html'
-        },
-        {
-            id: 'healthbar',
-            name: 'Health Bar',
-            description: 'This addon will show you a heart counter for monsters and mobs',
-            img: 'assets/images/HealthBar.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/healthbar.html'
-        },
-        {
-            id: 'mobcatcher',
-            name: 'Mob Catcher',
-            description: 'This addon will help you catch and move monsters and mobs anywhere',
-            img: 'assets/images/MobCatcher.webp',
-            version: 'support 1.21.111',
-            link: 'https://shadowgamer12k.github.io/posts/mobcatcher.html'
-        }
-    ];
-    
-    // Filter addons based on search
-    function filterAddons(query) {
-        query = query.toLowerCase().trim();
-        
-        if (!query) {
-            return [];
-        }
-        
-        return addons.filter(addon => 
-            addon.name.toLowerCase().includes(query) ||
-            addon.description.toLowerCase().includes(query) ||
-            addon.id.toLowerCase().includes(query)
-        );
-    }
-    
-    // Display search results
-    function displayResults(results) {
-        searchResults.innerHTML = '';
-        
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="no-results">No addons found</div>';
-            searchResults.classList.add('active');
-            return;
-        }
-        
-        results.forEach(addon => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'search-result-item';
-            resultItem.innerHTML = `
-                <img src="${addon.img}" alt="${addon.name}" class="search-result-img">
-                <div class="search-result-info">
-                    <h4>${addon.name} <span style="color: #888; font-size: 10px;">${addon.version}</span></h4>
-                    <p>${addon.description}</p>
-                </div>
-            `;
+        // ====================================================================
+        //                             MAIN LOGIC
+        // ====================================================================
+        document.addEventListener('DOMContentLoaded', function() {
             
-            resultItem.addEventListener('click', () => {
-                playClickSound();
-                window.location.href = addon.link;
-            });
-            
-            searchResults.appendChild(resultItem);
-        });
-        
-        searchResults.classList.add('active');
-    }
-    
-    // Search input event
-    searchInput.addEventListener('input', function() {
-        const query = this.value;
-        
-        if (query.trim()) {
-            clearSearch.style.display = 'block';
-            const results = filterAddons(query);
-            displayResults(results);
-        } else {
-            clearSearch.style.display = 'none';
-            searchResults.classList.remove('active');
-        }
-    });
-    
-    // Clear search
-    clearSearch.addEventListener('click', function() {
-        playClickSound();
-        searchInput.value = '';
-        clearSearch.style.display = 'none';
-        searchResults.classList.remove('active');
-        searchInput.focus();
-    });
-    
-    // Close search results when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !clearSearch.contains(e.target)) {
-            searchResults.classList.remove('active');
-        }
-    });
-    
-    // Close search results on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            searchResults.classList.remove('active');
-            searchInput.blur();
-        }
-    });
-});
-
-
-      
-document.addEventListener('DOMContentLoaded', function() {
-    const navbarLogo = document.getElementById('navbarLogo');
-    const navbarMenu = document.getElementById('navbarMenu');
-    const dropdownArrow = document.getElementById('dropdown-arrow');
-    
-    if (navbarLogo && navbarMenu) {
-        // Only add click functionality on mobile
-        navbarLogo.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                if (typeof playClickSound === 'function') {
-                    playClickSound();
+            // --- GLOBAL SOUND ---
+            const clickSound = document.getElementById('clickSound');
+            const playClickSound = async () => {
+                if(clickSound) {
+                    clickSound.currentTime = 0;
+                    try { await clickSound.play(); } catch (e) {}
                 }
-                navbarMenu.classList.toggle('show');
+            };
+
+            // --- RATING SYSTEM LOGIC ---
+            function initRatingSystem() {
+                const ratingContainers = document.querySelectorAll('.rating-container');
                 
-                // Rotate the arrow
-                if (navbarMenu.classList.contains('show')) {
-                    dropdownArrow.style.transform = 'rotate(180deg)';
-                } else {
-                    dropdownArrow.style.transform = 'rotate(0deg)';
-                }
-            }
-        });
-    }
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 768) {
-            if (!navbarLogo.contains(event.target) && !navbarMenu.contains(event.target)) {
-                navbarMenu.classList.remove('show');
-                dropdownArrow.style.transform = 'rotate(0deg)';
-            }
-        }
-    });
-    
-    // Handle tab clicks
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function() {
-            if (typeof playClickSound === 'function') {
-                playClickSound();
-            }
-            
-            // Remove active class from all tabs and tab contents
-            navItems.forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Add active class to clicked tab
-            this.classList.add('active');
-            
-            // Activate corresponding tab content
-            const target = this.getAttribute('data-target');
-            const targetContent = document.getElementById(target);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-            
-            // Close mobile menu
-            navbarMenu.classList.remove('show');
-            dropdownArrow.style.transform = 'rotate(0deg)';
-        });
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            navbarMenu.classList.remove('show');
-            dropdownArrow.style.transform = 'rotate(0deg)';
-        }
-    });
-});
+                ratingContainers.forEach(container => {
+                    const modId = container.dataset.modId;
+                    const scoreText = container.querySelector('.rating-score');
+                    const stars = container.querySelectorAll('.star-btn');
+                    
+                    // Load saved rating
+                    const savedRating = localStorage.getItem(`rating_${modId}`);
+                    if (savedRating) {
+                        updateStars(stars, savedRating);
+                        scoreText.textContent = `You rated: ${savedRating}/5`;
+                        container.dataset.userRated = "true";
+                    }
 
+                    // Add click events
+                    stars.forEach(star => {
+                        star.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation(); // Prevent card click
+                            playClickSound();
 
-       
-(function() {
-    const detectors = {
-        blockedRequests: async () => {
-            try {
-                const testUrls = [
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                    'https://adservice.google.com/adsid/integrator.js',
-                    'https://cdn.taboola.com/libtrc/unip/'
-                ];
-
-                const results = await Promise.all(
-                    testUrls.map(url => 
-                        fetch(url, {method: 'HEAD'})
-                        .then(() => false)
-                        .catch(() => true)
-                    )
-                );
-
-                return results.filter(x => x).length >= 2;
-            } catch {
-                return false;
-            }
-        },
-
-        hiddenElements: () => {
-            const testElement = document.getElementById('ad-test');
-            return testElement && 
-                (testElement.offsetHeight === 0 ||
-                 window.getComputedStyle(testElement).display === 'none');
-        },
-
-        detectExtensions: () => {
-            const extensionSignatures = {
-                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
-                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
-                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
-                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
-            };
-
-            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
-        },
-
-        checkChromeExtensions: async () => {
-            if (typeof chrome === 'undefined') return null;
-            
-            const extensionIds = {
-                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
-            };
-
-            try {
-                for (const [name, id] of Object.entries(extensionIds)) {
-                    const exists = await new Promise(resolve => {
-                        chrome.runtime.sendMessage(id, {}, (response) => {
-                            resolve(chrome.runtime.lastError ? false : true);
+                            const value = this.dataset.value;
+                            localStorage.setItem(`rating_${modId}`, value);
+                            updateStars(stars, value);
+                            scoreText.textContent = `You rated: ${value}/5`;
+                            
+                            // Optional: Add a little animation
+                            scoreText.style.color = "var(--mc-green)";
+                            setTimeout(() => scoreText.style.color = "#aaa", 500);
                         });
                     });
-                    if (exists) return name;
-                }
-            } catch {}
-            return null;
-        }
-    };
-
-    async function detectAdBlock() {
-        const results = await Promise.all([
-            detectors.blockedRequests(),
-            detectors.hiddenElements(),
-            detectors.detectExtensions(),
-            detectors.checkChromeExtensions()
-        ]);
-
-        return {
-            detected: results.some(r => r),
-            extension: results.find(r => typeof r === 'string') || 'unknown'
-        };
-    }
-
-    function showAdblockModal(extension) {
-            const modal = document.querySelector('.adblock-modal');
-            const overlay = document.querySelector('.adblock-overlay');
-            const resultDiv = document.getElementById('adblock-result');
-            
-            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                                <small>(Please disable to continue)</small>`;
-            modal.style.display = 'block';
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        document.getElementById('recheck-button').addEventListener('click', async () => {
-            const { detected, extension } = await detectAdBlock();
-            if (!detected) {
-                document.querySelector('.adblock-modal').style.display = 'none';
-                document.querySelector('.adblock-overlay').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-    // Initial check
-    setTimeout(async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (detected) showAdblockModal(extension);
-    }, 2000);
-
-    // Continuous background check
-    setInterval(async () => {
-        const { detected, extension } = await detectAdBlock();
-        const modal = document.querySelector('.adblock-modal');
-        
-        if (detected && modal.style.display === 'none') {
-            showAdblockModal(extension);
-        }
-    }, 5000);
-})();
-        
-        const clickSound = document.getElementById('clickSound');
-        
-       async function playClickSound() {
-    try {
-        clickSound.currentTime = 0;
-        await clickSound.play();
-    } catch (error) {
-        console.log('Audio error:', error);
-    }
-}
-
-        // Tab functionality
-        document.querySelectorAll('[role="tab"]').forEach(tab => {
-            tab.addEventListener('click', () => {
-                playClickSound();
-                const target = tab.dataset.target;
-                document.querySelectorAll('[role="tab"], .tab-content').forEach(el => {
-                    el.classList.remove('active');
                 });
-                tab.classList.add('active');
-                document.getElementById(target).classList.add('active');
+            }
+
+            // Helper to fill stars based on value
+            function updateStars(starNodeList, value) {
+                starNodeList.forEach(s => {
+                    if (parseInt(s.dataset.value) <= parseInt(value)) {
+                        s.classList.add('active');
+                        s.classList.replace('far', 'fas'); // Solid star
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            }
+            
+            initRatingSystem();
+
+            // --- NAVIGATION LOGIC ---
+            const allNavItems = document.querySelectorAll('.nav-item, .nav-icon');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            allNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    playClickSound();
+                    const target = this.getAttribute('data-target');
+                    
+                    // Update buttons
+                    allNavItems.forEach(nav => nav.classList.remove('active'));
+                    document.querySelectorAll(`[data-target="${target}"]`).forEach(nav => nav.classList.add('active'));
+                    
+                    // Update content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    const targetContent = document.getElementById(target);
+                    if (targetContent) targetContent.classList.add('active');
+                });
+            });
+
+            // --- CAROUSEL LOGIC ---
+            const carouselTrack = document.getElementById('carouselTrack');
+            const leftArrow = document.getElementById('carouselLeftArrow');
+            const rightArrow = document.getElementById('carouselRightArrow');
+            let autoScrollInterval;
+
+            if (carouselTrack) {
+                const scrollCarousel = (direction) => {
+                    const scrollAmount = 370; // Item width + gap
+                    if (direction === 'next') carouselTrack.scrollLeft += scrollAmount;
+                    else carouselTrack.scrollLeft -= scrollAmount;
+                };
+
+                if(leftArrow) leftArrow.addEventListener('click', () => { playClickSound(); scrollCarousel('prev'); });
+                if(rightArrow) rightArrow.addEventListener('click', () => { playClickSound(); scrollCarousel('next'); });
+
+                // Auto scroll
+                const startAutoScroll = () => {
+                    clearInterval(autoScrollInterval);
+                    autoScrollInterval = setInterval(() => {
+                         if (carouselTrack.scrollLeft + carouselTrack.clientWidth >= carouselTrack.scrollWidth - 10) {
+                             carouselTrack.scrollTo({left: 0, behavior: 'smooth'});
+                         } else {
+                             scrollCarousel('next');
+                         }
+                    }, 5000);
+                };
+                carouselTrack.addEventListener('touchstart', () => clearInterval(autoScrollInterval));
+                startAutoScroll();
+            }
+
+            // --- SEARCH LOGIC ---
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const searchResults = document.getElementById('searchResults');
+            
+            // Generate data from DOM to ensure single source of truth
+            const addons = Array.from(document.querySelectorAll('#projectModList .mod-item')).map(item => ({
+                name: item.querySelector('h3').firstChild.textContent.trim(),
+                desc: item.querySelector('p').textContent,
+                img: item.querySelector('img').src,
+                link: item.querySelector('a').href
+            })).filter(a => a.name); // Filter out empty items
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.toLowerCase().trim();
+                    if (query) {
+                        clearSearch.style.display = 'block';
+                        const filtered = addons.filter(a => a.name.toLowerCase().includes(query) || a.desc.toLowerCase().includes(query));
+                        
+                        searchResults.innerHTML = filtered.length ? '' : '<div class="no-results">No addons found</div>';
+                        filtered.forEach(addon => {
+                            const div = document.createElement('div');
+                            div.className = 'search-result-item';
+                            div.innerHTML = `<img src="${addon.img}" class="search-result-img"><div class="search-result-info"><h4>${addon.name}</h4><p>${addon.desc}</p></div>`;
+                            div.addEventListener('click', () => window.location.href = addon.link);
+                            searchResults.appendChild(div);
+                        });
+                        searchResults.classList.add('active');
+                    } else {
+                        searchResults.classList.remove('active');
+                        clearSearch.style.display = 'none';
+                    }
+                });
+                
+                clearSearch.addEventListener('click', () => {
+                    searchInput.value = '';
+                    clearSearch.style.display = 'none';
+                    searchResults.classList.remove('active');
+                });
+            }
+
+            // --- SORTING LOGIC ---
+            const sortButton = document.getElementById('sortButton');
+            const sortOptions = document.getElementById('sortOptions');
+            const projectModList = document.getElementById('projectModList');
+
+            if (sortButton && projectModList) {
+                sortButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    playClickSound();
+                    sortOptions.classList.toggle('show');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!sortButton.contains(e.target) && !sortOptions.contains(e.target)) sortOptions.classList.remove('show');
+                });
+
+                sortOptions.querySelectorAll('.sort-option').forEach(opt => {
+                    opt.addEventListener('click', function() {
+                        const type = this.dataset.sort;
+                        const items = Array.from(projectModList.children);
+                        
+                        items.sort((a, b) => {
+                            if (type === 'newest') return new Date(b.dataset.date) - new Date(a.dataset.date);
+                            if (type === 'popular') return (parseInt(b.dataset.downloads)||0) - (parseInt(a.dataset.downloads)||0);
+                            return 0; // Default/Trending logic (already sorted in HTML basically)
+                        });
+
+                        projectModList.innerHTML = '';
+                        items.forEach(item => projectModList.appendChild(item));
+                        
+                        document.getElementById('currentSortText').textContent = this.textContent.trim();
+                        sortOptions.classList.remove('show');
+                    });
+                });
+            }
+
+            // --- SIDEBAR LOGIC ---
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleSidebarBtn');
+            
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('show');
+                playClickSound();
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) sidebar.classList.remove('show');
+            });
+
+            // --- MODAL LOGIC ---
+            // (Kept simple as most items now use direct links, but preserved for future use)
+            const modal = document.querySelector('.modal');
+            const closeModal = () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.style.display = 'none', 300);
+            };
+            
+            document.querySelector('.close-button').addEventListener('click', (e) => {
+                e.preventDefault(); closeModal();
             });
         });
-
-  
-
-// Modal functionality
-const modItems = document.querySelectorAll('.mod-item');
-const modal = document.querySelector('.modal');
-
-const redirectLinks = {
-    'wirlesshopper': 'https://shadowgamer12k.github.io/posts/wirlessHopper.html',
-    'landclaim': 'https://shadowgamer12k.github.io/posts/landclaim.html',
-    'mobcatcher': 'https://shadowgamer12k.github.io/posts/mobcatcher.html',
-    'healthbar': 'https://shadowgamer12k.github.io/posts/healthbar.html',
-    'itemcarrier': 'https://shadowgamer12k.github.io/posts/itemcarrier.html',
-    'nightvision': 'https://shadowgamer12k.github.io/posts/nightvision.html',
-     'advancedwaypoint': 'https://shadowgamer12k.github.io/posts/advancedwaypoint.html',
-   'pocketwaypoint': 'https://shadowgamer12k.github.io/posts/pocketwaypoint.html',
-  'enderGuardian': 'https://shadowgamer12k.github.io/posts/enderGuardian.html',
-    'mobHider': 'https://shadowgamer12k.github.io/posts/mobHider.html',
-  'chainedHearts': 'https://shadowgamer12k.github.io/posts/linkedHearts.html'
-};
-
-modItems.forEach(mod => {
-    mod.addEventListener('click', async () => {
-        await playClickSound(); // Wait for sound to play
-        
-        // Check if this mod item has an ID that should redirect
-        if (mod.id && redirectLinks[mod.id]) {
-            // Add a small delay before redirecting
-            setTimeout(() => {
-                window.location.href = redirectLinks[mod.id];
-            }, 500);
-            return; // Exit early to prevent modal code from running
-        }
-        
-        // For mod items without specific redirects, show the modal
-        const videoSrc = mod.dataset.video.replace("youtu.be/", "youtube.com/embed/");
-        
-        modal.querySelector('.modal-video').src = videoSrc;
-        modal.querySelector('.modal-description').textContent = mod.dataset.description;
-        
-        const behaviorURL = encodeURIComponent(mod.dataset.behavior);
-        const resourceURL = encodeURIComponent(mod.dataset.resource);
-        
-        modal.querySelector('.behavior-pack').href = `redirect.html?url=${behaviorURL}`;
-        modal.querySelector('.resource-pack').href = `redirect.html?url=${resourceURL}`;
-        
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('active'), 10);
-        document.body.style.overflow = 'hidden';
-    });
-});
-
-        function redirectToDownload(element, type) {
-            const url = type === 'behavior' ? modal.dataset.behavior : modal.dataset.resource;
-            window.location.href = `redirect.html?url=${encodeURIComponent(url)}`;
-        }
-
-        // Close modal functionality
-        function closeModal() {
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modal.querySelector('.modal-video').src = '';
-                document.body.style.overflow = 'auto';
-            }, 300);
-        }
-
-        document.querySelector('.close-button').addEventListener('click', () => {
-            playClickSound();
-            closeModal();
-        });
-
-        window.addEventListener('click', (e) => e.target === modal && closeModal());
-        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
     </script>
-    <script>
-        function updateTabTitle() {
-            const activeTab = document.querySelector('.tab.active');
-            const tabTitle = activeTab ? activeTab.textContent : 'PROJECTS';
-            document.getElementById('tab-title').textContent = tabTitle;
-        }
-
-        // Call the function initially to set the title
-        updateTabTitle();
-
-        // Update the title whenever a tab is clicked
-        document.querySelectorAll('[role="tab"]').forEach(tab => {
-            tab.addEventListener('click', updateTabTitle);
-        });
-    </script>
-<!-- Sidebar Index -->
-<div id="sidebar">
-    <h3>Site Index</h3>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="posts/soulEggs.html">Soul Eggs</a></li>
-        <li><a href="posts/mobHider.html">Mob Hider</a></li>
-        <li><a href="posts/enderGuardian.html">Ender Guardian</a></li>
-        <li><a href="posts/pocketwaypoint.html">Pocket Waypoint</a></li>
-        <li><a href="posts/wirlesshopper.html">Wireless Hopper</a></li>
-        <li><a href="posts/advancedwaypoint.html">Advanced Waypoint</a></li>
-        <li><a href="posts/landclaim.html">Land Claim</a></li>
-        <li><a href="posts/itemcarrier.html">Items Carrier</a></li>
-        <li><a href="posts/healthbar.html">Health Bar</a></li>
-        <li><a href="posts/mobcatcher.html">Mob Catcher</a></li>
-    </ul>
-</div>
-
-<!-- Sidebar Toggle Button -->
-<div id="toggleSidebarBtn">☰</div>
-
-<style>
-/* Sidebar itself */
-#sidebar {
-    position: fixed;
-    right: -300px; /* Hidden off-screen to the right */
-    top: 0;
-    width: 260px;
-    height: 100%;
-    background-color: #1c1c1c;
-    color: #fff;
-    padding: 20px;
-    box-shadow: -2px 0 12px rgba(0,0,0,0.5);
-    transition: right 0.3s;
-    z-index: 9999;
-    overflow-y: auto;
-    visibility: hidden;
-}
-#sidebar.show {
-    right: 0;
-    visibility: visible;
-}
-#sidebar h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-    text-align: center;
-}
-#sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-#sidebar ul li {
-    margin: 10px 0;
-}
-#sidebar ul li a {
-    color: #aaffaa;
-    text-decoration: none;
-    font-weight: bold;
-}
-#sidebar ul li a:hover {
-    color: #00ff00;
-    text-decoration: underline;
-}
-
-/* Floating button (bottom right) */
-#toggleSidebarBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #2c2c2c;
-    color: #fff;
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 10000;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    transition: transform 0.2s;
-}
-#toggleSidebarBtn:hover {
-    transform: scale(1.05);
-}
-</style>
-
-<script>
-const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('toggleSidebarBtn');
-
-toggleBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent closing immediately
-    sidebar.classList.toggle('show');
-});
-
-// Close sidebar when clicking outside
-document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-        sidebar.classList.remove('show');
-    }
-});
-</script>
-
-
-
-<script>
-const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('toggleSidebarBtn');
-
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
-});
-
-// Close sidebar when clicking outside
-document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
-        sidebar.classList.remove('show');
-    }
-});
-</script>
-
-        <footer>
-    <p>&copy; 2025 shadowGamer12k. All rights reserved. 
-        <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
-        <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
-    </p>
-</footer>
-</body>
-   
-</html>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
