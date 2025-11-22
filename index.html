@@ -125,25 +125,57 @@
         .sort-option { padding: 10px 15px; cursor: pointer; font-size: 12px; font-family: Arial, sans-serif; border-bottom: 1px solid #333; text-align: left; }
         .sort-option:hover { background-color: #444; color: var(--mc-green); }
 
-        /* ==================== CAROUSEL ==================== */
+        /* ==================== CAROUSEL (REDESIGNED) ==================== */
         .featured-carousel { max-width: 1200px; margin: 0 auto 30px; padding: 0 15px; position: relative; }
-        .carousel-track { display: flex; gap: 20px; padding-bottom: 15px; overflow-x: auto; scrollbar-width: none; }
-        .carousel-track::-webkit-scrollbar { display: none; }
-        .featured-item {
-            flex-shrink: 0; width: 350px; height: 250px;
-            background-size: cover; background-position: center;
-            border: 4px solid var(--mc-green); border-radius: 8px;
-            position: relative; overflow: hidden; transition: transform 0.3s ease;
+        
+        .carousel-track { 
+            display: flex; gap: 20px; padding: 10px 5px 20px 5px; /* Extra padding for hover scale */
+            overflow-x: auto; scrollbar-width: none; 
         }
-        .featured-item:hover { transform: scale(1.02); }
-        .featured-item-overlay { position: absolute; bottom: 0; width: 100%; padding: 10px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); text-align: left; box-sizing: border-box; }
-        .featured-item h4 { color: var(--mc-green); margin: 0; font-size: 16px; text-shadow: 1px 1px 0 #000; }
-        .featured-item p { color: #ddd; margin: 5px 0 0; font-size: 12px; font-family: Arial, sans-serif; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        
+        .featured-item {
+            flex-shrink: 0; width: 350px; height: 220px;
+            background-size: cover; background-position: center;
+            border-radius: 12px; /* Soft rounded corners */
+            position: relative; overflow: hidden; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 2px solid #444; /* Subtle default border */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .featured-item:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            border-color: var(--mc-green);
+            box-shadow: 0 10px 25px rgba(85, 255, 85, 0.2); /* Green glow on hover */
+        }
+        
+        .featured-item-overlay { 
+            position: absolute; bottom: 0; width: 100%; 
+            padding: 15px; 
+            background: rgba(0, 0, 0, 0.85); /* Darker, solid glass look */
+            backdrop-filter: blur(6px);
+            text-align: left; 
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .featured-item h4 { 
+            color: #fff; margin: 0 0 5px 0; font-size: 14px; 
+            text-shadow: 1px 1px 0 #000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .featured-item p { 
+            color: #bbb; margin: 0; font-size: 11px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean readable font */
+            line-height: 1.4;
+        }
         
         .carousel-arrow {
             position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
             background: rgba(0,0,0,0.7); border: 2px solid var(--mc-green); color: var(--mc-green);
-            padding: 10px 15px; cursor: pointer; display: none;
+            padding: 10px 15px; cursor: pointer; display: none; border-radius: 8px;
         }
         .carousel-arrow.left { left: 20px; }
         .carousel-arrow.right { right: 20px; }
@@ -170,6 +202,16 @@
         }
         .news-badge { background: #aa55ff; }
         .social-badge { background: var(--mc-blue); }
+        /* Featured Badge Style inside Carousel */
+        .featured-badge {
+            background: var(--mc-green); color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px;
+        }
+        .hot-badge {
+            background: #ff4444; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px;
+        }
+        .pick-badge {
+            background: var(--mc-blue); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px;
+        }
 
         /* ==================== RATING SYSTEM STYLES ==================== */
         .rating-container {
@@ -211,11 +253,10 @@
         }
 
         /* ==================== BUTTONS & ACTION GROUP ==================== */
-        /* New Action Buttons Container for card footer */
         .action-buttons {
             display: flex;
             gap: 10px;
-            margin-top: auto; /* Pushes buttons to bottom */
+            margin-top: auto;
             width: 100%;
         }
 
@@ -225,11 +266,10 @@
             font-size: 12px; transition: all 0.3s;
         }
 
-        /* Main Download Button */
         .mod-item .social-link {
             display: block; text-align: center; padding: 10px; 
             background: #222; border: 2px solid #444; color: white;
-            flex-grow: 1; /* Take up most space */
+            flex-grow: 1;
             color: var(--mc-blue);
         }
         .mod-item .social-link:hover { 
@@ -237,11 +277,9 @@
             transform: none; border-color: var(--mc-green); 
         }
 
-        /* New Feedback Button */
         .feedback-button {
             display: flex; justify-content: center; align-items: center;
-            width: 45px; /* Square button */
-            background: #222; border: 2px solid #444; color: #ffaa00;
+            width: 45px; background: #222; border: 2px solid #444; color: #ffaa00;
             cursor: pointer;
         }
         
@@ -276,13 +314,13 @@
         }
         .close-button { background: #e63946; position: absolute; top: -15px; right: -15px; padding: 10px; font-size: 10px; z-index: 10; }
 
-        /* ==================== FEEDBACK MODAL (UPDATED STYLE) ==================== */
+        /* ==================== FEEDBACK MODAL ==================== */
         #feedbackModal .modal-content { 
             max-width: 500px; 
             text-align: left; 
-            background-color: #222; /* Darker background */
-            border: 4px solid #fff; /* Minecraft style border */
-            box-shadow: 0 0 0 4px #555; /* Double border effect */
+            background-color: #222;
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 4px #555;
         }
         #feedbackModal h3 { 
             color: var(--mc-gold); 
@@ -306,38 +344,21 @@
         }
         
         .form-input, .form-select, .form-textarea {
-            width: 100%; 
-            padding: 12px; 
-            background: #111; 
-            border: 2px solid #555; 
-            color: #fff;
-            border-radius: 0; /* Minecraft style is sharp */
-            font-family: 'Press Start 2P', cursive; /* Pixel font */
-            font-size: 10px; 
-            line-height: 1.5;
-            box-sizing: border-box;
-            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+            width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff;
+            border-radius: 0; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5;
+            box-sizing: border-box; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
         }
         
         .form-input:focus, .form-select:focus, .form-textarea:focus { 
-            border-color: var(--mc-gold); 
-            outline: none; 
-            background-color: #000;
+            border-color: var(--mc-gold); outline: none; background-color: #000;
         }
         
         .form-textarea { resize: vertical; min-height: 120px; }
 
-        /* Custom Select Styling */
         .form-select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            /* Custom White Arrow SVG */
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 20px;
-            cursor: pointer;
+            background-repeat: no-repeat; background-position: right 10px center; background-size: 20px; cursor: pointer;
         }
         
         .send-btn {
@@ -348,10 +369,10 @@
         .send-btn:hover { background: #4499ee; }
         .send-btn:disabled { background: #555; cursor: not-allowed; }
 
-        /* ==================== NEW "PAUSE MENU" OVERLAY (Replaces Sidebar) ==================== */
+        /* ==================== MENU OVERLAY ==================== */
         .menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); /* Obsidian tint */
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 9999;
             opacity: 0; pointer-events: none;
@@ -365,13 +386,10 @@
             width: 90%; max-width: 800px;
             background: rgba(30, 30, 30, 0.9);
             border: 4px solid #222;
-            box-shadow: 0 0 0 4px #555, 0 0 20px rgba(0,0,0,0.8); /* Double border effect */
-            padding: 20px;
-            text-align: left;
-            transform: scale(0.9);
+            box-shadow: 0 0 0 4px #555, 0 0 20px rgba(0,0,0,0.8);
+            padding: 20px; text-align: left; transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 90vh;
-            overflow-y: auto;
+            max-height: 90vh; overflow-y: auto;
         }
         
         .menu-overlay.active .menu-container { transform: scale(1); }
@@ -390,27 +408,17 @@
         }
 
         .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
         }
 
         .menu-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid #555;
-            padding: 15px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            text-decoration: none;
+            background: rgba(0, 0, 0, 0.3); border: 2px solid #555; padding: 15px 10px; text-align: center;
+            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none;
         }
 
         .menu-card:hover {
-            background: rgba(85, 255, 85, 0.1);
-            border-color: var(--mc-green);
-            transform: translateY(-3px);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+            background: rgba(85, 255, 85, 0.1); border-color: var(--mc-green);
+            transform: translateY(-3px); box-shadow: 0 4px 0 rgba(0,0,0,0.3);
         }
 
         .menu-card i { font-size: 24px; color: #aaa; margin-bottom: 5px; }
@@ -418,28 +426,22 @@
         .menu-card span { font-size: 10px; line-height: 1.4; color: #fff; }
 
         .menu-section-title {
-            grid-column: 1 / -1;
-            font-size: 12px; color: var(--mc-blue);
+            grid-column: 1 / -1; font-size: 12px; color: var(--mc-blue);
             margin: 15px 0 5px 0; border-bottom: 1px solid #444; padding-bottom: 5px;
         }
 
-        /* Menu Trigger Button (Floating) */
         #menuTrigger {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 50px; height: 50px;
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
             background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
-            border: 2px solid var(--mc-green);
-            color: var(--mc-green);
+            border: 2px solid var(--mc-green); color: var(--mc-green);
             display: flex; justify-content: center; align-items: center;
             border-radius: 8px; cursor: pointer; z-index: 3001;
-            box-shadow: 0 4px 0 #003300, 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 0 #003300, 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.2s;
         }
         
         #menuTrigger:active { transform: translateY(4px); box-shadow: 0 0 0 #003300; }
         #menuTrigger:hover { filter: brightness(1.2); }
         
-        /* ==================== RESPONSIVE ==================== */
         @media (max-width: 768px) {
             .navbar-menu { display: none; }
             .mobile-nav-icons { display: flex; }
@@ -505,24 +507,33 @@
                 </div>
             </div>
             
-            <!-- Carousel -->
+            <!-- Carousel (UPDATED CONTENT STRUCTURE) -->
             <div class="featured-carousel">
                 <button class="carousel-arrow left" id="carouselLeftArrow"><i class="fas fa-chevron-left"></i></button>
                 <div class="carousel-track" id="carouselTrack">
                     <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" class="featured-item" style="background-image: url('assets/images/postsImages/QuickPortItems.webp');">
-                        <div class="featured-item-overlay"><h4>QuickPort Items <span class="version-badge">FEATURED</span></h4><p>Automate item transfer!</p></div>
+                        <div class="featured-item-overlay">
+                            <h4>QuickPort Items <span class="featured-badge">FEATURED</span></h4>
+                            <p>Automate item transfer between chests instantly!</p>
+                        </div>
                     </a>
                     <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" class="featured-item" style="background-image: url('assets/images/postsImages/instantTeleport.webp');">
-                        <div class="featured-item-overlay"><h4>Instant Teleport <span class="version-badge">HOT</span></h4><p>Teleport anywhere instantly.</p></div>
+                        <div class="featured-item-overlay">
+                            <h4>Instant Teleport <span class="hot-badge">HOT</span></h4>
+                            <p>Teleport anywhere instantly with style.</p>
+                        </div>
                     </a>
                     <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" class="featured-item" style="background-image: url('assets/images/postsImages/souleggs.webp');">
-                        <div class="featured-item-overlay"><h4>Soul Eggs <span class="version-badge">PICK</span></h4><p>Catch mobs like Pokémon.</p></div>
+                        <div class="featured-item-overlay">
+                            <h4>Soul Eggs <span class="pick-badge">PICK</span></h4>
+                            <p>Catch and collect mobs just like Pokémon.</p>
+                        </div>
                     </a>
                 </div>
                 <button class="carousel-arrow right" id="carouselRightArrow"><i class="fas fa-chevron-right"></i></button>
             </div>
 
-            <!-- Mod List with Rating System -->
+            <!-- Mod List -->
             <ul class="mod-list" id="projectModList">
                 <!-- Item 1 -->
                 <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
@@ -826,7 +837,7 @@
         </div>
     </div>
     
-    <!-- FEEDBACK MODAL (NEW) -->
+    <!-- FEEDBACK MODAL -->
     <div class="modal" id="feedbackModal">
         <div class="modal-content">
             <a href="#" class="close-button" onclick="closeFeedbackModal(event)">✕</a>
@@ -859,7 +870,7 @@
         </p>
     </footer>
 
-    <!-- NEW MENU OVERLAY (Replaces Sidebar) -->
+    <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay">
         <div class="menu-container">
             <div class="menu-header">
@@ -945,14 +956,13 @@
                 }
             };
 
-            // --- FEEDBACK SYSTEM LOGIC (NEW) ---
+            // --- FEEDBACK SYSTEM LOGIC ---
             // Webhook URL (Note: Exposed to client-side)
             const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1441830441530294404/LWfl3eEZrLIDbDjq_UQra9zCaoAYZwPxd-_1PZmryavCIGqWe_hfBkBGJn5q7B4E6G3S";
             const feedbackModal = document.getElementById('feedbackModal');
             const feedbackAddonName = document.getElementById('feedbackAddonName');
             const feedbackMessage = document.getElementById('feedbackMessage');
             
-            // Exposed to global scope for inline onclicks
             window.openFeedbackModal = function(addonName) {
                 playClickSound();
                 feedbackAddonName.value = addonName;
