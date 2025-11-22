@@ -61,241 +61,214 @@
             --mc-gold: #e0ffaa;        /* Endrod yellow */
         }
 
-        /* ==================== GLOBAL STYLES ==================== */
+        /* ==================== CUSTOM CURSORS (NEW) ==================== */
+        /* Default Minecraft Crosshair */
         body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', cursive;
+            overflow-x: hidden;
+            background-color: #111;
+            
+            /* Custom SVG Crosshair */
+            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="4" height="4" fill="white" stroke="black" stroke-width="1"/><rect x="14" y="0" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="14" y="18" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="0" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="18" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/></svg>') 16 16, crosshair;
+        }
+
+        /* Diamond Sword / Hand Pointer on Links */
+        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option {
+            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-0)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
+        }
+
+        /* ==================== GLOBAL STYLES ==================== */
+        /* NEW WRAPPER FOR CONTENT TO PREVENT FIXED POSITION BUGS */
+        #main-wrapper {
             background-color: var(--bg-color);
             background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
             background-size: 30px 30px;
             background-position: -5px -5px;
-            font-family: 'Press Start 2P', cursive;
             color: var(--text-color);
             text-align: center;
             background-attachment: fixed;
             min-height: 100vh;
-            margin: 0;
-            overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.3s ease, transform 1s ease, filter 0.5s ease; /* Added transform for Dinnerbone */
+            width: 100%;
+            transition: background-color 0.5s ease, color 0.3s ease, transform 1s ease, filter 0.5s ease;
+            position: relative;
         }
 
         h1 { font-size: 2em; margin: 20px 0; }
         a { text-decoration: none; color: inherit; }
         
-        /* UPDATED: Container now takes 95% of width */
         .container {
             max-width: 95%;
             margin: 0 auto;
             padding: 0 15px;
+            padding-bottom: 80px; /* Extra padding for bottom buttons */
         }
 
-        /* ==================== EASTER EGG STYLES (NEW) ==================== */
-        
-        /* Dinnerbone Effect (Upside Down) */
-        body.dinnerbone-mode {
-            transform: rotate(180deg);
+        /* ==================== SPLASH TEXT (NEW) ==================== */
+        .splash-text {
+            position: absolute;
+            top: -10px;
+            right: -140px;
+            color: #ffff55;
+            font-size: 10px;
+            transform: rotate(-20deg);
+            text-shadow: 2px 2px 0 #3f3f15;
+            animation: splashBounce 0.8s infinite alternate;
+            width: 150px;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.4;
         }
 
-        /* jeb_ Effect (Rainbow Cycle) */
-        @keyframes rainbow-hue {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+        @keyframes splashBounce {
+            from { transform: rotate(-20deg) scale(1); }
+            to { transform: rotate(-20deg) scale(1.1); }
         }
-        body.jeb-mode {
-            animation: rainbow-hue 3s linear infinite;
+
+        /* ==================== WEATHER EFFECTS (NEW) ==================== */
+        .weather-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Above bg, below content */
+            display: none;
         }
+
+        /* Rain (Overworld) */
+        .weather-rain {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAHNJREFUWEft1rsNhDAMRNH7s46ACmiJjigC6iCjZ0ZCgOAZ37rwd2S/tDsHB0J+HAgJ+XEgJOTHgZCQHwdCQn4cCAq5e6x51ly7x5pT597/AQ4E/T4OhIQcCAk5EBJyICTkQEjIgZCQAyEhB0JCDhwI+X8c+AGuWyJ/y+u2EAAAAABJRU5ErkJggg==');
+            animation: rainFall 0.5s linear infinite;
+            opacity: 0.3;
+        }
+        @keyframes rainFall { from { background-position: 0 0; } to { background-position: 0 32px; } }
+
+        /* Ash (Nether) */
+        .weather-ash {
+            background-image: 
+                radial-gradient(circle, #888 1px, transparent 1.5px),
+                radial-gradient(circle, #555 1px, transparent 1.5px);
+            background-size: 40px 40px, 60px 60px;
+            background-position: 0 0, 20px 20px;
+            animation: ashRise 8s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes ashRise { from { background-position: 0 0, 20px 20px; } to { background-position: -20px -40px, 0px -20px; } }
+
+        /* Static (End) */
+        .weather-end {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=');
+            background-size: 64px 64px;
+            opacity: 0.05;
+            filter: sepia(100%) hue-rotate(240deg) saturate(300%);
+            animation: staticShift 0.2s steps(4) infinite;
+        }
+        @keyframes staticShift { 
+            0% { background-position: 0 0; } 
+            25% { background-position: 4px 0; }
+            50% { background-position: 0 4px; }
+            75% { background-position: 4px 4px; }
+            100% { background-position: 0 0; } 
+        }
+
+        /* ==================== CLICK PARTICLES (NEW) ==================== */
+        .click-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background-color: var(--mc-border); /* Default greyish */
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+
+        /* ==================== EASTER EGG STYLES ==================== */
+        /* Dinnerbone Effect */
+        body.dinnerbone-mode #main-wrapper { transform: rotate(180deg); }
+
+        /* jeb_ Effect */
+        @keyframes rainbow-hue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+        body.jeb-mode #main-wrapper { animation: rainbow-hue 3s linear infinite; }
+        body.jeb-mode #biomeToggle, body.jeb-mode #menuTrigger, body.jeb-mode .menu-overlay, body.jeb-mode .activity-feed, body.jeb-mode .modal-content { animation: rainbow-hue 3s linear infinite; }
 
         /* Advancement Toast */
         .advancement-toast {
-            position: fixed;
-            top: 20px;
-            right: -400px; /* Hidden initially */
-            background-color: #222;
-            border: 2px solid #555;
-            color: #fff;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 5000;
-            border-radius: 4px;
-            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            text-align: left;
-            max-width: 300px;
+            position: fixed; top: 20px; right: -400px; background-color: #222; border: 2px solid #555;
+            color: #fff; padding: 10px 15px; display: flex; align-items: center; gap: 15px;
+            z-index: 5000; border-radius: 4px; transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: left; max-width: 300px;
         }
-
-        .advancement-toast.show {
-            right: 20px;
-        }
-
-        .adv-icon {
-            font-size: 24px;
-            color: var(--mc-gold);
-        }
-
-        .adv-text-group h4 {
-            margin: 0 0 5px 0;
-            font-size: 10px;
-            color: var(--mc-gold);
-            text-transform: uppercase;
-        }
-
-        .adv-text-group p {
-            margin: 0;
-            font-size: 10px;
-            font-family: Arial, sans-serif;
-            color: #ddd;
-        }
+        .advancement-toast.show { right: 20px; }
+        .adv-icon { font-size: 24px; color: var(--mc-gold); }
+        .adv-text-group h4 { margin: 0 0 5px 0; font-size: 10px; color: var(--mc-gold); text-transform: uppercase; }
+        .adv-text-group p { margin: 0; font-size: 10px; font-family: Arial, sans-serif; color: #ddd; }
 
         /* Shake Animation */
         @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
+            0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
+        .shake-effect { animation: shake 0.5s; animation-iteration-count: 1; }
 
-        .shake-effect {
-            animation: shake 0.5s;
-            animation-iteration-count: 1;
-        }
-
-        /* ==================== SKELETON LOADING ANIMATION ==================== */
+        /* ==================== SKELETON LOADING ==================== */
         .skeleton {
-            background: #3a3a3a;
-            background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite;
-            border-radius: 4px;
+            background: #3a3a3a; background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px;
         }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* Specific Skeleton Shapes */
-        .skeleton-card {
-            background: #333;
-            padding: 15px;
-            border-radius: 5px;
-            border: 2px solid #444;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            height: 100%; /* Match height */
-        }
-
-        .skeleton-img { 
-            width: 100%; 
-            aspect-ratio: 16/9; 
-            border-radius: 5px; 
-        }
-        
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-card { background: #333; padding: 15px; border-radius: 5px; border: 2px solid #444; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); height: 100%; }
+        .skeleton-img { width: 100%; aspect-ratio: 16/9; border-radius: 5px; }
         .skeleton-title { height: 20px; width: 70%; }
         .skeleton-stars { height: 15px; width: 50%; }
         .skeleton-text { height: 12px; width: 100%; }
         .skeleton-text.short { width: 60%; }
         .skeleton-btn-group { display: flex; gap: 10px; margin-top: auto; }
         .skeleton-btn { height: 35px; width: 100%; border-radius: 0; }
-
-        /* Fade in animation for real content */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Fake Activity Feed */
         .activity-feed {
-            position: fixed;
-            bottom: 80px; /* Positioned above bottom controls */
-            left: 50%;
-            transform: translateX(-50%) translateY(150px); /* Hidden initially (pushed down) */
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--mc-green);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            z-index: 2900;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none; /* Allows clicking through it */
-            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-            width: max-content;
-            max-width: 90%;
-            text-align: left;
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(150px);
+            background: rgba(0, 0, 0, 0.9); border: 2px solid var(--mc-green); color: white; padding: 12px 20px;
+            border-radius: 8px; font-family: 'Press Start 2P', cursive; font-size: 10px; z-index: 2900;
+            display: flex; align-items: center; gap: 12px; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; box-shadow: 0 6px 20px rgba(0,0,0,0.6); width: max-content; max-width: 90%; text-align: left;
         }
-
-        .activity-feed.active {
-            transform: translateX(-50%) translateY(0); /* Slide up into view */
-        }
-
-        .activity-feed i {
-            font-size: 16px;
-        }
+        .activity-feed.active { transform: translateX(-50%) translateY(0); }
+        .activity-feed i { font-size: 16px; }
 
         /* ==================== NAVIGATION ==================== */
         .minecraft-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #2c2c2c;
-            padding: 10px 15px;
-            margin: 20px auto;
-            border: 2px solid #555;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            border-radius: 4px;
-            max-width: 95%; /* Match container */
+            display: flex; justify-content: space-between; align-items: center; background-color: #2c2c2c;
+            padding: 10px 15px; margin: 20px auto; border: 2px solid #555; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 4px; max-width: 95%; position: relative; /* For splash text */
         }
-        
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-            cursor: pointer; /* Changed to pointer for easter egg hint */
-            user-select: none;
-        }
-        
+        .navbar-logo { display: flex; align-items: center; cursor: pointer; user-select: none; position: relative; }
         .nav-logo { width: 36px; height: 36px; margin-right: 10px; image-rendering: pixelated; }
         .logo-text { font-size: 1.2rem; text-shadow: 2px 2px 0px #000; }
-        
         .navbar-menu, .mobile-nav-icons { display: flex; gap: 10px; }
         .mobile-nav-icons { display: none; }
-
         .nav-item, .nav-icon {
-            background-color: #3a3a3a;
-            color: #fff;
-            border: 2px solid #555;
-            padding: 8px 16px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
+            background-color: #3a3a3a; color: #fff; border: 2px solid #555; padding: 8px 16px;
+            cursor: pointer; text-transform: uppercase; transition: all 0.3s ease;
+            font-family: 'Press Start 2P', cursive; font-size: 14px;
         }
-
         .nav-icon { width: 40px; height: 40px; padding: 8px; display: flex; align-items: center; justify-content: center; }
         .nav-item.active, .nav-icon.active { background-color: #555; border-color: #7e7e7e; box-shadow: 0 0 5px rgba(255,255,255,0.3); }
 
         /* ==================== SEARCH & FILTERS ==================== */
         .search-container { max-width: 95%; margin: 0 auto 10px; padding: 0 15px; position: relative; }
         .search-box {
-            display: flex; align-items: center; background-color: #2c2c2c;
-            border: 2px solid #555; border-radius: 8px; padding: 12px 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;
+            display: flex; align-items: center; background-color: #2c2c2c; border: 2px solid #555;
+            border-radius: 8px; padding: 12px 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.3s ease;
         }
         .search-box:focus-within { border-color: #7e7e7e; }
         .search-icon { color: #888; margin-right: 12px; }
@@ -312,184 +285,55 @@
 
         /* ==================== CAROUSEL (REDESIGNED) ==================== */
         .featured-carousel { max-width: 95%; margin: 0 auto 30px; padding: 0 15px; position: relative; }
-        
-        .carousel-track { 
-            display: flex; gap: 20px; padding: 10px 5px 20px 5px; /* Extra padding for hover scale */
-            overflow-x: auto; scrollbar-width: none; 
-        }
+        .carousel-track { display: flex; gap: 20px; padding: 10px 5px 20px 5px; overflow-x: auto; scrollbar-width: none; }
         .carousel-track::-webkit-scrollbar { display: none; }
-        
         .featured-item {
-            flex-shrink: 0; width: 350px; height: 220px;
-            background-size: cover; background-position: center;
-            border-radius: 12px; /* Soft rounded corners */
-            position: relative; overflow: hidden; 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 2px solid #444; /* Subtle default border */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            flex-shrink: 0; width: 350px; height: 220px; background-size: cover; background-position: center;
+            border-radius: 12px; position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 2px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        
-        .featured-item:hover { 
-            transform: translateY(-5px) scale(1.02); 
-            border-color: var(--mc-green);
-            box-shadow: 0 10px 25px rgba(85, 255, 85, 0.2); /* Green glow on hover */
-        }
-        
-        .featured-item-overlay { 
-            position: absolute; bottom: 0; width: 100%; 
-            padding: 15px; 
-            background: rgba(0, 0, 0, 0.85); /* Darker, solid glass look */
-            backdrop-filter: blur(6px);
-            text-align: left; 
-            box-sizing: border-box;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .featured-item h4 { 
-            color: #fff; margin: 0 0 5px 0; font-size: 14px; 
-            text-shadow: 1px 1px 0 #000;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        
-        .featured-item p { 
-            color: #bbb; margin: 0; font-size: 11px; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean readable font */
-            line-height: 1.4;
-        }
-        
+        .featured-item:hover { transform: translateY(-5px) scale(1.02); border-color: var(--mc-green); box-shadow: 0 10px 25px rgba(85, 255, 85, 0.2); }
+        .featured-item-overlay { position: absolute; bottom: 0; width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); text-align: left; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.1); }
+        .featured-item h4 { color: #fff; margin: 0 0 5px 0; font-size: 14px; text-shadow: 1px 1px 0 #000; display: flex; justify-content: space-between; align-items: center; }
+        .featured-item p { color: #bbb; margin: 0; font-size: 11px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; }
         .carousel-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
-            background: rgba(0,0,0,0.7); border: 2px solid var(--mc-green); color: var(--mc-green);
-            padding: 10px 15px; cursor: pointer; display: none; border-radius: 8px;
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0,0,0,0.7);
+            border: 2px solid var(--mc-green); color: var(--mc-green); padding: 10px 15px; cursor: pointer; display: none; border-radius: 8px;
         }
         .carousel-arrow.left { left: 20px; }
         .carousel-arrow.right { right: 20px; }
 
-        /* ==================== MOD LIST (GRID LAYOUT) ==================== */
+        /* ==================== MOD LIST ==================== */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        /* NEW: Using CSS Grid to fill the space automatically */
-        .mod-list { 
-            display: grid;
-            /* Auto-fill columns, min 300px width, but stretch to fill space (1fr) */
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px; 
-            padding: 0; 
-            margin-top: 20px;
-            list-style: none;
-        }
-        
+        .mod-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0; margin-top: 20px; list-style: none; }
         .mod-item {
-            background: #333; padding: 15px; border-radius: 5px;
-            /* Width is now handled by grid, set to 100% of grid cell */
-            width: 100%; 
-            box-sizing: border-box;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5); text-align: left;
-            border: 2px solid #555; position: relative; transition: transform 0.2s;
-            display: flex; flex-direction: column;
+            background: #333; padding: 15px; border-radius: 5px; width: 100%; box-sizing: border-box;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5); text-align: left; border: 2px solid #555; position: relative;
+            transition: transform 0.2s; display: flex; flex-direction: column;
         }
         .mod-item:hover { transform: translateY(-5px); background-color: #3a3a3a; }
         .mod-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 5px; border: 2px solid #222; }
         .mod-item h3 { font-size: 14px; margin: 10px 0; color: var(--mc-green); line-height: 1.4; }
         .mod-item p { font-size: 12px; line-height: 1.5; color: #ccc; flex-grow: 1; margin-bottom: 15px; }
-        
-        .version-badge, .news-badge, .social-badge {
-            background: #555; padding: 2px 5px; border-radius: 3px; font-size: 9px; margin-left: 5px; vertical-align: middle; color: white;
-        }
+        .version-badge, .news-badge, .social-badge { background: #555; padding: 2px 5px; border-radius: 3px; font-size: 9px; margin-left: 5px; vertical-align: middle; color: white; }
         .news-badge { background: #aa55ff; }
         .social-badge { background: var(--mc-blue); }
-        /* Featured Badge Style inside Carousel */
-        .featured-badge {
-            background: var(--mc-green); color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px;
-        }
-        .hot-badge {
-            background: #ff4444; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px;
-        }
-        .pick-badge {
-            background: var(--mc-blue); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px;
-        }
-
-        /* ==================== RATING SYSTEM STYLES ==================== */
-        .rating-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 5px;
-            border-radius: 4px;
-        }
-        
-        .stars-wrapper {
-            display: flex;
-            flex-direction: row-reverse;
-            margin-right: 8px;
-        }
-
-        .star-btn {
-            font-size: 16px;
-            color: #555;
-            cursor: pointer;
-            transition: color 0.2s;
-            padding: 0 2px;
-        }
-
-        .star-btn:hover,
-        .star-btn:hover ~ .star-btn {
-            color: #ffe600;
-        }
-
-        .star-btn.active {
-            color: var(--mc-gold);
-        }
-
-        .rating-score {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            color: #aaa;
-        }
-
-        /* ==================== BUTTONS & ACTION GROUP ==================== */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: auto;
-            width: 100%;
-        }
-
-        .social-link, button, .download-button, .close-button, .feedback-button {
-            font-family: 'Press Start 2P', cursive;
-            display: inline-block; text-decoration: none;
-            font-size: 12px; transition: all 0.3s;
-        }
-
-        .mod-item .social-link {
-            display: block; text-align: center; padding: 10px; 
-            background: #222; border: 2px solid #444; color: white;
-            flex-grow: 1;
-            color: var(--mc-blue);
-        }
-        .mod-item .social-link:hover { 
-            background: var(--mc-green); color: black; text-decoration: none; 
-            transform: none; border-color: var(--mc-green); 
-        }
-
-        .feedback-button {
-            display: flex; justify-content: center; align-items: center;
-            width: 45px; background: #222; border: 2px solid #444; color: #ffaa00;
-            cursor: pointer;
-        }
-        
-        .feedback-button:hover {
-            background: #ffaa00; color: #222; border-color: #ffaa00;
-        }
+        .rating-container { display: flex; align-items: center; margin-bottom: 10px; background: rgba(0, 0, 0, 0.2); padding: 5px; border-radius: 4px; }
+        .stars-wrapper { display: flex; flex-direction: row-reverse; margin-right: 8px; }
+        .star-btn { font-size: 16px; color: #555; cursor: pointer; transition: color 0.2s; padding: 0 2px; }
+        .star-btn:hover, .star-btn:hover ~ .star-btn { color: #ffe600; }
+        .star-btn.active { color: var(--mc-gold); }
+        .rating-score { font-family: Arial, sans-serif; font-size: 11px; color: #aaa; }
+        .action-buttons { display: flex; gap: 10px; margin-top: auto; width: 100%; }
+        .social-link, button, .download-button, .close-button, .feedback-button { font-family: 'Press Start 2P', cursive; display: inline-block; text-decoration: none; font-size: 12px; transition: all 0.3s; }
+        .mod-item .social-link { display: block; text-align: center; padding: 10px; background: #222; border: 2px solid #444; color: white; flex-grow: 1; color: var(--mc-blue); }
+        .mod-item .social-link:hover { background: var(--mc-green); color: black; text-decoration: none; transform: none; border-color: var(--mc-green); }
+        .feedback-button { display: flex; justify-content: center; align-items: center; width: 45px; background: #222; border: 2px solid #444; color: #ffaa00; cursor: pointer; }
+        .feedback-button:hover { background: #ffaa00; color: #222; border-color: #ffaa00; }
 
         /* ==================== SEARCH RESULTS ==================== */
-        .search-results {
-            position: absolute; background: #2c2c2c; border: 2px solid #555; border-radius: 8px;
-            margin-top: 5px; max-height: 400px; overflow-y: auto; z-index: 1000; width: calc(100% - 30px);
-            left: 15px; display: none;
-        }
+        .search-results { position: absolute; background: #2c2c2c; border: 2px solid #555; border-radius: 8px; margin-top: 5px; max-height: 400px; overflow-y: auto; z-index: 1000; width: calc(100% - 30px); left: 15px; display: none; }
         .search-results.active { display: block; }
         .search-result-item { padding: 15px; border-bottom: 1px solid #444; display: flex; gap: 15px; cursor: pointer; }
         .search-result-item:hover { background: #3a3a3a; }
@@ -504,255 +348,53 @@
         .modal-content { width: 90%; max-width: 800px; background: #333; border: 4px solid var(--mc-border); padding: 20px; border-radius: 5px; position: relative; }
         .modal-video { width: 100%; height: 400px; border: 4px solid white; }
         .download-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        
-        .download-button, .close-button {
-            padding: 10px 20px; background: #008542; color: white; border: none; 
-            box-shadow: 0 -4px rgba(0,0,0,0.2) inset; position: relative;
-        }
+        .download-button, .close-button { padding: 10px 20px; background: #008542; color: white; border: none; box-shadow: 0 -4px rgba(0,0,0,0.2) inset; position: relative; }
         .close-button { background: #e63946; position: absolute; top: -15px; right: -15px; padding: 10px; font-size: 10px; z-index: 10; }
 
         /* ==================== FEEDBACK MODAL ==================== */
-        #feedbackModal .modal-content { 
-            max-width: 500px; 
-            text-align: left; 
-            background-color: #222;
-            border: 4px solid #fff;
-            box-shadow: 0 0 0 4px #555;
-        }
-        #feedbackModal h3 { 
-            color: var(--mc-gold); 
-            text-align: center; 
-            margin-bottom: 25px; 
-            text-shadow: 2px 2px 0 #000;
-            font-size: 18px;
-            line-height: 1.5;
-        }
-        
+        #feedbackModal .modal-content { max-width: 500px; text-align: left; background-color: #222; border: 4px solid #fff; box-shadow: 0 0 0 4px #555; }
+        #feedbackModal h3 { color: var(--mc-gold); text-align: center; margin-bottom: 25px; text-shadow: 2px 2px 0 #000; font-size: 18px; line-height: 1.5; }
         .form-group { margin-bottom: 20px; position: relative; }
-        
-        .form-label { 
-            display: block; 
-            color: var(--mc-green); 
-            margin-bottom: 8px; 
-            font-size: 10px; 
-            font-family: 'Press Start 2P', cursive; 
-            text-transform: uppercase;
-            text-shadow: 1px 1px 0 #000;
-        }
-        
-        .form-input, .form-textarea {
-            width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff;
-            border-radius: 0; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5;
-            box-sizing: border-box; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
-        }
-        
-        .form-input:focus, .form-textarea:focus { 
-            border-color: var(--mc-gold); outline: none; background-color: #000;
-        }
-        
+        .form-label { display: block; color: var(--mc-green); margin-bottom: 8px; font-size: 10px; font-family: 'Press Start 2P', cursive; text-transform: uppercase; text-shadow: 1px 1px 0 #000; }
+        .form-input, .form-textarea { width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff; border-radius: 0; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5; box-sizing: border-box; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); }
+        .form-input:focus, .form-textarea:focus { border-color: var(--mc-gold); outline: none; background-color: #000; }
         .form-textarea { resize: vertical; min-height: 120px; }
-
-        /* --- CUSTOM DROPDOWN STYLES (REPLACES SELECT) --- */
-        .custom-select-wrapper {
-            position: relative;
-            user-select: none;
-            width: 100%;
-        }
-        
-        .custom-select-trigger {
-            position: relative;
-            width: 100%;
-            padding: 12px;
-            background: #111;
-            border: 2px solid #555;
-            color: #fff;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            line-height: 1.5;
-            box-sizing: border-box;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
-        }
-
-        .custom-select-trigger:hover {
-            border-color: #777;
-        }
-
-        .custom-select-wrapper.open .custom-select-trigger {
-            border-color: var(--mc-gold);
-        }
-
-        .arrow {
-            width: 0; height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid #fff;
-            margin-left: 10px;
-        }
-
-        .custom-options {
-            position: absolute;
-            top: 100%; left: 0; right: 0;
-            background: #111;
-            border: 2px solid #555;
-            border-top: none;
-            z-index: 100;
-            display: none;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .custom-select-wrapper.open .custom-options {
-            display: block;
-        }
-
-        .custom-option {
-            padding: 12px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
-            color: #ccc;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-bottom: 1px solid #222;
-        }
-
-        .custom-option:hover, .custom-option.selected {
-            background-color: #333;
-            color: var(--mc-gold);
-        }
-
-        .send-btn {
-            width: 100%; background: var(--mc-blue); color: white; padding: 12px; border: none;
-            font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; margin-top: 10px;
-            box-shadow: 0 -4px rgba(0,0,0,0.2) inset;
-        }
+        .custom-select-wrapper { position: relative; user-select: none; width: 100%; }
+        .custom-select-trigger { position: relative; width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5; box-sizing: border-box; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); }
+        .custom-select-trigger:hover { border-color: #777; }
+        .custom-select-wrapper.open .custom-select-trigger { border-color: var(--mc-gold); }
+        .arrow { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #fff; margin-left: 10px; }
+        .custom-options { position: absolute; top: 100%; left: 0; right: 0; background: #111; border: 2px solid #555; border-top: none; z-index: 100; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .custom-select-wrapper.open .custom-options { display: block; }
+        .custom-option { padding: 12px; font-family: 'Press Start 2P', cursive; font-size: 10px; color: #ccc; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #222; }
+        .custom-option:hover, .custom-option.selected { background-color: #333; color: var(--mc-gold); }
+        .send-btn { width: 100%; background: var(--mc-blue); color: white; padding: 12px; border: none; font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; margin-top: 10px; box-shadow: 0 -4px rgba(0,0,0,0.2) inset; }
         .send-btn:hover { background: #4499ee; }
         .send-btn:disabled { background: #555; cursor: not-allowed; }
 
         /* ==================== MENU OVERLAY ==================== */
-        .menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-            display: flex; justify-content: center; align-items: center;
-        }
-
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; justify-content: center; align-items: center; }
         .menu-overlay.active { opacity: 1; pointer-events: all; }
-
-        .menu-container {
-            width: 90%; max-width: 800px;
-            background: rgba(30, 30, 30, 0.9);
-            border: 4px solid #222;
-            box-shadow: 0 0 0 4px #555, 0 0 20px rgba(0,0,0,0.8);
-            padding: 20px; text-align: left; transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 90vh; overflow-y: auto;
-        }
-        
+        .menu-container { width: 90%; max-width: 800px; background: rgba(30, 30, 30, 0.9); border: 4px solid #222; box-shadow: 0 0 0 4px #555, 0 0 20px rgba(0,0,0,0.8); padding: 20px; text-align: left; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto; }
         .menu-overlay.active .menu-container { transform: scale(1); }
-
-        .menu-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #555; padding-bottom: 15px; margin-bottom: 20px;
-        }
-        
+        .menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #555; padding-bottom: 15px; margin-bottom: 20px; }
         .menu-title { font-size: 1.2rem; color: #fff; text-shadow: 2px 2px 0 #000; }
-        
-        .menu-close-btn {
-            background: #e63946; border: 2px solid #fff; color: white;
-            width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-family: Arial, sans-serif; font-weight: bold;
-        }
-
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
-        }
-
-        .menu-card {
-            background: rgba(0, 0, 0, 0.3); border: 2px solid #555; padding: 15px 10px; text-align: center;
-            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none;
-        }
-
-        .menu-card:hover {
-            background: rgba(85, 255, 85, 0.1); border-color: var(--mc-green);
-            transform: translateY(-3px); box-shadow: 0 4px 0 rgba(0,0,0,0.3);
-        }
-
+        .menu-close-btn { background: #e63946; border: 2px solid #fff; color: white; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: Arial, sans-serif; font-weight: bold; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+        .menu-card { background: rgba(0, 0, 0, 0.3); border: 2px solid #555; padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; }
+        .menu-card:hover { background: rgba(85, 255, 85, 0.1); border-color: var(--mc-green); transform: translateY(-3px); box-shadow: 0 4px 0 rgba(0,0,0,0.3); }
         .menu-card i { font-size: 24px; color: #aaa; margin-bottom: 5px; }
         .menu-card:hover i { color: var(--mc-green); }
         .menu-card span { font-size: 10px; line-height: 1.4; color: #fff; }
+        .menu-section-title { grid-column: 1 / -1; font-size: 12px; color: var(--mc-blue); margin: 15px 0 5px 0; border-bottom: 1px solid #444; padding-bottom: 5px; }
 
-        .menu-section-title {
-            grid-column: 1 / -1; font-size: 12px; color: var(--mc-blue);
-            margin: 15px 0 5px 0; border-bottom: 1px solid #444; padding-bottom: 5px;
-        }
-
-        /* THEME TOGGLE BUTTON (Floating Bottom Left) - NEW */
-        #biomeToggle {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: #2c2c2c;
-            border: 2px solid var(--mc-green);
-            color: var(--mc-green);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 8px;
-            cursor: pointer;
-            z-index: 3000;
-            box-shadow: 0 4px 0 #000, 0 10px 20px rgba(0,0,0,0.5);
-            transition: all 0.2s;
-        }
-
-        #biomeToggle:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #000;
-        }
-
-        #biomeToggle:hover {
-            filter: brightness(1.2);
-        }
-
-        /* Tooltip for the biome button */
-        #biomeToggle::after {
-            content: attr(data-biome); /* Reads the text from the HTML */
-            position: absolute;
-            left: 60px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 10px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            font-family: 'Press Start 2P', cursive;
-        }
-
-        #biomeToggle:hover::after {
-            opacity: 1;
-        }
-
-        #menuTrigger {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
-            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
-            border: 2px solid var(--mc-green); color: var(--mc-green);
-            display: flex; justify-content: center; align-items: center;
-            border-radius: 8px; cursor: pointer; z-index: 3001;
-            box-shadow: 0 4px 0 #003300, 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.2s;
-        }
-        
+        /* THEME TOGGLE BUTTON */
+        #biomeToggle { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #2c2c2c; border: 2px solid var(--mc-green); color: var(--mc-green); display: flex; justify-content: center; align-items: center; border-radius: 8px; cursor: pointer; z-index: 3000; box-shadow: 0 4px 0 #000, 0 10px 20px rgba(0,0,0,0.5); transition: all 0.2s; }
+        #biomeToggle:active { transform: translateY(4px); box-shadow: 0 0 0 #000; }
+        #biomeToggle:hover { filter: brightness(1.2); }
+        #biomeToggle::after { content: attr(data-biome); position: absolute; left: 60px; background: rgba(0,0,0,0.8); color: white; padding: 5px 10px; border-radius: 4px; font-size: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; font-family: 'Press Start 2P', cursive; }
+        #biomeToggle:hover::after { opacity: 1; }
+        #menuTrigger { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg, #2c2c2c, #1a1a1a); border: 2px solid var(--mc-green); color: var(--mc-green); display: flex; justify-content: center; align-items: center; border-radius: 8px; cursor: pointer; z-index: 3001; box-shadow: 0 4px 0 #003300, 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.2s; }
         #menuTrigger:active { transform: translateY(4px); box-shadow: 0 0 0 #003300; }
         #menuTrigger:hover { filter: brightness(1.2); }
         
@@ -762,7 +404,6 @@
             .featured-item { width: 90vw; }
             .carousel-arrow { display: block; }
             .mod-item { width: 100%; max-width: 400px; }
-            /* Adjust floating buttons for mobile to not block content */
             #biomeToggle, #menuTrigger { bottom: 10px; width: 40px; height: 40px; }
             .activity-feed { bottom: 70px; font-size: 8px; padding: 8px 12px; }
         }
@@ -781,343 +422,362 @@
     <!-- CREEPER SOUND FOR EASTER EGG -->
     <audio id="creeperSound" src="assets/sounds/creeper.mp3" preload="auto"></audio>
 
-    <!-- NAVIGATION -->
-    <nav class="minecraft-navbar">
-        <div class="navbar-logo">
-            <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
-            <span class="logo-text">Projects</span>
+    <!-- MAIN CONTENT WRAPPER (FOR SCROLLING CONTENT) -->
+    <div id="main-wrapper">
+        
+        <!-- WEATHER EFFECT LAYERS (NEW) -->
+        <div id="weatherRain" class="weather-layer weather-rain"></div>
+        <div id="weatherAsh" class="weather-layer weather-ash"></div>
+        <div id="weatherEnd" class="weather-layer weather-end"></div>
+
+        <!-- NAVIGATION -->
+        <nav class="minecraft-navbar">
+            <div class="navbar-logo">
+                <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
+                <span class="logo-text">Projects</span>
+                <!-- SPLASH TEXT (NEW) -->
+                <span id="splashText" class="splash-text">Minecraft!</span>
+            </div>
+            <div class="mobile-nav-icons">
+                <button class="nav-icon active" data-target="projects"><i class="fas fa-scroll"></i></button>
+                <button class="nav-icon" data-target="social"><i class="fas fa-users"></i></button>
+                <button class="nav-icon" data-target="news"><i class="fas fa-newspaper"></i></button>
+            </div>
+            <div class="navbar-menu">
+                <button class="nav-item active" data-target="projects">PROJECTS</button>
+                <button class="nav-item" data-target="social">SOCIAL</button>
+                <button class="nav-item" data-target="news">NEWS</button>
+            </div>
+        </nav>
+        
+        <!-- SEARCH -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
+                <button id="clearSearch" class="clear-search">✕</button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
         </div>
-        <div class="mobile-nav-icons">
-            <button class="nav-icon active" data-target="projects"><i class="fas fa-scroll"></i></button>
-            <button class="nav-icon" data-target="social"><i class="fas fa-users"></i></button>
-            <button class="nav-icon" data-target="news"><i class="fas fa-newspaper"></i></button>
-        </div>
-        <div class="navbar-menu">
-            <button class="nav-item active" data-target="projects">PROJECTS</button>
-            <button class="nav-item" data-target="social">SOCIAL</button>
-            <button class="nav-item" data-target="news">NEWS</button>
-        </div>
-    </nav>
-    
-    <!-- SEARCH -->
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
-            <button id="clearSearch" class="clear-search">✕</button>
-        </div>
-        <div id="searchResults" class="search-results"></div>
-    </div>
-    
-    <div class="container">
-        <!-- PROJECTS TAB -->
-        <div id="projects" class="tab-content active">
-            <!-- Sorting -->
-            <div class="filter-container">
-                <div class="sort-dropdown">
-                    <button class="sort-button" id="sortButton">
-                        <i class="fas fa-fire"></i> Sort: <span id="currentSortText">Trending</span>
-                    </button>
-                    <div class="sort-options" id="sortOptions">
-                        <div class="sort-option" data-sort="trending"><i class="fas fa-fire"></i> Trending</div>
-                        <div class="sort-option" data-sort="newest"><i class="fas fa-star"></i> Newest</div>
-                        <div class="sort-option" data-sort="popular"><i class="fas fa-download"></i> Popular</div>
+        
+        <div class="container">
+            <!-- PROJECTS TAB -->
+            <div id="projects" class="tab-content active">
+                <!-- Sorting -->
+                <div class="filter-container">
+                    <div class="sort-dropdown">
+                        <button class="sort-button" id="sortButton">
+                            <i class="fas fa-fire"></i> Sort: <span id="currentSortText">Trending</span>
+                        </button>
+                        <div class="sort-options" id="sortOptions">
+                            <div class="sort-option" data-sort="trending"><i class="fas fa-fire"></i> Trending</div>
+                            <div class="sort-option" data-sort="newest"><i class="fas fa-star"></i> Newest</div>
+                            <div class="sort-option" data-sort="popular"><i class="fas fa-download"></i> Popular</div>
+                        </div>
                     </div>
                 </div>
+                
+            
+
+                <!-- Mod List (Empty initially to be filled by real content, will have Skeletons injected via JS) -->
+                <ul class="mod-list" id="projectModList">
+                    <!-- Item 1 -->
+                    <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
+                        <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
+                        <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="QuickPortItems">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Automate item transfer between chests instantly.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('QuickPort Items')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+                    
+                    <!-- Item 2 -->
+                    <li id='instantTeleport' class="mod-item" data-downloads="8000" data-date="2025-05-01">
+                        <img src="assets/images/postsImages/instantTeleport.webp" alt="instantTeleport">
+                        <h3>Instant Teleport <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="instantTeleport">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Teleport anywhere instantly with style.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Instant Teleport')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 3 -->
+                    <li id='handyCrafting' class="mod-item" data-downloads="4000" data-date="2025-04-20">
+                        <img src="assets/images/postsImages/handyCrafting.webp" alt="handyCrafting">
+                        <h3>Handy Crafting <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="handyCrafting">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Carry crafting tables as items and open them anywhere!</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Handy Crafting')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 4 -->
+                    <li id='chainedHearts' class="mod-item" data-downloads="2500" data-date="2025-04-10">
+                        <img src="assets/images/postsImages/chainedHearts.webp" alt="chainedHearts">
+                        <h3>Chained Hearts <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="chainedHearts">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Link your hearts with a friend, share damage and healing.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Chained Hearts')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 5 -->
+                    <li id='souleggs' class="mod-item" data-downloads="10000" data-date="2025-03-25">
+                        <img src="assets/images/postsImages/souleggs.webp" alt="souleggs">
+                        <h3>Soul Eggs <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="souleggs">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Catch and collect mobs just like Pokémon.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Soul Eggs')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 6 -->
+                    <li id='mobHider' class="mod-item" data-downloads="3000" data-date="2025-03-15">
+                        <img src="assets/images/postsImages/MobHider.webp" alt="mobHider">
+                        <h3>Mob Hider <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="mobHider">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Hide inside any mob to troll your friends.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Mob Hider')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 7 -->
+                    <li id='enderGuardian' class="mod-item" data-downloads="1200" data-date="2025-03-05"> 
+                        <img src="assets/images/postsImages/enderGuardian.webp" alt="enderGuardian">
+                        <h3>Ender Guardian <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="enderGuardian">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Saves your life when in battle or dying in silly ways.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Ender Guardian')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 8 -->
+                    <li id='pocketwaypoint' class="mod-item" data-downloads="7000" data-date="2025-02-20"> 
+                        <img src="assets/images/pocketwaypoint.webp" alt="pocketwaypoint">
+                        <h3>Pocket Waypoint <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="pocketwaypoint">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Save locations and teleport easily.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Pocket Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 9 -->
+                    <li id='wirlesshopper' class="mod-item" data-downloads="12000" data-date="2025-02-10"> 
+                        <img src="assets/images/hopper.webp" alt="wirlesshopper">
+                        <h3>Wireless Hopper <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="wirlesshopper">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>No more cluttered hoppers and complex redstone.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Wireless Hopper')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 10 -->
+                    <li id='advancedwaypoint' class="mod-item" data-downloads="1500" data-date="2025-02-01"> 
+                        <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
+                        <h3>Advanced Waypoint <span class="version-badge">1.21.70</span></h3>
+                        <div class="rating-container" data-mod-id="advancedwaypoint">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Return home from great distances easily.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Advanced Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 11 -->
+                    <li id='landclaim' class="mod-item" data-downloads="900" data-date="2025-01-25"> 
+                        <img src="assets/images/landClaim.webp" alt="Land Claim">
+                        <h3>Land Claim <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="landclaim">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Protect your areas from other players.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Land Claim')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+            
+                    <!-- Item 12 -->
+                    <li id='itemcarrier' class="mod-item" data-downloads="500" data-date="2025-01-15"> 
+                        <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
+                        <h3>Items Carrier <span class="version-badge">1.21.70</span></h3>
+                        <div class="rating-container" data-mod-id="itemcarrier">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Move items from one chest to another.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Items Carrier')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+            
+                    <!-- Item 13 -->
+                    <li id='healthbar' class="mod-item" data-downloads="1100" data-date="2025-01-05">
+                        <img src="assets/images/HealthBar.webp" alt="Health Bar">
+                        <h3>Health Bar <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="healthbar">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Show a heart counter for monsters and mobs.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Health Bar')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+
+                    <!-- Item 14 -->
+                    <li id='mobcatcher' class="mod-item" data-downloads="2000" data-date="2025-01-01"> 
+                        <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
+                        <h3>Mob Catcher <span class="version-badge">1.21.120</span></h3>
+                        <div class="rating-container" data-mod-id="mobcatcher">
+                            <div class="stars-wrapper">
+                                <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
+                            </div>
+                            <span class="rating-score">Rate this!</span>
+                        </div>
+                        <p>Help you move monsters and mobs easily.</p>
+                        <div class="action-buttons">
+                            <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-button" onclick="openFeedbackModal('Mob Catcher')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- SOCIAL TAB -->
+            <div id="social" class="tab-content">
+                <ul class="mod-list">
+                    <li class="mod-item social-item">
+                        <img src="assets/images/youtube.png" alt="YouTube">
+                        <h3>YouTube <span class="social-badge">Videos</span></h3>
+                        <p>Watch our tutorials</p>
+                        <a href="https://www.youtube.com/@shadowgamer100k" target="_blank" class="social-link">Visit Channel</a>
+                    </li>
+                    <li class="mod-item social-item">
+                        <img src="assets/images/discord.png" alt="Discord">
+                        <h3>Discord <span class="social-badge">Community</span></h3>
+                        <p>Join our server</p>
+                        <a href="http://bit.ly/4fUVc9H" target="_blank" class="social-link">Join Server</a>
+                    </li>
+                    <li class="mod-item social-item">
+                        <img src="assets/images/paypal.png" alt="PayPal">
+                        <h3>PayPal <span class="social-badge">Support</span></h3>
+                        <p>Support the creator</p>
+                        <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" target="_blank" class="social-link">Donate</a>
+                    </li>
+                    <li class="mod-item social-item">
+                        <img src="assets/images/coffe.png" alt="Buy me a Coffee">
+                        <h3>Buy me a Coffee <span class="social-badge">Support</span></h3>
+                        <p>Buy me a Coffee</p>
+                        <a href="https://buymeacoffee.com/shadowjamak" target="_blank" class="social-link">Donate</a>
+                    </li>
+                </ul>
             </div>
             
-           
-
-            <!-- Mod List (Empty initially to be filled by real content, will have Skeletons injected via JS) -->
-            <ul class="mod-list" id="projectModList">
-                <!-- Item 1 -->
-                <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
-                    <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
-                    <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="QuickPortItems">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Automate item transfer between chests instantly.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('QuickPort Items')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-                
-                <!-- Item 2 -->
-                <li id='instantTeleport' class="mod-item" data-downloads="8000" data-date="2025-05-01">
-                    <img src="assets/images/postsImages/instantTeleport.webp" alt="instantTeleport">
-                    <h3>Instant Teleport <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="instantTeleport">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Teleport anywhere instantly with style.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Instant Teleport')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 3 -->
-                <li id='handyCrafting' class="mod-item" data-downloads="4000" data-date="2025-04-20">
-                    <img src="assets/images/postsImages/handyCrafting.webp" alt="handyCrafting">
-                    <h3>Handy Crafting <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="handyCrafting">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Carry crafting tables as items and open them anywhere!</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Handy Crafting')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 4 -->
-                <li id='chainedHearts' class="mod-item" data-downloads="2500" data-date="2025-04-10">
-                    <img src="assets/images/postsImages/chainedHearts.webp" alt="chainedHearts">
-                    <h3>Chained Hearts <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="chainedHearts">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Link your hearts with a friend, share damage and healing.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Chained Hearts')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 5 -->
-                <li id='souleggs' class="mod-item" data-downloads="10000" data-date="2025-03-25">
-                    <img src="assets/images/postsImages/souleggs.webp" alt="souleggs">
-                    <h3>Soul Eggs <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="souleggs">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Catch and collect mobs just like Pokémon.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Soul Eggs')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 6 -->
-                <li id='mobHider' class="mod-item" data-downloads="3000" data-date="2025-03-15">
-                    <img src="assets/images/postsImages/MobHider.webp" alt="mobHider">
-                    <h3>Mob Hider <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="mobHider">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Hide inside any mob to troll your friends.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Mob Hider')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 7 -->
-                <li id='enderGuardian' class="mod-item" data-downloads="1200" data-date="2025-03-05"> 
-                    <img src="assets/images/postsImages/enderGuardian.webp" alt="enderGuardian">
-                    <h3>Ender Guardian <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="enderGuardian">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Saves your life when in battle or dying in silly ways.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Ender Guardian')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 8 -->
-                <li id='pocketwaypoint' class="mod-item" data-downloads="7000" data-date="2025-02-20"> 
-                    <img src="assets/images/pocketwaypoint.webp" alt="pocketwaypoint">
-                    <h3>Pocket Waypoint <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="pocketwaypoint">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Save locations and teleport easily.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Pocket Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 9 -->
-                <li id='wirlesshopper' class="mod-item" data-downloads="12000" data-date="2025-02-10"> 
-                    <img src="assets/images/hopper.webp" alt="wirlesshopper">
-                    <h3>Wireless Hopper <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="wirlesshopper">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>No more cluttered hoppers and complex redstone.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Wireless Hopper')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 10 -->
-                <li id='advancedwaypoint' class="mod-item" data-downloads="1500" data-date="2025-02-01"> 
-                    <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
-                    <h3>Advanced Waypoint <span class="version-badge">1.21.70</span></h3>
-                    <div class="rating-container" data-mod-id="advancedwaypoint">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Return home from great distances easily.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Advanced Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 11 -->
-                <li id='landclaim' class="mod-item" data-downloads="900" data-date="2025-01-25"> 
-                    <img src="assets/images/landClaim.webp" alt="Land Claim">
-                    <h3>Land Claim <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="landclaim">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Protect your areas from other players.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Land Claim')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-        
-                <!-- Item 12 -->
-                <li id='itemcarrier' class="mod-item" data-downloads="500" data-date="2025-01-15"> 
-                    <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
-                    <h3>Items Carrier <span class="version-badge">1.21.70</span></h3>
-                    <div class="rating-container" data-mod-id="itemcarrier">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Move items from one chest to another.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Items Carrier')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-           
-                <!-- Item 13 -->
-                <li id='healthbar' class="mod-item" data-downloads="1100" data-date="2025-01-05">
-                    <img src="assets/images/HealthBar.webp" alt="Health Bar">
-                    <h3>Health Bar <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="healthbar">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Show a heart counter for monsters and mobs.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Health Bar')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-
-                <!-- Item 14 -->
-                <li id='mobcatcher' class="mod-item" data-downloads="2000" data-date="2025-01-01"> 
-                    <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
-                    <h3>Mob Catcher <span class="version-badge">1.21.120</span></h3>
-                    <div class="rating-container" data-mod-id="mobcatcher">
-                        <div class="stars-wrapper">
-                            <i class="fas fa-star star-btn" data-value="5"></i><i class="fas fa-star star-btn" data-value="4"></i><i class="fas fa-star star-btn" data-value="3"></i><i class="fas fa-star star-btn" data-value="2"></i><i class="fas fa-star star-btn" data-value="1"></i>
-                        </div>
-                        <span class="rating-score">Rate this!</span>
-                    </div>
-                    <p>Help you move monsters and mobs easily.</p>
-                    <div class="action-buttons">
-                        <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
-                        <button class="feedback-button" onclick="openFeedbackModal('Mob Catcher')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <!-- SOCIAL TAB -->
-        <div id="social" class="tab-content">
-            <ul class="mod-list">
-                <li class="mod-item social-item">
-                    <img src="assets/images/youtube.png" alt="YouTube">
-                    <h3>YouTube <span class="social-badge">Videos</span></h3>
-                    <p>Watch our tutorials</p>
-                    <a href="https://www.youtube.com/@shadowgamer100k" target="_blank" class="social-link">Visit Channel</a>
-                </li>
-                <li class="mod-item social-item">
-                    <img src="assets/images/discord.png" alt="Discord">
-                    <h3>Discord <span class="social-badge">Community</span></h3>
-                    <p>Join our server</p>
-                    <a href="http://bit.ly/4fUVc9H" target="_blank" class="social-link">Join Server</a>
-                </li>
-                <li class="mod-item social-item">
-                    <img src="assets/images/paypal.png" alt="PayPal">
-                    <h3>PayPal <span class="social-badge">Support</span></h3>
-                    <p>Support the creator</p>
-                    <a href="https://paypal.me/shadowgamer100k?country.x=MA&locale.x=ar_EG" target="_blank" class="social-link">Donate</a>
-                </li>
-                 <li class="mod-item social-item">
-                    <img src="assets/images/coffe.png" alt="Buy me a Coffee">
-                    <h3>Buy me a Coffee <span class="social-badge">Support</span></h3>
-                    <p>Buy me a Coffee</p>
-                    <a href="https://buymeacoffee.com/shadowjamak" target="_blank" class="social-link">Donate</a>
-                </li>
-            </ul>
+            <!-- NEWS TAB -->
+            <div id="news" class="tab-content">
+                <ul class="mod-list">
+                    <li class="mod-item news-item">
+                        <img src="assets/images/news.png" alt="Addon Updates">
+                        <h3>Addon Updates <span class="news-badge">Update</span></h3>
+                        <span class="news-date">13 Feb 2025</span>
+                        <p>All addons updated to 1.21.60 except advanced shop.</p>
+                    </li>
+                    <li class="mod-item news-item">
+                        <img src="assets/images/news.png" alt="Official Website Launch">
+                        <h3>Website Launch <span class="news-badge">New</span></h3>
+                        <span class="news-date">3 Feb 2025</span>
+                        <p>Today is the first day of the site's creation.</p>
+                    </li>
+                </ul>
+            </div>
         </div>
         
-        <!-- NEWS TAB -->
-        <div id="news" class="tab-content">
-            <ul class="mod-list">
-                 <li class="mod-item news-item">
-                    <img src="assets/images/news.png" alt="Addon Updates">
-                    <h3>Addon Updates <span class="news-badge">Update</span></h3>
-                    <span class="news-date">13 Feb 2025</span>
-                    <p>All addons updated to 1.21.60 except advanced shop.</p>
-                </li>
-                <li class="mod-item news-item">
-                    <img src="assets/images/news.png" alt="Official Website Launch">
-                    <h3>Website Launch <span class="news-badge">New</span></h3>
-                    <span class="news-date">3 Feb 2025</span>
-                    <p>Today is the first day of the site's creation.</p>
-                </li>
-            </ul>
-        </div>
-    </div>
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2025 shadowGamer12k. All rights reserved. 
+                <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy</a> | 
+                <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms</a>
+            </p>
+        </footer>
+    </div> <!-- END OF MAIN WRAPPER -->
 
     <!-- MODAL -->
     <div class="modal">
@@ -1163,14 +823,6 @@
             <button class="send-btn" onclick="sendFeedback()">Send to Developer</button>
         </div>
     </div>
-    
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2025 shadowGamer12k. All rights reserved. 
-            <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy</a> | 
-            <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms</a>
-        </p>
-    </footer>
 
     <!-- FAKE ACTIVITY FEED CONTAINER (NEW) -->
     <div id="activityFeed" class="activity-feed"></div>
@@ -1274,6 +926,83 @@
                     try { await clickSound.play(); } catch (e) {}
                 }
             };
+
+            // ==================== SPLASH TEXT LOGIC (NEW) ====================
+            const splashTexts = [
+                "Creeper? Aww man!",
+                "Also try Terraria!",
+                "100% Bug Free!",
+                "Follow shadowGamer!",
+                "Don't dig straight down!",
+                "Herobrine Removed",
+                "Check out the addons!",
+                "Made with <3!",
+                "Splashing!",
+                "Sub to the channel!",
+                "Better than Bedrock?",
+                "Now with Ray Tracing! (JK)",
+                "Press Alt+F4 for diamonds!",
+                "Blocky goodness!",
+                "Pixel perfect!",
+                "Zombie proof!",
+                "Enderman friendly!",
+                "Not a scam!",
+                "Download now!",
+                "Rated 5 Stars!"
+            ];
+
+            const splashElement = document.getElementById('splashText');
+            if (splashElement) {
+                const randomSplash = splashTexts[Math.floor(Math.random() * splashTexts.length)];
+                splashElement.textContent = randomSplash;
+                
+                // Add slight scaling animation on click
+                splashElement.addEventListener('click', () => {
+                    splashElement.style.transform = "rotate(-20deg) scale(1.2)";
+                    playClickSound();
+                    setTimeout(() => {
+                        splashElement.textContent = splashTexts[Math.floor(Math.random() * splashTexts.length)];
+                        splashElement.style.transform = "rotate(-20deg) scale(1)";
+                    }, 150);
+                });
+            }
+
+            // ==================== CLICK PARTICLES (NEW) ====================
+            document.addEventListener('click', (e) => {
+                // Don't spawn particles if clicking a button/link to avoid visual clutter? 
+                // Actually, it's fun, so let's keep it everywhere.
+                createClickParticles(e.clientX, e.clientY);
+            });
+
+            function createClickParticles(x, y) {
+                const particleCount = 5;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('click-particle');
+                    document.body.appendChild(particle);
+
+                    // Set initial position
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+
+                    // Random direction
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 30 + 10;
+                    const dx = Math.cos(angle) * speed;
+                    const dy = Math.sin(angle) * speed;
+
+                    // Use requestAnimationFrame for smooth animation start
+                    requestAnimationFrame(() => {
+                        particle.style.transform = `translate(${dx}px, ${dy}px) scale(0)`;
+                        particle.style.opacity = '0';
+                    });
+
+                    // Remove after animation
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 600);
+                }
+            }
 
             // ==================== SKELETON LOADING LOGIC ====================
             const projectModList = document.getElementById('projectModList');
@@ -1441,6 +1170,11 @@
             // ==================== BIOME SWITCHER LOGIC ====================
             const biomeToggle = document.getElementById('biomeToggle');
             const biomeIcon = document.getElementById('biomeIcon');
+            const weatherLayers = {
+                rain: document.getElementById('weatherRain'),
+                ash: document.getElementById('weatherAsh'),
+                end: document.getElementById('weatherEnd')
+            };
             
             // Define the themes
             const biomes = [
@@ -1456,7 +1190,7 @@
             let biomeClickCount = 0;
             let biomeClickTimer;
 
-            // Function to apply theme
+            // Function to apply theme AND weather
             function applyBiome(index) {
                 const biome = biomes[index];
                 
@@ -1473,6 +1207,12 @@
                     biomeIcon.className = `fas ${biome.icon}`;
                     biomeToggle.setAttribute('data-biome', `Biome: ${biome.name}`);
                 }
+
+                // Update Weather Effects
+                Object.values(weatherLayers).forEach(layer => layer.style.display = 'none');
+                if (biome.name === 'Overworld') weatherLayers.rain.style.display = 'block';
+                else if (biome.name === 'The Nether') weatherLayers.ash.style.display = 'block';
+                else if (biome.name === 'The End') weatherLayers.end.style.display = 'block';
                 
                 // Save to storage
                 localStorage.setItem('selectedBiomeIndex', index);
