@@ -40,6 +40,27 @@
             --text-color: white;
         }
 
+        /* ==================== BIOME THEMES ==================== */
+        /* NETHER THEME (Red/Gold/Dark) */
+        body.theme-nether {
+            --mc-green: #ff5555;       /* Changes "Green" accents to Red */
+            --mc-blue: #ffaa00;        /* Changes "Blue" links to Gold */
+            --mc-dark: #3d1a1a;        /* Reddish dark background */
+            --bg-color: #250505;       /* Deep dark red background */
+            --mc-border: #8e4040;      /* Reddish border */
+            --mc-gold: #ffe6a0;        /* Lighter gold for contrast */
+        }
+
+        /* THE END THEME (Purple/Teal/Black) */
+        body.theme-end {
+            --mc-green: #d855ff;       /* Changes "Green" accents to Purple */
+            --mc-blue: #55ffff;        /* Changes "Blue" links to Cyan/Teal */
+            --mc-dark: #20102e;        /* Dark purple background */
+            --bg-color: #12061f;       /* Deep space purple background */
+            --mc-border: #683e8c;      /* Purple border */
+            --mc-gold: #e0ffaa;        /* Endrod yellow */
+        }
+
         /* ==================== GLOBAL STYLES ==================== */
         body {
             background-color: var(--bg-color);
@@ -53,6 +74,7 @@
             min-height: 100vh;
             margin: 0;
             overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.3s ease, transform 1s ease, filter 0.5s ease; /* Added transform for Dinnerbone */
         }
 
         h1 { font-size: 2em; margin: 20px 0; }
@@ -63,6 +85,167 @@
             max-width: 95%;
             margin: 0 auto;
             padding: 0 15px;
+        }
+
+        /* ==================== EASTER EGG STYLES (NEW) ==================== */
+        
+        /* Dinnerbone Effect (Upside Down) */
+        body.dinnerbone-mode {
+            transform: rotate(180deg);
+        }
+
+        /* jeb_ Effect (Rainbow Cycle) */
+        @keyframes rainbow-hue {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        body.jeb-mode {
+            animation: rainbow-hue 3s linear infinite;
+        }
+
+        /* Advancement Toast */
+        .advancement-toast {
+            position: fixed;
+            top: 20px;
+            right: -400px; /* Hidden initially */
+            background-color: #222;
+            border: 2px solid #555;
+            color: #fff;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 5000;
+            border-radius: 4px;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: left;
+            max-width: 300px;
+        }
+
+        .advancement-toast.show {
+            right: 20px;
+        }
+
+        .adv-icon {
+            font-size: 24px;
+            color: var(--mc-gold);
+        }
+
+        .adv-text-group h4 {
+            margin: 0 0 5px 0;
+            font-size: 10px;
+            color: var(--mc-gold);
+            text-transform: uppercase;
+        }
+
+        .adv-text-group p {
+            margin: 0;
+            font-size: 10px;
+            font-family: Arial, sans-serif;
+            color: #ddd;
+        }
+
+        /* Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .shake-effect {
+            animation: shake 0.5s;
+            animation-iteration-count: 1;
+        }
+
+        /* ==================== SKELETON LOADING ANIMATION ==================== */
+        .skeleton {
+            background: #3a3a3a;
+            background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Specific Skeleton Shapes */
+        .skeleton-card {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #444;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            height: 100%; /* Match height */
+        }
+
+        .skeleton-img { 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            border-radius: 5px; 
+        }
+        
+        .skeleton-title { height: 20px; width: 70%; }
+        .skeleton-stars { height: 15px; width: 50%; }
+        .skeleton-text { height: 12px; width: 100%; }
+        .skeleton-text.short { width: 60%; }
+        .skeleton-btn-group { display: flex; gap: 10px; margin-top: auto; }
+        .skeleton-btn { height: 35px; width: 100%; border-radius: 0; }
+
+        /* Fade in animation for real content */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Fake Activity Feed */
+        .activity-feed {
+            position: fixed;
+            bottom: 80px; /* Positioned above bottom controls */
+            left: 50%;
+            transform: translateX(-50%) translateY(150px); /* Hidden initially (pushed down) */
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--mc-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            z-index: 2900;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; /* Allows clicking through it */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            width: max-content;
+            max-width: 90%;
+            text-align: left;
+        }
+
+        .activity-feed.active {
+            transform: translateX(-50%) translateY(0); /* Slide up into view */
+        }
+
+        .activity-feed i {
+            font-size: 16px;
         }
 
         /* ==================== NAVIGATION ==================== */
@@ -82,7 +265,8 @@
         .navbar-logo {
             display: flex;
             align-items: center;
-            cursor: default;
+            cursor: pointer; /* Changed to pointer for easter egg hint */
+            user-select: none;
         }
         
         .nav-logo { width: 36px; height: 36px; margin-right: 10px; image-rendering: pixelated; }
@@ -510,6 +694,56 @@
             margin: 15px 0 5px 0; border-bottom: 1px solid #444; padding-bottom: 5px;
         }
 
+        /* THEME TOGGLE BUTTON (Floating Bottom Left) - NEW */
+        #biomeToggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: #2c2c2c;
+            border: 2px solid var(--mc-green);
+            color: var(--mc-green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 3000;
+            box-shadow: 0 4px 0 #000, 0 10px 20px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+        }
+
+        #biomeToggle:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #000;
+        }
+
+        #biomeToggle:hover {
+            filter: brightness(1.2);
+        }
+
+        /* Tooltip for the biome button */
+        #biomeToggle::after {
+            content: attr(data-biome); /* Reads the text from the HTML */
+            position: absolute;
+            left: 60px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        #biomeToggle:hover::after {
+            opacity: 1;
+        }
+
         #menuTrigger {
             position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
             background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
@@ -528,6 +762,9 @@
             .featured-item { width: 90vw; }
             .carousel-arrow { display: block; }
             .mod-item { width: 100%; max-width: 400px; }
+            /* Adjust floating buttons for mobile to not block content */
+            #biomeToggle, #menuTrigger { bottom: 10px; width: 40px; height: 40px; }
+            .activity-feed { bottom: 70px; font-size: 8px; padding: 8px 12px; }
         }
         @media (min-width: 769px) {
             .navbar-menu { display: flex !important; }
@@ -541,6 +778,8 @@
 <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
+    <!-- CREEPER SOUND FOR EASTER EGG -->
+    <audio id="creeperSound" src="assets/sounds/creeper.mp3" preload="auto"></audio>
 
     <!-- NAVIGATION -->
     <nav class="minecraft-navbar">
@@ -589,7 +828,7 @@
             
            
 
-            <!-- Mod List -->
+            <!-- Mod List (Empty initially to be filled by real content, will have Skeletons injected via JS) -->
             <ul class="mod-list" id="projectModList">
                 <!-- Item 1 -->
                 <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
@@ -933,6 +1172,18 @@
         </p>
     </footer>
 
+    <!-- FAKE ACTIVITY FEED CONTAINER (NEW) -->
+    <div id="activityFeed" class="activity-feed"></div>
+
+    <!-- ADVANCEMENT TOAST CONTAINER (NEW) -->
+    <div id="advancementToast" class="advancement-toast">
+        <i class="fas fa-award adv-icon"></i>
+        <div class="adv-text-group">
+            <h4>Advancement Made!</h4>
+            <p id="advancementTitle">Secret Found</p>
+        </div>
+    </div>
+
     <!-- NEW MENU OVERLAY (Replaces Sidebar) -->
     <div class="menu-overlay" id="menuOverlay">
         <div class="menu-container">
@@ -998,6 +1249,11 @@
         </div>
     </div>
 
+    <!-- BIOME SWITCHER BUTTON (NEW) -->
+    <button id="biomeToggle" data-biome="Overworld">
+        <i class="fas fa-tree" id="biomeIcon"></i>
+    </button>
+
     <!-- Floating Trigger Button -->
     <div id="menuTrigger">
         <i class="fas fa-bars" style="font-size: 20px;"></i>
@@ -1018,6 +1274,220 @@
                     try { await clickSound.play(); } catch (e) {}
                 }
             };
+
+            // ==================== SKELETON LOADING LOGIC ====================
+            const projectModList = document.getElementById('projectModList');
+            const realItems = Array.from(projectModList.children);
+            
+            // 1. Hide Real Items
+            realItems.forEach(item => item.style.display = 'none');
+            
+            // 2. Generate & Insert Skeletons
+            // We'll create 6 skeleton placeholders
+            for(let i=0; i<6; i++) {
+                const li = document.createElement('li');
+                li.className = 'mod-item skeleton-placeholder'; 
+                li.style.pointerEvents = 'none'; // Prevent clicks on skeletons
+                li.innerHTML = `
+                    <div class="skeleton-card">
+                        <div class="skeleton skeleton-img"></div>
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-stars"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text short"></div>
+                        <div class="skeleton-btn-group">
+                             <div class="skeleton skeleton-btn"></div>
+                             <div class="skeleton skeleton-btn" style="width:50px"></div>
+                        </div>
+                    </div>
+                `;
+                projectModList.appendChild(li);
+            }
+
+            // 3. Simulate Loading Time (e.g., 1.5 seconds)
+            setTimeout(() => {
+                // Remove all skeletons
+                document.querySelectorAll('.skeleton-placeholder').forEach(el => el.remove());
+                
+                // Show real items with fade animation
+                realItems.forEach((item, index) => {
+                    item.style.display = 'flex'; // Match CSS flex display
+                    item.style.opacity = '0';
+                    item.style.animation = `fadeIn 0.5s ease-in forwards ${index * 0.05}s`; // Staggered fade in
+                });
+            }, 1500);
+
+            // ==================== EASTER EGG LOGIC (NEW FEATURES) ====================
+            const logo = document.querySelector('.nav-logo');
+            const creeperSound = document.getElementById('creeperSound');
+            let logoClicks = 0;
+            let logoTimer;
+            
+            // Advancement Toast Helper
+            const advToast = document.getElementById('advancementToast');
+            const advTitle = document.getElementById('advancementTitle');
+            
+            function showAdvancement(text) {
+                advTitle.textContent = text;
+                advToast.classList.add('show');
+                playClickSound(); // Reuse click sound as popup sound
+                setTimeout(() => {
+                    advToast.classList.remove('show');
+                }, 4000);
+            }
+
+            // 1. KEYBOARD EASTER EGGS (Dinnerbone & jeb_)
+            let keyBuffer = "";
+            document.addEventListener('keydown', (e) => {
+                keyBuffer += e.key.toLowerCase();
+                if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20); // Keep buffer short
+
+                if (keyBuffer.includes("dinnerbone")) {
+                    document.body.classList.toggle("dinnerbone-mode");
+                    showAdvancement("Upside Down World");
+                    keyBuffer = ""; // Reset
+                }
+                
+                if (keyBuffer.includes("jeb_")) {
+                    document.body.classList.toggle("jeb-mode");
+                    showAdvancement("Rainbow Sheep Mode");
+                    keyBuffer = ""; // Reset
+                }
+            });
+
+            // 2. CLICK LOGO EASTER EGG
+            if(logo) {
+                logo.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    logoClicks++;
+                    
+                    clearTimeout(logoTimer);
+                    logoTimer = setTimeout(() => {
+                        logoClicks = 0;
+                    }, 1000); 
+
+                    if(logoClicks >= 5) {
+                        logoClicks = 0;
+                        triggerCreeperEffect();
+                        showAdvancement("Creeper Aww Man!");
+                    }
+                });
+            }
+
+            function triggerCreeperEffect() {
+                if(creeperSound) {
+                    creeperSound.currentTime = 0;
+                    creeperSound.volume = 0.5;
+                    creeperSound.play().catch(e => console.log("Audio play failed", e));
+                }
+                document.body.classList.add('shake-effect');
+                const oldBg = document.body.style.backgroundColor;
+                document.body.style.transition = "background-color 0.1s";
+                document.body.style.backgroundColor = "#fff"; 
+                
+                setTimeout(() => {
+                    document.body.classList.remove('shake-effect');
+                    document.body.style.backgroundColor = oldBg; 
+                    setTimeout(() => { document.body.style.transition = "background-color 0.5s ease"; }, 100);
+                }, 500);
+            }
+
+            // ==================== FAKE ACTIVITY FEED LOGIC (NEW) ====================
+            const feedContainer = document.getElementById('activityFeed');
+            const activities = [
+                { action: "downloaded", icon: "fas fa-download" },
+                { action: "rated 5 stars for", icon: "fas fa-star" },
+                { action: "just viewed", icon: "fas fa-eye" }
+            ];
+            // Some sample addons names in case extracting from DOM fails or is empty
+            const feedAddons = [ "Soul Eggs", "Mob Hider", "Ender Guardian", "QuickPort Items", "Wireless Hopper", "Instant Teleport" ];
+            const locations = ["USA", "UK", "Germany", "Brazil", "Japan", "Canada", "France", "Australia", "Spain"];
+
+            function showRandomActivity() {
+                if(!feedContainer) return;
+                
+                const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+                const randomAddon = feedAddons[Math.floor(Math.random() * feedAddons.length)];
+                const randomLoc = locations[Math.floor(Math.random() * locations.length)];
+                
+                // Construct content
+                feedContainer.innerHTML = `
+                    <i class="${randomActivity.icon}" style="color: var(--mc-green)"></i>
+                    <span>Someone from <strong>${randomLoc}</strong> ${randomActivity.action} <strong>${randomAddon}</strong></span>
+                `;
+                
+                // Show
+                feedContainer.classList.add('active');
+                
+                // Hide after 4 seconds
+                setTimeout(() => {
+                    feedContainer.classList.remove('active');
+                }, 4000);
+            }
+
+            // Start loop (random interval between 8 and 15 seconds)
+            function scheduleNextActivity() {
+                const delay = Math.random() * (15000 - 8000) + 8000;
+                setTimeout(() => {
+                    showRandomActivity();
+                    scheduleNextActivity();
+                }, delay);
+            }
+
+            // Start activity feed after initial load (5 seconds)
+            setTimeout(scheduleNextActivity, 5000);
+
+
+            // ==================== BIOME SWITCHER LOGIC ====================
+            const biomeToggle = document.getElementById('biomeToggle');
+            const biomeIcon = document.getElementById('biomeIcon');
+            
+            // Define the themes
+            const biomes = [
+                { name: 'Overworld', class: '', icon: 'fa-tree' },
+                { name: 'The Nether', class: 'theme-nether', icon: 'fa-fire' },
+                { name: 'The End', class: 'theme-end', icon: 'fa-eye' }
+            ];
+
+            // Check Local Storage for saved preference
+            let currentBiomeIndex = parseInt(localStorage.getItem('selectedBiomeIndex')) || 0;
+
+            // Function to apply theme
+            function applyBiome(index) {
+                const biome = biomes[index];
+                
+                // Reset classes
+                document.body.classList.remove('theme-nether', 'theme-end');
+                
+                // Add new class if it exists (not empty string)
+                if (biome.class) {
+                    document.body.classList.add(biome.class);
+                }
+                
+                // Update Icon and Tooltip
+                if(biomeIcon && biomeToggle) {
+                    biomeIcon.className = `fas ${biome.icon}`;
+                    biomeToggle.setAttribute('data-biome', `Biome: ${biome.name}`);
+                }
+                
+                // Save to storage
+                localStorage.setItem('selectedBiomeIndex', index);
+            }
+
+            // Initialize on load
+            applyBiome(currentBiomeIndex);
+
+            // Click Event
+            if (biomeToggle) {
+                biomeToggle.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering other clicks
+                    playClickSound();
+                    
+                    // Cycle to next biome
+                    currentBiomeIndex = (currentBiomeIndex + 1) % biomes.length;
+                    applyBiome(currentBiomeIndex);
+                });
+            }
 
             // --- FEEDBACK SYSTEM LOGIC ---
             // Webhook URL (Note: Exposed to client-side)
@@ -1241,12 +1711,23 @@
             const searchResults = document.getElementById('searchResults');
             
             // Generate data from DOM to ensure single source of truth
-            const addons = Array.from(document.querySelectorAll('#projectModList .mod-item')).map(item => ({
-                name: item.querySelector('h3').firstChild.textContent.trim(),
-                desc: item.querySelector('p').textContent,
-                img: item.querySelector('img').src,
-                link: item.querySelector('a').href
-            })).filter(a => a.name); // Filter out empty items
+            // Exclude skeleton placeholders which cause the "Cannot read properties of null" error
+            const addons = Array.from(document.querySelectorAll('#projectModList .mod-item:not(.skeleton-placeholder)')).map(item => {
+                const h3 = item.querySelector('h3');
+                const img = item.querySelector('img');
+                const link = item.querySelector('a');
+                const p = item.querySelector('p');
+
+                // Safety check to prevent crashes if an element is missing
+                if (!h3 || !img || !link || !p) return null;
+
+                return {
+                    name: h3.firstChild ? h3.firstChild.textContent.trim() : h3.textContent.trim(),
+                    desc: p.textContent,
+                    img: img.src,
+                    link: link.href
+                };
+            }).filter(a => a !== null); // Filter out invalid/empty items
 
             if (searchInput) {
                 searchInput.addEventListener('input', function() {
@@ -1280,7 +1761,7 @@
             // --- SORTING LOGIC ---
             const sortButton = document.getElementById('sortButton');
             const sortOptions = document.getElementById('sortOptions');
-            const projectModList = document.getElementById('projectModList');
+            // projectModList is already declared in Skeleton Logic above.
 
             if (sortButton && projectModList) {
                 sortButton.addEventListener('click', (e) => {
@@ -1368,4 +1849,3 @@
     </script>
 </body>
 </html>
-
