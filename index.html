@@ -58,8 +58,9 @@
         h1 { font-size: 2em; margin: 20px 0; }
         a { text-decoration: none; color: inherit; }
         
+        /* UPDATED: Container now takes 95% of width */
         .container {
-            max-width: 1200px;
+            max-width: 95%;
             margin: 0 auto;
             padding: 0 15px;
         }
@@ -75,7 +76,7 @@
             border: 2px solid #555;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             border-radius: 4px;
-            max-width: 1200px;
+            max-width: 95%; /* Match container */
         }
         
         .navbar-logo {
@@ -106,7 +107,7 @@
         .nav-item.active, .nav-icon.active { background-color: #555; border-color: #7e7e7e; box-shadow: 0 0 5px rgba(255,255,255,0.3); }
 
         /* ==================== SEARCH & FILTERS ==================== */
-        .search-container { max-width: 1200px; margin: 0 auto 10px; padding: 0 15px; position: relative; }
+        .search-container { max-width: 95%; margin: 0 auto 10px; padding: 0 15px; position: relative; }
         .search-box {
             display: flex; align-items: center; background-color: #2c2c2c;
             border: 2px solid #555; border-radius: 8px; padding: 12px 15px;
@@ -117,7 +118,7 @@
         .search-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; outline: none; font-family: Arial, sans-serif; }
         .clear-search { background: #444; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: none; }
         
-        .filter-container { display: flex; justify-content: flex-end; max-width: 1200px; margin: 15px auto 20px; padding: 0 15px; }
+        .filter-container { display: flex; justify-content: flex-end; max-width: 95%; margin: 15px auto 20px; padding: 0 15px; }
         .sort-dropdown { position: relative; display: inline-block; }
         .sort-button { background: #3a3a3a; color: #fff; border: 2px solid #555; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Press Start 2P', cursive; display: flex; align-items: center; gap: 8px; }
         .sort-options { display: none; position: absolute; right: 0; top: 100%; background: #2c2c2c; border: 2px solid #555; z-index: 50; min-width: 150px; }
@@ -126,7 +127,7 @@
         .sort-option:hover { background-color: #444; color: var(--mc-green); }
 
         /* ==================== CAROUSEL (REDESIGNED) ==================== */
-        .featured-carousel { max-width: 1200px; margin: 0 auto 30px; padding: 0 15px; position: relative; }
+        .featured-carousel { max-width: 95%; margin: 0 auto 30px; padding: 0 15px; position: relative; }
         
         .carousel-track { 
             display: flex; gap: 20px; padding: 10px 5px 20px 5px; /* Extra padding for hover scale */
@@ -180,14 +181,26 @@
         .carousel-arrow.left { left: 20px; }
         .carousel-arrow.right { right: 20px; }
 
-        /* ==================== MOD LIST & CARDS ==================== */
+        /* ==================== MOD LIST (GRID LAYOUT) ==================== */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        .mod-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; list-style: none; padding: 0; margin-top: 20px; }
+        /* NEW: Using CSS Grid to fill the space automatically */
+        .mod-list { 
+            display: grid;
+            /* Auto-fill columns, min 300px width, but stretch to fill space (1fr) */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px; 
+            padding: 0; 
+            margin-top: 20px;
+            list-style: none;
+        }
         
         .mod-item {
-            background: #333; padding: 15px; border-radius: 5px; width: 300px;
+            background: #333; padding: 15px; border-radius: 5px;
+            /* Width is now handled by grid, set to 100% of grid cell */
+            width: 100%; 
+            box-sizing: border-box;
             box-shadow: 0 4px 8px rgba(0,0,0,0.5); text-align: left;
             border: 2px solid #555; position: relative; transition: transform 0.2s;
             display: flex; flex-direction: column;
