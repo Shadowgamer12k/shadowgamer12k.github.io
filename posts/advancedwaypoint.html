@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M2P94THH');</script>
-<!-- End Google Tag Manager -->
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M2P94THH');</script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JKTG6N0GFN');
+    </script>
 
-
-     
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <meta name="description" content="Minecraft Advanced Waypoint Add-on - get back">
-    <title>Minecraft Advanced Waypoint Add-on | get back</title>
-   <style>
+    <meta name="description" content="Minecraft Advanced Waypoint Add-on – Navigate your worlds with custom waypoints, death points, and teleportation!">
+    <title>Advanced Waypoint Add-on | Navigation System</title>
+    
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
         @font-face {
             font-family: 'Minecraft';
             src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css') format('truetype');
@@ -26,66 +34,94 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --mc-green: #55FF55;
             --mc-dark: #2D2D2D;
             --mc-border: #555555;
+            --xp-green-light: #80ff20;
+            --xp-green-dark: #00aa00;
         }
 
        body {
-  background-color: #1a1a1a;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                  linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                  linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-  font-family: 'Press Start 2P', cursive;
-  color: white;
-  line-height: 1.6;
-  margin: 0;
-  min-height: 100vh;
-  font-size: 16px;
-}
-     h1 {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  line-height: 1.2;
-  margin: 0.5em 0;
-}
-     h2, .feature-title {
-  font-size: clamp(1.2rem, 4vw, 1.8rem);
-  margin: 0.8em 0;
-}
-
-p, .feature-item, .faq-answer {
-  font-size: clamp(0.9rem, 3vw, 1rem);
-  line-height: 1.5;
-}
-     
-
-        .header {
-  padding: 2rem 1rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-bottom: 4px solid var(--mc-border);
-  text-align: center;
-}
-
-        .header img {
-            max-width: 600px;
-            width: 90%;
-            image-rendering: pixelated;
-            filter: drop-shadow(0 0 8px var(--mc-green));
+          background-color: #1a1a1a;
+          background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+          background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+          font-family: 'Press Start 2P', cursive;
+          color: white;
+          line-height: 1.6;
+          margin: 0;
+          min-height: 100vh;
+          font-size: 16px;
+          overflow-x: hidden;
+          padding-bottom: 60px;
         }
 
-    .container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
+        button, input, select, textarea, .game-ui, #gameUI p {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        h1 {
+          font-size: clamp(1.5rem, 5vw, 2.5rem);
+          line-height: 1.4;
+          margin: 0.5em 0;
+          text-shadow: 4px 4px 0px #000;
+          position: relative;
+          z-index: 2;
+        }
+
+        h2, .feature-title {
+          font-size: clamp(1.2rem, 4vw, 1.8rem);
+          margin: 0.8em 0;
+        }
+        
+        h3 {
+            color: #fff;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
+        p, .feature-item, .faq-answer, li {
+          font-size: clamp(0.7rem, 2.5vw, 0.9rem); 
+          line-height: 1.8;
+        }
+
+        .header {
+          padding: 2rem 1rem;
+          background: rgba(0, 0, 0, 0.7);
+          border-bottom: 4px solid var(--mc-border);
+          text-align: center;
+          position: relative;
+          z-index: 10;
+        }
+
+        /* تنسيق الصور داخل الشرح */
+        .addon-preview-img {
+            display: block;
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            margin: 1rem auto; 
+            border: 3px solid var(--mc-border);
+            image-rendering: pixelated;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
+        }
+
+        .container {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 1rem;
+          position: relative;
+          z-index: 5;
+        }
 
         .feature-box {
-  background: rgba(0, 0, 0, 0.8);
-  border: 4px solid var(--mc-border);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
+          background: rgba(0, 0, 0, 0.85); 
+          border: 4px solid var(--mc-border);
+          padding: 1.5rem;
+          margin: 1.5rem 0;
+          position: relative;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(2px);
+        }
 
         .feature-title {
             color: var(--mc-green);
@@ -97,6 +133,214 @@ p, .feature-item, .faq-answer {
             border: 2px solid var(--mc-border);
         }
 
+        /* --- CLICK TO COPY STYLES --- */
+        .command-box {
+            background: #000;
+            border: 2px solid var(--mc-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .command-box:hover {
+            border-color: var(--mc-green);
+            background: #111;
+        }
+
+        .command-box::after {
+            content: "CLICK TO COPY";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.6rem;
+            color: #888;
+            font-family: 'Press Start 2P', cursive;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .command-box:hover::after {
+            opacity: 1;
+        }
+
+        .command-box.copied {
+            border-color: #ffff55; 
+            animation: flashSuccess 0.5s ease;
+        }
+
+        .command-box.copied::after {
+            content: "COPIED!";
+            color: #ffff55;
+            opacity: 1;
+        }
+
+        @keyframes flashSuccess {
+            0% { background-color: #000; }
+            50% { background-color: #222; }
+            100% { background-color: #000; }
+        }
+
+        .command-prefix {
+            color: var(--mc-green);
+        }
+
+        /* --- VIDEO CONTAINER --- */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            margin: 1.5rem 0;
+            border: 3px solid var(--mc-border);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- XP BAR --- */
+        .xp-hud-container {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 600px;
+            z-index: 9999;
+            padding: 0 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .xp-level-number {
+            font-family: 'Press Start 2P', cursive;
+            color: #80ff20;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 4px;
+        }
+
+        .xp-bar-bg {
+            width: 100%;
+            height: 12px;
+            background-color: #3a3a3a;
+            border: 2px solid #1a1a1a;
+            border-top: 2px solid #555;
+            border-bottom: 2px solid #000;
+            position: relative;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #80ff20;
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+            transition: width 0.1s linear;
+            position: relative;
+        }
+        
+        .xp-bar-bg::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0,0,0,0.3) 19px, rgba(0,0,0,0.3) 20px);
+            pointer-events: none;
+        }
+
+        /* --- PARTICLES --- */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            width: 8px;
+            height: 8px;
+            bottom: -10px;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- GAME STYLES --- */
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #222;
+            border: 4px solid var(--mc-border);
+            overflow: hidden;
+            margin-bottom: 1rem;
+            cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48c3R5bGU+Y2lyY2xlLGxpbmV7c3Ryb2tlOiM1NUZGNTU7c3Ryb2tlLXdpZHRoOjNweDtmaWxsOm5vbmU7ZmlsdGVyOmRyb3Atc2hhZG93KDNweCAzcHggMHB4ICMwMDApO308L3N0eWxlPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE1Ii8+PGxpbmUgeDE9IjIwIiB5MT0iNCIgeDI9IjIwIiB5Mj0iMzYiLz48bGluZSB4MT0iNCIgeTE9IjIwIiB4Mj0iMzYiIHkyPSIyMCIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiM1NUZGNTUiLz48L3N2Zz4=') 20 20, crosshair;
+            display: none; 
+            image-rendering: pixelated;
+        }
+
+        .game-area:active {
+            cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48c3R5bGU+Y2lyY2xlLGxpbmV7c3Ryb2tlOiNGRjU1NTU7c3Ryb2tlLXdpZHRoOjNweDtmaWxsOm5vbmU7ZmlsdGVyOmRyb3Atc2hhZG93KDNweCAzcHggMHB4ICMwMDApO308L3N0eWxlPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEyIi8+PGxpbmUgeDE9IjIwIiB5MT0iNCIgeDI9IjIwIiB5Mj0iMzYiLz48bGluZSB4MT0iNCIgeTE9IjIwIiB4Mj0iMzYiIHkyPSIyMCIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNGRjU1NTUiLz48L3N2Zz4=') 20 20, crosshair;
+        }
+
+        .chicken {
+            position: absolute;
+            font-size: 40px;
+            user-select: none;
+            cursor: pointer;
+            animation: bob 0.5s infinite alternate;
+            transition: transform 0.1s;
+            filter: drop-shadow(2px 2px 0px #000); 
+            z-index: 10;
+        }
+
+        .chicken:active {
+            transform: scale(0.8);
+        }
+
+        @keyframes bob {
+            from { margin-top: 0; }
+            to { margin-top: -5px; }
+        }
+
+        .game-ui {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border: 2px dashed #444;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+        }
+
         .download-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -104,93 +348,51 @@ p, .feature-item, .faq-answer {
             margin: 2rem 0;
         }
 
-      .download-button {
-  font-size: clamp(0.8rem, 3vw, 1rem);
-  background: var(--mc-dark);
-  color: white;
-  padding: 1.5rem;
-  text-decoration: none;
-  border: 3px solid var(--mc-border);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
+        .download-button {
+          font-size: 0.8rem;
+          background: var(--mc-dark);
+          color: white;
+          padding: 1.5rem;
+          text-decoration: none;
+          border: 4px solid var(--mc-border);
+          transition: all 0.1s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          cursor: pointer;
+          text-transform: uppercase;
+          line-height: 1.5;
+        }
 
         .download-button:hover {
-  background: var(--mc-green);
-  color: black;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(85, 255, 85, 0.3);
-}
+          background: var(--mc-green);
+          color: black;
+          transform: translateY(-4px);
+          box-shadow: 0 4px 0px #004222;
+        }
 
         .download-button:active {
             transform: translateY(0);
+            box-shadow: 0 0 0;
+        }
+        
+        /* هذا الكلاس يخفي الأزرار الحقيقية حتى تنتهي اللعبة */
+        .hidden-content {
+            display: none;
         }
 
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            margin: 1.5rem 0;
+        .features-list {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+          padding: 1rem 0;
         }
 
-        .video-container iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 3px solid var(--mc-border);
-        }
-
-       .features-list, .testimonials {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
-}
         .feature-item {
             background: rgba(255, 255, 255, 0.05);
             padding: 1rem;
             border-left: 4px solid var(--mc-green);
-        }
-
-        .screenshot-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .screenshot {
-            border: 3px solid var(--mc-border);
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .screenshot:hover {
-            transform: scale(1.05);
-        }
-
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .testimonial {
-            background: rgba(85, 255, 85, 0.05);
-            padding: 1rem;
-            border-left: 4px solid var(--mc-green);
-            font-style: italic;
-        }
-
-        .compatibility-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.5rem;
-            margin: 1rem 0;
         }
 
         .compatibility-item {
@@ -199,6 +401,7 @@ p, .feature-item, .faq-answer {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .compatibility-item.compatible::before {
@@ -213,25 +416,16 @@ p, .feature-item, .faq-answer {
 
         .faq-item {
             margin-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(85, 255, 85, 0.3);
+            padding-bottom: 1rem;
         }
 
         .faq-question {
             color: var(--mc-green);
             font-weight: bold;
             margin-bottom: 0.5rem;
-        }
-
-        .command-box {
-            background: #000;
-            border: 2px solid var(--mc-border);
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .command-prefix {
-            color: var(--mc-green);
+            display: block;
+            font-size: 0.8rem;
         }
 
         footer {
@@ -240,6 +434,8 @@ p, .feature-item, .faq-answer {
             text-align: center;
             border-top: 4px solid var(--mc-border);
             margin-top: 3rem;
+            position: relative;
+            z-index: 10;
         }
 
         footer a {
@@ -253,665 +449,350 @@ p, .feature-item, .faq-answer {
             text-decoration: underline;
         }
         
-        .whats-new {
-            background: rgba(85, 255, 85, 0.05);
-            padding: 1.5rem;
-            border-left: 4px solid var(--mc-green);
-            margin: 1.5rem 0;
+        @media (max-width: 768px) {
+          body { font-size: 10px; line-height: 1.5; }
+          .header { padding: 0.7rem; }
+          .container { padding: 0.2rem; }
+          .feature-box { padding: 0.7rem; margin: 0.7rem 0; }
+          .features-list { grid-template-columns: 1fr; }
         }
-        
-        .whats-new h3 {
-            color: var(--mc-green);
-            margin-top: 0;
-        }
-        
-        .whats-new ul {
-            list-style-type: none;
-            padding-left: 0.5rem;
-        }
-        
-        .whats-new li {
-            margin-bottom: 0.8rem;
-            font-style: italic;
-        }
-
-      @media (max-width: 768px) {
-  body {
-    font-size: 10px;
-    line-height: 1.5;
-  }
-
-  .header {
-    padding: 0.7rem;
-  }
-
-  .container {
-    padding: 0.2rem;
-  }
-
-  .feature-box {
-    padding: 0.7rem;
-    margin: 0.7rem 0;
-  }
-
-  .features-list, .testimonials {
-    grid-template-columns: 0.7fr;
-  }
-
-  .download-button {
-    padding: 0.7rem;
-    font-size: 0.0.6rem;
-  }
-
-  p, li {
-    word-break: break-word;
-    hyphens: auto;
-  }
-}
-     @media (max-width: 480px) {
-  h1 {
-    font-size: 1.3rem;
-  }
-  
-  h2, .feature-title {
-    font-size: 1.1rem;
-  }
-  
-  .feature-box p {
-    font-size: 0.85rem;
-  }
-  
-  .download-button {
-    font-size: 0.8rem;
-    padding: 0.8rem;
-  }
-
-  .video-container {
-    margin: 0.5rem 0;
-  }
-}
-           /* Ad Block Detection Modal */
-        .adblock-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 9998;
-            pointer-events: all;
-        }
-
-        .adblock-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #2d2d2d;
-            border: 4px solid #55ff55;
-            padding: 20px;
-            z-index: 9999;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
-            border-radius: 10px;
-            pointer-events: all;
-        }
-
-        .adblock-modal h2 {
-            color: #55ff55;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-        .mod-item-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            transition: transform 0.2s ease;
-        }
-
-        .mod-item-link:hover {
-            transform: translateY(-3px);
-        }
-
-        .mod-item-link:active {
-            transform: translateY(0);
-        }
-
-        .mod-item {
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            position: relative;
-        }
-
-        .mod-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .adblock-modal p {
-            color: #fff;
-            font-size: 0.9em;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .adblock-modal button {
-            background: #008542;
-            border: 2px solid #55ff55;
-            color: #fff;
-            padding: 10px 25px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0 10px;
-        }
-
-        .adblock-modal button:hover {
-            background: #00a550;
-            transform: scale(1.05);
-        }
-     
     </style>
 </head>
 <body>
-     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
+    <!-- BACKGROUND PARTICLES CONTAINER -->
+    <div class="particles-container" id="particles"></div>
 
     <header class="header">
-        <h1>Advanced Waypoint Add-on</h1>
-        <p>Navigate your Minecraft worlds with ease</p>
+      <h1>🌍 Advanced Waypoint Add-on</h1>
+      <p>Navigate your Minecraft worlds with ease!</p>
     </header>
 
     <main class="container">
-       <section class="feature-box">
-    <h2 class="feature-title">SHOWCASE</h2>
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/ahiRQIfUKDk?si=iNrINBcKhPNZw8F-" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; encrypted-media; gyroscope" 
-                allowfullscreen 
-                loading="lazy">
-        </iframe>
-    </div>
-</section>
-
-
-
       
-        <section class="feature-box">
-            <h2 class="feature-title">ABOUT</h2>
-            <p>Advanced Waypoint Add-on brings a sophisticated navigation system to your Minecraft Bedrock experience. Whether you're exploring far from home, managing multiple bases, or playing with friends, this add-on ensures you'll never lose your way again.</p>
-            <p>Built specifically for Minecraft Bedrock Edition 1.20 and above, this add-on integrates seamlessly with your gameplay, providing an intuitive interface for creating, managing, and navigating between important locations in your world.</p>
-        </section>
+      <!-- SHOWCASE VIDEO -->
+      <section class="feature-box">
+        <h2 class="feature-title">SHOWCASE</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/ahiRQIfUKDk?si=iNrINBcKhPNZw8F-" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+      </section>
 
-        <section class="feature-box">
-            <h2 class="feature-title">WHAT'S NEW</h2>
-            <div class="whats-new">
-                <h3>What's new ✨?</h3>
-                <ul>
-                    <li>🎉 New, The size of the addon has become small.</li>
-                    <li>🎉 New, Gui new button icons.</li>
-                    <li>🎉 New, Feature access: waypoint now you can share your waypoint with your friends.</li>
-                    <li>🎉 New, Flags colors.</li>
-                    <li>🎉 New, I added icons, now you can add an icon for your waypoint.</li>
-                    <li>🎉 New, Now you can select the flag of the waypoint.</li>
-                    <li>🎉 New, More settings...</li>
-                    <li>🎉 New, Admin panel: you can manage the waypoints of your server.</li>
-                    <li>🎉 New, The admin can set the limit of the waypoints that's the players can create.</li>
-                    <li>🎉 New, Now you can make more than 999999 wapoints.</li>
-                    <li>🎉 New, Removed the points system, just for now.</li>
-                </ul>
-                <h3>What has been fixed 🔧?</h3>
-                <ul>
-                    <li>🔨 Fixed, An issue where the player would not be teleported.</li>
-                    <li>🔨 Fixed, The problem of waypoint disappearing from other players when moving away from it.</li>
-                </ul>
-            </div>
-        </section>
+      <section class="feature-box">
+        <h2 class="feature-title">ABOUT</h2>
+        <p><strong>Advanced Waypoint Add-on</strong> brings a sophisticated navigation system to your Minecraft Bedrock experience. Whether you're exploring far from home, managing multiple bases, or playing with friends, this add-on ensures you'll never lose your way again.</p>
+        
+        <img src="../assets/images/postsImages/waypointaddonImages/main_form.png" alt="Waypoint Interface" class="addon-preview-img">
+      </section>
 
-        <div data-banner-id="6063861"></div>
-         
-        <section class="feature-box">
-            <h2 class="feature-title">KEY FEATURES</h2>
-            <div class="features-list">
-                <div class="feature-item">
-                    <h3>Custom Waypoints</h3>
-                    <p>Save important locations with custom names and colors. Create up to 30 waypoints per player.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Death Waypoints</h3>
-                    <p>Automatically create a waypoint at your last death location, making item recovery easy.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Teleportation</h3>
-                    <p>Teleport directly to any of your waypoints with a simple command or through the interface.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Multiplayer Support</h3>
-                    <p>Share waypoints with friends or keep them private. See other players' public waypoints.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Distance Tracking</h3>
-                    <p>Display distance to selected waypoints in real-time as you move through your world.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Compass Integration</h3>
-                    <p>Your compass will point to your selected waypoint for easy navigation.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>User-Friendly Management</h3>
-                    <p>Intuitive form interface makes creating, editing, and deleting waypoints simple.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Dimension Support</h3>
-                    <p>Create waypoints across different dimensions (Overworld, Nether, End).</p>
-                </div>
+      <section class="feature-box">
+        <h2 class="feature-title">KEY FEATURES</h2>
+        <div class="features-list">
+            <div class="feature-item">
+                <h3>📍 Custom Waypoints</h3>
+                <p>Save important locations with custom names and colors. Create up to 30 waypoints per player.</p>
             </div>
-        </section>
-<div data-banner-id="6062006"></div>
-        <section class="feature-box">
-    <h2 class="feature-title">HOW TO USE</h2>
-    <p>The Advanced Waypoint Add-on is designed to be simple and intuitive. Here's how to use the main features:</p>
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Creating Waypoints</h3>
-    <p>To create an advanced waypoint, you need to craft the Advanced Waypoint Compass first. Follow the recipe shown in the image below. Once the compass is crafted, simply click on it to open a form. This form will ask for details about the waypoint you want to create, such as its name, color, flag, and whether it is private or public. After selecting your preferences, click "Submit." A flag will then spawn to display your waypoint information. If you prefer, you can hide the flag from your settings.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/main_form.png" alt="Main Form for Waypoint Creation" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Creating Waypoint Form</h3>
-    <p>Here’s the form you will use to input the details of your waypoint like name, color, and visibility options. Make sure to fill in the details before submitting.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/create_form.png" alt="Create Waypoint Form" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Managing Waypoints</h3>
-    <p>To manage your created waypoints, click on the compass again. This will allow you to view and edit your existing waypoints, change their settings, or remove them if needed. The management form is shown below:</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/waypoint_manager_form.png" alt="Waypoint Manager Form" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Flag Display</h3>
-    <p>When you create a waypoint, a flag will appear to indicate your waypoint’s location. The flag shows the waypoint’s details and can be customized according to your preferences.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/flag.png" alt="Waypoint Flag" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Teleporting to Waypoints</h3>
-    <p>Once your waypoints are created, you can teleport to them easily by clicking on the waypoint flag. This will teleport you to the saved location instantly. Here's an example of the teleportation options:</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/teleport_options.png" alt="Teleport Options" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Settings</h3>
-    <p>The Add-on also offers various settings to customize your experience. You can modify the settings as shown in the image below:</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/addon_settings.png" alt="Addon Settings" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Access Options</h3>
-    <p>Set permissions for who can access your waypoints. You can choose to make the waypoint private or public for other players to view and teleport to.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/access_options.png" alt="Access Options" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Admin Panel</h3>
-    <p>Admins can use the admin panel to manage all waypoints across the server. Here's a look at the admin panel interface:</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/admin_panel.png" alt="Admin Panel" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">-> Admin Panel Settings</h3>
-    <p>In the admin panel, you can also configure additional settings related to waypoint management and control over public and private waypoints.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/admin_panel_setting.png" alt="Admin Panel Settings" style="width:100%;max-width:600px;">
-    
-    <h3 style="border-bottom: 1px solid #000; background-color: #6eff3c; color: black;">> Waypoint Summary</h3>
-    <p>Get a detailed summary of all your waypoints, including their name, location, and status. This summary helps you keep track of all active and saved waypoints.</p>
-    <img src="../assets/images/postsImages/waypointaddonImages/waypoint_summary.png" alt="Waypoint Summary" style="width:100%;max-width:600px;">
-</section>
+            <div class="feature-item">
+                <h3>💀 Death Waypoints</h3>
+                <p>Automatically creates a waypoint at your last death location for easy item recovery.</p>
+            </div>
+            <div class="feature-item">
+                <h3>🚀 Instant Teleport</h3>
+                <p>Teleport directly to any of your waypoints with a simple command or through the UI.</p>
+            </div>
+            <div class="feature-item">
+                <h3>🧭 Compass Integration</h3>
+                <p>Your compass will actually point to your selected waypoint for vanilla-style navigation.</p>
+            </div>
+        </div>
+    </section>
 
+      <section class="feature-box">
+        <h2 class="feature-title">HOW TO USE</h2>
+        <p>1️⃣ Craft the <strong>Advanced Waypoint Compass</strong>.</p>
+        <p>2️⃣ Use the compass to open the Waypoint Menu.</p>
+        
+        <!-- CLICK TO COPY -->
+        <div class="command-box" id="cmdBox" onclick="copyCommand()" title="Click to copy command">
+          <span class="command-prefix">/waypoint help</span>
+        </div>
+        
+        <h3>Creating & Managing</h3>
+        <p>Fill in the form with your waypoint's name, color, and flag style. You can choose to make it public (visible to friends) or private.</p>
+        <img src="../assets/images/postsImages/waypointaddonImages/create_form.png" alt="Creation Form" class="addon-preview-img">
+        
+        <h3>Teleportation</h3>
+        <p>Simply click on a waypoint flag or use the menu to teleport instantly.</p>
+        <img src="../assets/images/postsImages/waypointaddonImages/teleport_options.png" alt="Teleport Menu" class="addon-preview-img">
+      </section>
 
-        <section class="feature-box">
-            <h2 class="feature-title">COMPATIBILITY</h2>
-            <div class="compatibility-list">
-                <div class="compatibility-item compatible">Minecraft 1.20.0+</div>
-                <div class="compatibility-item compatible">Survival Mode</div>
-                <div class="compatibility-item compatible">Creative Mode</div>
-                <div class="compatibility-item compatible">Adventure Mode</div>
-                <div class="compatibility-item compatible">Multiplayer Realms</div>
-                <div class="compatibility-item compatible">Local Multiplayer</div>
-                <div class="compatibility-item compatible">Most Texture Packs</div>
-                <div class="compatibility-item incompatible">Minecraft Java Edition</div>
-                <div class="compatibility-item incompatible">Minecraft Below 1.20</div>
-            </div>
-            <p>This add-on has been extensively tested with various other popular add-ons and should work seamlessly with most gameplay enhancement packs.</p>
-        </section>
+      <section class="feature-box">
+        <h2 class="feature-title">COMPATIBILITY</h2>
+        <div class="compatibility-item compatible">Minecraft Bedrock 1.20+</div>
+        <div class="compatibility-item compatible">Survival & Adventure Modes</div>
+        <div class="compatibility-item compatible">Multiplayer & Realms</div>
+        <div class="compatibility-item incompatible">Java Edition</div>
+      </section>
 
-        <section class="feature-box">
-            <h2 class="feature-title">FREQUENTLY ASKED QUESTIONS</h2>
-            <div class="faq-item">
-                <div class="faq-question">- How many waypoints can I create?</div>
-                <div class="faq-answer">You can create up to 30 waypoints per player. Server admins can adjust this limit as needed.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">- Will my waypoints stay after I close the game?</div>
-                <div class="faq-answer">Yes, all waypoints are saved permanently until you delete them.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">- Can I use this in multiplayer?</div>
-                <div class="faq-answer">Yes, Advanced Waypoint Add-on works perfectly in multiplayer environments, including Realms.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">- Does the teleport feature work in survival mode?</div>
-                <div class="faq-answer">Yes, the teleport feature works in all game modes, but server admins can disable it if desired.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">- How do I update to a newer version?</div>
-                <div class="faq-answer">Simply download the new version and replace the old files. Your waypoints will be preserved.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">- Can I customize the appearance of waypoints?</div>
-                <div class="faq-answer">Yes, you can select different colors for each waypoint, choose custom flags, and add icons to help categorize them.</div>
-            </div>
-        </section>
+      <!-- DOWNLOAD SECTION WITH CHICKEN MINIGAME -->
+      <section class="feature-box">
+        <h2 class="feature-title">DOWNLOAD</h2>
+        
+        <div class="game-ui" id="gameUI">
+            <p style="color: #ccc; margin-bottom: 10px; font-size: 0.7rem;">VERIFICATION: CATCH <strong><span id="chickenCount" style="color: var(--mc-green)">5</span></strong> CHICKENS!</p>
+            <button class="download-button" id="startGameBtn" onclick="startChickenGame()" style="width: 100%; max-width: 300px; margin: 0 auto;">
+                🎮 START GAME
+            </button>
+        </div>
 
+        <!-- Safe Game Area: Chickens only spawn HERE -->
+        <div class="game-area" id="gameArea"></div>
 
-<div data-banner-id="6063861"></div>
-         
-        <section class="feature-box">
-            <h2 class="feature-title">DOWNLOAD - linkvertise</h2>
-            <div class="download-buttons">
-                <a href="https://shadowgamer12k.github.io/redirect.html?url=https://direct-link.net/642753/advancedwaypoint" 
-                   class="download-button">
-                    <span>⬇️</span> Behavior Pack (+1.20)
-                </a>
-                <a href="https://shadowgamer12k.github.io/redirect.html?url=https://direct-link.net/642753/advancedwaypointrs" 
-                   class="download-button">
-                    <span>⬇️</span> Resource Pack (+1.20)
-                </a>
-            </div>
-            <p>Requires Minecraft Bedrock 1.20 or higher. Both packs must be installed for full functionality.</p>
-        </section>
+        <!-- LOCKED CONTENT: Will show 2 buttons after game -->
+        <div id="lockedDownloads" class="download-buttons hidden-content">
+          <a href="https://shadowgamer12k.github.io/redirect.html?url=https://direct-link.net/642753/advancedwaypoint" target="_blank" class="download-button">
+              ⬇️ Download Behavior Pack
+          </a>
+          <a href="https://shadowgamer12k.github.io/redirect.html?url=https://direct-link.net/642753/advancedwaypointrs" target="_blank" class="download-button">
+              ⬇️ Download Resource Pack
+          </a>
+        </div>
+        
+        <!-- INITIAL LOCKED MESSAGE -->
+        <div id="lockMessage" style="text-align: center; margin-top: 1rem;">
+             <p>🔒 Complete the mini-game to unlock download links.</p>
+        </div>
 
-        <section class="feature-box">
-            <h2 class="feature-title">INSTALLATION GUIDE</h2>
-            <ol class="installation-steps">
-                <li>Download both the Behavior Pack and Resource Pack</li>
-                <li>Open Minecraft and navigate to Settings > Global Resources</li>
-                <li>Click on "Import" and select the downloaded .mcpack files</li>
-                <li>Create a new world or edit an existing one</li>
-                <li>Under world settings, enable both the Advanced Waypoint Behavior Pack and Resource Pack</li>
-                <li>Ensure "Require Trusted Packages" is disabled if you encounter any issues</li>
-                <li>Start your world and use /waypoint help to begin</li>
-            </ol>
-        </section>
-
-        <section class="feature-box">
-            <h2 class="feature-title">FUTURE UPDATES</h2>
-            <p>We're constantly working to improve the Advanced Waypoint Add-on. Here are some features planned for upcoming releases:</p>
-            <ul>
-                <li>In-game minimap integration</li>
-                <li>Waypoint categories and folders</li>
-                <li>Route planning between multiple waypoints</li>
-                <li>Enhanced multiplayer permissions</li>
-                <li>Performance optimizations</li>
-                <li>More customization options</li>
-                <li>Return of the points system with new features</li>
-            </ul>
-            <p>Follow our updates on Discord for the latest news and feature announcements!</p>
-        </section>
-
-        <section class="feature-box">
-            <h2 class="feature-title">SUPPORT</h2>
-            <p>Having trouble with the Advanced Waypoint Add-on? Here are some common troubleshooting steps:</p>
-            <ul>
-                <li>Ensure both the Behavior Pack and Resource Pack are activated</li>
-                <li>Check that you're running Minecraft Bedrock 1.20 or higher</li>
-                <li>Verify that experimental features are enabled in your world settings</li>
-                <li>Try reinstalling both packs if commands aren't working</li>
-                <li>For multiplayer issues, make sure all players have the add-on installed</li>
-            </ul>
-            <p>If you continue to experience problems, please join our Discord community for direct support.</p>
-        </section>
+        <p style="margin-top: 1rem;">Requires Minecraft Bedrock 1.20+ with Experimental Features enabled.</p>
+      </section>
     </main>
-
-
-
+    
     <footer>
-    <p>&copy; 2025 shadowGamer12k. All rights reserved. 
+        <p>&copy; 2025 shadowGamer12k. All rights reserved. <br>
         <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
         <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
-    </p>
-</footer>
+        </p>
+        <p style="font-size: 0.7em; margin-top: 10px; opacity: 0.7;">NOT AN OFFICIAL MINECRAFT PRODUCT.</p>
+    </footer>
 
-<script>
-(function() {
-    const detectors = {
-        blockedRequests: async () => {
-            try {
-                const testUrls = [
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                    'https://adservice.google.com/adsid/integrator.js',
-                    'https://cdn.taboola.com/libtrc/unip/'
-                ];
+    <!-- REALISTIC XP BAR HUD -->
+    <div class="xp-hud-container">
+        <div class="xp-level-number" id="xpLevel">0</div>
+        <div class="xp-bar-bg">
+            <div class="xp-bar-fill" id="xpFill"></div>
+        </div>
+    </div>
 
-                const results = await Promise.all(
-                    testUrls.map(url => 
-                        fetch(url, {method: 'HEAD'})
-                        .then(() => false)
-                        .catch(() => true)
-                    )
-                );
-
-                return results.filter(x => x).length >= 2;
-            } catch {
-                return false;
-            }
-        },
-
-        hiddenElements: () => {
-            const testElement = document.getElementById('ad-test');
-            return testElement && 
-                (testElement.offsetHeight === 0 ||
-                 window.getComputedStyle(testElement).display === 'none');
-        },
-
-        detectExtensions: () => {
-            const extensionSignatures = {
-                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
-                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
-                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
-                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
-            };
-
-            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
-        },
-
-        checkChromeExtensions: async () => {
-            if (typeof chrome === 'undefined') return null;
-            
-            const extensionIds = {
-                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
-            };
-
-            try {
-                for (const [name, id] of Object.entries(extensionIds)) {
-                    const exists = await new Promise(resolve => {
-                        chrome.runtime.sendMessage(id, {}, (response) => {
-                            resolve(chrome.runtime.lastError ? false : true);
-                        });
-                    });
-                    if (exists) return name;
-                }
-            } catch {}
-            return null;
-        }
-    };
-
-    async function detectAdBlock() {
-        const results = await Promise.all([
-            detectors.blockedRequests(),
-            detectors.hiddenElements(),
-            detectors.detectExtensions(),
-            detectors.checkChromeExtensions()
-        ]);
-
-        return {
-            detected: results.some(r => r),
-            extension: results.find(r => typeof r === 'string') || 'unknown'
-        };
-    }
-
-    function showAdblockModal(extension) {
-            const modal = document.querySelector('.adblock-modal');
-            const overlay = document.querySelector('.adblock-overlay');
-            const resultDiv = document.getElementById('adblock-result');
-            
-            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                                <small>(Please disable to continue)</small>`;
-            modal.style.display = 'block';
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        document.getElementById('recheck-button').addEventListener('click', async () => {
-            const { detected, extension } = await detectAdBlock();
-            if (!detected) {
-                document.querySelector('.adblock-modal').style.display = 'none';
-                document.querySelector('.adblock-overlay').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-    // Initial check
-    setTimeout(async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (detected) showAdblockModal(extension);
-    }, 2000);
-
-    // Continuous background check
-    setInterval(async () => {
-        const { detected, extension } = await detectAdBlock();
-        const modal = document.querySelector('.adblock-modal');
+    <script>
+        let chickensCaught = 0;
+        const targetChickens = 5;
+        let gameInterval;
         
-        if (detected && modal.style.display === 'none') {
-            showAdblockModal(extension);
-        }
-    }, 5000);
-})();
-        function playClickSound() {
-            const clickSound = document.getElementById('clickSound');
-            try {
-                clickSound.currentTime = 0;
-                clickSound.play();
-            } catch(error) {
-                console.log('Sound playback error:', error);
+        // --- AUDIO SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function resumeAudio() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
-        // Improved ad blocker detection
-        function detectAdBlock() {
-            return new Promise((resolve) => {
-                const fakeAd = document.createElement('div');
-                fakeAd.innerHTML = '&nbsp;';
-                fakeAd.className = 'adsbox';
-                fakeAd.style.height = '1px';
-                document.body.appendChild(fakeAd);
-                
+
+        function playHitSound() {
+            resumeAudio();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playWinSound() {
+            resumeAudio();
+            [500, 600, 800].forEach((freq, i) => {
                 setTimeout(() => {
-                    const isBlocked = fakeAd.offsetHeight === 0;
-                    document.body.removeChild(fakeAd);
-                    resolve(isBlocked);
-                }, 100);
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
+                }, i * 150);
             });
         }
-
-        const params = new URLSearchParams(window.location.search);
-        const targetURL = decodeURIComponent(params.get("url"));
-        let tasksCompleted = 0;
-
-        function taskCompleted() {
-            tasksCompleted++;
-            if (tasksCompleted === 4) {
-                if (!targetURL) {
-                    showError("Invalid redirect link.");
-                    return;
-                }
-                showRedirectMessage();
-                startRedirectCountdown();
-            }
+        
+        function playPlopSound() {
+            resumeAudio();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
         }
 
-        function showRedirectMessage() {
-            document.getElementById("message").textContent = "Redirecting you...";
-            document.querySelector(".loadingspinner").style.display = "block";
-            document.querySelectorAll(".task-button").forEach(button => {
-                button.style.display = "none";
-            });
-        }
-
-        function startRedirectCountdown() {
-            let seconds = 5;
-            const countdownElement = document.createElement("div");
-            countdownElement.id = "countdown";
-            document.querySelector(".loadingspinner").after(countdownElement);
+        // --- XP BAR LOGIC ---
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
             
-            const interval = setInterval(() => {
-                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
-                if (seconds-- <= 0) {
-                    clearInterval(interval);
-                    window.location.href = targetURL;
-                }
-            }, 1000);
-        }
-
-        function showError(message) {
-            document.getElementById("message").textContent = message;
-            document.querySelector(".error").style.display = "block";
-        }
-
-        async function startCountdown(button) {
-            if (button.classList.contains('completed')) return;
-
-            const adBlockDetected = await detectAdBlock();
-            if (adBlockDetected) {
-                showError("Ad blocker detected! Please disable to continue.");
-                return;
-            }
-
-            const originalText = button.textContent;
-            const adWindow = window.open(button.href, '_blank');
-            
-            let countdown = 5;
-            button.style.pointerEvents = 'none';
-
-            const interval = setInterval(() => {
-                if (countdown > 0) {
-                    button.textContent = `${originalText} (${countdown}s)`;
-                    countdown--;
-                } else {
-                    clearInterval(interval);
-                    button.classList.add("completed");
-                    button.textContent = `✔ ${originalText} Completed`;
-                    taskCompleted();
-                }
-            }, 1000);
-        }
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            const adBlockDetected = await detectAdBlock();
-            if (adBlockDetected) {
-                document.getElementById('adblock-warning').style.display = 'block';
-                document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
-                document.getElementById('message').style.display = 'none';
-                return;
-            }
-
-            if (!targetURL) {
-                showError("Missing redirect URL!");
-                return;
-            }
-            
-            document.querySelectorAll(".task-button").forEach(button => {
-                button.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    startCountdown(button);
-                });
-            });
+            document.getElementById("xpFill").style.width = scrolled + "%";
+            const level = Math.round(scrolled);
+            document.getElementById("xpLevel").innerText = level;
         });
-</script>
+
+        // --- CLICK TO COPY LOGIC (SAFE) ---
+        function copyCommand() {
+            const cmdText = "/waypoint help";
+            
+            const textArea = document.createElement("textarea");
+            textArea.value = cmdText;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const box = document.getElementById('cmdBox');
+                box.classList.add('copied');
+                playPlopSound();
+                setTimeout(() => {
+                    box.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // --- FLOATING PARTICLES LOGIC ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20; 
+
+            setInterval(() => {
+                if (container.children.length > particleCount) return;
+
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                
+                const size = Math.random() * 8 + 4;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 10 + 5;
+                p.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(p);
+
+                setTimeout(() => {
+                    p.remove();
+                }, duration * 1000);
+            }, 800); 
+        }
+        
+        createParticles();
+
+        // --- CHICKEN GAME LOGIC ---
+        function startChickenGame() {
+            const gameArea = document.getElementById('gameArea');
+            const startBtn = document.getElementById('startGameBtn');
+            
+            resumeAudio();
+
+            startBtn.style.display = 'none'; 
+            gameArea.style.display = 'block'; 
+            
+            gameInterval = setInterval(spawnChicken, 800);
+            spawnChicken(); 
+        }
+
+        function spawnChicken() {
+            if (chickensCaught >= targetChickens) return;
+
+            const gameArea = document.getElementById('gameArea');
+            const chicken = document.createElement('div');
+            
+            chicken.className = 'chicken';
+            chicken.innerHTML = '🐔'; 
+            
+            const maxX = gameArea.clientWidth - 50;
+            const maxY = gameArea.clientHeight - 50;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            chicken.style.left = randomX + 'px';
+            chicken.style.top = randomY + 'px';
+            
+            chicken.onclick = function() {
+                catchChicken(this);
+            };
+
+            setTimeout(() => {
+                if(chicken.parentNode) chicken.remove();
+            }, 1500);
+
+            gameArea.appendChild(chicken);
+        }
+
+        function catchChicken(element) {
+            playHitSound();
+            element.remove();
+            chickensCaught++;
+            
+            const remaining = targetChickens - chickensCaught;
+            const counterSpan = document.getElementById('chickenCount');
+            
+            if (remaining > 0) {
+                counterSpan.innerText = remaining;
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            clearInterval(gameInterval);
+            playWinSound();
+            
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameUI').innerHTML = '<p style="color: var(--mc-green); font-size: 0.8rem;">✅ VERIFICATION COMPLETE!</p>';
+            
+            // UNLOCK BOTH DOWNLOADS
+            document.getElementById('lockedDownloads').style.display = 'grid'; // Show the grid of buttons
+            document.getElementById('lockMessage').style.display = 'none'; // Hide the lock message
+        }
+    </script>
 </body>
 </html>
