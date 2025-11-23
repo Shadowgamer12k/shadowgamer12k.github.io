@@ -34,6 +34,8 @@
             --mc-green: #55FF55;
             --mc-dark: #2D2D2D;
             --mc-border: #555555;
+            --xp-green-light: #80ff20;
+            --xp-green-dark: #00aa00;
         }
 
        body {
@@ -49,9 +51,10 @@
           margin: 0;
           min-height: 100vh;
           font-size: 16px;
+          overflow-x: hidden;
+          padding-bottom: 60px; /* Space for the new HUD */
         }
 
-        /* توحيد الخط في جميع العناصر والأزرار */
         button, input, select, textarea, .game-ui, #gameUI p {
             font-family: 'Press Start 2P', cursive;
         }
@@ -61,6 +64,8 @@
           line-height: 1.4;
           margin: 0.5em 0;
           text-shadow: 4px 4px 0px #000;
+          position: relative;
+          z-index: 2;
         }
 
         h2, .feature-title {
@@ -78,6 +83,8 @@
           background: rgba(0, 0, 0, 0.7);
           border-bottom: 4px solid var(--mc-border);
           text-align: center;
+          position: relative;
+          z-index: 10;
         }
 
         .addon-preview-img {
@@ -95,15 +102,18 @@
           max-width: 800px;
           margin: 2rem auto;
           padding: 1rem;
+          position: relative;
+          z-index: 5;
         }
 
         .feature-box {
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(0, 0, 0, 0.85); 
           border: 4px solid var(--mc-border);
           padding: 1.5rem;
           margin: 1.5rem 0;
           position: relative;
           box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(2px);
         }
 
         .feature-title {
@@ -116,6 +126,157 @@
             border: 2px solid var(--mc-border);
         }
 
+        /* --- CLICK TO COPY STYLES --- */
+        .command-box {
+            background: #000;
+            border: 2px solid var(--mc-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .command-box:hover {
+            border-color: var(--mc-green);
+            background: #111;
+        }
+
+        .command-box::after {
+            content: "CLICK TO COPY";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.6rem;
+            color: #888;
+            font-family: 'Press Start 2P', cursive;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .command-box:hover::after {
+            opacity: 1;
+        }
+
+        .command-box.copied {
+            border-color: #ffff55; 
+            animation: flashSuccess 0.5s ease;
+        }
+
+        .command-box.copied::after {
+            content: "COPIED!";
+            color: #ffff55;
+            opacity: 1;
+        }
+
+        @keyframes flashSuccess {
+            0% { background-color: #000; }
+            50% { background-color: #222; }
+            100% { background-color: #000; }
+        }
+
+        .command-prefix {
+            color: var(--mc-green);
+        }
+
+        /* --- UPDATED REALISTIC MINECRAFT XP BAR --- */
+        .xp-hud-container {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%; /* Full width for mobile */
+            max-width: 600px; /* Constrain on desktop */
+            z-index: 9999;
+            padding: 0 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .xp-level-number {
+            font-family: 'Press Start 2P', cursive;
+            color: #80ff20;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 4px;
+        }
+
+        .xp-bar-bg {
+            width: 100%;
+            height: 12px;
+            background-color: #3a3a3a;
+            border: 2px solid #1a1a1a;
+            border-top: 2px solid #555;
+            border-bottom: 2px solid #000;
+            position: relative;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #80ff20;
+            /* Texture effect to look like segments */
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+            transition: width 0.1s linear;
+            position: relative;
+        }
+        
+        /* Optional: Faint lines to simulate slots */
+        .xp-bar-bg::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0,0,0,0.3) 19px, rgba(0,0,0,0.3) 20px);
+            pointer-events: none;
+        }
+        /* --------------------- */
+
+        /* --- FLOATING PARTICLES --- */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            width: 8px;
+            height: 8px;
+            bottom: -10px;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         /* --- STYLES FOR THE CHICKEN GAME --- */
         .game-area {
             position: relative;
@@ -125,17 +286,12 @@
             border: 4px solid var(--mc-border);
             overflow: hidden;
             margin-bottom: 1rem;
-            
-            /* تم إصلاح كود المؤشر باستخدام Base64 ليعمل على كل المتصفحات */
             cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48c3R5bGU+Y2lyY2xlLGxpbmV7c3Ryb2tlOiM1NUZGNTU7c3Ryb2tlLXdpZHRoOjNweDtmaWxsOm5vbmU7ZmlsdGVyOmRyb3Atc2hhZG93KDNweCAzcHggMHB4ICMwMDApO308L3N0eWxlPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjE1Ii8+PGxpbmUgeDE9IjIwIiB5MT0iNCIgeDI9IjIwIiB5Mj0iMzYiLz48bGluZSB4MT0iNCIgeTE9IjIwIiB4Mj0iMzYiIHkyPSIyMCIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiM1NUZGNTUiLz48L3N2Zz4=') 20 20, crosshair;
-
             display: none; 
             image-rendering: pixelated;
         }
 
-        /* --- تأثير إطلاق النار عند الضغط --- */
         .game-area:active {
-            /* يتحول المؤشر للأحمر عند الضغط */
             cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48c3R5bGU+Y2lyY2xlLGxpbmV7c3Ryb2tlOiNGRjU1NTU7c3Ryb2tlLXdpZHRoOjNweDtmaWxsOm5vbmU7ZmlsdGVyOmRyb3Atc2hhZG93KDNweCAzcHggMHB4ICMwMDApO308L3N0eWxlPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEyIi8+PGxpbmUgeDE9IjIwIiB5MT0iNCIgeDI9IjIwIiB5Mj0iMzYiLz48bGluZSB4MT0iNCIgeTE9IjIwIiB4Mj0iMzYiIHkyPSIyMCIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNGRjU1NTUiLz48L3N2Zz4=') 20 20, crosshair;
         }
 
@@ -147,7 +303,7 @@
             animation: bob 0.5s infinite alternate;
             transition: transform 0.1s;
             filter: drop-shadow(2px 2px 0px #000); 
-            z-index: 10; /* ضمان أن الدجاجة قابلة للنقر */
+            z-index: 10;
         }
 
         .chicken:active {
@@ -166,7 +322,6 @@
             padding: 1rem;
             background: rgba(0,0,0,0.3);
         }
-        /* ----------------------------------- */
 
         .download-buttons {
             display: grid;
@@ -255,25 +410,14 @@
             font-size: 0.8rem;
         }
 
-        .command-box {
-            background: #000;
-            border: 2px solid var(--mc-border);
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .command-prefix {
-            color: var(--mc-green);
-        }
-
         footer {
             background: rgba(0, 0, 0, 0.9);
             padding: 1rem;
             text-align: center;
             border-top: 4px solid var(--mc-border);
             margin-top: 3rem;
+            position: relative;
+            z-index: 10;
         }
 
         footer a {
@@ -300,6 +444,9 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
+    <!-- BACKGROUND PARTICLES CONTAINER -->
+    <div class="particles-container" id="particles"></div>
+
     <header class="header">
       <h1>🧱 QuickPort Items Add-on</h1>
       <p>Quickly link two containers and move items between them!</p>
@@ -311,7 +458,7 @@
         <p><strong>QuickPort Items</strong> is a lightweight Minecraft Bedrock add-on that lets you easily transfer items between two containers like chests, barrels, and hoppers. 
         It features a clean interface, smooth animations, and full compatibility with other addons.</p>
         
-        <img src="./assets/images/postsImages/QuickPortItems.webp" alt="Addon Preview" class="addon-preview-img">
+        <img src="https://via.placeholder.com/640x360/1a1a1a/55ff55?text=ADDON+PREVIEW" alt="Addon Preview" class="addon-preview-img">
         
       </section>
 
@@ -341,9 +488,12 @@
         <h2 class="feature-title">HOW TO USE</h2>
         <p>1️⃣ Enable <strong>GameTest Framework</strong> and <strong>Beta APIs</strong>.</p>
         <p>2️⃣ Get the linking tool with:</p>
-        <div class="command-box">
+        
+        <!-- CLICK TO COPY ADDED HERE -->
+        <div class="command-box" id="cmdBox" onclick="copyCommand()" title="Click to copy command">
           <span class="command-prefix">/give @s sh:items_carrier</span>
         </div>
+        
         <p>3️⃣ Sneak + use the tool on the first container to select it.</p>
         <p>4️⃣ Sneak + use on the second container to link.</p>
         <p>5️⃣ Sneak + use again to open the transfer confirmation menu.</p>
@@ -401,7 +551,7 @@
         <p>🧠 Created by <strong>Vector</strong> — bringing smart automation tools to Minecraft Bedrock through scripting.</p>
       </section>
     </main>
-
+    
     <footer>
         <p>&copy; 2025 shadowGamer12k. All rights reserved. <br>
         <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
@@ -410,24 +560,35 @@
         <p style="font-size: 0.7em; margin-top: 10px; opacity: 0.7;">NOT AN OFFICIAL MINECRAFT PRODUCT.</p>
     </footer>
 
+    <!-- UPDATED REALISTIC XP BAR HUD -->
+    <div class="xp-hud-container">
+        <div class="xp-level-number" id="xpLevel">0</div>
+        <div class="xp-bar-bg">
+            <div class="xp-bar-fill" id="xpFill"></div>
+        </div>
+    </div>
+
     <script>
         const downloadUrl = "https://www.curseforge.com/minecraft-bedrock/addons/quickport-items";
         let chickensCaught = 0;
         const targetChickens = 5;
         let gameInterval;
         
-        // Simple Audio Context for generating sounds
+        // --- AUDIO SYSTEM ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Generate a retro "Hit" sound
-        function playHitSound() {
+        function resumeAudio() {
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+        }
+
+        function playHitSound() {
+            resumeAudio();
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
 
-            oscillator.type = 'square'; // Retro 8-bit sound
+            oscillator.type = 'square';
             oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
             oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
 
@@ -441,13 +602,8 @@
             oscillator.stop(audioCtx.currentTime + 0.1);
         }
 
-        // Generate a "Win" sound
         function playWinSound() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
-            // Play a small arpeggio
+            resumeAudio();
             [500, 600, 800].forEach((freq, i) => {
                 setTimeout(() => {
                     const osc = audioCtx.createOscillator();
@@ -464,21 +620,109 @@
             });
         }
         
+        function playPlopSound() { // For copy action
+            resumeAudio();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // --- UPDATED XP BAR LOGIC ---
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            // Update bar width
+            document.getElementById("xpFill").style.width = scrolled + "%";
+            
+            // Update level number (0 to 100)
+            const level = Math.round(scrolled);
+            document.getElementById("xpLevel").innerText = level;
+        });
+
+        // --- CLICK TO COPY LOGIC (SAFE) ---
+        function copyCommand() {
+            const cmdText = "/give @s sh:items_carrier";
+            
+            const textArea = document.createElement("textarea");
+            textArea.value = cmdText;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const box = document.getElementById('cmdBox');
+                box.classList.add('copied');
+                playPlopSound();
+                setTimeout(() => {
+                    box.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // --- FLOATING PARTICLES LOGIC ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20; // Max particles at once
+
+            setInterval(() => {
+                if (container.children.length > particleCount) return;
+
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                
+                // Randomize position and size
+                const size = Math.random() * 8 + 4; // 4px to 12px
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}vw`;
+                
+                // Randomize animation duration
+                const duration = Math.random() * 10 + 5; // 5s to 15s
+                p.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(p);
+
+                // Remove after animation
+                setTimeout(() => {
+                    p.remove();
+                }, duration * 1000);
+            }, 800); // Create new particle every 800ms
+        }
+        
+        // Start particles on load
+        createParticles();
+
+        // --- CHICKEN GAME LOGIC ---
         function startChickenGame() {
             const gameArea = document.getElementById('gameArea');
             const startBtn = document.getElementById('startGameBtn');
             
-            // Resume audio context on user gesture
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            resumeAudio();
 
-            startBtn.style.display = 'none'; // Hide start button
-            gameArea.style.display = 'block'; // Show game arena
+            startBtn.style.display = 'none'; 
+            gameArea.style.display = 'block'; 
             
-            // Spawn a chicken every 800ms
             gameInterval = setInterval(spawnChicken, 800);
-            spawnChicken(); // Spawn first one immediately
+            spawnChicken(); 
         }
 
         function spawnChicken() {
@@ -488,9 +732,8 @@
             const chicken = document.createElement('div');
             
             chicken.className = 'chicken';
-            chicken.innerHTML = '🐔'; // Using Emoji for simplicity
+            chicken.innerHTML = '🐔'; 
             
-            // Random position within the game box
             const maxX = gameArea.clientWidth - 50;
             const maxY = gameArea.clientHeight - 50;
             
@@ -504,7 +747,6 @@
                 catchChicken(this);
             };
 
-            // Remove chicken automatically after 1.5 seconds if not clicked (harder!)
             setTimeout(() => {
                 if(chicken.parentNode) chicken.remove();
             }, 1500);
@@ -513,11 +755,10 @@
         }
 
         function catchChicken(element) {
-            playHitSound(); // Play sound!
+            playHitSound();
             element.remove();
             chickensCaught++;
             
-            // Update Text
             const remaining = targetChickens - chickensCaught;
             const counterSpan = document.getElementById('chickenCount');
             
@@ -530,13 +771,11 @@
 
         function finishGame() {
             clearInterval(gameInterval);
-            playWinSound(); // Play victory sound!
+            playWinSound();
             
-            // Update UI
             document.getElementById('gameArea').style.display = 'none';
             document.getElementById('gameUI').innerHTML = '<p style="color: var(--mc-green); font-size: 0.8rem;">✅ VERIFICATION COMPLETE!</p>';
             
-            // Unlock Button
             const dlBtn = document.getElementById('finalDownloadBtn');
             dlBtn.classList.remove('disabled');
             dlBtn.href = downloadUrl;
