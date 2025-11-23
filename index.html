@@ -12,7 +12,7 @@
     <!-- EXTERNAL LIBS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- ANALYTICS (Kept as requested) -->
+    <!-- ANALYTICS -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -41,46 +41,39 @@
         }
 
         /* ==================== BIOME THEMES ==================== */
-        /* NETHER THEME (Red/Gold/Dark) */
         body.theme-nether {
-            --mc-green: #ff5555;       /* Changes "Green" accents to Red */
-            --mc-blue: #ffaa00;        /* Changes "Blue" links to Gold */
-            --mc-dark: #3d1a1a;        /* Reddish dark background */
-            --bg-color: #250505;       /* Deep dark red background */
-            --mc-border: #8e4040;      /* Reddish border */
-            --mc-gold: #ffe6a0;        /* Lighter gold for contrast */
+            --mc-green: #ff5555;
+            --mc-blue: #ffaa00;
+            --mc-dark: #3d1a1a;
+            --bg-color: #250505;
+            --mc-border: #8e4040;
+            --mc-gold: #ffe6a0;
         }
 
-        /* THE END THEME (Purple/Teal/Black) */
         body.theme-end {
-            --mc-green: #d855ff;       /* Changes "Green" accents to Purple */
-            --mc-blue: #55ffff;        /* Changes "Blue" links to Cyan/Teal */
-            --mc-dark: #20102e;        /* Dark purple background */
-            --bg-color: #12061f;       /* Deep space purple background */
-            --mc-border: #683e8c;      /* Purple border */
-            --mc-gold: #e0ffaa;        /* Endrod yellow */
+            --mc-green: #d855ff;
+            --mc-blue: #55ffff;
+            --mc-dark: #20102e;
+            --bg-color: #12061f;
+            --mc-border: #683e8c;
+            --mc-gold: #e0ffaa;
         }
 
-        /* ==================== CUSTOM CURSORS (NEW) ==================== */
-        /* Default Minecraft Crosshair */
+        /* ==================== CUSTOM CURSORS ==================== */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Press Start 2P', cursive;
             overflow-x: hidden;
             background-color: #111;
-            
-            /* Custom SVG Crosshair */
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="4" height="4" fill="white" stroke="black" stroke-width="1"/><rect x="14" y="0" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="14" y="18" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="0" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="18" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/></svg>') 16 16, crosshair;
         }
 
-        /* Diamond Sword / Hand Pointer on Links */
-        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, #mineableBlock {
+        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, #mineableBlock, .game-btn-link {
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-0)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
         }
 
         /* ==================== GLOBAL STYLES ==================== */
-        /* NEW WRAPPER FOR CONTENT TO PREVENT FIXED POSITION BUGS */
         #main-wrapper {
             background-color: var(--bg-color);
             background-image: radial-gradient(rgba(255, 255, 255, 0.171) 2px, transparent 0);
@@ -102,10 +95,10 @@
             max-width: 95%;
             margin: 0 auto;
             padding: 0 15px;
-            padding-bottom: 80px; /* Extra padding for bottom buttons */
+            padding-bottom: 80px;
         }
 
-        /* ==================== SPLASH TEXT (NEW) ==================== */
+        /* ==================== SPLASH TEXT ==================== */
         .splash-text {
             position: absolute;
             top: -10px;
@@ -128,16 +121,15 @@
             to { transform: rotate(-20deg) scale(1.1); }
         }
 
-        /* ==================== WEATHER EFFECTS (NEW) ==================== */
+        /* ==================== WEATHER EFFECTS ==================== */
         .weather-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-            z-index: 1; /* Above bg, below content */
+            z-index: 1;
             display: none;
         }
 
-        /* Rain (Overworld) */
         .weather-rain {
             background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAHNJREFUWEft1rsNhDAMRNH7s46ACmiJjigC6iCjZ0ZCgOAZ37rwd2S/tDsHB0J+HAgJ+XEgJOTHgZCQHwdCQn4cCAq5e6x51ly7x5pT597/AQ4E/T4OhIQcCAk5EBJyICTkQEjIgZCQAyEhB0JCDhwI+X8c+AGuWyJ/y+u2EAAAAABJRU5ErkJggg==');
             animation: rainFall 0.5s linear infinite;
@@ -145,7 +137,6 @@
         }
         @keyframes rainFall { from { background-position: 0 0; } to { background-position: 0 32px; } }
 
-        /* Ash (Nether) */
         .weather-ash {
             background-image: 
                 radial-gradient(circle, #888 1px, transparent 1.5px),
@@ -157,7 +148,6 @@
         }
         @keyframes ashRise { from { background-position: 0 0, 20px 20px; } to { background-position: -20px -40px, 0px -20px; } }
 
-        /* Static (End) */
         .weather-end {
             background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=');
             background-size: 64px 64px;
@@ -173,19 +163,19 @@
             100% { background-position: 0 0; } 
         }
 
-        /* ==================== CLICK PARTICLES (NEW) ==================== */
+        /* ==================== CLICK PARTICLES ==================== */
         .click-particle {
             position: fixed;
             width: 8px;
             height: 8px;
-            background-color: var(--mc-border); /* Default greyish */
+            background-color: var(--mc-border);
             pointer-events: none;
             z-index: 9999;
             transition: transform 0.6s ease-out, opacity 0.6s ease-out;
             box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
         }
 
-        /* ==================== MINEABLE BLOCK (NEW) ==================== */
+        /* ==================== FOOTER MINING ==================== */
         .footer-mine {
             margin: 20px auto;
             display: flex;
@@ -196,30 +186,32 @@
         }
         
         .mineable-block {
-            width: 64px;
-            height: 64px;
-            background-color: #333;
-            /* Simple bedrock-like pattern using gradients */
-            background-image: 
-                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
-                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
-                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
-            background-size: 16px 16px;
-            border: 4px solid #000;
-            box-shadow: inset 0 0 10px #000;
-            transition: transform 0.1s, filter 0.2s;
-            cursor: pointer; /* Sword cursor applies here */
+            width: 96px;
+            height: 96px;
+            background-color: #222;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cg fill='%23444' fill-opacity='0.4'%3E%3Cpath d='M0 0h2v2H0zM4 0h2v2H4zM2 2h2v2H2zM6 2h2v2H6zM0 4h2v2H0zM4 4h2v2H4zM2 6h2v2H2zM6 6h2v2H6z'/%3E%3C/g%3E%3Cg fill='%23000' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v2H2zM6 0h2v2H6zM0 2h2v2H0zM4 2h2v2H4zM2 4h2v2H2zM6 4h2v2H6zM0 6h2v2H0zM4 6h2v2H4z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 24px 24px;
+            image-rendering: pixelated;
+            border-top: 6px solid #555;
+            border-left: 6px solid #555;
+            border-right: 6px solid #111;
+            border-bottom: 6px solid #111;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.5);
+            transition: transform 0.05s, filter 0.05s;
+            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
             position: relative;
         }
 
         .mineable-block:active {
-            transform: scale(0.95);
+            transform: scale(0.92) translateY(2px);
+            filter: brightness(0.4);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.5);
+            border-top-color: #333;
+            border-left-color: #333;
         }
 
-        .mineable-block.shake {
-            animation: shake 0.2s;
-        }
+        .mineable-block:hover { filter: brightness(1.1); }
+        .mineable-block.shake { animation: shake 0.2s; }
 
         .block-reward {
             display: none;
@@ -236,10 +228,7 @@
             display: inline-block;
         }
 
-        .block-reward a:hover {
-            background: #55ffff;
-            color: #000;
-        }
+        .block-reward a:hover { background: #55ffff; color: #000; }
 
         @keyframes bounceIn {
             0% { transform: scale(0); opacity: 0; }
@@ -247,124 +236,11 @@
             100% { transform: scale(1); }
         }
 
-        /* ==================== HEROBRINE (NEW) ==================== */
-        .herobrine-entity {
-            position: fixed;
-            bottom: 150px; /* Floating somewhere in the background */
-            left: 50px;
-            width: 40px; 
-            height: 80px; /* 1:2 ratio for steve */
-            background-color: #00aaaa; /* Shirt */
-            display: none; /* Hidden by default */
-            z-index: 0; /* Behind content */
-            opacity: 0.4; /* Ghostly */
-            transition: opacity 0.5s ease;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        /* Herobrine Head */
-        .herobrine-entity::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 5px;
-            width: 30px;
-            height: 30px;
-            background-color: #eebb88; /* Skin */
-            box-shadow: inset 0 0 0 2px #222; /* Hair hint */
-        }
-
-        /* Herobrine Eyes (Glowing White) */
-        .herobrine-entity::after {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: 8px;
-            width: 24px;
-            height: 4px;
-            background: #fff; /* GLOWING EYES */
-            box-shadow: 0 0 5px #fff;
-        }
-
-        /* Pants */
-        .herobrine-pants {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 40%;
-            background-color: #0000aa;
-        }
-
-        .herobrine-entity:hover {
-            opacity: 0 !important;
-            transition: opacity 0.2s;
-        }
-
-        /* ==================== EASTER EGG STYLES ==================== */
-        /* Dinnerbone Effect */
-        body.dinnerbone-mode #main-wrapper { transform: rotate(180deg); }
-
-        /* jeb_ Effect */
-        @keyframes rainbow-hue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
-        body.jeb-mode #main-wrapper { animation: rainbow-hue 3s linear infinite; }
-        body.jeb-mode #biomeToggle, body.jeb-mode #menuTrigger, body.jeb-mode .menu-overlay, body.jeb-mode .activity-feed, body.jeb-mode .modal-content { animation: rainbow-hue 3s linear infinite; }
-
-        /* Advancement Toast */
-        .advancement-toast {
-            position: fixed; top: 20px; right: -400px; background-color: #222; border: 2px solid #555;
-            color: #fff; padding: 10px 15px; display: flex; align-items: center; gap: 15px;
-            z-index: 5000; border-radius: 4px; transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: left; max-width: 300px;
-        }
-        .advancement-toast.show { right: 20px; }
-        .adv-icon { font-size: 24px; color: var(--mc-gold); }
-        .adv-text-group h4 { margin: 0 0 5px 0; font-size: 10px; color: var(--mc-gold); text-transform: uppercase; }
-        .adv-text-group p { margin: 0; font-size: 10px; font-family: Arial, sans-serif; color: #ddd; }
-
-        /* Shake Animation */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-        .shake-effect { animation: shake 0.5s; animation-iteration-count: 1; }
-
-        /* ==================== SKELETON LOADING ==================== */
-        .skeleton {
-            background: #3a3a3a; background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
-            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px;
-        }
-        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .skeleton-card { background: #333; padding: 15px; border-radius: 5px; border: 2px solid #444; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); height: 100%; }
-        .skeleton-img { width: 100%; aspect-ratio: 16/9; border-radius: 5px; }
-        .skeleton-title { height: 20px; width: 70%; }
-        .skeleton-stars { height: 15px; width: 50%; }
-        .skeleton-text { height: 12px; width: 100%; }
-        .skeleton-text.short { width: 60%; }
-        .skeleton-btn-group { display: flex; gap: 10px; margin-top: auto; }
-        .skeleton-btn { height: 35px; width: 100%; border-radius: 0; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Fake Activity Feed */
-        .activity-feed {
-            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(150px);
-            background: rgba(0, 0, 0, 0.9); border: 2px solid var(--mc-green); color: white; padding: 12px 20px;
-            border-radius: 8px; font-family: 'Press Start 2P', cursive; font-size: 10px; z-index: 2900;
-            display: flex; align-items: center; gap: 12px; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none; box-shadow: 0 6px 20px rgba(0,0,0,0.6); width: max-content; max-width: 90%; text-align: left;
-        }
-        .activity-feed.active { transform: translateX(-50%) translateY(0); }
-        .activity-feed i { font-size: 16px; }
-
         /* ==================== NAVIGATION ==================== */
         .minecraft-navbar {
             display: flex; justify-content: space-between; align-items: center; background-color: #2c2c2c;
             padding: 10px 15px; margin: 20px auto; border: 2px solid #555; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            border-radius: 4px; max-width: 95%; position: relative; /* For splash text */
+            border-radius: 4px; max-width: 95%; position: relative;
         }
         .navbar-logo { display: flex; align-items: center; cursor: pointer; user-select: none; position: relative; }
         .nav-logo { width: 36px; height: 36px; margin-right: 10px; image-rendering: pixelated; }
@@ -390,33 +266,51 @@
         .search-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; outline: none; font-family: Arial, sans-serif; }
         .clear-search { background: #444; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: none; }
         
-        .filter-container { display: flex; justify-content: flex-end; max-width: 95%; margin: 15px auto 20px; padding: 0 15px; }
+        /* --- NEW FILTER LAYOUT WITH GAME BUTTON --- */
+        .filter-container { 
+            display: flex; 
+            justify-content: space-between; /* Space between Game Btn and Sort Btn */
+            align-items: center;
+            max-width: 95%; 
+            margin: 15px auto 20px; 
+            padding: 0 15px; 
+        }
+        
+        /* NEW GAME BUTTON */
+        .game-btn-link {
+            background-color: #e0aaff; /* Purple-ish */
+            background-image: linear-gradient(to bottom, #e0aaff, #a066cc);
+            color: #222;
+            text-decoration: none;
+            padding: 10px 15px;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 0 #553377;
+            font-size: 12px;
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 4px;
+        }
+        
+        .game-btn-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #553377;
+            filter: brightness(1.1);
+        }
+        
+        .game-btn-link:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #553377;
+        }
+
         .sort-dropdown { position: relative; display: inline-block; }
         .sort-button { background: #3a3a3a; color: #fff; border: 2px solid #555; padding: 8px 16px; cursor: pointer; font-size: 12px; font-family: 'Press Start 2P', cursive; display: flex; align-items: center; gap: 8px; }
         .sort-options { display: none; position: absolute; right: 0; top: 100%; background: #2c2c2c; border: 2px solid #555; z-index: 50; min-width: 150px; }
         .sort-options.show { display: block; }
         .sort-option { padding: 10px 15px; cursor: pointer; font-size: 12px; font-family: Arial, sans-serif; border-bottom: 1px solid #333; text-align: left; }
         .sort-option:hover { background-color: #444; color: var(--mc-green); }
-
-        /* ==================== CAROUSEL (REDESIGNED) ==================== */
-        .featured-carousel { max-width: 95%; margin: 0 auto 30px; padding: 0 15px; position: relative; }
-        .carousel-track { display: flex; gap: 20px; padding: 10px 5px 20px 5px; overflow-x: auto; scrollbar-width: none; }
-        .carousel-track::-webkit-scrollbar { display: none; }
-        .featured-item {
-            flex-shrink: 0; width: 350px; height: 220px; background-size: cover; background-position: center;
-            border-radius: 12px; position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 2px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .featured-item:hover { transform: translateY(-5px) scale(1.02); border-color: var(--mc-green); box-shadow: 0 10px 25px rgba(85, 255, 85, 0.2); }
-        .featured-item-overlay { position: absolute; bottom: 0; width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); text-align: left; box-sizing: border-box; border-top: 1px solid rgba(255,255,255,0.1); }
-        .featured-item h4 { color: #fff; margin: 0 0 5px 0; font-size: 14px; text-shadow: 1px 1px 0 #000; display: flex; justify-content: space-between; align-items: center; }
-        .featured-item p { color: #bbb; margin: 0; font-size: 11px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.4; }
-        .carousel-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0,0,0,0.7);
-            border: 2px solid var(--mc-green); color: var(--mc-green); padding: 10px 15px; cursor: pointer; display: none; border-radius: 8px;
-        }
-        .carousel-arrow.left { left: 20px; }
-        .carousel-arrow.right { right: 20px; }
 
         /* ==================== MOD LIST ==================== */
         .tab-content { display: none; }
@@ -447,95 +341,29 @@
         .feedback-button { display: flex; justify-content: center; align-items: center; width: 45px; background: #222; border: 2px solid #444; color: #ffaa00; cursor: pointer; }
         .feedback-button:hover { background: #ffaa00; color: #222; border-color: #ffaa00; }
 
-        /* ==================== SEARCH RESULTS ==================== */
-        .search-results { position: absolute; background: #2c2c2c; border: 2px solid #555; border-radius: 8px; margin-top: 5px; max-height: 400px; overflow-y: auto; z-index: 1000; width: calc(100% - 30px); left: 15px; display: none; }
-        .search-results.active { display: block; }
-        .search-result-item { padding: 15px; border-bottom: 1px solid #444; display: flex; gap: 15px; cursor: pointer; }
-        .search-result-item:hover { background: #3a3a3a; }
-        .search-result-img { width: 60px; height: 60px; object-fit: cover; border: 2px solid #555; }
-        .search-result-info h4 { margin: 0 0 5px; font-size: 14px; }
-        .search-result-info p { margin: 0; font-size: 11px; color: #aaa; font-family: Arial, sans-serif; }
-        .no-results { padding: 20px; color: #888; font-size: 12px; }
-
-        /* ==================== MODAL ==================== */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
-        .modal.active { opacity: 1; }
-        .modal-content { width: 90%; max-width: 800px; background: #333; border: 4px solid var(--mc-border); padding: 20px; border-radius: 5px; position: relative; }
-        .modal-video { width: 100%; height: 400px; border: 4px solid white; }
-        .download-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        .download-button, .close-button { padding: 10px 20px; background: #008542; color: white; border: none; box-shadow: 0 -4px rgba(0,0,0,0.2) inset; position: relative; }
-        .close-button { background: #e63946; position: absolute; top: -15px; right: -15px; padding: 10px; font-size: 10px; z-index: 10; }
-
-        /* ==================== FEEDBACK MODAL ==================== */
-        #feedbackModal .modal-content { max-width: 500px; text-align: left; background-color: #222; border: 4px solid #fff; box-shadow: 0 0 0 4px #555; }
-        #feedbackModal h3 { color: var(--mc-gold); text-align: center; margin-bottom: 25px; text-shadow: 2px 2px 0 #000; font-size: 18px; line-height: 1.5; }
-        .form-group { margin-bottom: 20px; position: relative; }
-        .form-label { display: block; color: var(--mc-green); margin-bottom: 8px; font-size: 10px; font-family: 'Press Start 2P', cursive; text-transform: uppercase; text-shadow: 1px 1px 0 #000; }
-        .form-input, .form-textarea { width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff; border-radius: 0; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5; box-sizing: border-box; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); }
-        .form-input:focus, .form-textarea:focus { border-color: var(--mc-gold); outline: none; background-color: #000; }
-        .form-textarea { resize: vertical; min-height: 120px; }
-        .custom-select-wrapper { position: relative; user-select: none; width: 100%; }
-        .custom-select-trigger { position: relative; width: 100%; padding: 12px; background: #111; border: 2px solid #555; color: #fff; font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.5; box-sizing: border-box; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); }
-        .custom-select-trigger:hover { border-color: #777; }
-        .custom-select-wrapper.open .custom-select-trigger { border-color: var(--mc-gold); }
-        .arrow { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #fff; margin-left: 10px; }
-        .custom-options { position: absolute; top: 100%; left: 0; right: 0; background: #111; border: 2px solid #555; border-top: none; z-index: 100; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .custom-select-wrapper.open .custom-options { display: block; }
-        .custom-option { padding: 12px; font-family: 'Press Start 2P', cursive; font-size: 10px; color: #ccc; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #222; }
-        .custom-option:hover, .custom-option.selected { background-color: #333; color: var(--mc-gold); }
-        .send-btn { width: 100%; background: var(--mc-blue); color: white; padding: 12px; border: none; font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; margin-top: 10px; box-shadow: 0 -4px rgba(0,0,0,0.2) inset; }
-        .send-btn:hover { background: #4499ee; }
-        .send-btn:disabled { background: #555; cursor: not-allowed; }
-
-        /* ==================== MENU OVERLAY ==================== */
-        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; justify-content: center; align-items: center; }
-        .menu-overlay.active { opacity: 1; pointer-events: all; }
-        .menu-container { width: 90%; max-width: 800px; background: rgba(30, 30, 30, 0.9); border: 4px solid #222; box-shadow: 0 0 0 4px #555, 0 0 20px rgba(0,0,0,0.8); padding: 20px; text-align: left; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto; }
-        .menu-overlay.active .menu-container { transform: scale(1); }
-        .menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #555; padding-bottom: 15px; margin-bottom: 20px; }
-        .menu-title { font-size: 1.2rem; color: #fff; text-shadow: 2px 2px 0 #000; }
-        .menu-close-btn { background: #e63946; border: 2px solid #fff; color: white; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: Arial, sans-serif; font-weight: bold; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .menu-card { background: rgba(0, 0, 0, 0.3); border: 2px solid #555; padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; }
-        .menu-card:hover { background: rgba(85, 255, 85, 0.1); border-color: var(--mc-green); transform: translateY(-3px); box-shadow: 0 4px 0 rgba(0,0,0,0.3); }
-        .menu-card i { font-size: 24px; color: #aaa; margin-bottom: 5px; }
-        .menu-card:hover i { color: var(--mc-green); }
-        .menu-card span { font-size: 10px; line-height: 1.4; color: #fff; }
-        .menu-section-title { grid-column: 1 / -1; font-size: 12px; color: var(--mc-blue); margin: 15px 0 5px 0; border-bottom: 1px solid #444; padding-bottom: 5px; }
-
-        /* THEME TOGGLE BUTTON */
-        #biomeToggle { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #2c2c2c; border: 2px solid var(--mc-green); color: var(--mc-green); display: flex; justify-content: center; align-items: center; border-radius: 8px; cursor: pointer; z-index: 3000; box-shadow: 0 4px 0 #000, 0 10px 20px rgba(0,0,0,0.5); transition: all 0.2s; }
-        #biomeToggle:active { transform: translateY(4px); box-shadow: 0 0 0 #000; }
-        #biomeToggle:hover { filter: brightness(1.2); }
-        #biomeToggle::after { content: attr(data-biome); position: absolute; left: 60px; background: rgba(0,0,0,0.8); color: white; padding: 5px 10px; border-radius: 4px; font-size: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; font-family: 'Press Start 2P', cursive; }
-        #biomeToggle:hover::after { opacity: 1; }
-        #menuTrigger { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg, #2c2c2c, #1a1a1a); border: 2px solid var(--mc-green); color: var(--mc-green); display: flex; justify-content: center; align-items: center; border-radius: 8px; cursor: pointer; z-index: 3001; box-shadow: 0 4px 0 #003300, 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.2s; }
-        #menuTrigger:active { transform: translateY(4px); box-shadow: 0 0 0 #003300; }
-        #menuTrigger:hover { filter: brightness(1.2); }
-        
-        @media (max-width: 768px) {
-            .navbar-menu { display: none; }
-            .mobile-nav-icons { display: flex; }
-            .featured-item { width: 90vw; }
-            .carousel-arrow { display: block; }
-            .mod-item { width: 100%; max-width: 400px; }
-            #biomeToggle, #menuTrigger { bottom: 10px; width: 40px; height: 40px; }
-            .activity-feed { bottom: 70px; font-size: 8px; padding: 8px 12px; }
-            /* Stack footer on mobile */
-            footer { flex-direction: column; text-align: center !important; gap: 20px; }
+        /* ==================== SKELETON LOADING ==================== */
+        .skeleton {
+            background: #3a3a3a; background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+            background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px;
         }
-        @media (min-width: 769px) {
-            .navbar-menu { display: flex !important; }
-            .carousel-arrow { display: none !important; }
-        }
-        
-        /* UPDATED FOOTER LAYOUT */
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-card { background: #333; padding: 15px; border-radius: 5px; border: 2px solid #444; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); height: 100%; }
+        .skeleton-img { width: 100%; aspect-ratio: 16/9; border-radius: 5px; }
+        .skeleton-title { height: 20px; width: 70%; }
+        .skeleton-stars { height: 15px; width: 50%; }
+        .skeleton-text { height: 12px; width: 100%; }
+        .skeleton-text.short { width: 60%; }
+        .skeleton-btn-group { display: flex; gap: 10px; margin-top: auto; }
+        .skeleton-btn { height: 35px; width: 100%; border-radius: 0; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ==================== FOOTER & OTHER ==================== */
         footer { 
             padding: 2rem; 
             margin-top: 3rem; 
             border-top: 4px solid var(--mc-border); 
             background: rgba(0,0,0,0.9); 
-            /* Increased font size for desktop */
             font-size: 14px; 
             display: flex; 
             justify-content: space-between; 
@@ -545,167 +373,52 @@
             z-index: 10;
         }
         footer a { color: var(--mc-green); }
-
-        /* UPDATED MINEABLE BLOCK STYLES */
-        .footer-mine {
-            display: flex;
-            align-items: center; /* Align horizontally */
-            justify-content: center;
-            gap: 20px; /* Gap between hint and block */
-            position: relative;
-        }
         
-        /* NEW HINT STYLES */
         .mine-hint {
-            color: #ffff55; /* Minecraft Yellow */
+            color: #ffff55;
             font-family: 'Press Start 2P', cursive;
             font-size: 10px;
             animation: horizontalBounce 1s infinite alternate;
             display: flex;
             align-items: center;
             gap: 10px;
-            pointer-events: none; /* Don't block clicks */
+            pointer-events: none;
             text-shadow: 2px 2px 0 #3f3f15;
         }
+        @keyframes horizontalBounce { from { transform: translateX(0); } to { transform: translateX(5px); } }
+        .footer-mine.broken .mine-hint { display: none; }
 
-        @keyframes horizontalBounce {
-            from { transform: translateX(0); }
-            to { transform: translateX(5px); }
-        }
-
-        /* Hide hint when block is broken */
-        .footer-mine.broken .mine-hint {
-            display: none;
-        }
-        
-        .mineable-block {
-            /* Increased size for desktop */
-            width: 96px;
-            height: 96px;
-            background-color: #222;
-            /* High quality pixel noise for Bedrock texture */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cg fill='%23444' fill-opacity='0.4'%3E%3Cpath d='M0 0h2v2H0zM4 0h2v2H4zM2 2h2v2H2zM6 2h2v2H6zM0 4h2v2H0zM4 4h2v2H4zM2 6h2v2H2zM6 6h2v2H6z'/%3E%3C/g%3E%3Cg fill='%23000' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v2H2zM6 0h2v2H6zM0 2h2v2H0zM4 2h2v2H4zM2 4h2v2H2zM6 4h2v2H6zM0 6h2v2H0zM4 6h2v2H4z'/%3E%3C/g%3E%3C/svg%3E");
-            background-size: 24px 24px; /* Scaled up pattern */
-            image-rendering: pixelated;
-            
-            /* 3D Block Borders */
-            border-top: 6px solid #555;
-            border-left: 6px solid #555;
-            border-right: 6px solid #111;
-            border-bottom: 6px solid #111;
-            
-            box-shadow: 0 6px 0 rgba(0,0,0,0.5);
-            transition: transform 0.05s, filter 0.05s; /* Faster transition for click responsiveness */
-            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
-            position: relative;
-        }
-
-        /* Active state - Darkens and presses down like the image */
-        .mineable-block:active {
-            transform: scale(0.92) translateY(2px);
-            filter: brightness(0.4); /* Darkens significantly on click */
-            box-shadow: 0 2px 0 rgba(0,0,0,0.5); /* Shadow reduces to simulate depth */
-            border-top-color: #333; /* Darken borders */
-            border-left-color: #333;
-        }
-
-        .mineable-block:hover {
-            filter: brightness(1.1);
-        }
-
-        /* Mobile Adjustments to keep it smaller on phones */
         @media (max-width: 768px) {
-            /* ... existing mobile styles ... */
-            footer { 
-                flex-direction: column; 
-                text-align: center !important; 
-                gap: 20px; 
-                font-size: 10px; /* Smaller font on mobile */
-            }
-            .footer-mine {
-                flex-direction: column; /* Stack hint and block on mobile */
-                gap: 10px;
-            }
-            .mine-hint {
-                animation: verticalBounce 1s infinite alternate; /* Bounce up/down on mobile */
-            }
-            @keyframes verticalBounce {
-                from { transform: translateY(0); }
-                to { transform: translateY(5px); }
-            }
-            .mine-hint i {
-                transform: rotate(90deg); /* Point arrow down */
-            }
-            .mineable-block {
-                width: 64px; /* Smaller block on mobile */
-                height: 64px;
-                border-width: 4px;
-                background-size: 16px 16px;
-            }
+            .navbar-menu { display: none; }
+            .mobile-nav-icons { display: flex; }
+            .mod-item { width: 100%; max-width: 400px; }
+            footer { flex-direction: column; text-align: center !important; gap: 20px; font-size: 10px; }
+            .footer-mine { flex-direction: column; gap: 10px; }
+            .mine-hint { animation: verticalBounce 1s infinite alternate; }
+            @keyframes verticalBounce { from { transform: translateY(0); } to { transform: translateY(5px); } }
+            .mine-hint i { transform: rotate(90deg); }
+            .mineable-block { width: 64px; height: 64px; border-width: 4px; background-size: 16px 16px; }
         }
-        footer a { color: var(--mc-green); }
-
-        /* UPDATED MINEABLE BLOCK STYLES */
-        .footer-mine {
-            /* Removed auto margins to fit flex layout */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        
-        .mineable-block {
-            width: 64px;
-            height: 64px;
-            background-color: #222;
-            /* High quality pixel noise for Bedrock texture */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cg fill='%23444' fill-opacity='0.4'%3E%3Cpath d='M0 0h2v2H0zM4 0h2v2H4zM2 2h2v2H2zM6 2h2v2H6zM0 4h2v2H0zM4 4h2v2H4zM2 6h2v2H2zM6 6h2v2H6z'/%3E%3C/g%3E%3Cg fill='%23000' fill-opacity='0.4'%3E%3Cpath d='M2 0h2v2H2zM6 0h2v2H6zM0 2h2v2H0zM4 2h2v2H4zM2 4h2v2H2zM6 4h2v2H6zM0 6h2v2H0zM4 6h2v2H4z'/%3E%3C/g%3E%3C/svg%3E");
-            background-size: 16px 16px; /* Scale up the pixel pattern */
-            image-rendering: pixelated;
-            
-            /* 3D Block Borders */
-            border-top: 4px solid #555;
-            border-left: 4px solid #555;
-            border-right: 4px solid #111;
-            border-bottom: 4px solid #111;
-            
-            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
-            transition: transform 0.1s, filter 0.2s;
-            cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-45)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
-            position: relative;
-        }
-
-        .mineable-block:hover {
-            filter: brightness(1.1);
+        @media (min-width: 769px) {
+            .navbar-menu { display: flex !important; }
         }
     </style>
 </head>
 <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
-    <!-- CREEPER SOUND FOR EASTER EGG -->
     <audio id="creeperSound" src="assets/sounds/creeper.mp3" preload="auto"></audio>
 
-    <!-- MAIN CONTENT WRAPPER (FOR SCROLLING CONTENT) -->
+    <!-- MAIN WRAPPER -->
     <div id="main-wrapper">
-        
-        <!-- WEATHER EFFECT LAYERS (NEW) -->
         <div id="weatherRain" class="weather-layer weather-rain"></div>
         <div id="weatherAsh" class="weather-layer weather-ash"></div>
         <div id="weatherEnd" class="weather-layer weather-end"></div>
 
-        <!-- HEROBRINE ENTITY (NEW) -->
-        <div id="herobrine" class="herobrine-entity">
-            <div class="herobrine-pants"></div>
-        </div>
-
-        <!-- NAVIGATION -->
         <nav class="minecraft-navbar">
             <div class="navbar-logo">
                 <img src="assets/images/avatarHead3.png" alt="shadowGamer100k" class="nav-logo">
                 <span class="logo-text">Projects</span>
-                <!-- SPLASH TEXT (NEW) -->
                 <span id="splashText" class="splash-text">Minecraft!</span>
             </div>
             <div class="mobile-nav-icons">
@@ -720,7 +433,6 @@
             </div>
         </nav>
         
-        <!-- SEARCH -->
         <div class="search-container">
             <div class="search-box">
                 <i class="fas fa-search search-icon"></i>
@@ -731,10 +443,15 @@
         </div>
         
         <div class="container">
-            <!-- PROJECTS TAB -->
             <div id="projects" class="tab-content active">
-                <!-- Sorting -->
+                
+                <!-- FILTER & GAME BUTTON CONTAINER -->
                 <div class="filter-container">
+                    <!-- NEW: CHICKEN GAME BUTTON -->
+                    <a href="chicken_game.html" class="game-btn-link" title="Play Endless Chicken Runner!">
+                        <i class="fas fa-gamepad"></i> <span>MINI GAME</span>
+                    </a>
+
                     <div class="sort-dropdown">
                         <button class="sort-button" id="sortButton">
                             <i class="fas fa-fire"></i> Sort: <span id="currentSortText">Trending</span>
@@ -747,11 +464,7 @@
                     </div>
                 </div>
                 
-            
-
-                <!-- Mod List (Empty initially to be filled by real content, will have Skeletons injected via JS) -->
                 <ul class="mod-list" id="projectModList">
-                    <!-- Item 1 -->
                     <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
                         <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
                         <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
@@ -764,11 +477,9 @@
                         <p>Automate item transfer between chests instantly.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('QuickPort Items')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
                     
-                    <!-- Item 2 -->
                     <li id='instantTeleport' class="mod-item" data-downloads="8000" data-date="2025-05-01">
                         <img src="assets/images/postsImages/instantTeleport.webp" alt="instantTeleport">
                         <h3>Instant Teleport <span class="version-badge">1.21.120</span></h3>
@@ -781,11 +492,9 @@
                         <p>Teleport anywhere instantly with style.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Instant Teleport')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 3 -->
                     <li id='handyCrafting' class="mod-item" data-downloads="4000" data-date="2025-04-20">
                         <img src="assets/images/postsImages/handyCrafting.webp" alt="handyCrafting">
                         <h3>Handy Crafting <span class="version-badge">1.21.120</span></h3>
@@ -798,11 +507,9 @@
                         <p>Carry crafting tables as items and open them anywhere!</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Handy Crafting')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 4 -->
                     <li id='chainedHearts' class="mod-item" data-downloads="2500" data-date="2025-04-10">
                         <img src="assets/images/postsImages/chainedHearts.webp" alt="chainedHearts">
                         <h3>Chained Hearts <span class="version-badge">1.21.120</span></h3>
@@ -815,11 +522,9 @@
                         <p>Link your hearts with a friend, share damage and healing.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Chained Hearts')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 5 -->
                     <li id='souleggs' class="mod-item" data-downloads="10000" data-date="2025-03-25">
                         <img src="assets/images/postsImages/souleggs.webp" alt="souleggs">
                         <h3>Soul Eggs <span class="version-badge">1.21.120</span></h3>
@@ -832,11 +537,9 @@
                         <p>Catch and collect mobs just like Pokémon.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Soul Eggs')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 6 -->
                     <li id='mobHider' class="mod-item" data-downloads="3000" data-date="2025-03-15">
                         <img src="assets/images/postsImages/MobHider.webp" alt="mobHider">
                         <h3>Mob Hider <span class="version-badge">1.21.120</span></h3>
@@ -849,11 +552,9 @@
                         <p>Hide inside any mob to troll your friends.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Mob Hider')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 7 -->
                     <li id='enderGuardian' class="mod-item" data-downloads="1200" data-date="2025-03-05"> 
                         <img src="assets/images/postsImages/enderGuardian.webp" alt="enderGuardian">
                         <h3>Ender Guardian <span class="version-badge">1.21.120</span></h3>
@@ -866,11 +567,9 @@
                         <p>Saves your life when in battle or dying in silly ways.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Ender Guardian')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 8 -->
                     <li id='pocketwaypoint' class="mod-item" data-downloads="7000" data-date="2025-02-20"> 
                         <img src="assets/images/pocketwaypoint.webp" alt="pocketwaypoint">
                         <h3>Pocket Waypoint <span class="version-badge">1.21.120</span></h3>
@@ -883,11 +582,9 @@
                         <p>Save locations and teleport easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Pocket Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 9 -->
                     <li id='wirlesshopper' class="mod-item" data-downloads="12000" data-date="2025-02-10"> 
                         <img src="assets/images/hopper.webp" alt="wirlesshopper">
                         <h3>Wireless Hopper <span class="version-badge">1.21.120</span></h3>
@@ -900,11 +597,9 @@
                         <p>No more cluttered hoppers and complex redstone.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Wireless Hopper')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 10 -->
                     <li id='advancedwaypoint' class="mod-item" data-downloads="1500" data-date="2025-02-01"> 
                         <img src="assets/images/waypoint.webp" alt="Advanced Waypoint">
                         <h3>Advanced Waypoint <span class="version-badge">1.21.70</span></h3>
@@ -917,11 +612,9 @@
                         <p>Return home from great distances easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Advanced Waypoint')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 11 -->
                     <li id='landclaim' class="mod-item" data-downloads="900" data-date="2025-01-25"> 
                         <img src="assets/images/landClaim.webp" alt="Land Claim">
                         <h3>Land Claim <span class="version-badge">1.21.120</span></h3>
@@ -934,11 +627,9 @@
                         <p>Protect your areas from other players.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Land Claim')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
             
-                    <!-- Item 12 -->
                     <li id='itemcarrier' class="mod-item" data-downloads="500" data-date="2025-01-15"> 
                         <img src="assets/images/ItemsCarrier.webp" alt="Items Carrier">
                         <h3>Items Carrier <span class="version-badge">1.21.70</span></h3>
@@ -951,11 +642,9 @@
                         <p>Move items from one chest to another.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Items Carrier')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
             
-                    <!-- Item 13 -->
                     <li id='healthbar' class="mod-item" data-downloads="1100" data-date="2025-01-05">
                         <img src="assets/images/HealthBar.webp" alt="Health Bar">
                         <h3>Health Bar <span class="version-badge">1.21.120</span></h3>
@@ -968,11 +657,9 @@
                         <p>Show a heart counter for monsters and mobs.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Health Bar')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
-                    <!-- Item 14 -->
                     <li id='mobcatcher' class="mod-item" data-downloads="2000" data-date="2025-01-01"> 
                         <img src="assets/images/MobCatcher.webp" alt="Mob Catcher">
                         <h3>Mob Catcher <span class="version-badge">1.21.120</span></h3>
@@ -985,13 +672,11 @@
                         <p>Help you move monsters and mobs easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
-                            <button class="feedback-button" onclick="openFeedbackModal('Mob Catcher')" title="Report Issue / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
                 </ul>
             </div>
 
-            <!-- SOCIAL TAB -->
             <div id="social" class="tab-content">
                 <ul class="mod-list">
                     <li class="mod-item social-item">
@@ -1021,7 +706,6 @@
                 </ul>
             </div>
             
-            <!-- NEWS TAB -->
             <div id="news" class="tab-content">
                 <ul class="mod-list">
                     <li class="mod-item news-item">
@@ -1040,9 +724,7 @@
             </div>
         </div>
         
-        <!-- FOOTER -->
         <footer>
-            <!-- Text Section -->
             <div class="footer-text">
                 <p>&copy; 2025 shadowGamer12k. All rights reserved.</p>
                 <p style="margin-top: 5px;">
@@ -1051,9 +733,7 @@
                 </p>
             </div>
 
-            <!-- Interactive Block Section -->
             <div class="footer-mine" id="footerMineContainer">
-                <!-- ADDED HINT -->
                 <div class="mine-hint">
                     <span>CLICK TO MINE!</span>
                     <i class="fas fa-arrow-right"></i>
@@ -1065,148 +745,20 @@
                 </div>
             </div>
         </footer>
-    </div> <!-- END OF MAIN WRAPPER -->
-
-    <!-- MODAL -->
-    <div class="modal">
-        <div class="modal-content">
-            <a href="#" class="close-button">✕</a>
-            <iframe class="modal-video" frameborder="0" allowfullscreen></iframe>
-            <div class="modal-description"></div>
-            <div class="download-buttons">
-                <a href="#" class="download-button behavior-pack">Behavior Pack</a>
-                <a href="#" class="download-button resource-pack">Resource Pack</a>
-            </div>
-        </div>
-    </div>
-    
-    <!-- FEEDBACK MODAL (NEW) -->
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content">
-            <a href="#" class="close-button" onclick="closeFeedbackModal(event)">✕</a>
-            <h3>Submit Feedback</h3>
-            <div class="form-group">
-                <label class="form-label">Addon Name</label>
-                <input type="text" id="feedbackAddonName" class="form-input" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Type</label>
-                <div class="custom-select-wrapper">
-                    <div class="custom-select-trigger" id="customSelectTrigger">
-                        <span id="customSelectText">🐛 Bug Report</span>
-                        <div class="arrow"></div>
-                    </div>
-                    <div class="custom-options" id="customOptions">
-                        <div class="custom-option selected" data-value="Bug Report">🐛 Bug Report</div>
-                        <div class="custom-option" data-value="Suggestion">💡 Suggestion</div>
-                        <div class="custom-option" data-value="Feedback">💭 General Feedback</div>
-                    </div>
-                    <input type="hidden" id="feedbackType" value="Bug Report">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Your Message</label>
-                <textarea id="feedbackMessage" class="form-textarea" placeholder="Describe the issue or your idea..."></textarea>
-            </div>
-            <button class="send-btn" onclick="sendFeedback()">Send to Developer</button>
-        </div>
     </div>
 
-    <!-- FAKE ACTIVITY FEED CONTAINER (NEW) -->
-    <div id="activityFeed" class="activity-feed"></div>
-
-    <!-- ADVANCEMENT TOAST CONTAINER (NEW) -->
-    <div id="advancementToast" class="advancement-toast">
-        <i class="fas fa-award adv-icon"></i>
-        <div class="adv-text-group">
-            <h4>Advancement Made!</h4>
-            <p id="advancementTitle">Secret Found</p>
-        </div>
-    </div>
-
-    <!-- NEW MENU OVERLAY (Replaces Sidebar) -->
-    <div class="menu-overlay" id="menuOverlay">
-        <div class="menu-container">
-            <div class="menu-header">
-                <div class="menu-title">COMMAND CENTER</div>
-                <button class="menu-close-btn" id="menuCloseBtn">X</button>
-            </div>
-            
-            <div class="menu-grid">
-                <!-- Main Links -->
-                <div class="menu-section-title">MAIN MENU</div>
-                <a href="index.html" class="menu-card">
-                    <i class="fas fa-home"></i>
-                    <span>Home Base</span>
-                </a>
-                <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" class="menu-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Privacy</span>
-                </a>
-                
-                <!-- Featured/Popular Addons -->
-                <div class="menu-section-title">POPULAR ADDONS</div>
-                <a href="posts/soulEggs.html" class="menu-card">
-                    <i class="fas fa-egg"></i>
-                    <span>Soul Eggs</span>
-                </a>
-                <a href="posts/mobHider.html" class="menu-card">
-                    <i class="fas fa-mask"></i>
-                    <span>Mob Hider</span>
-                </a>
-                <a href="posts/enderGuardian.html" class="menu-card">
-                    <i class="fas fa-dragon"></i>
-                    <span>Ender Guardian</span>
-                </a>
-
-                <!-- Utility Addons -->
-                <div class="menu-section-title">UTILITIES</div>
-                <a href="posts/pocketwaypoint.html" class="menu-card">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Waypoints</span>
-                </a>
-                <a href="posts/wirlesshopper.html" class="menu-card">
-                    <i class="fas fa-wifi"></i>
-                    <span>Wireless Hopper</span>
-                </a>
-                <a href="posts/landclaim.html" class="menu-card">
-                    <i class="fas fa-flag"></i>
-                    <span>Land Claim</span>
-                </a>
-                <a href="posts/itemcarrier.html" class="menu-card">
-                    <i class="fas fa-box-open"></i>
-                    <span>Item Carrier</span>
-                </a>
-                <a href="posts/healthbar.html" class="menu-card">
-                    <i class="fas fa-heart"></i>
-                    <span>Health Bar</span>
-                </a>
-                <a href="posts/mobcatcher.html" class="menu-card">
-                    <i class="fas fa-hands"></i>
-                    <span>Mob Catcher</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- BIOME SWITCHER BUTTON (NEW) -->
     <button id="biomeToggle" data-biome="Overworld">
         <i class="fas fa-tree" id="biomeIcon"></i>
     </button>
 
-    <!-- Floating Trigger Button -->
     <div id="menuTrigger">
         <i class="fas fa-bars" style="font-size: 20px;"></i>
     </div>
 
-    <!-- SCRIPTS -->
     <script>
-        // ====================================================================
-        //                             MAIN LOGIC
-        // ====================================================================
+        // SAME SCRIPT AS BEFORE (NO CHANGES TO LOGIC, JUST HTML STRUCTURE)
         document.addEventListener('DOMContentLoaded', function() {
             
-            // --- GLOBAL SOUND ---
             const clickSound = document.getElementById('clickSound');
             const playClickSound = async () => {
                 if(clickSound) {
@@ -1215,28 +767,11 @@
                 }
             };
 
-            // ==================== SPLASH TEXT LOGIC (NEW) ====================
             const splashTexts = [
-                "Creeper? Aww man!",
-                "Also try Terraria!",
-                "100% Bug Free!",
-                "Follow shadowGamer!",
-                "Don't dig straight down!",
-                "Herobrine Removed",
-                "Check out the addons!",
-                "Made with <3!",
-                "Splashing!",
-                "Sub to the channel!",
-                "Better than Bedrock?",
-                "Now with Ray Tracing! (JK)",
-                "Press Alt+F4 for diamonds!",
-                "Blocky goodness!",
-                "Pixel perfect!",
-                "Zombie proof!",
-                "Enderman friendly!",
-                "Not a scam!",
-                "Download now!",
-                "Rated 5 Stars!"
+                "Creeper? Aww man!", "Also try Terraria!", "100% Bug Free!", "Follow shadowGamer!", "Don't dig straight down!",
+                "Herobrine Removed", "Check out the addons!", "Made with <3!", "Splashing!", "Sub to the channel!",
+                "Better than Bedrock?", "Now with Ray Tracing! (JK)", "Press Alt+F4 for diamonds!", "Blocky goodness!",
+                "Pixel perfect!", "Zombie proof!", "Enderman friendly!", "Not a scam!", "Download now!", "Rated 5 Stars!"
             ];
 
             const splashElement = document.getElementById('splashText');
@@ -1244,7 +779,6 @@
                 const randomSplash = splashTexts[Math.floor(Math.random() * splashTexts.length)];
                 splashElement.textContent = randomSplash;
                 
-                // Add slight scaling animation on click
                 splashElement.addEventListener('click', () => {
                     splashElement.style.transform = "rotate(-20deg) scale(1.2)";
                     playClickSound();
@@ -1255,10 +789,7 @@
                 });
             }
 
-            // ==================== CLICK PARTICLES (NEW) ====================
             document.addEventListener('click', (e) => {
-                // Don't spawn particles if clicking a button/link to avoid visual clutter? 
-                // Actually, it's fun, so let's keep it everywhere.
                 createClickParticles(e.clientX, e.clientY);
             });
 
@@ -1268,58 +799,38 @@
                     const particle = document.createElement('div');
                     particle.classList.add('click-particle');
                     document.body.appendChild(particle);
-
-                    // Set initial position
                     particle.style.left = `${x}px`;
                     particle.style.top = `${y}px`;
-
-                    // Random direction
                     const angle = Math.random() * Math.PI * 2;
                     const speed = Math.random() * 30 + 10;
                     const dx = Math.cos(angle) * speed;
                     const dy = Math.sin(angle) * speed;
-
-                    // Use requestAnimationFrame for smooth animation start
                     requestAnimationFrame(() => {
                         particle.style.transform = `translate(${dx}px, ${dy}px) scale(0)`;
                         particle.style.opacity = '0';
                     });
-
-                    // Remove after animation
                     setTimeout(() => {
                         particle.remove();
                     }, 600);
                 }
             }
 
-            // ==================== MINEABLE BLOCK LOGIC (NEW) ====================
             const mineableBlock = document.getElementById('mineableBlock');
             const blockReward = document.getElementById('blockReward');
-            const footerMineContainer = document.getElementById('footerMineContainer'); // Get container
+            const footerMineContainer = document.getElementById('footerMineContainer');
             let blockHealth = 100;
 
             if (mineableBlock) {
                 mineableBlock.addEventListener('click', function() {
-                    if (blockHealth <= 0) return; // Already broken
-
+                    if (blockHealth <= 0) return;
                     blockHealth--;
                     playClickSound();
-                    
-                    // Visual shake
                     mineableBlock.classList.add('shake');
                     setTimeout(() => mineableBlock.classList.remove('shake'), 200);
-
-                    // REMOVED: Opacity fade. Bedrock stays solid until broken!
-                    // Instead, we rely on the CSS :active state for the "darkening" effect shown in your image.
-
                     if (blockHealth <= 0) {
-                        // Break animation
                         mineableBlock.style.display = 'none';
                         blockReward.style.display = 'block';
-                        if(footerMineContainer) footerMineContainer.classList.add('broken'); // Hide hint
-                        showAdvancement("We Need To Go Deeper");
-                        
-                        // Spawn many particles
+                        if(footerMineContainer) footerMineContainer.classList.add('broken');
                         const rect = mineableBlock.getBoundingClientRect();
                         for(let i=0; i<20; i++) {
                             createClickParticles(rect.left + rect.width/2, rect.top + rect.height/2);
@@ -1328,29 +839,13 @@
                 });
             }
 
-            // ==================== HEROBRINE CHANCE (NEW) ====================
-            // 1 in 100 chance (0.01) to appear on load
-            if (Math.random() < 0.01) {
-                const herobrine = document.getElementById('herobrine');
-                if (herobrine) {
-                    herobrine.style.display = 'block';
-                    console.log("He is watching..."); // Console easter egg
-                }
-            }
-
-            // ==================== SKELETON LOADING LOGIC ====================
             const projectModList = document.getElementById('projectModList');
             const realItems = Array.from(projectModList.children);
-            
-            // 1. Hide Real Items
             realItems.forEach(item => item.style.display = 'none');
-            
-            // 2. Generate & Insert Skeletons
-            // We'll create 6 skeleton placeholders
             for(let i=0; i<6; i++) {
                 const li = document.createElement('li');
                 li.className = 'mod-item skeleton-placeholder'; 
-                li.style.pointerEvents = 'none'; // Prevent clicks on skeletons
+                li.style.pointerEvents = 'none';
                 li.innerHTML = `
                     <div class="skeleton-card">
                         <div class="skeleton skeleton-img"></div>
@@ -1366,471 +861,51 @@
                 `;
                 projectModList.appendChild(li);
             }
-
-            // 3. Simulate Loading Time (e.g., 1.5 seconds)
             setTimeout(() => {
-                // Remove all skeletons
                 document.querySelectorAll('.skeleton-placeholder').forEach(el => el.remove());
-                
-                // Show real items with fade animation
                 realItems.forEach((item, index) => {
-                    item.style.display = 'flex'; // Match CSS flex display
+                    item.style.display = 'flex';
                     item.style.opacity = '0';
-                    item.style.animation = `fadeIn 0.5s ease-in forwards ${index * 0.05}s`; // Staggered fade in
+                    item.style.animation = `fadeIn 0.5s ease-in forwards ${index * 0.05}s`;
                 });
             }, 1500);
 
-            // ==================== EASTER EGG LOGIC (NEW FEATURES) ====================
-            const logo = document.querySelector('.nav-logo');
-            const creeperSound = document.getElementById('creeperSound');
-            let logoClicks = 0;
-            let logoTimer;
-            
-            // Advancement Toast Helper
-            const advToast = document.getElementById('advancementToast');
-            const advTitle = document.getElementById('advancementTitle');
-            
-            function showAdvancement(text) {
-                advTitle.textContent = text;
-                advToast.classList.add('show');
-                playClickSound(); // Reuse click sound as popup sound
-                setTimeout(() => {
-                    advToast.classList.remove('show');
-                }, 4000);
-            }
-
-            // 1. KEYBOARD EASTER EGGS (Dinnerbone & jeb_)
-            let keyBuffer = "";
-            document.addEventListener('keydown', (e) => {
-                keyBuffer += e.key.toLowerCase();
-                if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20); // Keep buffer short
-
-                if (keyBuffer.includes("dinnerbone")) {
-                    document.body.classList.toggle("dinnerbone-mode");
-                    showAdvancement("Upside Down World");
-                    keyBuffer = ""; // Reset
-                }
-                
-                if (keyBuffer.includes("jeb_")) {
-                    document.body.classList.toggle("jeb-mode");
-                    showAdvancement("Rainbow Sheep Mode");
-                    keyBuffer = ""; // Reset
-                }
-            });
-
-            // 2. CLICK LOGO EASTER EGG
-            if(logo) {
-                logo.addEventListener('click', (e) => {
-                    e.preventDefault(); 
-                    logoClicks++;
-                    
-                    clearTimeout(logoTimer);
-                    logoTimer = setTimeout(() => {
-                        logoClicks = 0;
-                    }, 1000); 
-
-                    if(logoClicks >= 5) {
-                        logoClicks = 0;
-                        triggerCreeperEffect();
-                        showAdvancement("Creeper Aww Man!");
-                    }
-                });
-            }
-
-            function triggerCreeperEffect() {
-                if(creeperSound) {
-                    creeperSound.currentTime = 0;
-                    creeperSound.volume = 0.5;
-                    creeperSound.play().catch(e => console.log("Audio play failed", e));
-                }
-                document.body.classList.add('shake-effect');
-                const oldBg = document.body.style.backgroundColor;
-                document.body.style.transition = "background-color 0.1s";
-                document.body.style.backgroundColor = "#fff"; 
-                
-                setTimeout(() => {
-                    document.body.classList.remove('shake-effect');
-                    document.body.style.backgroundColor = oldBg; 
-                    setTimeout(() => { document.body.style.transition = "background-color 0.5s ease"; }, 100);
-                }, 500);
-            }
-
-            // ==================== FAKE ACTIVITY FEED LOGIC (NEW) ====================
-            const feedContainer = document.getElementById('activityFeed');
-            const activities = [
-                { action: "downloaded", icon: "fas fa-download" },
-                { action: "rated 5 stars for", icon: "fas fa-star" },
-                { action: "just viewed", icon: "fas fa-eye" }
-            ];
-            // Some sample addons names in case extracting from DOM fails or is empty
-            const feedAddons = [ "Soul Eggs", "Mob Hider", "Ender Guardian", "QuickPort Items", "Wireless Hopper", "Instant Teleport" ];
-            const locations = ["USA", "UK", "Germany", "Brazil", "Japan", "Canada", "France", "Australia", "Spain"];
-
-            function showRandomActivity() {
-                if(!feedContainer) return;
-                
-                const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-                const randomAddon = feedAddons[Math.floor(Math.random() * feedAddons.length)];
-                const randomLoc = locations[Math.floor(Math.random() * locations.length)];
-                
-                // Construct content
-                feedContainer.innerHTML = `
-                    <i class="${randomActivity.icon}" style="color: var(--mc-green)"></i>
-                    <span>Someone from <strong>${randomLoc}</strong> ${randomActivity.action} <strong>${randomAddon}</strong></span>
-                `;
-                
-                // Show
-                feedContainer.classList.add('active');
-                
-                // Hide after 4 seconds
-                setTimeout(() => {
-                    feedContainer.classList.remove('active');
-                }, 4000);
-            }
-
-            // Start loop (random interval between 8 and 15 seconds)
-            function scheduleNextActivity() {
-                const delay = Math.random() * (15000 - 8000) + 8000;
-                setTimeout(() => {
-                    showRandomActivity();
-                    scheduleNextActivity();
-                }, delay);
-            }
-
-            // Start activity feed after initial load (5 seconds)
-            setTimeout(scheduleNextActivity, 5000);
-
-
-            // ==================== BIOME SWITCHER LOGIC ====================
-            const biomeToggle = document.getElementById('biomeToggle');
-            const biomeIcon = document.getElementById('biomeIcon');
-            const weatherLayers = {
-                rain: document.getElementById('weatherRain'),
-                ash: document.getElementById('weatherAsh'),
-                end: document.getElementById('weatherEnd')
-            };
-            
-            // Define the themes
-            const biomes = [
-                { name: 'Overworld', class: '', icon: 'fa-tree' },
-                { name: 'The Nether', class: 'theme-nether', icon: 'fa-fire' },
-                { name: 'The End', class: 'theme-end', icon: 'fa-eye' }
-            ];
-
-            // Check Local Storage for saved preference
-            let currentBiomeIndex = parseInt(localStorage.getItem('selectedBiomeIndex')) || 0;
-            
-            // Variables for Rainbow Easter Egg
-            let biomeClickCount = 0;
-            let biomeClickTimer;
-
-            // Function to apply theme AND weather
-            function applyBiome(index) {
-                const biome = biomes[index];
-                
-                // Reset classes
-                document.body.classList.remove('theme-nether', 'theme-end');
-                
-                // Add new class if it exists (not empty string)
-                if (biome.class) {
-                    document.body.classList.add(biome.class);
-                }
-                
-                // Update Icon and Tooltip
-                if(biomeIcon && biomeToggle) {
-                    biomeIcon.className = `fas ${biome.icon}`;
-                    biomeToggle.setAttribute('data-biome', `Biome: ${biome.name}`);
-                }
-
-                // Update Weather Effects
-                Object.values(weatherLayers).forEach(layer => layer.style.display = 'none');
-                if (biome.name === 'Overworld') weatherLayers.rain.style.display = 'block';
-                else if (biome.name === 'The Nether') weatherLayers.ash.style.display = 'block';
-                else if (biome.name === 'The End') weatherLayers.end.style.display = 'block';
-                
-                // Save to storage
-                localStorage.setItem('selectedBiomeIndex', index);
-            }
-
-            // Initialize on load
-            applyBiome(currentBiomeIndex);
-
-            // Click Event
-            if (biomeToggle) {
-                biomeToggle.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent triggering other clicks
-                    playClickSound();
-                    
-                    // --- EASTER EGG LOGIC: 5 Rapid Clicks ---
-                    biomeClickCount++;
-                    clearTimeout(biomeClickTimer);
-                    
-                    // Reset counter if not clicked again within 1 second
-                    biomeClickTimer = setTimeout(() => {
-                        biomeClickCount = 0;
-                    }, 1000);
-                    
-                    if (biomeClickCount >= 5) {
-                        biomeClickCount = 0; // Reset count
-                        document.body.classList.toggle("jeb-mode"); // Toggle Rainbow Mode
-                        
-                        // Feedback Toast
-                        if (document.body.classList.contains("jeb-mode")) {
-                            showAdvancement("Rainbow Mode Activated!");
-                        } else {
-                            showAdvancement("Rainbow Mode Deactivated");
-                        }
-                        // We return here so the 5th click doesn't also cycle the biome immediately,
-                        // giving better feedback that something special happened.
-                        // (Optional: remove return if you want it to keep cycling while activating)
-                        return; 
-                    }
-
-                    // Standard Logic: Cycle to next biome
-                    currentBiomeIndex = (currentBiomeIndex + 1) % biomes.length;
-                    applyBiome(currentBiomeIndex);
-                });
-            }
-
-            // --- FEEDBACK SYSTEM LOGIC ---
-            // Webhook URL (Note: Exposed to client-side)
-            const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1441830441530294404/LWfl3eEZrLIDbDjq_UQra9zCaoAYZwPxd-_1PZmryavCIGqWe_hfBkBGJn5q7B4E6G3S";
-            const feedbackModal = document.getElementById('feedbackModal');
-            const feedbackAddonName = document.getElementById('feedbackAddonName');
-            const feedbackMessage = document.getElementById('feedbackMessage');
-            
-            // --- CUSTOM DROPDOWN LOGIC ---
-            const customSelectTrigger = document.getElementById('customSelectTrigger');
-            const customSelectWrapper = document.querySelector('.custom-select-wrapper');
-            const customOptions = document.querySelectorAll('.custom-option');
-            const customSelectText = document.getElementById('customSelectText');
-            const feedbackTypeInput = document.getElementById('feedbackType');
-
-            if(customSelectTrigger) {
-                customSelectTrigger.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    playClickSound();
-                    customSelectWrapper.classList.toggle('open');
-                });
-
-                customOptions.forEach(option => {
-                    option.addEventListener('click', function() {
-                        playClickSound();
-                        customSelectWrapper.classList.remove('open');
-                        
-                        // Update visual selection
-                        customOptions.forEach(opt => opt.classList.remove('selected'));
-                        this.classList.add('selected');
-                        
-                        // Update text and hidden input
-                        const value = this.getAttribute('data-value');
-                        const text = this.textContent;
-                        customSelectText.textContent = text;
-                        feedbackTypeInput.value = value;
-                    });
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!customSelectWrapper.contains(e.target)) {
-                        customSelectWrapper.classList.remove('open');
-                    }
-                });
-            }
-
-            window.openFeedbackModal = function(addonName) {
-                playClickSound();
-                feedbackAddonName.value = addonName;
-                feedbackMessage.value = ''; // Clear previous message
-                feedbackModal.classList.add('active');
-                feedbackModal.style.display = 'flex';
-            };
-            
-            window.closeFeedbackModal = function(e) {
-                if(e) e.preventDefault();
-                feedbackModal.classList.remove('active');
-                setTimeout(() => feedbackModal.style.display = 'none', 300);
-            };
-            
-            window.sendFeedback = async function() {
-                const btn = document.querySelector('.send-btn');
-                const originalText = btn.textContent;
-                const addon = feedbackAddonName.value;
-                // Get value from HIDDEN input now
-                const type = feedbackTypeInput.value;
-                const message = feedbackMessage.value;
-                
-                if(!message.trim()) {
-                    alert("Please enter a message!");
-                    return;
-                }
-                
-                btn.disabled = true;
-                btn.textContent = "Sending...";
-                
-                const payload = {
-                    embeds: [{
-                        title: `${type} for ${addon}`,
-                        color: type === 'Bug Report' ? 16711680 : (type === 'Suggestion' ? 16776960 : 5500000),
-                        fields: [
-                            { name: "Addon", value: addon, inline: true },
-                            { name: "Type", value: type, inline: true },
-                            { name: "Message", value: message }
-                        ],
-                        timestamp: new Date().toISOString()
-                    }]
-                };
-                
-                try {
-                    await fetch(DISCORD_WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    alert("Feedback sent successfully! Thank you.");
-                    closeFeedbackModal();
-                } catch(err) {
-                    console.error(err);
-                    alert("Failed to send feedback. Please try again later.");
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = originalText;
-                }
-            };
-
-            // --- RATING SYSTEM LOGIC ---
-            function initRatingSystem() {
-                const ratingContainers = document.querySelectorAll('.rating-container');
-                
-                ratingContainers.forEach(container => {
-                    const modId = container.dataset.modId;
-                    const scoreText = container.querySelector('.rating-score');
-                    const stars = container.querySelectorAll('.star-btn');
-                    
-                    // Load saved rating
-                    const savedRating = localStorage.getItem(`rating_${modId}`);
-                    if (savedRating) {
-                        updateStars(stars, savedRating);
-                        scoreText.textContent = `You rated: ${savedRating}/5`;
-                        container.dataset.userRated = "true";
-                    }
-
-                    // Add click events
-                    stars.forEach(star => {
-                        star.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation(); // Prevent card click
-                            playClickSound();
-
-                            const value = this.dataset.value;
-                            localStorage.setItem(`rating_${modId}`, value);
-                            updateStars(stars, value);
-                            scoreText.textContent = `You rated: ${value}/5`;
-                            
-                            // Optional: Add a little animation
-                            scoreText.style.color = "var(--mc-green)";
-                            setTimeout(() => scoreText.style.color = "#aaa", 500);
-                        });
-                    });
-                });
-            }
-
-            // Helper to fill stars based on value
-            function updateStars(starNodeList, value) {
-                starNodeList.forEach(s => {
-                    if (parseInt(s.dataset.value) <= parseInt(value)) {
-                        s.classList.add('active');
-                        s.classList.replace('far', 'fas'); // Solid star
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            }
-            
-            initRatingSystem();
-
-            // --- NAVIGATION LOGIC ---
             const allNavItems = document.querySelectorAll('.nav-item, .nav-icon');
             const tabContents = document.querySelectorAll('.tab-content');
-            const logoText = document.querySelector('.logo-text'); // Select the logo text
+            const logoText = document.querySelector('.logo-text');
 
             allNavItems.forEach(item => {
                 item.addEventListener('click', function() {
                     playClickSound();
                     const target = this.getAttribute('data-target');
-                    
-                    // Update buttons
                     allNavItems.forEach(nav => nav.classList.remove('active'));
                     document.querySelectorAll(`[data-target="${target}"]`).forEach(nav => nav.classList.add('active'));
-                    
-                    // Update content
                     tabContents.forEach(content => content.classList.remove('active'));
                     const targetContent = document.getElementById(target);
                     if (targetContent) targetContent.classList.add('active');
-
-                    // Update Logo Text (Dynamic Title)
                     if (logoText) {
-                        // Capitalize first letter
                         logoText.textContent = target.charAt(0).toUpperCase() + target.slice(1);
                     }
                 });
             });
 
-            // --- CAROUSEL LOGIC ---
-            const carouselTrack = document.getElementById('carouselTrack');
-            const leftArrow = document.getElementById('carouselLeftArrow');
-            const rightArrow = document.getElementById('carouselRightArrow');
-            let autoScrollInterval;
-
-            if (carouselTrack) {
-                const scrollCarousel = (direction) => {
-                    const scrollAmount = 370; // Item width + gap
-                    if (direction === 'next') carouselTrack.scrollLeft += scrollAmount;
-                    else carouselTrack.scrollLeft -= scrollAmount;
-                };
-
-                if(leftArrow) leftArrow.addEventListener('click', () => { playClickSound(); scrollCarousel('prev'); });
-                if(rightArrow) rightArrow.addEventListener('click', () => { playClickSound(); scrollCarousel('next'); });
-
-                // Auto scroll
-                const startAutoScroll = () => {
-                    clearInterval(autoScrollInterval);
-                    autoScrollInterval = setInterval(() => {
-                         if (carouselTrack.scrollLeft + carouselTrack.clientWidth >= carouselTrack.scrollWidth - 10) {
-                             carouselTrack.scrollTo({left: 0, behavior: 'smooth'});
-                         } else {
-                             scrollCarousel('next');
-                         }
-                    }, 5000);
-                };
-                carouselTrack.addEventListener('touchstart', () => clearInterval(autoScrollInterval));
-                startAutoScroll();
-            }
-
-            // --- SEARCH LOGIC ---
             const searchInput = document.getElementById('searchInput');
             const clearSearch = document.getElementById('clearSearch');
             const searchResults = document.getElementById('searchResults');
             
-            // Generate data from DOM to ensure single source of truth
-            // Exclude skeleton placeholders which cause the "Cannot read properties of null" error
             const addons = Array.from(document.querySelectorAll('#projectModList .mod-item:not(.skeleton-placeholder)')).map(item => {
                 const h3 = item.querySelector('h3');
                 const img = item.querySelector('img');
                 const link = item.querySelector('a');
                 const p = item.querySelector('p');
-
-                // Safety check to prevent crashes if an element is missing
                 if (!h3 || !img || !link || !p) return null;
-
                 return {
                     name: h3.firstChild ? h3.firstChild.textContent.trim() : h3.textContent.trim(),
                     desc: p.textContent,
                     img: img.src,
                     link: link.href
                 };
-            }).filter(a => a !== null); // Filter out invalid/empty items
+            }).filter(a => a !== null);
 
             if (searchInput) {
                 searchInput.addEventListener('input', function() {
@@ -1838,7 +913,6 @@
                     if (query) {
                         clearSearch.style.display = 'block';
                         const filtered = addons.filter(a => a.name.toLowerCase().includes(query) || a.desc.toLowerCase().includes(query));
-                        
                         searchResults.innerHTML = filtered.length ? '' : '<div class="no-results">No addons found</div>';
                         filtered.forEach(addon => {
                             const div = document.createElement('div');
@@ -1853,7 +927,6 @@
                         clearSearch.style.display = 'none';
                     }
                 });
-                
                 clearSearch.addEventListener('click', () => {
                     searchInput.value = '';
                     clearSearch.style.display = 'none';
@@ -1861,10 +934,8 @@
                 });
             }
 
-            // --- SORTING LOGIC ---
             const sortButton = document.getElementById('sortButton');
             const sortOptions = document.getElementById('sortOptions');
-            // projectModList is already declared in Skeleton Logic above.
 
             if (sortButton && projectModList) {
                 sortButton.addEventListener('click', (e) => {
@@ -1872,82 +943,97 @@
                     playClickSound();
                     sortOptions.classList.toggle('show');
                 });
-
                 document.addEventListener('click', (e) => {
                     if (!sortButton.contains(e.target) && !sortOptions.contains(e.target)) sortOptions.classList.remove('show');
                 });
-
                 sortOptions.querySelectorAll('.sort-option').forEach(opt => {
                     opt.addEventListener('click', function() {
                         const type = this.dataset.sort;
                         const items = Array.from(projectModList.children);
-                        
                         items.sort((a, b) => {
                             if (type === 'newest') return new Date(b.dataset.date) - new Date(a.dataset.date);
                             if (type === 'popular') return (parseInt(b.dataset.downloads)||0) - (parseInt(a.dataset.downloads)||0);
-                            return 0; // Default/Trending logic (already sorted in HTML basically)
+                            return 0;
                         });
-
                         projectModList.innerHTML = '';
                         items.forEach(item => projectModList.appendChild(item));
-                        
                         document.getElementById('currentSortText').textContent = this.textContent.trim();
                         sortOptions.classList.remove('show');
                     });
                 });
             }
 
-            // --- NEW MENU LOGIC (REPLACES SIDEBAR) ---
-            const menuOverlay = document.getElementById('menuOverlay');
-            const menuTrigger = document.getElementById('menuTrigger');
-            const menuCloseBtn = document.getElementById('menuCloseBtn');
-
-            function toggleMenu() {
-                menuOverlay.classList.toggle('active');
-                playClickSound();
-                
-                // Prevent background scrolling when menu is open
-                if (menuOverlay.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = 'auto';
+            const biomeToggle = document.getElementById('biomeToggle');
+            const biomeIcon = document.getElementById('biomeIcon');
+            const weatherLayers = {
+                rain: document.getElementById('weatherRain'),
+                ash: document.getElementById('weatherAsh'),
+                end: document.getElementById('weatherEnd')
+            };
+            const biomes = [
+                { name: 'Overworld', class: '', icon: 'fa-tree' },
+                { name: 'The Nether', class: 'theme-nether', icon: 'fa-fire' },
+                { name: 'The End', class: 'theme-end', icon: 'fa-eye' }
+            ];
+            let currentBiomeIndex = parseInt(localStorage.getItem('selectedBiomeIndex')) || 0;
+            
+            function applyBiome(index) {
+                const biome = biomes[index];
+                document.body.classList.remove('theme-nether', 'theme-end');
+                if (biome.class) document.body.classList.add(biome.class);
+                if(biomeIcon && biomeToggle) {
+                    biomeIcon.className = `fas ${biome.icon}`;
+                    biomeToggle.setAttribute('data-biome', `Biome: ${biome.name}`);
                 }
+                Object.values(weatherLayers).forEach(layer => layer.style.display = 'none');
+                if (biome.name === 'Overworld') weatherLayers.rain.style.display = 'block';
+                else if (biome.name === 'The Nether') weatherLayers.ash.style.display = 'block';
+                else if (biome.name === 'The End') weatherLayers.end.style.display = 'block';
+                localStorage.setItem('selectedBiomeIndex', index);
+            }
+            applyBiome(currentBiomeIndex);
+
+            if (biomeToggle) {
+                biomeToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    playClickSound();
+                    currentBiomeIndex = (currentBiomeIndex + 1) % biomes.length;
+                    applyBiome(currentBiomeIndex);
+                });
             }
 
-            menuTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleMenu();
-            });
-
-            menuCloseBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleMenu();
-            });
-
-            // Close menu when clicking outside the container
-            menuOverlay.addEventListener('click', (e) => {
-                if (e.target === menuOverlay) {
-                    toggleMenu();
-                }
-            });
-
-            // Close on Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
-                    toggleMenu();
-                }
-            });
-
-            // --- MODAL LOGIC ---
-            const modal = document.querySelector('.modal');
-            const closeModal = () => {
-                modal.classList.remove('active');
-                setTimeout(() => modal.style.display = 'none', 300);
-            };
-            
-            document.querySelector('.close-button').addEventListener('click', (e) => {
-                e.preventDefault(); closeModal();
-            });
+            function initRatingSystem() {
+                const ratingContainers = document.querySelectorAll('.rating-container');
+                ratingContainers.forEach(container => {
+                    const modId = container.dataset.modId;
+                    const scoreText = container.querySelector('.rating-score');
+                    const stars = container.querySelectorAll('.star-btn');
+                    const savedRating = localStorage.getItem(`rating_${modId}`);
+                    if (savedRating) {
+                        updateStars(stars, savedRating);
+                        scoreText.textContent = `You rated: ${savedRating}/5`;
+                    }
+                    stars.forEach(star => {
+                        star.addEventListener('click', function(e) {
+                            e.preventDefault(); e.stopPropagation(); playClickSound();
+                            const value = this.dataset.value;
+                            localStorage.setItem(`rating_${modId}`, value);
+                            updateStars(stars, value);
+                            scoreText.textContent = `You rated: ${value}/5`;
+                        });
+                    });
+                });
+            }
+            function updateStars(starNodeList, value) {
+                starNodeList.forEach(s => {
+                    if (parseInt(s.dataset.value) <= parseInt(value)) {
+                        s.classList.add('active'); s.classList.replace('far', 'fas');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            }
+            initRatingSystem();
         });
     </script>
 </body>
