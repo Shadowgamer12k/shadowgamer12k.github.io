@@ -142,30 +142,110 @@
             position: absolute;
             bottom: 100px;
             left: 50px;
-            width: 40px;
-            height: 40px;
+            width: 55px;
+            height: 55px;
             z-index: 5;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             transform-origin: center center;
-            /* Fallback text styling */
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 30px;
         }
 
+        /* ---- MINECRAFT-STYLE ASSETS (CSS Pixel Art) ---- */
+        
+        /* Common Obstacle Base */
         .obstacle {
             position: absolute;
             bottom: 100px;
-            font-size: 40px;
-            z-index: 5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             width: 40px;
             height: 40px;
+            z-index: 5;
+            image-rendering: pixelated;
+            background-size: cover;
+        }
+
+        /* Cactus */
+        .obstacle.cactus {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect x="6" y="0" width="4" height="16" fill="%232E8B57"/><rect x="2" y="4" width="4" height="4" fill="%232E8B57"/><rect x="10" y="6" width="4" height="4" fill="%232E8B57"/><rect x="2" y="8" width="2" height="2" fill="%23225522"/><rect x="12" y="10" width="2" height="2" fill="%23225522"/></svg>');
+        }
+
+        /* Wood Log */
+        .obstacle.log {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%236B4226"/><rect x="2" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="8" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="12" y="0" width="2" height="16" fill="%234B2E1A"/></svg>');
+        }
+
+        /* Zombie Head */
+        .obstacle.zombie {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 8 8"><rect width="8" height="8" fill="%2300AA00"/><rect x="1" y="2" width="2" height="1" fill="%23000"/><rect x="5" y="2" width="2" height="1" fill="%23000"/></svg>');
+        }
+
+        /* Magma Cube / Fire */
+        .obstacle.fire {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23FF4500"/><rect x="4" y="4" width="8" height="8" fill="%23FFA500"/><rect x="6" y="6" width="4" height="4" fill="%23FFFF00"/></svg>');
+            animation: flicker 0.2s infinite;
+        }
+        @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+
+        /* Obsidian */
+        .obstacle.obsidian {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%231a1a2e"/><rect x="2" y="2" width="4" height="4" fill="%234a1a6e" opacity="0.5"/><rect x="10" y="10" width="4" height="4" fill="%234a1a6e" opacity="0.5"/></svg>');
+        }
+
+        /* Bedrock */
+        .obstacle.bedrock {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23333"/><rect x="0" y="0" width="16" height="16" fill="transparent" stroke="%23111" stroke-width="2"/></svg>');
+        }
+
+        /* End Crystal (Purple) */
+        .obstacle.crystal {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="transparent"/><rect x="4" y="4" width="8" height="8" fill="%23E0AAFF" transform="rotate(45 8 8)"/><rect x="6" y="6" width="4" height="4" fill="%23FF55FF" transform="rotate(45 8 8)"/></svg>');
+            animation: float 1s infinite alternate;
+        }
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+        /* Coin (Gold Nugget) */
+        .coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            z-index: 4;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="%23FFD700" stroke="%23DAA520" stroke-width="2"/><rect x="6" y="4" width="4" height="8" fill="%23FFFFE0" opacity="0.5"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: spin 1s infinite linear;
+        }
+        
+        @keyframes spin { 
+            0% { transform: scaleX(1); }
+            50% { transform: scaleX(0.2); }
+            100% { transform: scaleX(1); }
+        }
+
+        /* Projectile (Arrow) */
+        .projectile {
+            position: absolute;
+            width: 40px;
+            height: 10px;
+            z-index: 6;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="10" viewBox="0 0 40 10"><rect x="0" y="4" width="30" height="2" fill="%238B4513"/><polygon points="30,0 40,5 30,10" fill="%23888"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        /* Potion */
+        .potion {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            z-index: 4;
+            /* Simple Pixel Potion Bottle */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="%23fff" d="M6 0h4v2H6z"/><path fill="%23aaa" d="M5 2h6v2H5z"/><path fill="%2355ff55" d="M4 4h8v10H4z"/><path fill="%23fff" opacity="0.5" d="M5 6h2v2H5z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
         .cloud {
@@ -173,6 +253,16 @@
             font-size: 60px;
             opacity: 0.8;
             z-index: -2;
+        }
+        
+        .lightning {
+            position: absolute;
+            top: 0;
+            width: 10px;
+            background: #fff;
+            z-index: 8;
+            display: none;
+            box-shadow: 0 0 20px #fff;
         }
 
         /* Screens (Head Select & Game Over) */
@@ -245,12 +335,24 @@
             height: 6px;
             z-index: 6;
         }
+        
+        /* Flash Effect for Lightning */
+        .flash {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 0.1s;
+        }
 
     </style>
 </head>
 <body>
 
     <div id="gameContainer">
+        <div id="flashOverlay" class="flash"></div>
         <a href="../index.html" class="back-btn"><i class="fas fa-home"></i> EXIT</a>
 
         <!-- UI -->
@@ -301,6 +403,7 @@
         <div id="gameOverScreen" class="overlay-screen" style="display: none;">
             <h1 style="color: #ff5555;">YOU DIED!</h1>
             <div style="font-size: 16px; margin-bottom: 30px;">Score: <span id="finalScore" style="color: #ffff55;">0</span></div>
+            <div style="font-size: 12px; margin-bottom: 20px; color: #aaa;" id="scoreSendingStatus"></div>
             
             <button class="btn" onclick="restartGame()">RESPAWN ↻</button>
             <button class="btn" onclick="openCharSelect()" style="margin-top: 10px; font-size: 10px;">CHANGE SKIN</button>
@@ -316,17 +419,40 @@
             'Fex.png'
         ];
 
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1442640750000209920/43eGpGn-pPJ9K-IY7_7WJ5mh5LN5xBVPkPcbgVYrm2esDA8qIYc0vziuaQT60QdytLSS";
+
         const CONFIG = {
             gravity: 0.8,
-            jumpForce: 16,
+            jumpForce: 17, // Slightly higher for bigger player
             groundHeight: 100,
             startSpeed: 7,
             maxSpeed: 22,
             speedInc: 0.003,
             phases: [
-                { name: 'OVERWORLD', score: 0, skyTop: '#87CEEB', skyBot: '#E0F6FF', grTop: '#2E8B57', grBot: '#5C4033', obstacles: ['🌳', '🌵', '🐷', '🪵'] },
-                { name: 'THE NETHER', score: 500, skyTop: '#3d1a1a', skyBot: '#500000', grTop: '#8B0000', grBot: '#4a0e0e', obstacles: ['🔥', '🧟', '🍄', '🏰'] },
-                { name: 'THE END', score: 1000, skyTop: '#12061f', skyBot: '#20102e', grTop: '#e0ffaa', grBot: '#111111', obstacles: ['👁️', '🔮', '👾', '⬛'] }
+                { 
+                    name: 'OVERWORLD', 
+                    score: 0, 
+                    skyTop: '#87CEEB', skyBot: '#E0F6FF', 
+                    grTop: '#2E8B57', grBot: '#5C4033', 
+                    obstacles: ['cactus', 'log', 'cactus'], 
+                    canShoot: false 
+                },
+                { 
+                    name: 'THE NETHER', 
+                    score: 500, 
+                    skyTop: '#3d1a1a', skyBot: '#500000', 
+                    grTop: '#8B0000', grBot: '#4a0e0e', 
+                    obstacles: ['fire', 'zombie', 'obsidian'], 
+                    canShoot: true 
+                },
+                { 
+                    name: 'THE END', 
+                    score: 1000, 
+                    skyTop: '#12061f', skyBot: '#20102e', 
+                    grTop: '#e0ffaa', grBot: '#111111', 
+                    obstacles: ['crystal', 'obsidian', 'bedrock'], 
+                    canShoot: true 
+                }
             ]
         };
 
@@ -352,7 +478,9 @@
             charScreen: document.getElementById('charSelectScreen'),
             gameOverScreen: document.getElementById('gameOverScreen'),
             finalScore: document.getElementById('finalScore'),
-            headOptions: document.querySelectorAll('.head-option')
+            headOptions: document.querySelectorAll('.head-option'),
+            flash: document.getElementById('flashOverlay'),
+            status: document.getElementById('scoreSendingStatus')
         };
 
         // --- PLAYER PHYSICS OBJECT ---
@@ -360,45 +488,40 @@
             y: 0,
             dy: 0,
             isGrounded: true,
-            rot: 0
+            rot: 0,
+            width: 55, // Updated Width
+            height: 55 // Updated Height
         };
 
         let obstacles = [];
+        let coins = [];
+        let projectiles = [];
+        let potions = [];
         
         // --- INITIALIZATION ---
         function init() {
             els.highScore.textContent = `HI: ${state.highScore}`;
-            selectHead(state.selectedHeadIndex); // Load saved head
+            selectHead(state.selectedHeadIndex); 
         }
 
         // --- CHARACTER SELECTION ---
         window.selectHead = function(index) {
-            // Bounds check
             if (index < 0 || index >= HEAD_FILES.length) index = 0;
-            
             state.selectedHeadIndex = index;
-            
-            // Update UI selection
             els.headOptions.forEach(el => el.classList.remove('selected'));
             const selectedOption = document.getElementById(`head${index}`);
             if(selectedOption) selectedOption.classList.add('selected');
-            
-            // Update Player Entity Visual
             const imgPath = `../assets/minigames/heads/${HEAD_FILES[index]}`;
-            
-            // Try to load image for player
             const img = new Image();
             img.src = imgPath;
-            
             img.onload = () => {
                 els.player.style.backgroundImage = `url('${imgPath}')`;
-                els.player.textContent = ''; // Remove fallback emoji
+                els.player.textContent = ''; 
                 els.player.style.backgroundColor = 'transparent';
             };
-            
             img.onerror = () => {
                 els.player.style.backgroundImage = 'none';
-                els.player.textContent = '🐔'; // Fallback to Chicken if image fails
+                els.player.textContent = '🐔'; 
             };
         };
 
@@ -427,6 +550,12 @@
 
             obstacles.forEach(o => o.el.remove());
             obstacles = [];
+            coins.forEach(c => c.el.remove());
+            coins = [];
+            projectiles.forEach(p => p.el.remove());
+            projectiles = [];
+            potions.forEach(p => p.el.remove());
+            potions = [];
             
             setPhase(0);
             update();
@@ -482,17 +611,20 @@
                 player.dy = 0;
                 player.isGrounded = true;
                 player.rot = 0; 
-                // Snap rotation back smoothly? For now instant reset is safer for gameplay
                 els.player.style.transform = `rotate(0deg)`;
             } else {
-                player.rot += 6; // Spin
+                player.rot += 6; 
                 els.player.style.transform = `rotate(${player.rot}deg)`;
             }
 
             els.player.style.bottom = `${CONFIG.groundHeight + player.y}px`;
 
-            // 3. Obstacles
+            // 3. Game Logic
             handleObstacles();
+            handleCoins();
+            handleProjectiles();
+            handleLightning();
+            handlePotions();
 
             requestAnimationFrame(update);
         }
@@ -501,7 +633,6 @@
         function checkPhase() {
             const scoreInt = Math.floor(state.score);
             const nextPhaseIdx = state.currentPhaseIdx + 1;
-            
             if (nextPhaseIdx < CONFIG.phases.length) {
                 if (scoreInt >= CONFIG.phases[nextPhaseIdx].score) {
                     setPhase(nextPhaseIdx);
@@ -512,12 +643,10 @@
         function setPhase(idx) {
             state.currentPhaseIdx = idx;
             const p = CONFIG.phases[idx];
-            
             document.documentElement.style.setProperty('--bg-sky-top', p.skyTop);
             document.documentElement.style.setProperty('--bg-sky-bot', p.skyBot);
             document.documentElement.style.setProperty('--ground-top', p.grTop);
             document.documentElement.style.setProperty('--ground-bot', p.grBot);
-            
             els.phase.textContent = `BIOME: ${p.name}`;
             els.phase.style.color = p.grTop;
         }
@@ -525,7 +654,7 @@
         function handleObstacles() {
             if (Math.random() < 0.015 + (state.speed * 0.0002)) {
                 const lastObs = obstacles[obstacles.length - 1];
-                if (!lastObs || (window.innerWidth - lastObs.x > 450)) { // Gap logic
+                if (!lastObs || (window.innerWidth - lastObs.x > 450)) { 
                     createObstacle();
                 }
             }
@@ -535,11 +664,11 @@
                 obs.x -= state.speed;
                 obs.el.style.left = `${obs.x}px`;
 
-                // Collision AABB
-                const pLeft = 50 + 8; 
-                const pRight = 50 + 32; // tighter hitbox
+                // Collision AABB (Player size 55px)
+                const pLeft = 50 + 10; 
+                const pRight = 50 + player.width - 10; 
                 const pBottom = player.y;
-                const pTop = player.y + 32;
+                const pTop = player.y + player.height - 10;
 
                 const oLeft = obs.x + 5;
                 const oRight = obs.x + 35;
@@ -557,17 +686,175 @@
             }
         }
 
+        function handleCoins() {
+            if (Math.random() < 0.008) createCoin();
+
+            for (let i = coins.length - 1; i >= 0; i--) {
+                let c = coins[i];
+                c.x -= state.speed;
+                c.el.style.left = `${c.x}px`;
+
+                // Check collection
+                const pLeft = 50; 
+                const pRight = 50 + player.width; 
+                const pBottom = player.y;
+                const pTop = player.y + player.height;
+
+                const cLeft = c.x;
+                const cRight = c.x + 30;
+                const cBottom = c.y;
+                const cTop = c.y + 30;
+
+                if (pRight > cLeft && pLeft < cRight && pBottom < cTop && pTop > cBottom) {
+                    // Collect
+                    state.score += 50;
+                    els.score.style.color = '#ffff55'; // Flash gold
+                    setTimeout(() => els.score.style.color = '#55ff55', 200);
+                    c.el.remove();
+                    coins.splice(i, 1);
+                    spawnParticles(50, CONFIG.groundHeight + player.y + 20, 8, '#FFD700'); // Gold particles
+                } else if (c.x < -100) {
+                    c.el.remove();
+                    coins.splice(i, 1);
+                }
+            }
+        }
+
+        function handleProjectiles() {
+            const p = CONFIG.phases[state.currentPhaseIdx];
+            // Only in Nether/End phases
+            if (p.canShoot && Math.random() < 0.003) {
+                createProjectile();
+            }
+
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                let proj = projectiles[i];
+                proj.x -= (state.speed * 1.5); // Move faster than obstacles
+                proj.el.style.left = `${proj.x}px`;
+
+                // Collision
+                const pLeft = 50 + 10; 
+                const pRight = 50 + player.width - 10; 
+                const pBottom = player.y;
+                const pTop = player.y + player.height;
+
+                const oLeft = proj.x;
+                const oRight = proj.x + 20;
+                const oBottom = proj.y;
+                const oTop = proj.y + 10;
+
+                if (pRight > oLeft && pLeft < oRight && pBottom < oTop && pTop > oBottom) {
+                    die();
+                }
+
+                if (proj.x < -100) {
+                    proj.el.remove();
+                    projectiles.splice(i, 1);
+                }
+            }
+        }
+
+        function handleLightning() {
+            // Random chance for lightning strike
+            if (Math.random() < 0.001) {
+                triggerLightning();
+            }
+        }
+
+        function triggerLightning() {
+            els.flash.style.opacity = 0.8;
+            setTimeout(() => els.flash.style.opacity = 0, 100);
+        }
+
+        function handlePotions() {
+            // Rare event: Potion fall
+            if (Math.random() < 0.002) {
+                createPotion();
+            }
+
+            for (let i = potions.length - 1; i >= 0; i--) {
+                let pot = potions[i];
+                pot.y -= 3; // Fall down
+                pot.x -= (state.speed * 0.5); // Drift left slightly
+                pot.el.style.left = `${pot.x}px`;
+                pot.el.style.bottom = `${CONFIG.groundHeight + pot.y}px`;
+
+                // Collision
+                const pLeft = 50; 
+                const pRight = 50 + player.width; 
+                const pBottom = player.y;
+                const pTop = player.y + player.height;
+
+                const oLeft = pot.x;
+                const oRight = pot.x + 30;
+                const oBottom = pot.y;
+                const oTop = pot.y + 30;
+
+                if (pRight > oLeft && pLeft < oRight && pBottom < oTop && pTop > oBottom) {
+                    // Collect Potion (Swiftness - Bonus Points + Speed Up?)
+                    state.score += 200;
+                    state.speed += 0.5; // Make it harder!
+                    pot.el.remove();
+                    potions.splice(i, 1);
+                    spawnParticles(50, CONFIG.groundHeight + player.y + 20, 10, '#55ff55'); // Green particles
+                } else if (pot.y < 0) {
+                    pot.el.remove();
+                    potions.splice(i, 1);
+                }
+            }
+        }
+
         function createObstacle() {
             const p = CONFIG.phases[state.currentPhaseIdx];
-            const emoji = p.obstacles[Math.floor(Math.random() * p.obstacles.length)];
+            // Get random type from phase config
+            const type = p.obstacles[Math.floor(Math.random() * p.obstacles.length)];
             
             const el = document.createElement('div');
-            el.className = 'obstacle';
-            el.textContent = emoji;
+            el.className = `obstacle ${type}`; // Add specific class for background image
             el.style.left = '100vw';
             els.container.appendChild(el);
             
             obstacles.push({ x: window.innerWidth, el: el });
+        }
+
+        function createCoin() {
+            const el = document.createElement('div');
+            el.className = 'coin';
+            el.style.left = '100vw';
+            // Random height
+            const y = Math.random() * 150 + 50; 
+            el.style.bottom = `${CONFIG.groundHeight + y}px`;
+            els.container.appendChild(el);
+            
+            coins.push({ x: window.innerWidth, y: y, el: el });
+        }
+
+        function createProjectile() {
+            const el = document.createElement('div');
+            el.className = 'projectile'; // CSS class handles image
+            // Determine height (can be low or high)
+            const y = Math.random() > 0.5 ? 20 : 80; 
+            const realY = 30; 
+            
+            el.style.bottom = `${CONFIG.groundHeight + realY}px`;
+            el.style.left = '100vw';
+            els.container.appendChild(el);
+            
+            projectiles.push({ x: window.innerWidth, y: realY, el: el });
+        }
+
+        function createPotion() {
+            const el = document.createElement('div');
+            el.className = 'potion';
+            // Start high up
+            const startY = 400;
+            const startX = Math.random() * (window.innerWidth - 200) + 200; // Spawn ahead
+            
+            el.style.left = `${startX}px`;
+            el.style.bottom = `${CONFIG.groundHeight + startY}px`;
+            els.container.appendChild(el);
+            
+            potions.push({ x: startX, y: startY, el: el });
         }
 
         function spawnParticles(x, bottomY, count, color) {
@@ -609,13 +896,51 @@
                 localStorage.setItem('mcRunnerHighScore', state.highScore);
                 els.highScore.textContent = `HI: ${state.highScore} (NEW!)`;
             }
-            els.finalScore.textContent = Math.floor(state.score);
+            
+            const finalScore = Math.floor(state.score);
+            els.finalScore.textContent = finalScore;
             els.gameOverScreen.style.display = 'flex';
             
             // Shake effect
             els.container.style.transform = 'translate(5px, 5px)';
             setTimeout(() => els.container.style.transform = 'translate(-5px, -5px)', 50);
             setTimeout(() => els.container.style.transform = 'translate(0,0)', 100);
+
+            // Send Score to Discord
+            sendScoreToDiscord(finalScore, state.highScore);
+        }
+
+        async function sendScoreToDiscord(score, highScore) {
+            els.status.innerText = "Sending score...";
+            els.status.style.color = "#aaa";
+
+            const gameUrl = window.location.href;
+            
+            const embed = {
+                title: "🎮 New Run Finished!",
+                color: 16734296, // Reddish
+                fields: [
+                    { name: "Score", value: `**${score}**`, inline: true },
+                    { name: "High Score", value: `${highScore}`, inline: true },
+                    { name: "Biome Reached", value: `${CONFIG.phases[state.currentPhaseIdx].name}`, inline: true },
+                    { name: "Play Now", value: `[Click Here to Play](${gameUrl})` }
+                ],
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+                els.status.innerText = "Score sent!";
+                els.status.style.color = "#55ff55";
+            } catch (error) {
+                console.error(error);
+                els.status.innerText = "Failed to send score.";
+                els.status.style.color = "#ff5555";
+            }
         }
 
         init();
