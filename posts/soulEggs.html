@@ -1,682 +1,637 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M2P94THH');</script>
-<!-- End Google Tag Manager -->
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M2P94THH');</script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JKTG6N0GFN');
+    </script>
 
-  gtag('config', 'G-JKTG6N0GFN');
-</script>
-
-     
- <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta name="description" content="SoulEggs Add-on for Minecraft Bedrock – Capture and release any mob using magic eggs!"> <title>Minecraft SoulEggs Add-on | Capture & Release Any Mob</title>
-   <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO META TAGS -->
+    <meta name="description" content="Download Soul Eggs Addon for Minecraft Bedrock. Capture any mob in magic eggs and release them later. The ultimate mob transport tool for MCPE 1.20+.">
+    <meta name="keywords" content="Minecraft Bedrock, Soul Eggs, Mob Catcher, Poke Balls, Capture Mobs, Transport Mobs, MCPE Addons, shadowGamer100k">
+    <meta name="author" content="shadowGamer100k">
+    <meta name="robots" content="index, follow">
+    
+    <title>Soul Eggs Addon Download | Mob Capture Tool</title>
+    
+    <!-- JSON-LD SCHEMA FOR GOOGLE SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Soul Eggs Addon",
+      "operatingSystem": "Minecraft Bedrock Edition",
+      "applicationCategory": "GameModification",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A Minecraft Bedrock addon that allows players to craft magic eggs to capture and transport any mob in the game.",
+      "author": {
+        "@type": "Person",
+        "name": "shadowGamer100k"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "165"
+      }
+    }
+    </script>
+    
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css') format('truetype');
-        }
 
         :root {
             --mc-green: #55FF55;
+            --mc-cyan: #00AAAA; /* Cyan for Soul/Magic theme */
             --mc-dark: #2D2D2D;
             --mc-border: #555555;
+            --xp-green-light: #80ff20;
+            --xp-green-dark: #00aa00;
         }
 
        body {
-  background-color: #1a1a1a;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                  linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
-                  linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
-  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-  font-family: 'Press Start 2P', cursive;
-  color: white;
-  line-height: 1.6;
-  margin: 0;
-  min-height: 100vh;
-  font-size: 16px;
-}
-     h1 {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
-  line-height: 1.2;
-  margin: 0.5em 0;
-}
-     h2, .feature-title {
-  font-size: clamp(1.2rem, 4vw, 1.8rem);
-  margin: 0.8em 0;
-}
-
-p, .feature-item, .faq-answer {
-  font-size: clamp(0.9rem, 3vw, 1rem);
-  line-height: 1.5;
-}
-     
-
-        .header {
-  padding: 2rem 1rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-bottom: 4px solid var(--mc-border);
-  text-align: center;
-}
-
-        .header img {
-            max-width: 600px;
-            width: 90%;
-            image-rendering: pixelated;
-            filter: drop-shadow(0 0 8px var(--mc-green));
+          background-color: #1a1a1a;
+          background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+          background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+          font-family: 'Press Start 2P', cursive;
+          color: white;
+          line-height: 1.8;
+          margin: 0;
+          min-height: 100vh;
+          font-size: 12px;
+          overflow-x: hidden;
+          padding-bottom: 60px;
         }
 
-    .container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
+        /* Responsive Text */
+        p, .seo-text, li {
+            font-size: 10px;
+            color: #ddd;
+            line-height: 2.0;
+            margin-bottom: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            p, .seo-text, li {
+                font-size: 12px;
+            }
+        }
+
+        button, input, select, textarea, .game-ui, #gameUI p, h1, h2, h3, .nav-link {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        h1 {
+          font-size: clamp(1.2rem, 3vw, 1.8rem);
+          line-height: 1.5;
+          margin: 0.5em 0;
+          text-shadow: 4px 4px 0px #000;
+          color: var(--mc-cyan);
+        }
+
+        .header {
+          padding: 2rem 1rem;
+          background: rgba(0, 0, 0, 0.8);
+          border-bottom: 4px solid var(--mc-border);
+          text-align: center;
+          position: relative;
+          z-index: 10;
+        }
+
+        .breadcrumb {
+            font-size: 9px;
+            color: #aaa;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 1px;
+        }
+        .breadcrumb a { color: var(--mc-green); text-decoration: none; }
+
+        .container {
+          max-width: 900px;
+          margin: 2rem auto;
+          padding: 1rem;
+          position: relative;
+          z-index: 5;
+        }
 
         .feature-box {
-  background: rgba(0, 0, 0, 0.8);
-  border: 4px solid var(--mc-border);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
+          background: rgba(30, 30, 30, 0.9); 
+          border: 4px solid var(--mc-border);
+          padding: 2rem;
+          margin: 2.5rem 0;
+          position: relative;
+          box-shadow: 0 0 0 2px #000, 0 0 20px rgba(0, 0, 0, 0.6);
+        }
 
         .feature-title {
             color: var(--mc-green);
-            font-size: 1.2rem;
-            margin: -1rem 0 1rem 0;
+            font-size: 12px;
+            margin: -3rem 0 1.5rem 0;
             background: var(--mc-dark);
-            padding: 0.5rem;
+            padding: 10px 15px;
             display: inline-block;
-            border: 2px solid var(--mc-border);
+            border: 4px solid var(--mc-border);
+            box-shadow: 4px 4px 0 #000;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .download-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-      .download-button {
-  font-size: clamp(0.8rem, 3vw, 1rem);
-  background: var(--mc-dark);
-  color: white;
-  padding: 1.5rem;
-  text-decoration: none;
-  border: 3px solid var(--mc-border);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-        .download-button:hover {
-  background: var(--mc-green);
-  color: black;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(85, 255, 85, 0.3);
-}
-
-        .download-button:active {
-            transform: translateY(0);
-        }
-
+        /* --- VIDEO CONTAINER --- */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%;
-            margin: 1.5rem 0;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            border: 4px solid #111;
+            margin-bottom: 1rem;
         }
-
         .video-container iframe {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 3px solid var(--mc-border);
-        }
-
-       .features-list, .testimonials {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
-}
-        .feature-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-left: 4px solid var(--mc-green);
-        }
-
-        .screenshot-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .screenshot {
-            border: 3px solid var(--mc-border);
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .screenshot:hover {
-            transform: scale(1.05);
-        }
-
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .testimonial {
-            background: rgba(85, 255, 85, 0.05);
-            padding: 1rem;
-            border-left: 4px solid var(--mc-green);
-            font-style: italic;
-        }
-
-        .compatibility-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .compatibility-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .compatibility-item.compatible::before {
-            content: "✓";
-            color: var(--mc-green);
-        }
-
-        .compatibility-item.incompatible::before {
-            content: "✗";
-            color: #FF5555;
-        }
-
-        .faq-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .faq-question {
-            color: var(--mc-green);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .command-box {
-            background: #000;
-            border: 2px solid var(--mc-border);
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .command-prefix {
-            color: var(--mc-green);
-        }
-
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1rem;
-            text-align: center;
-            border-top: 4px solid var(--mc-border);
-            margin-top: 3rem;
-        }
-
-        footer a {
-            color: var(--mc-green);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        footer a:hover {
-            text-shadow: 0 0 8px var(--mc-green);
-            text-decoration: underline;
-        }
-        
-        .whats-new {
-            background: rgba(85, 255, 85, 0.05);
-            padding: 1.5rem;
-            border-left: 4px solid var(--mc-green);
-            margin: 1.5rem 0;
-        }
-        
-        .whats-new h3 {
-            color: var(--mc-green);
-            margin-top: 0;
-        }
-        
-        .whats-new ul {
-            list-style-type: none;
-            padding-left: 0.5rem;
-        }
-        
-        .whats-new li {
-            margin-bottom: 0.8rem;
-            font-style: italic;
-        }
-
-      @media (max-width: 768px) {
-  body {
-    font-size: 10px;
-    line-height: 1.5;
-  }
-
-  .header {
-    padding: 0.7rem;
-  }
-
-  .container {
-    padding: 0.2rem;
-  }
-
-  .feature-box {
-    padding: 0.7rem;
-    margin: 0.7rem 0;
-  }
-
-  .features-list, .testimonials {
-    grid-template-columns: 0.7fr;
-  }
-
-  .download-button {
-    padding: 0.7rem;
-    font-size: 0.0.6rem;
-  }
-
-  p, li {
-    word-break: break-word;
-    hyphens: auto;
-  }
-}
-     @media (max-width: 480px) {
-  h1 {
-    font-size: 1.3rem;
-  }
-  
-  h2, .feature-title {
-    font-size: 1.1rem;
-  }
-  
-  .feature-box p {
-    font-size: 0.85rem;
-  }
-  
-  .download-button {
-    font-size: 0.8rem;
-    padding: 0.8rem;
-  }
-
-  .video-container {
-    margin: 0.5rem 0;
-  }
-}
-           /* Ad Block Detection Modal */
-        .adblock-overlay {
-            display: none;
-            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 9998;
-            pointer-events: all;
         }
 
-        .adblock-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #2d2d2d;
-            border: 4px solid #55ff55;
-            padding: 20px;
-            z-index: 9999;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
-            border-radius: 10px;
-            pointer-events: all;
+        /* --- IMAGES & SCREENSHOTS --- */
+        .addon-preview-img {
+            width: 100%;
+            border: 4px solid #111;
+            margin: 1rem 0;
+            image-rendering: pixelated;
         }
 
-        .adblock-modal h2 {
-            color: #55ff55;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-        .mod-item-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            transition: transform 0.2s ease;
+        .sub-header {
+            background-color: rgba(0, 170, 170, 0.2); /* Cyan tint */
+            color: var(--mc-cyan);
+            padding: 10px;
+            margin-top: 2rem;
+            border-left: 4px solid var(--mc-cyan);
+            font-size: 11px;
         }
 
-        .mod-item-link:hover {
-            transform: translateY(-3px);
+        /* --- CONTENT STYLES --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: rgba(0,0,0,0.4);
+            padding: 1.5rem;
+            border: 2px solid #444;
+            border-left: 6px solid var(--mc-cyan); /* Cyan accent */
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.05);
+        }
+        .feature-card h3 { font-size: 11px; margin-bottom: 1rem; color: #fff; line-height: 1.5; }
+        .feature-card p { font-size: 10px; margin: 0; color: #ccc; }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        .step-list li {
+            margin-bottom: 1rem;
+            background: rgba(0,0,0,0.3);
+            padding: 1.2rem;
+            border: 2px solid #333;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .step-number {
+            color: var(--mc-green);
+            min-width: 20px;
         }
 
-        .mod-item-link:active {
-            transform: translateY(0);
+        .compatibility-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .compatibility-item {
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            border: 2px solid #333;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .compatible { color: var(--mc-green); border-color: #004400; }
+        .incompatible { color: #ff5555; border-color: #440000; }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed #444;
+            padding-bottom: 1rem;
+        }
+        .faq-question { color: var(--mc-green); margin-bottom: 0.5rem; }
+
+        /* --- DOWNLOAD BUTTONS --- */
+        .download-button {
+          font-size: 12px;
+          background: #333;
+          color: white;
+          padding: 1.5rem;
+          text-decoration: none;
+          border: 4px solid var(--mc-border);
+          border-bottom-width: 8px; 
+          transition: all 0.1s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          cursor: pointer;
+          margin-top: 1rem;
+          text-transform: uppercase;
+        }
+        .download-button:hover {
+          background: var(--mc-cyan);
+          color: #fff;
+          transform: translateY(-2px);
+          border-bottom-width: 10px;
+        }
+        .download-button:active {
+            transform: translateY(4px);
+            border-bottom-width: 4px;
+        }
+        .download-button.disabled {
+            opacity: 0.6; cursor: not-allowed; background: #222;
+            border-color: #444;
         }
 
-        .mod-item {
+        /* --- COMMAND BOX --- */
+        .command-box {
+            background: #111;
+            border: 2px dashed #555;
+            padding: 15px;
+            font-family: monospace; 
+            font-size: 12px;
+            color: var(--mc-green);
             cursor: pointer;
-            transition: background-color 0.2s ease;
             position: relative;
+            margin: 1rem 0;
+            overflow-x: auto;
         }
+        .command-box:active { background: #000; }
+        .command-box::after { content: "CLICK TO COPY"; position: absolute; right: 10px; top: 15px; font-size: 8px; color: #888; font-family: 'Press Start 2P', cursive; }
 
-        .mod-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        /* --- XP BAR --- */
+        .xp-hud-container {
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 10px 0; text-align: center; pointer-events: none;
         }
+        .xp-bar-bg {
+            width: 300px; height: 12px; background: #333; border: 3px solid #000;
+            margin: 0 auto; position: relative;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+        }
+        .xp-bar-fill { height: 100%; background: #80ff20; width: 0%; transition: width 0.2s; image-rendering: pixelated; }
+        .xp-level { color: #80ff20; font-size: 16px; margin-bottom: 8px; text-shadow: 3px 3px 0 #000; }
 
-        .adblock-modal p {
-            color: #fff;
-            font-size: 0.9em;
-            line-height: 1.5;
-            margin-bottom: 20px;
+        /* --- GAME STYLES --- */
+        .game-area {
+            height: 250px; background: #222; border: 4px solid #555;
+            position: relative; overflow: hidden; margin-top: 1rem;
+            cursor: crosshair; display: none;
+            box-shadow: inset 0 0 20px #000;
         }
+        .chicken { position: absolute; font-size: 32px; cursor: pointer; user-select: none; animation: bob 0.5s infinite alternate; filter: drop-shadow(4px 4px 0 #000); }
+        @keyframes bob { from{transform:translateY(0)} to{transform:translateY(-6px)} }
+        
+        /* --- FOOTER --- */
+        footer {
+            text-align: center; padding: 2rem; background: rgba(0,0,0,0.9);
+            border-top: 4px solid #444; margin-top: 3rem; font-size: 10px;
+        }
+        footer a { color: var(--mc-green); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
 
-        .adblock-modal button {
-            background: #008542;
-            border: 2px solid #55ff55;
-            color: #fff;
-            padding: 10px 25px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0 10px;
+        @media (max-width: 768px) {
+            .feature-box { padding: 1.5rem 1rem; margin: 1.5rem 0; }
+            .feature-title { font-size: 10px; margin-top: -2.5rem; }
+            h1 { font-size: 14px; }
+            body { font-size: 10px; }
         }
-
-        .adblock-modal button:hover {
-            background: #00a550;
-            transform: scale(1.05);
-        }
-     
     </style>
 </head>
 <body>
-     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<header class="header"> <h1>🥚 SoulEggs Add-on</h1> <p>Capture & Release Any Mob in Minecraft Bedrock!</p> </header> <main class="container"> <section class="feature-box"> <h2 class="feature-title">SHOWCASE</h2> <div class="video-container"> <iframe src="https://www.youtube.com/embed/UUgFfzVhz90?si=CqzXJ46X4hT81u1A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope" allowfullscreen loading="lazy"></iframe> </div> </section> <section class="feature-box"> <h2 class="feature-title">ABOUT</h2> <p>With <strong>SoulEggs</strong>, you can now capture any mob and store it safely inside a magical egg! Each mob is saved with its unique properties, ready to be released wherever and whenever you want.</p> <p>This addon brings a fun, Pokémon-style mechanic into Minecraft — perfect for collectors, adventurers, and builders who want full control over their mobs.</p> </section> <section class="feature-box"> <h2 class="feature-title">WHAT'S NEW</h2> <div class="whats-new"> <h3>New Features ✨</h3> <ul> <li>🥚 Added Empty Egg & Full Egg system.</li> <li>💾 Full Eggs now store dynamic mob data.</li> <li>🧬 Each egg can hold one mob type.</li> <li>🪄 Mobs can be released anywhere by interacting with the ground.</li> <li>⚙️ New crafting recipe with balanced item costs.</li> </ul> <h3>Fixes & Improvements 🔧</h3> <ul> <li>🔨 Optimized capture and release system.</li> <li>🔨 Fixed entity duplication issues.</li> <li>🔨 Better compatibility with Bedrock 1.20+.</li> </ul> </div> </section> <section class="feature-box"> <h2 class="feature-title">KEY FEATURES</h2> <div class="features-list"> <div class="feature-item"> <h3>🧿 Empty Egg</h3> <p>Craft and use it to capture any mob by interacting with it.</p> </div> <div class="feature-item"> <h3>🔮 Full Egg</h3> <p>Stores the mob’s unique data and allows you to spawn it back anytime.</p> </div> <div class="feature-item"> <h3>⚙️ Logical Crafting Recipe</h3> <p>Balanced mix of Ghast Tear, Ender Pearl, Iron, and an Egg.</p> </div> <div class="feature-item"> <h3>🌍 Works on All Mobs</h3> <p>Capture animals, monsters, villagers — even bosses!</p> </div> <div class="feature-item"> <h3>🧰 Adventure Ready</h3> <p>Perfect for mob transport, farms, zoos, and quest maps.</p> </div> </div> </section> <section class="feature-box"> <h2 class="feature-title">HOW TO USE</h2> <p>1️⃣ Craft an <strong>Empty Egg</strong> using the recipe.</p> <p>2️⃣ Interact with any mob to capture it — your Empty Egg becomes a <strong>Full Egg</strong>.</p> <p>3️⃣ Interact with the ground to release your mob back into the world.</p> </section> <section class="feature-box"> <h2 class="feature-title">COMPATIBILITY</h2> <div class="compatibility-list"> <div class="compatibility-item compatible">Minecraft 1.20.0+</div> <div class="compatibility-item compatible">Survival Mode</div> <div class="compatibility-item compatible">Creative Mode</div> <div class="compatibility-item compatible">Adventure Mode</div> <div class="compatibility-item compatible">Multiplayer Realms</div> <div class="compatibility-item compatible">Local Multiplayer</div> </div> </section> <section class="feature-box"> <h2 class="feature-title">DOWNLOAD</h2> <div class="download-buttons"> <a href="http://shadowgamer12k.github.io/redirect.html?url=https://www.curseforge.com/minecraft-bedrock/addons/soul-eggs" class="download-button"><span>⬇️</span> Download SoulEggs Pack</a> </div> <p>Requires Minecraft Bedrock 1.20+ and Experimental Features enabled.</p> </section> </main>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
+    <header class="header">
+        <div class="breadcrumb">
+            <a href="../index.html">HOME</a> &gt; <a href="#">ADDONS</a> &gt; SOUL EGGS
+        </div>
+        <h1>SOUL EGGS ADDON</h1>
+        <p style="color: #888; font-size: 10px;">CAPTURE ANY MOB. BUILD YOUR ZOO.</p>
+    </header>
+
+    <main class="container">
+        
+        <!-- SHOWCASE SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">🎥 SHOWCASE</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/UUgFfzVhz90?si=CqzXJ46X4hT81u1A" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope" 
+                        allowfullscreen 
+                        loading="lazy">
+                </iframe>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">🧩 ABOUT</h2>
+            <img src="https://shadowgamer12k.github.io/assets/images/postsImages/souleggs.webp" alt="Soul Eggs Preview" class="addon-preview-img" onerror="this.style.display='none'">
+            <p>
+                WITH <strong>SOUL EGGS</strong>, YOU CAN CAPTURE ANY MOB AND STORE IT SAFELY INSIDE A MAGICAL EGG! EACH MOB IS SAVED WITH ITS UNIQUE PROPERTIES, READY TO BE RELEASED WHEREVER YOU WANT.
+            </p>
+            <p>
+                THIS ADDON BRINGS A FUN, POKÉMON-STYLE MECHANIC INTO MINECRAFT — PERFECT FOR COLLECTORS, ADVENTURERS, AND BUILDERS WHO WANT TO MOVE VILLAGERS, ANIMALS, OR EVEN HOSTILE MOBS EASILY.
+            </p>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="feature-box">
+            <h2 class="feature-title">✨ KEY FEATURES</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🧿 EMPTY EGG</h3>
+                    <p>CRAFT A MAGICAL EMPTY EGG THAT CAN ABSORB THE SOUL OF ANY CREATURE.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔮 FULL EGG</h3>
+                    <p>ONCE CAPTURED, THE EGG GLOWS AND STORES THE MOB'S DATA (HP, NAME, TRADES).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚙️ BALANCED RECIPE</h3>
+                    <p>REQUIRES ENDER PEARLS AND GHAST TEARS, MAKING IT BALANCED FOR SURVIVAL.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌍 UNIVERSAL SUPPORT</h3>
+                    <p>WORKS ON ALMOST ALL ENTITIES, INCLUDING THOSE FROM OTHER ADDONS.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW TO USE -->
+        <section class="feature-box">
+            <h2 class="feature-title">🎮 HOW TO USE</h2>
+            
+            <div class="sub-header">STEP 1: CRAFTING</div>
+            <p>CRAFT AN <strong>EMPTY EGG</strong> USING 1 EGG, 1 ENDER PEARL, 1 GHAST TEAR, AND 4 IRON INGOTS.</p>
+            
+            <div class="sub-header">STEP 2: CAPTURE</div>
+            <p>HOLD THE EMPTY EGG AND INTERACT (RIGHT-CLICK OR TAP) ON THE MOB YOU WANT TO CATCH.</p>
+
+            <div class="sub-header">STEP 3: TRANSPORT</div>
+            <p>THE MOB WILL DISAPPEAR AND YOU WILL RECEIVE A <strong>FULL SOUL EGG</strong> IN YOUR INVENTORY.</p>
+
+            <div class="sub-header">STEP 4: RELEASE</div>
+            <p>INTERACT WITH THE GROUND WHILE HOLDING THE FULL EGG TO SPAWN THE MOB BACK EXACTLY AS IT WAS.</p>
+        </section>
+
+        <!-- COMPATIBILITY -->
+        <section class="feature-box">
+            <h2 class="feature-title">✅ COMPATIBILITY</h2>
+            <div class="compatibility-list">
+                <div class="compatibility-item compatible">MINECRAFT 1.20+</div>
+                <div class="compatibility-item compatible">SURVIVAL MODE</div>
+                <div class="compatibility-item compatible">MULTIPLAYER REALMS</div>
+                <div class="compatibility-item compatible">LOCAL WIFI</div>
+                <div class="compatibility-item compatible">ADDON ENTITIES</div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="feature-box">
+            <h2 class="feature-title">❓ FAQ</h2>
+            <div class="faq-item">
+                <div class="faq-question">CAN I CATCH BOSSES?</div>
+                <div class="faq-answer">BY DEFAULT, BOSSES LIKE THE WITHER ARE BLACKLISTED TO PREVENT GRIEFING.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">DOES IT KEEP VILLAGER TRADES?</div>
+                <div class="faq-answer">YES! ALL NBT DATA INCLUDING TRADES AND NAMES ARE PRESERVED.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">IS IT REUSABLE?</div>
+                <div class="faq-answer">THE EGG CONSUMES UPON RELEASE, BUT DROPS AN EMPTY EGG BACK (CONFIGURABLE).</div>
+            </div>
+        </section>
+
+        <!-- CHANGELOG -->
+        <section class="feature-box">
+            <h2 class="feature-title">🔄 CHANGELOG</h2>
+            <ul style="padding-left: 20px; color:#aaa;">
+                <li><strong>v1.2:</strong> FIXED ENTITY DUPLICATION GLITCH.</li>
+                <li><strong>v1.1:</strong> ADDED CUSTOM TEXTURES FOR FULL EGGS.</li>
+                <li><strong>v1.0:</strong> INITIAL RELEASE.</li>
+            </ul>
+        </section>
+
+        <!-- INSTALLATION -->
+        <section class="feature-box">
+            <h2 class="feature-title">📥 INSTALLATION</h2>
+            <ol style="padding-left: 20px; line-height: 2;">
+                <li>DOWNLOAD THE .MCPACK FILE BELOW.</li>
+                <li>IMPORT TO MINECRAFT (JUST CLICK IT).</li>
+                <li>ACTIVATE BEHAVIOR & RESOURCE PACKS.</li>
+                <li><strong>REQUIRED:</strong> TURN ON "BETA APIS" IN EXPERIMENTS.</li>
+            </ol>
+        </section>
+
+        <!-- DOWNLOAD SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">⬇️ DOWNLOAD</h2>
+            
+            <div class="game-ui" id="gameUI">
+                <p style="color: #fff; margin-bottom: 15px; font-size: 10px; line-height: 1.5;">
+                    ANTI-BOT VERIFICATION:<br>
+                    <strong>MISSION: CATCH 5 CHICKENS!</strong>
+                </p>
+                <button class="download-button" id="startGameBtn" onclick="startChickenGame()" style="width: auto; margin: 0 auto; padding: 15px 30px;">
+                    ▶ START MISSION
+                </button>
+            </div>
+
+            <div class="game-area" id="gameArea"></div>
+
+            <div id="finalDownloadSection" style="margin-top: 2rem;">
+                <a href="#" id="downloadLink" class="download-button disabled">
+                    <span>🔒 COMPLETE MISSION TO UNLOCK</span>
+                </a>
+            </div>
+            
+            <p style="font-size: 8px; color: #555; margin-top: 1rem; text-align: center;">
+                REQUIRES MINECRAFT BEDROCK 1.20+
+            </p>
+        </section>
+
+    </main>
 
     <footer>
-        <p>&copy; 2025 shadowGamer12k. All rights reserved. 
-        <a href="https://shadowgamer12k.github.io/legal/privacy-policy.html" target="_blank">Privacy Policy</a> | 
-        <a href="https://shadowgamer12k.github.io/legal/terms-of-use.html" target="_blank">Terms of Use</a>
+        <p>&copy; 2025 SHADOWGAMER12K. CREATED BY VECTOR.<br>NOT AN OFFICIAL MINECRAFT PRODUCT.</p>
+        <p style="margin-top: 10px;">
+            <a href="../legal/privacy-policy.html">PRIVACY POLICY</a> | 
+            <a href="../legal/terms-of-use.html">TERMS OF USE</a>
         </p>
     </footer>
-</body>
 
-<script>
-(function() {
-    const detectors = {
-        blockedRequests: async () => {
-            try {
-                const testUrls = [
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-                    'https://adservice.google.com/adsid/integrator.js',
-                    'https://cdn.taboola.com/libtrc/unip/'
-                ];
+    <!-- XP HUD -->
+    <div class="xp-hud-container">
+        <div class="xp-level" id="xpLevel">0</div>
+        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill"></div></div>
+    </div>
 
-                const results = await Promise.all(
-                    testUrls.map(url => 
-                        fetch(url, {method: 'HEAD'})
-                        .then(() => false)
-                        .catch(() => true)
-                    )
-                );
+    <!-- SCRIPTS -->
+    <script>
+        // --- AUDIO SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
-                return results.filter(x => x).length >= 2;
-            } catch {
-                return false;
-            }
-        },
-
-        hiddenElements: () => {
-            const testElement = document.getElementById('ad-test');
-            return testElement && 
-                (testElement.offsetHeight === 0 ||
-                 window.getComputedStyle(testElement).display === 'none');
-        },
-
-        detectExtensions: () => {
-            const extensionSignatures = {
-                'ublock': () => typeof window.uboAdBlock === 'function' || document.getElementById('ublock0-epicker'),
-                'adblockplus': () => typeof window.AdBlock !== 'undefined' || document.getElementById('abp-pattern-inspector'),
-                'adguard': () => typeof window.adguard !== 'undefined' || document.querySelector('[data-adguard]'),
-                'ghostery': () => typeof window.Ghostery !== 'undefined' || document.querySelector('.ghostery-tracker-tally')
-            };
-
-            return Object.entries(extensionSignatures).find(([_, check]) => check())?.[0];
-        },
-
-        checkChromeExtensions: async () => {
-            if (typeof chrome === 'undefined') return null;
-            
-            const extensionIds = {
-                'ublock': 'cjpalhdlnbpafiamejdnhcphjbkeiagm',
-                'adblockplus': 'cfhdojbkjhnklbpkdaibdccddilifddb',
-                'adguard': 'bgnkhhnnamicmpeenaelnjfhikgbkllg',
-                'ghostery': 'mlomiejdfkolichcflejclcbmpeaniij'
-            };
-
-            try {
-                for (const [name, id] of Object.entries(extensionIds)) {
-                    const exists = await new Promise(resolve => {
-                        chrome.runtime.sendMessage(id, {}, (response) => {
-                            resolve(chrome.runtime.lastError ? false : true);
-                        });
-                    });
-                    if (exists) return name;
-                }
-            } catch {}
-            return null;
-        }
-    };
-
-    async function detectAdBlock() {
-        const results = await Promise.all([
-            detectors.blockedRequests(),
-            detectors.hiddenElements(),
-            detectors.detectExtensions(),
-            detectors.checkChromeExtensions()
-        ]);
-
-        return {
-            detected: results.some(r => r),
-            extension: results.find(r => typeof r === 'string') || 'unknown'
-        };
-    }
-
-    function showAdblockModal(extension) {
-            const modal = document.querySelector('.adblock-modal');
-            const overlay = document.querySelector('.adblock-overlay');
-            const resultDiv = document.getElementById('adblock-result');
-            
-            resultDiv.innerHTML = `Blocked by: ${extension.replace(/(^\w)/, m => m.toUpperCase())}<br>
-                                <small>(Please disable to continue)</small>`;
-            modal.style.display = 'block';
-            overlay.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        document.getElementById('recheck-button').addEventListener('click', async () => {
-            const { detected, extension } = await detectAdBlock();
-            if (!detected) {
-                document.querySelector('.adblock-modal').style.display = 'none';
-                document.querySelector('.adblock-overlay').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-    // Initial check
-    setTimeout(async () => {
-        const { detected, extension } = await detectAdBlock();
-        if (detected) showAdblockModal(extension);
-    }, 2000);
-
-    // Continuous background check
-    setInterval(async () => {
-        const { detected, extension } = await detectAdBlock();
-        const modal = document.querySelector('.adblock-modal');
-        
-        if (detected && modal.style.display === 'none') {
-            showAdblockModal(extension);
-        }
-    }, 5000);
-})();
-        function playClickSound() {
-            const clickSound = document.getElementById('clickSound');
-            try {
-                clickSound.currentTime = 0;
-                clickSound.play();
-            } catch(error) {
-                console.log('Sound playback error:', error);
+            const now = audioCtx.currentTime;
+            if (type === 'hit') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'copy') {
+                 osc.type = 'sine';
+                 osc.frequency.setValueAtTime(1000, now);
+                 gain.gain.setValueAtTime(0.05, now);
+                 gain.gain.linearRampToValueAtTime(0, now + 0.1);
+                 osc.start(now); osc.stop(now + 0.1);
             }
         }
-        // Improved ad blocker detection
-        function detectAdBlock() {
-            return new Promise((resolve) => {
-                const fakeAd = document.createElement('div');
-                fakeAd.innerHTML = '&nbsp;';
-                fakeAd.className = 'adsbox';
-                fakeAd.style.height = '1px';
-                document.body.appendChild(fakeAd);
-                
+
+        // --- COPY COMMAND ---
+        function copyCommand(el) {
+            const text = el.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                playSound('copy');
+                const originalText = el.innerText;
+                el.innerText = "COPIED!";
+                el.style.borderColor = "#fff";
                 setTimeout(() => {
-                    const isBlocked = fakeAd.offsetHeight === 0;
-                    document.body.removeChild(fakeAd);
-                    resolve(isBlocked);
-                }, 100);
+                    el.innerText = originalText;
+                    el.style.borderColor = "#555";
+                }, 1000);
             });
         }
 
-        const params = new URLSearchParams(window.location.search);
-        const targetURL = decodeURIComponent(params.get("url"));
-        let tasksCompleted = 0;
-
-        function taskCompleted() {
-            tasksCompleted++;
-            if (tasksCompleted === 4) {
-                if (!targetURL) {
-                    showError("Invalid redirect link.");
-                    return;
-                }
-                showRedirectMessage();
-                startRedirectCountdown();
-            }
-        }
-
-        function showRedirectMessage() {
-            document.getElementById("message").textContent = "Redirecting you...";
-            document.querySelector(".loadingspinner").style.display = "block";
-            document.querySelectorAll(".task-button").forEach(button => {
-                button.style.display = "none";
-            });
-        }
-
-        function startRedirectCountdown() {
-            let seconds = 5;
-            const countdownElement = document.createElement("div");
-            countdownElement.id = "countdown";
-            document.querySelector(".loadingspinner").after(countdownElement);
-            
-            const interval = setInterval(() => {
-                countdownElement.textContent = `Redirecting in ${seconds} seconds...`;
-                if (seconds-- <= 0) {
-                    clearInterval(interval);
-                    window.location.href = targetURL;
-                }
-            }, 1000);
-        }
-
-        function showError(message) {
-            document.getElementById("message").textContent = message;
-            document.querySelector(".error").style.display = "block";
-        }
-
-        async function startCountdown(button) {
-            if (button.classList.contains('completed')) return;
-
-            const adBlockDetected = await detectAdBlock();
-            if (adBlockDetected) {
-                showError("Ad blocker detected! Please disable to continue.");
-                return;
-            }
-
-            const originalText = button.textContent;
-            const adWindow = window.open(button.href, '_blank');
-            
-            let countdown = 5;
-            button.style.pointerEvents = 'none';
-
-            const interval = setInterval(() => {
-                if (countdown > 0) {
-                    button.textContent = `${originalText} (${countdown}s)`;
-                    countdown--;
-                } else {
-                    clearInterval(interval);
-                    button.classList.add("completed");
-                    button.textContent = `✔ ${originalText} Completed`;
-                    taskCompleted();
-                }
-            }, 1000);
-        }
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            const adBlockDetected = await detectAdBlock();
-            if (adBlockDetected) {
-                document.getElementById('adblock-warning').style.display = 'block';
-                document.querySelectorAll('.task-button').forEach(btn => btn.style.display = 'none');
-                document.getElementById('message').style.display = 'none';
-                return;
-            }
-
-            if (!targetURL) {
-                showError("Missing redirect URL!");
-                return;
-            }
-            
-            document.querySelectorAll(".task-button").forEach(button => {
-                button.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    startCountdown(button);
-                });
-            });
+        // --- SCROLL XP BAR ---
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('xpFill').style.width = scrollPercent + '%';
+            document.getElementById('xpLevel').innerText = Math.floor(scrollPercent / 2);
         });
-</script>
+
+        // --- CHICKEN GAME ---
+        const downloadUrl = "https://www.curseforge.com/minecraft-bedrock/addons/soul-eggs"; 
+        let score = 0;
+        const target = 5;
+        
+        function startChickenGame() {
+            document.getElementById('startGameBtn').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('gameUI').innerHTML = '<p style="color:#aaa; font-size:10px;">CATCH <span style="color:#fff; font-size:14px" id="scoreDisplay">0</span> / 5 CHICKENS</p>';
+            spawnChicken();
+        }
+
+        function spawnChicken() {
+            if (score >= target) return winGame();
+            
+            const area = document.getElementById('gameArea');
+            const chicken = document.createElement('div');
+            chicken.className = 'chicken';
+            chicken.innerHTML = '🐔';
+            
+            const x = Math.random() * (area.clientWidth - 40);
+            const y = Math.random() * (area.clientHeight - 40);
+            
+            chicken.style.left = x + 'px';
+            chicken.style.top = y + 'px';
+            
+            chicken.onclick = () => {
+                playSound('hit');
+                score++;
+                document.getElementById('scoreDisplay').innerText = score;
+                chicken.remove();
+                if (score < target) setTimeout(spawnChicken, 300);
+                else winGame();
+            };
+
+            area.appendChild(chicken);
+            
+            // Remove chicken if not clicked in time
+            setTimeout(() => {
+                if (chicken.parentElement && score < target) {
+                    chicken.remove();
+                    spawnChicken();
+                }
+            }, 1200);
+        }
+
+        function winGame() {
+            playSound('win');
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameUI').innerHTML = '<p style="color:#55ff55; font-size:12px;">✅ VERIFIED! YOU CAN DOWNLOAD NOW.</p>';
+            
+            const btn = document.getElementById('downloadLink');
+            btn.classList.remove('disabled');
+            btn.href = downloadUrl;
+            btn.target = "_blank";
+            btn.innerHTML = '<span>⬇️ DOWNLOAD MCPACK</span>';
+            btn.style.background = "#00AAAA";
+            btn.style.color = "#fff";
+        }
+    </script>
 </body>
 </html>
