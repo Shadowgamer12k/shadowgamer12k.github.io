@@ -69,7 +69,7 @@
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="4" height="4" fill="white" stroke="black" stroke-width="1"/><rect x="14" y="0" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="14" y="18" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="0" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="18" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/></svg>') 16 16, crosshair;
         }
 
-        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, .game-btn-link, .mobile-menu-item, #biomeToggle, #menuTrigger {
+        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, .game-btn-link, .mobile-menu-item, #biomeToggle, #menuTrigger, .feedback-btn, .feedback-close, .feedback-submit {
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-0)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
         }
 
@@ -288,6 +288,224 @@
         .mod-item .social-link:hover { background: var(--mc-green); color: black; text-decoration: none; transform: none; border-color: var(--mc-green); }
         .feedback-button { display: flex; justify-content: center; align-items: center; width: 45px; background: #222; border: 2px solid #444; color: #ffaa00; cursor: pointer; }
         .feedback-button:hover { background: #ffaa00; color: #222; border-color: #ffaa00; }
+
+        /* FEEDBACK BUTTON STYLE */
+        .feedback-btn {
+            width: 42px; /* Matches standard button height approx */
+            background: #222;
+            border: 2px solid #444;
+            color: #ffaa00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .feedback-btn:hover {
+            background: #ffaa00;
+            color: #222;
+            border-color: #ffaa00;
+        }
+
+        /* FEEDBACK MODAL */
+        .feedback-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        
+        .feedback-modal {
+            background: #2c2c2c;
+            border: 2px solid #555;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-radius: 6px;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .feedback-title {
+            color: #ffaa00;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .feedback-close {
+            background: #ff5555;
+            border: 2px solid #8e4040;
+            color: white;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        .feedback-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: left;
+        }
+
+        .feedback-label {
+            font-size: 10px;
+            color: #aaa;
+            font-family: 'Press Start 2P', cursive; /* UPDATED: PIXEL FONT */
+            margin-left: 2px;
+            line-height: 1.5;
+        }
+
+        .feedback-input, .feedback-textarea {
+            background: #1a1a1a;
+            border: 2px solid #444;
+            color: white;
+            padding: 10px;
+            font-family: 'Press Start 2P', cursive; /* UPDATED: PIXEL FONT */
+            font-size: 10px; /* Smaller font size for pixel font legibility */
+            border-radius: 4px;
+            outline: none;
+            line-height: 1.5;
+        }
+        
+        .feedback-input:focus, .feedback-textarea:focus {
+            border-color: var(--mc-green);
+        }
+
+        .feedback-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* CUSTOM SELECT (REPLACES NATIVE DROPDOWN) */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+        
+        .custom-select-trigger {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1a1a;
+            border: 2px solid #444;
+            padding: 10px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        
+        .custom-select-trigger:hover {
+            border-color: #666;
+        }
+        
+        .custom-select-trigger .arrow {
+            width: 0; 
+            height: 0; 
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #888;
+            margin-left: 10px;
+        }
+        
+        .custom-options {
+            position: absolute;
+            display: block;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #222;
+            border: 2px solid #444;
+            border-top: none;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+        
+        .custom-select-wrapper.open .custom-options {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+        
+        .custom-select-wrapper.open .custom-select-trigger {
+            border-color: var(--mc-green);
+            border-bottom-color: #222;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .custom-option {
+            position: relative;
+            display: block;
+            padding: 10px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .custom-option:hover {
+            background-color: #333;
+            color: var(--mc-green);
+        }
+        
+        .custom-option.selected {
+            background-color: #2a2a2a;
+            color: #fff;
+        }
+
+        .feedback-submit {
+            background: var(--mc-blue);
+            color: #000;
+            border: 2px solid #3388dd;
+            padding: 12px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .feedback-submit:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
 
         /* ==================== SKELETON LOADING ==================== */
         .skeleton {
@@ -509,6 +727,47 @@
     <audio id="clickSound" src="assets/sounds/pop.mp3" preload="auto"></audio>
     <audio id="creeperSound" src="assets/sounds/creeper.mp3" preload="auto"></audio>
 
+    <!-- FEEDBACK FORM MODAL -->
+    <div id="feedbackOverlay" class="feedback-overlay">
+        <div class="feedback-modal">
+            <div class="feedback-header">
+                <span class="feedback-title">Submit Feedback</span>
+                <div id="feedbackClose" class="feedback-close">✕</div>
+            </div>
+            
+            <div class="feedback-form-group">
+                <label class="feedback-label">Addon Name</label>
+                <input type="text" id="feedbackAddonName" class="feedback-input" readonly>
+            </div>
+            
+            <div class="feedback-form-group">
+                <label class="feedback-label">Type</label>
+                
+                <!-- REPLACED NATIVE SELECT WITH CUSTOM DROPDOWN -->
+                <div class="custom-select-wrapper" id="feedbackTypeSelect">
+                    <div class="custom-select-trigger">
+                        <span>🐛 Bug Report</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="custom-options">
+                        <span class="custom-option selected" data-value="Bug Report">🐛 Bug Report</span>
+                        <span class="custom-option" data-value="Suggestion">💡 Suggestion</span>
+                        <span class="custom-option" data-value="Comment">💬 Comment</span>
+                        <span class="custom-option" data-value="Other">❓ Other</span>
+                    </div>
+                </div>
+                <input type="hidden" id="feedbackType" value="Bug Report"> <!-- Hidden input to store value -->
+            </div>
+
+            <div class="feedback-form-group">
+                <label class="feedback-label">Your Message</label>
+                <textarea id="feedbackMessage" class="feedback-textarea" placeholder="Describe the issue or your idea..."></textarea>
+            </div>
+
+            <button id="feedbackSubmit" class="feedback-submit">Send to Developer</button>
+        </div>
+    </div>
+
     <!-- MAIN WRAPPER -->
     <div id="main-wrapper">
         <div id="weatherRain" class="weather-layer weather-rain"></div>
@@ -584,6 +843,7 @@
                 </div>
                 
                 <ul class="mod-list" id="projectModList">
+                    <!-- Updated items with feedback buttons -->
                     <li id='QuickPortItems' class="mod-item" data-downloads="15000" data-date="2025-05-15">
                         <img src="assets/images/postsImages/QuickPortItems.webp" alt="QuickPortItems">
                         <h3>QuickPort Items <span class="version-badge">1.21.120</span></h3>
@@ -596,6 +856,7 @@
                         <p>Automate item transfer between chests instantly.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/QuickPortItems.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
                     
@@ -611,6 +872,7 @@
                         <p>Teleport anywhere instantly with style.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/instantTeleport.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -626,6 +888,7 @@
                         <p>Carry crafting tables as items and open them anywhere!</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/handyCrafting.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -641,6 +904,7 @@
                         <p>Link your hearts with a friend, share damage and healing.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/linkedHearts.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -656,6 +920,7 @@
                         <p>Catch and collect mobs just like Pokémon.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/soulEggs.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -671,6 +936,7 @@
                         <p>Hide inside any mob to troll your friends.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/mobHider.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -686,6 +952,7 @@
                         <p>Saves your life when in battle or dying in silly ways.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/enderGuardian.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -701,6 +968,7 @@
                         <p>Save locations and teleport easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/pocketwaypoint.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -716,6 +984,7 @@
                         <p>No more cluttered hoppers and complex redstone.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/wirlessHopper.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -731,6 +1000,7 @@
                         <p>Return home from great distances easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/advancedwaypoint.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -746,6 +1016,7 @@
                         <p>Protect your areas from other players.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/landclaim.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
             
@@ -761,6 +1032,7 @@
                         <p>Move items from one chest to another.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/itemcarrier.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
             
@@ -776,6 +1048,7 @@
                         <p>Show a heart counter for monsters and mobs.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/healthbar.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
 
@@ -791,6 +1064,7 @@
                         <p>Help you move monsters and mobs easily.</p>
                         <div class="action-buttons">
                             <a href="https://shadowgamer12k.github.io/posts/mobcatcher.html" target="_blank" class="social-link">Download</a>
+                            <button class="feedback-btn" title="Report Bug / Feedback"><i class="fas fa-comment-dots"></i></button>
                         </div>
                     </li>
                 </ul>
@@ -1003,6 +1277,137 @@
                     if (correspondingNav) correspondingNav.click();
                 });
             });
+
+            // --- FEEDBACK FORM LOGIC ---
+            const feedbackOverlay = document.getElementById('feedbackOverlay');
+            const feedbackClose = document.getElementById('feedbackClose');
+            const feedbackAddonName = document.getElementById('feedbackAddonName');
+            const feedbackSubmit = document.getElementById('feedbackSubmit');
+            const feedbackType = document.getElementById('feedbackType');
+            
+            // --- CUSTOM SELECT LOGIC ---
+            const customSelectWrapper = document.querySelector('.custom-select-wrapper');
+            if (customSelectWrapper) {
+                const trigger = customSelectWrapper.querySelector('.custom-select-trigger');
+                const options = customSelectWrapper.querySelectorAll('.custom-option');
+                const hiddenInput = document.getElementById('feedbackType');
+
+                // Toggle dropdown open
+                trigger.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent closing immediately
+                    playClickSound();
+                    customSelectWrapper.classList.toggle('open');
+                });
+
+                // Handle option selection
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        playClickSound();
+                        // Update trigger text
+                        const text = option.textContent;
+                        const value = option.dataset.value;
+                        
+                        trigger.querySelector('span').textContent = text;
+                        hiddenInput.value = value;
+                        
+                        // Update selected class
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        
+                        // Close dropdown
+                        customSelectWrapper.classList.remove('open');
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!customSelectWrapper.contains(e.target)) {
+                        customSelectWrapper.classList.remove('open');
+                    }
+                });
+            }
+
+            // Open Modal
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.feedback-btn')) {
+                    e.preventDefault();
+                    playClickSound();
+                    const btn = e.target.closest('.feedback-btn');
+                    const item = btn.closest('.mod-item');
+                    const title = item.querySelector('h3').innerText.split(' 1.')[0].trim(); // Clean version number if needed
+                    
+                    feedbackAddonName.value = title;
+                    feedbackOverlay.style.display = 'flex';
+                }
+            });
+
+            // Close Modal
+            if (feedbackClose) {
+                feedbackClose.addEventListener('click', () => {
+                    playClickSound();
+                    feedbackOverlay.style.display = 'none';
+                });
+            }
+            
+            // Close when clicking outside (background overlay)
+            if (feedbackOverlay) {
+                feedbackOverlay.addEventListener('click', (e) => {
+                    if (e.target === feedbackOverlay) {
+                        feedbackOverlay.style.display = 'none';
+                    }
+                });
+            }
+
+            // Submit Feedback
+            if (feedbackSubmit) {
+                feedbackSubmit.addEventListener('click', async () => {
+                    playClickSound();
+                    const name = feedbackAddonName.value;
+                    const type = document.getElementById('feedbackType').value; // Use hidden input value
+                    const message = document.getElementById('feedbackMessage').value;
+                    
+                    if (!message.trim()) {
+                        alert("Please enter a message.");
+                        return;
+                    }
+
+                    const originalText = feedbackSubmit.innerText;
+                    feedbackSubmit.innerText = "Sending...";
+                    feedbackSubmit.disabled = true;
+
+                    const webhookURL = "https://discord.com/api/webhooks/1441830441530294404/LWfl3eEZrLIDbDjq_UQra9zCaoAYZwPxd-_1PZmryavCIGqWe_hfBkBGJn5q7B4E6G3S";
+
+                    const embed = {
+                        title: `New Feedback: ${type}`,
+                        color: type === "Bug Report" ? 16734296 : 5814783, // Red for bug, blue for others
+                        fields: [
+                            { name: "Addon", value: name, inline: true },
+                            { name: "Type", value: type, inline: true },
+                            { name: "Message", value: message }
+                        ],
+                        footer: { text: "Submitted via website" },
+                        timestamp: new Date().toISOString()
+                    };
+
+                    try {
+                        await fetch(webhookURL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ embeds: [embed] })
+                        });
+                        alert("Feedback sent successfully! Thank you.");
+                        feedbackOverlay.style.display = 'none';
+                        document.getElementById('feedbackMessage').value = ""; // Clear message
+                    } catch (error) {
+                        console.error(error);
+                        alert("Failed to send feedback. Please try again later.");
+                    } finally {
+                        feedbackSubmit.innerText = originalText;
+                        feedbackSubmit.disabled = false;
+                    }
+                });
+            }
 
             const searchInput = document.getElementById('searchInput');
             const clearSearch = document.getElementById('clearSearch');
