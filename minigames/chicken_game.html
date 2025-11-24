@@ -322,11 +322,13 @@
 
         // --- MULTIPLAYER LOGIC ---
         function hostGame() {
+            if(peer) return alert("Already hosting!");
             els.lobbyStatus.innerText = "Creating Room...";
+            
             peer = new Peer(); 
             
             peer.on('open', (id) => {
-                els.lobbyStatus.innerHTML = `CODE: <span style="color:yellow; font-size:14px;">${id}</span>`;
+                els.lobbyStatus.innerHTML = `CODE: <span style="color:yellow; font-size:14px; user-select: text;">${id}</span>`;
                 logLobby("Room Created. Waiting for players...");
                 state.isHost = true;
                 state.isMultiplayer = true;
@@ -338,11 +340,17 @@
                 logLobby("Player joined!");
                 els.hostStartBtn.style.display = "inline-block"; // Show start button to host
             });
+            
+            peer.on('error', (err) => {
+                logLobby("Error: " + err.type);
+                console.error(err);
+            });
         }
 
         function joinGame() {
             const code = document.getElementById('joinCodeInput').value.trim();
             if (!code) return alert("Enter a Room Code!");
+            if(peer) peer.destroy(); // Clear previous if any
             
             els.lobbyStatus.innerText = "Connecting...";
             peer = new Peer();
@@ -357,6 +365,17 @@
                     logLobby("Connected to Host. Waiting for start...");
                     els.lobbyStatus.innerText = "CONNECTED!";
                 });
+                
+                conn.on('error', (err) => {
+                    logLobby("Connection Error: " + err);
+                });
+            });
+            
+            peer.on('error', (err) => {
+                logLobby("Peer Error: " + err.type);
+                if(err.type === 'peer-unavailable') {
+                    els.lobbyStatus.innerText = "Room not found!";
+                }
             });
         }
 
@@ -406,6 +425,7 @@
             });
 
             // Start sending loop
+            if(mpInterval) clearInterval(mpInterval);
             mpInterval = setInterval(sendUpdate, 50);
         }
 
