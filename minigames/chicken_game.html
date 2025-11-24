@@ -63,6 +63,9 @@
         #phaseDisplay { font-size: 10px; color: #eee; letter-spacing: 1px; text-transform: uppercase; }
         #highScore { font-size: 10px; color: #bbb; margin-top: 5px; }
         #mpStatus { font-size: 10px; color: #55aaff; margin-top: 5px; display: none; }
+        #spectatorMsg { font-size: 12px; color: #ff5555; margin-top: 10px; display: none; animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         .btn, .back-btn {
             background: #3a3a3a; color: #fff; border: 2px solid #555;
@@ -74,6 +77,7 @@
 
         .btn:hover, .back-btn:hover { transform: translateY(-2px); background-color: #444; box-shadow: 0 6px 0 #222; }
         .btn:active, .back-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #222; }
+        .btn:disabled { background: #222; color: #555; border-color: #333; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .back-btn { position: absolute; top: 20px; right: 20px; z-index: 20; }
 
@@ -142,15 +146,24 @@
         .head-option.selected { border-color: var(--mc-green); box-shadow: 0 0 15px var(--mc-green); }
 
         /* Multiplayer UI */
-        .mp-controls { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .mp-controls { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; flex-direction: column; }
         .mp-input { background: #222; border: 2px solid #555; color: white; padding: 10px; font-family: 'Press Start 2P'; font-size: 10px; width: 150px; }
         .lobby-id { font-size: 12px; color: #55ffff; margin: 10px 0; user-select: text; cursor: pointer; }
+        .lobby-log { width: 80%; max-height: 100px; overflow-y: auto; font-size: 10px; text-align: left; color: #aaa; margin-top: 10px; border: 1px solid #444; padding: 5px; background: #111; }
+        
+        /* Countdown Overlay */
+        #countdownOverlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 60; display: none;
+            justify-content: center; align-items: center; font-size: 60px; color: #fff;
+        }
     </style>
 </head>
 <body>
 
     <div id="gameContainer">
         <div id="flashOverlay" class="flash"></div>
+        <div id="countdownOverlay">3</div>
         <a href="../index.html" class="back-btn"><i class="fas fa-home"></i> EXIT</a>
 
         <!-- UI -->
@@ -159,6 +172,7 @@
             <div id="phaseDisplay">BIOME: OVERWORLD</div>
             <div id="highScore">HI: 0</div>
             <div id="mpStatus">SINGLE PLAYER</div>
+            <div id="spectatorMsg">SPECTATING...</div>
         </div>
 
         <!-- World -->
@@ -188,26 +202,34 @@
             <!-- Play Options -->
             <button class="btn" onclick="startSinglePlayer()">PLAY SOLO ▶</button>
             
-            <div style="margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; width: 80%;">
+            <div style="margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; width: 90%; max-width:400px;">
                 <h2 style="font-size: 14px; color: #55aaff;">MULTIPLAYER (BETA)</h2>
                 <div class="mp-controls">
-                    <button class="btn" onclick="hostGame()">HOST GAME</button>
-                    <div style="display:flex; gap:5px;">
-                        <input type="text" id="joinCodeInput" class="mp-input" placeholder="ENTER CODE">
-                        <button class="btn" onclick="joinGame()">JOIN</button>
+                    <div style="display:flex; gap:10px; width:100%; justify-content:center;">
+                        <button class="btn" onclick="hostGame()">HOST GAME</button>
+                        <div style="display:flex; gap:5px;">
+                            <input type="text" id="joinCodeInput" class="mp-input" placeholder="CODE">
+                            <button class="btn" onclick="joinGame()">JOIN</button>
+                        </div>
                     </div>
+                    <!-- Host Start Button -->
+                    <button id="hostStartBtn" class="btn" style="display:none; background:#2E8B57; width:100%; margin-top:10px;" onclick="hostStartGame()">START MATCH</button>
                 </div>
                 <div id="lobbyStatus" class="lobby-id"></div>
+                <div id="lobbyLog" class="lobby-log" style="display:none;"></div>
             </div>
         </div>
 
         <!-- 2. Game Over Screen -->
         <div id="gameOverScreen" class="overlay-screen" style="display: none;">
-            <h1 style="color: #ff5555;">GAME OVER</h1>
+            <h1 style="color: #ff5555;" id="gameOverTitle">GAME OVER</h1>
             <div style="font-size: 16px; margin-bottom: 30px;">Score: <span id="finalScore" style="color: #ffff55;">0</span></div>
             <div style="font-size: 12px; margin-bottom: 20px; color: #aaa;" id="scoreSendingStatus"></div>
             
-            <button class="btn" onclick="location.reload()">MAIN MENU 🏠</button>
+            <!-- Logic: Single player = Retry. MP = Play Again (All) -->
+            <button id="btnRetry" class="btn" onclick="restartGame()">RESPAWN ↻</button>
+            <button id="btnPlayAgainMP" class="btn" style="display:none;" onclick="requestRematch()">PLAY AGAIN (10s)</button>
+            <button class="btn" onclick="location.reload()" style="margin-top:10px;">MAIN MENU 🏠</button>
         </div>
     </div>
 
@@ -239,7 +261,10 @@
             selectedHeadIndex: parseInt(localStorage.getItem('mcRunnerHeadIndex')) || 0, 
             currentPhaseIdx: 0,
             isMultiplayer: false,
-            isHost: false
+            isHost: false,
+            isSpectating: false,
+            remoteIsDead: false,
+            rematchRequested: false
         };
 
         // --- PEERJS (MULTIPLAYER) ---
@@ -256,15 +281,22 @@
             highScore: document.getElementById('highScore'),
             phase: document.getElementById('phaseDisplay'),
             mpStatus: document.getElementById('mpStatus'),
+            spectatorMsg: document.getElementById('spectatorMsg'),
             sky: document.getElementById('sky'),
             ground: document.getElementById('ground'),
             charScreen: document.getElementById('charSelectScreen'),
             gameOverScreen: document.getElementById('gameOverScreen'),
             finalScore: document.getElementById('finalScore'),
+            gameOverTitle: document.getElementById('gameOverTitle'),
             headOptions: document.querySelectorAll('.head-option'),
             flash: document.getElementById('flashOverlay'),
             status: document.getElementById('scoreSendingStatus'),
-            lobbyStatus: document.getElementById('lobbyStatus')
+            lobbyStatus: document.getElementById('lobbyStatus'),
+            lobbyLog: document.getElementById('lobbyLog'),
+            hostStartBtn: document.getElementById('hostStartBtn'),
+            btnRetry: document.getElementById('btnRetry'),
+            btnPlayAgainMP: document.getElementById('btnPlayAgainMP'),
+            countdown: document.getElementById('countdownOverlay')
         };
 
         let player = { y: 0, dy: 0, isGrounded: true, rot: 0, width: 55, height: 55 };
@@ -280,13 +312,22 @@
             selectHead(state.selectedHeadIndex); 
         }
 
+        function logLobby(msg) {
+            els.lobbyLog.style.display = "block";
+            const p = document.createElement('div');
+            p.innerText = `> ${msg}`;
+            els.lobbyLog.appendChild(p);
+            els.lobbyLog.scrollTop = els.lobbyLog.scrollHeight;
+        }
+
         // --- MULTIPLAYER LOGIC ---
         function hostGame() {
             els.lobbyStatus.innerText = "Creating Room...";
-            peer = new Peer(); // Generate ID
+            peer = new Peer(); 
             
             peer.on('open', (id) => {
-                els.lobbyStatus.innerHTML = `ROOM CODE: <span style="color:yellow; font-size:14px;">${id}</span><br>(Share this code)`;
+                els.lobbyStatus.innerHTML = `CODE: <span style="color:yellow; font-size:14px;">${id}</span>`;
+                logLobby("Room Created. Waiting for players...");
                 state.isHost = true;
                 state.isMultiplayer = true;
             });
@@ -294,8 +335,8 @@
             peer.on('connection', (c) => {
                 conn = c;
                 setupConnection();
-                els.lobbyStatus.innerText = "PLAYER CONNECTED! STARTING...";
-                setTimeout(startGame, 1000);
+                logLobby("Player joined!");
+                els.hostStartBtn.style.display = "inline-block"; // Show start button to host
             });
         }
 
@@ -313,7 +354,8 @@
                 
                 conn.on('open', () => {
                     setupConnection();
-                    els.lobbyStatus.innerText = "CONNECTED! WAITING FOR HOST...";
+                    logLobby("Connected to Host. Waiting for start...");
+                    els.lobbyStatus.innerText = "CONNECTED!";
                 });
             });
         }
@@ -324,21 +366,42 @@
             
             conn.on('data', (data) => {
                 if (data.type === 'sync') {
-                    // Update remote player ghost
-                    remoteP.y = data.y;
-                    if (data.skin !== undefined) updateRemoteSkin(data.skin);
+                    // Update remote player
+                    if(!state.remoteIsDead) {
+                        remoteP.y = data.y;
+                        if (data.skin !== undefined) updateRemoteSkin(data.skin);
+                        // If spectator, update score from live player
+                        if (state.isSpectating) {
+                            state.score = data.score;
+                            els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
+                        }
+                    }
                     
-                    // If client, sync world objects from host
+                    // Sync world objects
                     if (!state.isHost && data.obstacles) {
                         syncWorldFromHost(data);
                     }
                 }
                 if (data.type === 'start') {
                     els.charScreen.style.display = 'none';
-                    startGame(true); // True = skip reset
+                    startCountdown();
                 }
                 if (data.type === 'die') {
-                    // Other player died notification?
+                    state.remoteIsDead = true;
+                    els.remotePlayer.style.display = 'none';
+                    logLobby("Teammate died!");
+                    // If host detects all dead, show end screen for everyone
+                    if(state.isHost && !state.running) {
+                       triggerAllDead();
+                    }
+                }
+                if (data.type === 'rematch') {
+                    // Received rematch request/start
+                    startCountdown();
+                }
+                if (data.type === 'all_dead') {
+                    // Host says game over
+                    showMPGameOver();
                 }
             });
 
@@ -346,20 +409,44 @@
             mpInterval = setInterval(sendUpdate, 50);
         }
 
+        function hostStartGame() {
+            if(!conn) return alert("No players joined!");
+            conn.send({ type: 'start' });
+            els.charScreen.style.display = 'none';
+            startCountdown();
+        }
+
+        function startCountdown() {
+            els.gameOverScreen.style.display = 'none';
+            els.countdown.style.display = 'flex';
+            let count = 3;
+            els.countdown.innerText = count;
+            
+            let timer = setInterval(() => {
+                count--;
+                if(count > 0) {
+                    els.countdown.innerText = count;
+                } else {
+                    clearInterval(timer);
+                    els.countdown.style.display = 'none';
+                    startGame(true);
+                }
+            }, 1000);
+        }
+
         function sendUpdate() {
-            if (!conn || !state.running) return;
+            if (!conn) return;
             
             const payload = {
                 type: 'sync',
                 y: player.y,
-                skin: state.selectedHeadIndex
+                skin: state.selectedHeadIndex,
+                score: state.score // Send score so spectators can see
             };
 
-            // Host sends authority data (obstacles, score, speed)
             if (state.isHost) {
-                payload.score = state.score;
                 payload.speed = state.speed;
-                // Simplify obstacles for bandwidth
+                // Host sends obstacles
                 payload.obstacles = obstacles.map(o => ({ x: o.x, typeClass: o.el.className }));
             }
 
@@ -375,13 +462,10 @@
         }
 
         function syncWorldFromHost(data) {
-            // Client purely visual syncs score/speed/obstacles
             state.score = data.score;
             state.speed = data.speed;
-            els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
+            if(!state.isSpectating) els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
             
-            // Very basic sync: Clear and redraw (Naïve approach, smooth enough for simple p2p)
-            // ideally we match IDs, but for this demo:
             obstacles.forEach(o => o.el.remove());
             obstacles = [];
             
@@ -390,11 +474,11 @@
                 el.className = oData.typeClass;
                 el.style.left = `${oData.x}px`;
                 els.container.appendChild(el);
-                obstacles.push({ x: oData.x, el: el }); // Just for rendering
+                obstacles.push({ x: oData.x, el: el });
             });
         }
 
-        // --- CHARACTER SELECTION ---
+        // --- SELECTION & SINGLE PLAYER ---
         window.selectHead = function(index) {
             if (index < 0 || index >= HEAD_FILES.length) index = 0;
             state.selectedHeadIndex = index;
@@ -422,8 +506,14 @@
         // --- GAME ENGINE ---
         function startGame(isMpStart = false) {
             state.running = true;
-            
-            // Only reset if host or single player
+            state.isSpectating = false;
+            state.remoteIsDead = false;
+            state.rematchRequested = false;
+            els.player.style.display = 'flex'; // Show player
+            if(state.isMultiplayer) els.remotePlayer.style.display = 'block';
+            els.spectatorMsg.style.display = 'none';
+
+            // Host or Single Player resets world
             if (state.isHost || !state.isMultiplayer) {
                 state.score = 0;
                 state.speed = CONFIG.startSpeed;
@@ -435,19 +525,17 @@
                 setPhase(0);
             }
             
-            if (state.isHost && !isMpStart) conn.send({ type: 'start' });
-
             player.y = 0; player.dy = 0; player.isGrounded = true; player.rot = 0;
             update();
         }
 
         window.restartGame = function() {
-            location.reload(); // Easiest full reset for now
+            location.reload(); 
         };
 
         // --- INPUT ---
         function jump() {
-            if (!state.running) return;
+            if (!state.running || state.isSpectating) return;
             if (player.isGrounded) {
                 player.dy = CONFIG.jumpForce;
                 player.isGrounded = false;
@@ -460,24 +548,26 @@
 
         // --- MAIN LOOP ---
         function update() {
-            if (!state.running) return;
+            if (!state.running && !state.isSpectating) return; // Stop loop if dead and all dead
 
-            // 1. Local Physics
-            player.y += player.dy;
-            if (!player.isGrounded) player.dy -= CONFIG.gravity;
-            if (player.y <= 0) { player.y = 0; player.dy = 0; player.isGrounded = true; player.rot = 0; els.player.style.transform = `rotate(0deg)`; } 
-            else { player.rot += 6; els.player.style.transform = `rotate(${player.rot}deg)`; }
-            els.player.style.bottom = `${CONFIG.groundHeight + player.y}px`;
+            // If spectating, just render obstacles/remote player updates
+            if (!state.isSpectating) {
+                // 1. Local Physics
+                player.y += player.dy;
+                if (!player.isGrounded) player.dy -= CONFIG.gravity;
+                if (player.y <= 0) { player.y = 0; player.dy = 0; player.isGrounded = true; player.rot = 0; els.player.style.transform = `rotate(0deg)`; } 
+                else { player.rot += 6; els.player.style.transform = `rotate(${player.rot}deg)`; }
+                els.player.style.bottom = `${CONFIG.groundHeight + player.y}px`;
+            }
 
-            // 2. Render Remote Player (Ghost)
-            if (state.isMultiplayer && els.remotePlayer) {
+            // 2. Render Remote
+            if (state.isMultiplayer && els.remotePlayer && !state.remoteIsDead) {
                 els.remotePlayer.style.bottom = `${CONFIG.groundHeight + remoteP.y}px`;
-                // Add simple rotation for visual flair
                 els.remotePlayer.style.transform = remoteP.y > 0 ? `rotate(${player.rot}deg)` : `rotate(0deg)`;
             }
 
-            // 3. Host Logic (Obstacles, Score)
-            if (state.isHost || !state.isMultiplayer) {
+            // 3. Host Logic
+            if ((state.isHost || !state.isMultiplayer) && state.running) { // Only update world if someone is alive
                 state.score += 0.15;
                 if (state.speed < CONFIG.maxSpeed) state.speed += CONFIG.speedInc;
                 els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
@@ -488,15 +578,16 @@
                 handleProjectiles();
                 handleLightning();
                 handlePotions();
-            } else {
-                // Client: Check collision with synced obstacles
-                checkClientCollisions();
+            } else if (!state.isHost && state.isMultiplayer) {
+                // Client Logic: check client collisions if alive
+                if(!state.isSpectating) checkClientCollisions();
             }
 
-            requestAnimationFrame(update);
+            // If both dead in multiplayer, stop loop is handled by die() logic triggering endgame
+            if (state.running || state.isSpectating) requestAnimationFrame(update);
         }
 
-        // --- GAME LOGIC (HOST) ---
+        // --- GAME LOGIC ---
         function checkPhase() {
             const scoreInt = Math.floor(state.score);
             const nextPhaseIdx = state.currentPhaseIdx + 1;
@@ -525,40 +616,23 @@
                 let obs = obstacles[i];
                 obs.x -= state.speed;
                 obs.el.style.left = `${obs.x}px`;
-                if (checkCollision(obs.x, 0, 35, 35)) die();
+                if (!state.isSpectating && checkCollision(obs.x, 0, 35, 35)) die();
                 if (obs.x < -100) { obs.el.remove(); obstacles.splice(i, 1); }
             }
         }
 
-        // Logic for client to check collisions against visual obstacles
         function checkClientCollisions() {
-            // We iterate over the visual obstacles synced from host
-            // Note: In a robust game, host would authorize hits, but client-side hit is fine for casual.
-            obstacles.forEach(obs => {
-                // Need current X from style since we aren't calculating physics locally
-                // This is tricky without interpolated state. 
-                // For P2P demo, visual overlap is okay.
-                // Ideally, client runs same logic.
-            });
-            // Actually, for simplicity in this P2P implementation, Client won't die from obstacles 
-            // because syncing exact X/Y at 60fps without lag compensation is hard in a single file.
-            // We will let Client play "Invincible" mode or just simulate locally.
-            // BETTER APPROACH: Client runs local logic for obstacles too? No, desync.
-            // SOLUTION: Client detects collision with the obstacles drawn on screen.
-            
             const playerRect = els.player.getBoundingClientRect();
-            // Check DOM elements with class 'obstacle'
             const domObstacles = document.getElementsByClassName('obstacle');
             for(let el of domObstacles) {
                 const rect = el.getBoundingClientRect();
-                // Simple overlap
-                if(!(playerRect.right < rect.left || playerRect.left > rect.right || playerRect.bottom < rect.top || playerRect.top > rect.bottom)) {
+                // AABB overlap
+                if(!(playerRect.right < rect.left + 10 || playerRect.left > rect.right - 10 || playerRect.bottom < rect.top + 10 || playerRect.top > rect.bottom)) {
                     die();
                 }
             }
         }
 
-        // Generic collision check for Host
         function checkCollision(objX, objY, width, height) {
             const pLeft = 50 + 10; const pRight = 50 + player.width - 10;
             const pBottom = player.y; const pTop = player.y + player.height - 10;
@@ -571,8 +645,7 @@
             if (Math.random() < 0.008) createCoin();
             for (let i = coins.length - 1; i >= 0; i--) {
                 let c = coins[i]; c.x -= state.speed; c.el.style.left = `${c.x}px`;
-                // Collision logic simplified
-                if (c.x < 100 && c.x > 0 && player.y + 55 > c.y && player.y < c.y + 30) {
+                if (c.x < 100 && c.x > 0 && player.y + 55 > c.y && player.y < c.y + 30 && !state.isSpectating) {
                     state.score += 50; c.el.remove(); coins.splice(i, 1); spawnParticles(50, CONFIG.groundHeight + player.y + 20, 8, '#FFD700');
                 } else if (c.x < -100) { c.el.remove(); coins.splice(i, 1); }
             }
@@ -583,7 +656,7 @@
             if (p.canShoot && Math.random() < 0.003) createProjectile();
             for (let i = projectiles.length - 1; i >= 0; i--) {
                 let proj = projectiles[i]; proj.x -= (state.speed * 1.5); proj.el.style.left = `${proj.x}px`;
-                if (checkCollision(proj.x, proj.y, 20, 10)) die();
+                if (!state.isSpectating && checkCollision(proj.x, proj.y, 20, 10)) die();
                 if (proj.x < -100) { proj.el.remove(); projectiles.splice(i, 1); }
             }
         }
@@ -595,13 +668,12 @@
             for (let i = potions.length - 1; i >= 0; i--) {
                 let pot = potions[i]; pot.y -= 3; pot.x -= (state.speed * 0.5); 
                 pot.el.style.left = `${pot.x}px`; pot.el.style.bottom = `${CONFIG.groundHeight + pot.y}px`;
-                if (pot.x < 100 && pot.x > 0 && player.y + 55 > pot.y && player.y < pot.y + 30) {
+                if (pot.x < 100 && pot.x > 0 && player.y + 55 > pot.y && player.y < pot.y + 30 && !state.isSpectating) {
                     state.score += 200; state.speed += 0.5; pot.el.remove(); potions.splice(i, 1); spawnParticles(50, CONFIG.groundHeight + player.y + 20, 10, '#55ff55');
                 } else if (pot.y < 0) { pot.el.remove(); potions.splice(i, 1); }
             }
         }
 
-        // Spawners
         function createObstacle() {
             const p = CONFIG.phases[state.currentPhaseIdx];
             const type = p.obstacles[Math.floor(Math.random() * p.obstacles.length)];
@@ -644,20 +716,91 @@
 
         function die() {
             state.running = false;
-            if(conn) conn.send({ type: 'die' }); // Notify other
+            
+            if (state.isMultiplayer) {
+                // Notify other player I died
+                if(conn) conn.send({ type: 'die' });
+                
+                // If remote is also dead, trigger game over
+                if (state.remoteIsDead) {
+                    if (state.isHost) triggerAllDead();
+                } else {
+                    // Enter Spectator Mode
+                    state.isSpectating = true;
+                    els.player.style.display = 'none'; // Hide my player
+                    els.spectatorMsg.style.display = 'block';
+                    els.spectatorMsg.innerText = "YOU DIED! SPECTATING...";
+                    // Keep loop running to receive updates
+                    requestAnimationFrame(update);
+                    return; // Don't show game over screen yet
+                }
+            } else {
+                // Single Player
+                showMPGameOver();
+            }
+        }
+
+        function triggerAllDead() {
+            // Host triggers this
+            if(conn) conn.send({ type: 'all_dead' });
+            showMPGameOver();
+        }
+
+        function showMPGameOver() {
+            state.running = false;
+            state.isSpectating = false;
             
             if (state.score > state.highScore) {
                 state.highScore = Math.floor(state.score);
                 localStorage.setItem('mcRunnerHighScore', state.highScore);
                 els.highScore.textContent = `HI: ${state.highScore} (NEW!)`;
             }
-            const finalScore = Math.floor(state.score);
-            els.finalScore.textContent = finalScore;
+            
+            els.finalScore.textContent = Math.floor(state.score);
             els.gameOverScreen.style.display = 'flex';
             
-            els.container.style.transform = 'translate(5px, 5px)';
-            setTimeout(() => els.container.style.transform = 'translate(0,0)', 100);
-            if(state.score > 50) sendScoreToDiscord(finalScore, state.highScore);
+            if (state.isMultiplayer) {
+                els.btnRetry.style.display = 'none';
+                els.btnPlayAgainMP.style.display = 'inline-block';
+            } else {
+                els.btnRetry.style.display = 'inline-block';
+                els.btnPlayAgainMP.style.display = 'none';
+            }
+
+            if(state.score > 50) sendScoreToDiscord(Math.floor(state.score), state.highScore);
+        }
+
+        function requestRematch() {
+            if (state.isHost) {
+                // Host starts countdown immediately
+                conn.send({ type: 'rematch' });
+                els.gameOverScreen.style.display = 'none';
+                start10sTimer();
+            } else {
+                // Client waits
+                alert("Waiting for Host to restart...");
+            }
+        }
+
+        function start10sTimer() {
+            els.countdown.style.display = 'flex';
+            let count = 10;
+            els.countdown.innerText = `NEXT ROUND IN ${count}`;
+            
+            let timer = setInterval(() => {
+                count--;
+                if(count > 0) {
+                    els.countdown.innerText = `NEXT ROUND IN ${count}`;
+                } else {
+                    clearInterval(timer);
+                    els.countdown.style.display = 'none';
+                    // Send hard start to sync
+                    if(state.isHost) {
+                        conn.send({ type: 'start' });
+                        startGame(true);
+                    }
+                }
+            }, 1000);
         }
 
         async function sendScoreToDiscord(score, highScore) {
