@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Endless Runner | shadowGamer100k</title>
-    <!-- PLAYROOM KIT -->
+    <!-- PLAYROOM KIT (Ensure this loads first) -->
     <script src="https://unpkg.com/playroomkit/multiplayer.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -81,10 +81,13 @@
 
         .back-btn { position: absolute; top: 20px; right: 20px; z-index: 20; }
 
+        /* Mobile Jump Button (SQUARE) */
         #mobileJumpBtn {
             display: none; position: absolute; bottom: 30px; right: 30px;
-            width: 70px; height: 70px; background: #3a3a3a;
-            border: 2px solid #555; border-radius: 50%; z-index: 15;
+            width: 80px; height: 80px; background: #3a3a3a;
+            border: 2px solid #555; 
+            border-radius: 8px; /* Slightly rounded corners, but square */
+            z-index: 15;
             box-shadow: 0 6px 0 #222; justify-content: center; align-items: center;
             font-size: 24px; color: var(--mc-green); transition: transform 0.1s, box-shadow 0.1s;
         }
@@ -194,6 +197,7 @@
         <div id="charSelectScreen" class="overlay-screen">
             <h1>GAME MENU</h1>
             
+            <!-- Character Selector -->
             <p style="font-size: 10px; color: #aaa; margin-top: 10px;">SELECT SKIN</p>
             <div class="head-grid">
                 <div class="head-option" onclick="selectHead(0)" id="head0"><img src="../assets/minigames/heads/ShadowGem7119.png" onerror="this.style.display='none';this.parentNode.innerText='1'"></div>
@@ -202,6 +206,7 @@
                 <div class="head-option" onclick="selectHead(3)" id="head3"><img src="../assets/minigames/heads/Fex.png" onerror="this.style.display='none';this.parentNode.innerText='4'"></div>
             </div>
 
+            <!-- Play Options -->
             <button class="btn" onclick="startSinglePlayer()">PLAY SOLO ▶</button>
             
             <div style="margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; width: 90%; max-width:400px;">
@@ -292,6 +297,11 @@
         async function startMultiplayer() {
             els.lobbyStatus.innerText = "Connecting to Playroom...";
             try {
+                // Ensure Playroom is loaded
+                if (typeof Playroom === 'undefined') {
+                    throw new Error("Playroom library not loaded. Check internet connection.");
+                }
+
                 await Playroom.insertCoin({
                     gameId: "endless-chicken-runner-v1",
                     discord: true,
@@ -303,7 +313,6 @@
                 
                 // Sync Lobby
                 Playroom.onPlayerJoin(playerState => {
-                    logLobby("Player Joined!");
                     createRemotePlayer(playerState);
                 });
 
@@ -316,7 +325,8 @@
                 
             } catch (e) {
                 console.error(e);
-                alert("Multiplayer Error: " + e.message);
+                els.lobbyStatus.innerText = "Error: " + e.message;
+                // Fallback or alert user
             }
         }
 
@@ -350,9 +360,8 @@
 
             // 2. Host Logic: Sync Obstacles/Score
             if (Playroom.isHost()) {
-                // Simple obstacle sync: Broadcast seed or current obstacle x
-                // Ideally we sync entities list, but for simplicity we trust host loop
-                // Playroom.setState("score", state.score);
+                // Host handles authority on obstacles implicitly by syncing random seed or position
+                // For simplicity in this version, clients run local simulation
             }
 
             // 3. Read Others
@@ -373,7 +382,8 @@
 
         function updateSkin(el, idx) {
             const imgPath = `../assets/minigames/heads/${HEAD_FILES[idx]}`;
-            if(el.style.backgroundImage !== `url("${imgPath}")`) {
+            // Only update if changed to avoid flickering
+            if(el.style.backgroundImage.indexOf(HEAD_FILES[idx]) === -1) {
                 el.style.backgroundImage = `url('${imgPath}')`;
             }
         }
@@ -411,6 +421,7 @@
                 els.entities.appendChild(myP);
             }
             myP.style.display = 'flex';
+            myP.style.opacity = 1;
             updateSkin(myP, state.selectedHeadIndex);
 
             setPhase(0);
@@ -455,8 +466,6 @@
             }
 
             // Global Game Logic (Host or Single Player runs obstacles)
-            // Note: In Playroom P2P, it's better if everyone runs physics but Host is authority.
-            // For simplicity here: everyone runs their own obstacles locally.
             if (!player.dead) {
                 state.score += 0.15;
                 if (state.speed < CONFIG.maxSpeed) state.speed += CONFIG.speedInc;
@@ -496,7 +505,7 @@
             els.phase.style.color = p.grTop;
         }
 
-        // Obstacle Logic (Same as before, simplified for brevity)
+        // Obstacle Logic
         function handleObstacles() {
             if (Math.random() < 0.015 + (state.speed * 0.0002)) {
                 const lastObs = obstacles[obstacles.length - 1];
@@ -526,8 +535,8 @@
             els.container.appendChild(el); obstacles.push({ x: window.innerWidth, el: el });
         }
 
-        function handleCoins() { /* ... (Standard Logic) ... */ }
-        function handleProjectiles() { /* ... (Standard Logic) ... */ }
+        function handleCoins() { /* ... */ }
+        function handleProjectiles() { /* ... */ }
         function handleLightning() { /* ... */ }
         function handlePotions() { /* ... */ }
 
@@ -537,6 +546,10 @@
             if(!state.isMultiplayer) {
                 state.running = false;
                 showGameOver();
+            } else {
+                // Fade out my player
+                const myP = document.getElementById('myPlayer');
+                if(myP) myP.style.opacity = 0.2;
             }
         }
 
@@ -562,8 +575,6 @@
             };
             fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ embeds: [embed] }) });
         }
-
-        function logLobby(msg) { console.log(msg); } // Placeholder
 
         init();
     </script>
