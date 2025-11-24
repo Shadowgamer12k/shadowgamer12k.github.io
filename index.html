@@ -202,7 +202,20 @@
         }
         .search-box:focus-within { border-color: #7e7e7e; }
         .search-icon { color: #888; margin-right: 12px; }
-        .search-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; outline: none; font-family: Arial, sans-serif; }
+        
+        /* UPDATED: SEARCH INPUT TO PIXEL FONT */
+        .search-input { 
+            flex: 1; 
+            background: transparent; 
+            border: none; 
+            color: #fff; 
+            font-size: 12px; /* Adjusted for pixel font */
+            outline: none; 
+            font-family: 'Press Start 2P', cursive; /* Now pixelated */
+            line-height: 1.5;
+        }
+        .search-input::placeholder { color: #888; opacity: 1; }
+        
         .clear-search { background: #444; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: none; }
         
         /* --- FILTER LAYOUT WITH GAME BUTTON --- */
@@ -217,23 +230,23 @@
         
         /* UPDATED GAME BUTTON TO MATCH FILTER BUTTON */
         .game-btn-link {
-            background-color: #3a3a3a; /* Match sort-button */
+            background-color: #3a3a3a;
             color: #fff;
             text-decoration: none;
-            padding: 8px 16px; /* Match sort-button */
-            border: 2px solid #555; /* Match sort-button */
+            padding: 8px 16px;
+            border: 2px solid #555;
             font-size: 12px;
             font-family: 'Press Start 2P', cursive;
             transition: all 0.1s;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: none; /* Removed purple shadow */
+            box-shadow: none;
         }
         
         .game-btn-link:hover {
             transform: translateY(-2px);
-            background-color: #444; /* Slight hover effect */
+            background-color: #444;
         }
         
         .game-btn-link:active {
@@ -316,28 +329,44 @@
             .mobile-nav-icons { display: flex; }
             .mod-item { width: 100%; max-width: 400px; }
             footer { flex-direction: column; text-align: center !important; gap: 20px; font-size: 10px; }
+            
+            /* UPDATED: MOBILE LAYOUT FOR FILTERS */
+            .filter-container {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch; /* Make items full width */
+            }
+            
+            .game-btn-link, .sort-dropdown, .sort-button {
+                width: 100%;
+                justify-content: center;
+                box-sizing: border-box; /* Ensure padding doesn't break width */
+            }
         }
         @media (min-width: 769px) {
             .navbar-menu { display: flex !important; }
         }
 
         /* ==================== FIXED FLOATING BUTTONS (BLOCKY STYLE) ==================== */
+        /* UPDATED: ENSURING EXACT SAME SIZE */
         #biomeToggle, #menuTrigger {
             position: fixed;
-            width: 45px;
-            height: 45px;
+            width: 50px;  /* Slightly larger explicit width */
+            height: 50px; /* Explicit height */
             background-color: #3a3a3a;
             color: #fff;
             border: 2px solid #555;
-            border-radius: 4px; /* Slight rounded corners like other buttons */
+            border-radius: 4px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             z-index: 1000;
-            box-shadow: 0 4px 0 #222; /* 3D Bottom Shadow */
+            box-shadow: 0 4px 0 #222;
             transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+            box-sizing: border-box; /* Ensures border is included in 50px */
+            padding: 0; /* Remove potential default padding */
         }
         
         #biomeToggle {
@@ -350,7 +379,7 @@
             bottom: 80px; /* Sits above biome toggle */
             right: 20px;
             color: white;
-            display: flex; /* Always visible per request */
+            display: flex; 
         }
 
         #biomeToggle:hover, #menuTrigger:hover {
