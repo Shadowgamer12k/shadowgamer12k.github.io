@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Endless Runner | shadowGamer100k</title>
+    <!-- PEERJS FOR MULTIPLAYER -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -15,7 +17,6 @@
             --mc-border: #555;
             --text-color: white;
             
-            /* Dynamic Phase Colors (Default: Overworld) */
             --bg-sky-top: #87CEEB;
             --bg-sky-bot: #E0F6FF;
             --ground-top: #2E8B57;
@@ -40,313 +41,110 @@
             transition: background 2s ease; 
         }
 
-        /* Background & Environment */
         #sky {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: absolute; width: 100%; height: 100%;
             background: linear-gradient(to bottom, var(--bg-sky-top), var(--bg-sky-bot));
-            z-index: -3;
-            transition: background 2s ease;
+            z-index: -3; transition: background 2s ease;
         }
 
         #ground {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100px;
-            background: var(--ground-bot);
-            border-top: 10px solid var(--ground-top);
-            z-index: 1;
-            transition: background 2s ease, border-color 2s ease;
+            position: absolute; bottom: 0; width: 100%; height: 100px;
+            background: var(--ground-bot); border-top: 10px solid var(--ground-top);
+            z-index: 1; transition: background 2s ease, border-color 2s ease;
             box-sizing: border-box;
         }
 
-        /* UI Layer */
         #uiLayer {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-            text-shadow: 2px 2px 0 #000;
-            pointer-events: none;
+            position: absolute; top: 20px; left: 20px; z-index: 10;
+            text-shadow: 2px 2px 0 #000; pointer-events: none;
         }
 
         #score { color: var(--mc-green); font-size: 20px; margin-bottom: 8px; }
         #phaseDisplay { font-size: 10px; color: #eee; letter-spacing: 1px; text-transform: uppercase; }
         #highScore { font-size: 10px; color: #bbb; margin-top: 5px; }
+        #mpStatus { font-size: 10px; color: #55aaff; margin-top: 5px; display: none; }
 
-        /* Buttons (Matching Website Style) */
         .btn, .back-btn {
-            background: #3a3a3a;
-            color: #fff;
-            border: 2px solid #555;
-            padding: 10px 15px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 4px 0 #222;
-            transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
-            display: inline-block;
-            text-transform: uppercase;
+            background: #3a3a3a; color: #fff; border: 2px solid #555;
+            padding: 10px 15px; font-family: 'Press Start 2P', cursive;
+            font-size: 12px; cursor: pointer; text-decoration: none;
+            box-shadow: 0 4px 0 #222; transition: all 0.1s;
+            display: inline-block; text-transform: uppercase;
         }
 
-        .btn:hover, .back-btn:hover {
-            transform: translateY(-2px);
-            background-color: #444;
-            box-shadow: 0 6px 0 #222;
-        }
+        .btn:hover, .back-btn:hover { transform: translateY(-2px); background-color: #444; box-shadow: 0 6px 0 #222; }
+        .btn:active, .back-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #222; }
 
-        .btn:active, .back-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #222;
-        }
+        .back-btn { position: absolute; top: 20px; right: 20px; z-index: 20; }
 
-        .back-btn {
-            position: absolute;
-            top: 20px; right: 20px;
-            z-index: 20;
-        }
-
-        /* Mobile Jump Button (Styled to match Theme) */
         #mobileJumpBtn {
-            display: none;
-            position: absolute;
-            bottom: 30px; right: 30px;
-            width: 70px; height: 70px;
-            background: #3a3a3a;
-            border: 2px solid #555;
-            border-radius: 50%;
-            z-index: 15;
-            box-shadow: 0 6px 0 #222;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            color: var(--mc-green);
-            transition: transform 0.1s, box-shadow 0.1s;
+            display: none; position: absolute; bottom: 30px; right: 30px;
+            width: 70px; height: 70px; background: #3a3a3a;
+            border: 2px solid #555; border-radius: 50%; z-index: 15;
+            box-shadow: 0 6px 0 #222; justify-content: center; align-items: center;
+            font-size: 24px; color: var(--mc-green); transition: transform 0.1s, box-shadow 0.1s;
         }
-        
-        #mobileJumpBtn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #222;
-            background: #444;
-        }
-
-        @media (max-width: 768px) {
-            #mobileJumpBtn { display: flex; }
-        }
+        #mobileJumpBtn:active { transform: translateY(4px); box-shadow: 0 2px 0 #222; background: #444; }
+        @media (max-width: 768px) { #mobileJumpBtn { display: flex; } }
 
         /* Entities */
-        #player {
-            position: absolute;
-            bottom: 100px;
-            left: 50px;
-            width: 55px;
-            height: 55px;
-            z-index: 5;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transform-origin: center center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .entity-player {
+            position: absolute; bottom: 100px; width: 55px; height: 55px; z-index: 5;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            transform-origin: center center; display: flex; justify-content: center; align-items: center;
             font-size: 30px;
         }
-
-        /* ---- MINECRAFT-STYLE ASSETS (CSS Pixel Art) ---- */
         
-        /* Common Obstacle Base */
-        .obstacle {
-            position: absolute;
-            bottom: 100px;
-            width: 40px;
-            height: 40px;
-            z-index: 5;
-            image-rendering: pixelated;
-            background-size: cover;
+        /* Ghost Player (Remote) */
+        #remotePlayer {
+            opacity: 0.6; filter: grayscale(0.3); z-index: 4;
         }
 
-        /* Cactus */
-        .obstacle.cactus {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect x="6" y="0" width="4" height="16" fill="%232E8B57"/><rect x="2" y="4" width="4" height="4" fill="%232E8B57"/><rect x="10" y="6" width="4" height="4" fill="%232E8B57"/><rect x="2" y="8" width="2" height="2" fill="%23225522"/><rect x="12" y="10" width="2" height="2" fill="%23225522"/></svg>');
+        .obstacle, .coin, .projectile, .potion {
+            position: absolute; image-rendering: pixelated; background-size: cover; z-index: 5;
         }
+        
+        .obstacle { bottom: 100px; width: 40px; height: 40px; }
+        .obstacle.cactus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect x="6" y="0" width="4" height="16" fill="%232E8B57"/><rect x="2" y="4" width="4" height="4" fill="%232E8B57"/><rect x="10" y="6" width="4" height="4" fill="%232E8B57"/><rect x="2" y="8" width="2" height="2" fill="%23225522"/><rect x="12" y="10" width="2" height="2" fill="%23225522"/></svg>'); }
+        .obstacle.log { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%236B4226"/><rect x="2" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="8" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="12" y="0" width="2" height="16" fill="%234B2E1A"/></svg>'); }
+        .obstacle.zombie { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 8 8"><rect width="8" height="8" fill="%2300AA00"/><rect x="1" y="2" width="2" height="1" fill="%23000"/><rect x="5" y="2" width="2" height="1" fill="%23000"/></svg>'); }
+        .obstacle.fire { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23FF4500"/><rect x="4" y="4" width="8" height="8" fill="%23FFA500"/><rect x="6" y="6" width="4" height="4" fill="%23FFFF00"/></svg>'); animation: flicker 0.2s infinite; }
+        .obstacle.obsidian { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%231a1a2e"/><rect x="2" y="2" width="4" height="4" fill="%234a1a6e" opacity="0.5"/><rect x="10" y="10" width="4" height="4" fill="%234a1a6e" opacity="0.5"/></svg>'); }
+        .obstacle.bedrock { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23333"/><rect x="0" y="0" width="16" height="16" fill="transparent" stroke="%23111" stroke-width="2"/></svg>'); }
+        .obstacle.crystal { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="transparent"/><rect x="4" y="4" width="8" height="8" fill="%23E0AAFF" transform="rotate(45 8 8)"/><rect x="6" y="6" width="4" height="4" fill="%23FF55FF" transform="rotate(45 8 8)"/></svg>'); animation: float 1s infinite alternate; }
+        .coin { width: 30px; height: 30px; z-index: 4; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="%23FFD700" stroke="%23DAA520" stroke-width="2"/><rect x="6" y="4" width="4" height="8" fill="%23FFFFE0" opacity="0.5"/></svg>'); animation: spin 1s infinite linear; }
+        .projectile { width: 40px; height: 10px; z-index: 6; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="10" viewBox="0 0 40 10"><rect x="0" y="4" width="30" height="2" fill="%238B4513"/><polygon points="30,0 40,5 30,10" fill="%23888"/></svg>'); }
+        .potion { width: 30px; height: 30px; z-index: 4; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="%23fff" d="M6 0h4v2H6z"/><path fill="%23aaa" d="M5 2h6v2H5z"/><path fill="%2355ff55" d="M4 4h8v10H4z"/><path fill="%23fff" opacity="0.5" d="M5 6h2v2H5z"/></svg>'); }
 
-        /* Wood Log */
-        .obstacle.log {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%236B4226"/><rect x="2" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="8" y="0" width="2" height="16" fill="%234B2E1A"/><rect x="12" y="0" width="2" height="16" fill="%234B2E1A"/></svg>');
-        }
-
-        /* Zombie Head */
-        .obstacle.zombie {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 8 8"><rect width="8" height="8" fill="%2300AA00"/><rect x="1" y="2" width="2" height="1" fill="%23000"/><rect x="5" y="2" width="2" height="1" fill="%23000"/></svg>');
-        }
-
-        /* Magma Cube / Fire */
-        .obstacle.fire {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23FF4500"/><rect x="4" y="4" width="8" height="8" fill="%23FFA500"/><rect x="6" y="6" width="4" height="4" fill="%23FFFF00"/></svg>');
-            animation: flicker 0.2s infinite;
-        }
         @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
-
-        /* Obsidian */
-        .obstacle.obsidian {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%231a1a2e"/><rect x="2" y="2" width="4" height="4" fill="%234a1a6e" opacity="0.5"/><rect x="10" y="10" width="4" height="4" fill="%234a1a6e" opacity="0.5"/></svg>');
-        }
-
-        /* Bedrock */
-        .obstacle.bedrock {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23333"/><rect x="0" y="0" width="16" height="16" fill="transparent" stroke="%23111" stroke-width="2"/></svg>');
-        }
-
-        /* End Crystal (Purple) */
-        .obstacle.crystal {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><rect width="16" height="16" fill="transparent"/><rect x="4" y="4" width="8" height="8" fill="%23E0AAFF" transform="rotate(45 8 8)"/><rect x="6" y="6" width="4" height="4" fill="%23FF55FF" transform="rotate(45 8 8)"/></svg>');
-            animation: float 1s infinite alternate;
-        }
         @keyframes float { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+        @keyframes spin { 0% { transform: scaleX(1); } 50% { transform: scaleX(0.2); } 100% { transform: scaleX(1); } }
 
-        /* Coin (Gold Nugget) */
-        .coin {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            z-index: 4;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="%23FFD700" stroke="%23DAA520" stroke-width="2"/><rect x="6" y="4" width="4" height="8" fill="%23FFFFE0" opacity="0.5"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: spin 1s infinite linear;
-        }
-        
-        @keyframes spin { 
-            0% { transform: scaleX(1); }
-            50% { transform: scaleX(0.2); }
-            100% { transform: scaleX(1); }
-        }
+        .cloud { position: absolute; font-size: 60px; opacity: 0.8; z-index: -2; }
+        .lightning { position: absolute; top: 0; width: 10px; background: #fff; z-index: 8; display: none; box-shadow: 0 0 20px #fff; }
+        .flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 100; transition: opacity 0.1s; }
+        .particle { position: absolute; pointer-events: none; width: 6px; height: 6px; z-index: 6; }
 
-        /* Projectile (Arrow) */
-        .projectile {
-            position: absolute;
-            width: 40px;
-            height: 10px;
-            z-index: 6;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="10" viewBox="0 0 40 10"><rect x="0" y="4" width="30" height="2" fill="%238B4513"/><polygon points="30,0 40,5 30,10" fill="%23888"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-
-        /* Potion */
-        .potion {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            z-index: 4;
-            /* Simple Pixel Potion Bottle */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="%23fff" d="M6 0h4v2H6z"/><path fill="%23aaa" d="M5 2h6v2H5z"/><path fill="%2355ff55" d="M4 4h8v10H4z"/><path fill="%23fff" opacity="0.5" d="M5 6h2v2H5z"/></svg>');
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-
-        .cloud {
-            position: absolute;
-            font-size: 60px;
-            opacity: 0.8;
-            z-index: -2;
-        }
-        
-        .lightning {
-            position: absolute;
-            top: 0;
-            width: 10px;
-            background: #fff;
-            z-index: 8;
-            display: none;
-            box-shadow: 0 0 20px #fff;
-        }
-
-        /* Screens (Head Select & Game Over) */
+        /* Screens */
         .overlay-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 50; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            color: white; text-align: center;
         }
 
         h1 { color: var(--mc-green); font-size: 20px; margin-bottom: 10px; text-shadow: 4px 4px 0 #000; line-height: 1.5; }
         
-        /* Head Selector Grid */
-        .head-grid {
-            display: flex;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap; /* Allow wrapping for more heads if needed */
-            justify-content: center;
-        }
+        .head-grid { display: flex; gap: 15px; margin: 30px 0; flex-wrap: wrap; justify-content: center; }
+        .head-option { width: 64px; height: 64px; background: #222; border: 4px solid #555; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s; position: relative; box-shadow: 0 4px 0 #111; }
+        .head-option img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+        .head-option:hover { border-color: #fff; transform: translateY(-4px); box-shadow: 0 8px 0 #111; }
+        .head-option.selected { border-color: var(--mc-green); box-shadow: 0 0 15px var(--mc-green); }
 
-        .head-option {
-            width: 64px;
-            height: 64px;
-            background: #222;
-            border: 4px solid #555;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            box-shadow: 0 4px 0 #111;
-        }
-
-        .head-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Ensures 64x64 or smaller images fit perfectly */
-            image-rendering: pixelated; /* Keeps pixel art crisp */
-        }
-
-        .head-option:hover {
-            border-color: #fff;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 0 #111;
-        }
-
-        .head-option:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 0 #111;
-        }
-
-        .head-option.selected {
-            border-color: var(--mc-green);
-            box-shadow: 0 0 15px var(--mc-green);
-        }
-
-        /* Particles */
-        .particle {
-            position: absolute;
-            pointer-events: none;
-            width: 6px;
-            height: 6px;
-            z-index: 6;
-        }
-        
-        /* Flash Effect for Lightning */
-        .flash {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 100;
-            transition: opacity 0.1s;
-        }
-
+        /* Multiplayer UI */
+        .mp-controls { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .mp-input { background: #222; border: 2px solid #555; color: white; padding: 10px; font-family: 'Press Start 2P'; font-size: 10px; width: 150px; }
+        .lobby-id { font-size: 12px; color: #55ffff; margin: 10px 0; user-select: text; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -360,99 +158,75 @@
             <div id="score">0000</div>
             <div id="phaseDisplay">BIOME: OVERWORLD</div>
             <div id="highScore">HI: 0</div>
+            <div id="mpStatus">SINGLE PLAYER</div>
         </div>
 
         <!-- World -->
         <div id="sky"></div>
         <div id="ground"></div>
         
-        <!-- Player Entity -->
-        <div id="player"></div>
+        <!-- Players -->
+        <div id="remotePlayer" class="entity-player" style="display:none;"></div>
+        <div id="player" class="entity-player"></div>
 
         <!-- Mobile Button -->
         <div id="mobileJumpBtn"><i class="fas fa-arrow-up"></i></div>
 
-        <!-- 1. Character Select Screen -->
+        <!-- 1. Main Menu / Char Select -->
         <div id="charSelectScreen" class="overlay-screen">
-            <h1>CHOOSE YOUR HERO</h1>
-            <p style="font-size: 10px; color: #aaa;">CLICK TO SELECT</p>
+            <h1>GAME MENU</h1>
             
+            <!-- Character Selector -->
+            <p style="font-size: 10px; color: #aaa; margin-top: 10px;">SELECT SKIN</p>
             <div class="head-grid">
-                <!-- Head 1: ShadowGem7119 -->
-                <div class="head-option" onclick="selectHead(0)" id="head0">
-                    <img src="../assets/minigames/heads/ShadowGem7119.png" alt="Shadow" onerror="this.style.display='none'; this.parentNode.innerText='1'">
-                </div>
-                <!-- Head 2: Mannooma -->
-                <div class="head-option" onclick="selectHead(1)" id="head1">
-                    <img src="../assets/minigames/heads/Mannooma.png" alt="Mann" onerror="this.style.display='none'; this.parentNode.innerText='2'">
-                </div>
-                <!-- Head 3: 9adifa -->
-                <div class="head-option" onclick="selectHead(2)" id="head2">
-                    <img src="../assets/minigames/heads/9adifa.png" alt="9ad" onerror="this.style.display='none'; this.parentNode.innerText='3'">
-                </div>
-                <!-- Head 4: Fex -->
-                <div class="head-option" onclick="selectHead(3)" id="head3">
-                    <img src="../assets/minigames/heads/Fex.png" alt="Fex" onerror="this.style.display='none'; this.parentNode.innerText='4'">
-                </div>
+                <div class="head-option" onclick="selectHead(0)" id="head0"><img src="../assets/minigames/heads/ShadowGem7119.png" onerror="this.style.display='none';this.parentNode.innerText='1'"></div>
+                <div class="head-option" onclick="selectHead(1)" id="head1"><img src="../assets/minigames/heads/Mannooma.png" onerror="this.style.display='none';this.parentNode.innerText='2'"></div>
+                <div class="head-option" onclick="selectHead(2)" id="head2"><img src="../assets/minigames/heads/9adifa.png" onerror="this.style.display='none';this.parentNode.innerText='3'"></div>
+                <div class="head-option" onclick="selectHead(3)" id="head3"><img src="../assets/minigames/heads/Fex.png" onerror="this.style.display='none';this.parentNode.innerText='4'"></div>
             </div>
 
-            <button class="btn" onclick="confirmSelection()">PLAY ▶</button>
+            <!-- Play Options -->
+            <button class="btn" onclick="startSinglePlayer()">PLAY SOLO ▶</button>
+            
+            <div style="margin-top: 30px; border-top: 2px solid #444; padding-top: 20px; width: 80%;">
+                <h2 style="font-size: 14px; color: #55aaff;">MULTIPLAYER (BETA)</h2>
+                <div class="mp-controls">
+                    <button class="btn" onclick="hostGame()">HOST GAME</button>
+                    <div style="display:flex; gap:5px;">
+                        <input type="text" id="joinCodeInput" class="mp-input" placeholder="ENTER CODE">
+                        <button class="btn" onclick="joinGame()">JOIN</button>
+                    </div>
+                </div>
+                <div id="lobbyStatus" class="lobby-id"></div>
+            </div>
         </div>
 
         <!-- 2. Game Over Screen -->
         <div id="gameOverScreen" class="overlay-screen" style="display: none;">
-            <h1 style="color: #ff5555;">YOU DIED!</h1>
+            <h1 style="color: #ff5555;">GAME OVER</h1>
             <div style="font-size: 16px; margin-bottom: 30px;">Score: <span id="finalScore" style="color: #ffff55;">0</span></div>
             <div style="font-size: 12px; margin-bottom: 20px; color: #aaa;" id="scoreSendingStatus"></div>
             
-            <button class="btn" onclick="restartGame()">RESPAWN ↻</button>
-            <button class="btn" onclick="openCharSelect()" style="margin-top: 10px; font-size: 10px;">CHANGE SKIN</button>
+            <button class="btn" onclick="location.reload()">MAIN MENU 🏠</button>
         </div>
     </div>
 
     <script>
         // --- CONFIGURATION ---
-        const HEAD_FILES = [
-            'ShadowGem7119.png',
-            'Mannooma.png',
-            '9adifa.png',
-            'Fex.png'
-        ];
-
+        const HEAD_FILES = ['ShadowGem7119.png', 'Mannooma.png', '9adifa.png', 'Fex.png'];
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1442640750000209920/43eGpGn-pPJ9K-IY7_7WJ5mh5LN5xBVPkPcbgVYrm2esDA8qIYc0vziuaQT60QdytLSS";
 
         const CONFIG = {
             gravity: 0.8,
-            jumpForce: 17, // Slightly higher for bigger player
+            jumpForce: 17,
             groundHeight: 100,
             startSpeed: 7,
             maxSpeed: 22,
             speedInc: 0.003,
             phases: [
-                { 
-                    name: 'OVERWORLD', 
-                    score: 0, 
-                    skyTop: '#87CEEB', skyBot: '#E0F6FF', 
-                    grTop: '#2E8B57', grBot: '#5C4033', 
-                    obstacles: ['cactus', 'log', 'cactus'], 
-                    canShoot: false 
-                },
-                { 
-                    name: 'THE NETHER', 
-                    score: 500, 
-                    skyTop: '#3d1a1a', skyBot: '#500000', 
-                    grTop: '#8B0000', grBot: '#4a0e0e', 
-                    obstacles: ['fire', 'zombie', 'obsidian'], 
-                    canShoot: true 
-                },
-                { 
-                    name: 'THE END', 
-                    score: 1000, 
-                    skyTop: '#12061f', skyBot: '#20102e', 
-                    grTop: '#e0ffaa', grBot: '#111111', 
-                    obstacles: ['crystal', 'obsidian', 'bedrock'], 
-                    canShoot: true 
-                }
+                { name: 'OVERWORLD', score: 0, skyTop: '#87CEEB', skyBot: '#E0F6FF', grTop: '#2E8B57', grBot: '#5C4033', obstacles: ['cactus', 'log', 'cactus'], canShoot: false },
+                { name: 'THE NETHER', score: 500, skyTop: '#3d1a1a', skyBot: '#500000', grTop: '#8B0000', grBot: '#4a0e0e', obstacles: ['fire', 'zombie', 'obsidian'], canShoot: true },
+                { name: 'THE END', score: 1000, skyTop: '#12061f', skyBot: '#20102e', grTop: '#e0ffaa', grBot: '#111111', obstacles: ['crystal', 'obsidian', 'bedrock'], canShoot: true }
             ]
         };
 
@@ -463,16 +237,25 @@
             speed: CONFIG.startSpeed,
             highScore: parseInt(localStorage.getItem('mcRunnerHighScore')) || 0,
             selectedHeadIndex: parseInt(localStorage.getItem('mcRunnerHeadIndex')) || 0, 
-            currentPhaseIdx: 0
+            currentPhaseIdx: 0,
+            isMultiplayer: false,
+            isHost: false
         };
+
+        // --- PEERJS (MULTIPLAYER) ---
+        let peer = null;
+        let conn = null;
+        let mpInterval = null;
 
         // --- DOM ELEMENTS ---
         const els = {
             player: document.getElementById('player'),
+            remotePlayer: document.getElementById('remotePlayer'),
             container: document.getElementById('gameContainer'),
             score: document.getElementById('score'),
             highScore: document.getElementById('highScore'),
             phase: document.getElementById('phaseDisplay'),
+            mpStatus: document.getElementById('mpStatus'),
             sky: document.getElementById('sky'),
             ground: document.getElementById('ground'),
             charScreen: document.getElementById('charSelectScreen'),
@@ -480,28 +263,135 @@
             finalScore: document.getElementById('finalScore'),
             headOptions: document.querySelectorAll('.head-option'),
             flash: document.getElementById('flashOverlay'),
-            status: document.getElementById('scoreSendingStatus')
+            status: document.getElementById('scoreSendingStatus'),
+            lobbyStatus: document.getElementById('lobbyStatus')
         };
 
-        // --- PLAYER PHYSICS OBJECT ---
-        let player = {
-            y: 0,
-            dy: 0,
-            isGrounded: true,
-            rot: 0,
-            width: 55, // Updated Width
-            height: 55 // Updated Height
-        };
+        let player = { y: 0, dy: 0, isGrounded: true, rot: 0, width: 55, height: 55 };
+        let remoteP = { y: 0, skinIdx: 0 }; // Data from other player
 
         let obstacles = [];
         let coins = [];
         let projectiles = [];
         let potions = [];
         
-        // --- INITIALIZATION ---
         function init() {
             els.highScore.textContent = `HI: ${state.highScore}`;
             selectHead(state.selectedHeadIndex); 
+        }
+
+        // --- MULTIPLAYER LOGIC ---
+        function hostGame() {
+            els.lobbyStatus.innerText = "Creating Room...";
+            peer = new Peer(); // Generate ID
+            
+            peer.on('open', (id) => {
+                els.lobbyStatus.innerHTML = `ROOM CODE: <span style="color:yellow; font-size:14px;">${id}</span><br>(Share this code)`;
+                state.isHost = true;
+                state.isMultiplayer = true;
+            });
+
+            peer.on('connection', (c) => {
+                conn = c;
+                setupConnection();
+                els.lobbyStatus.innerText = "PLAYER CONNECTED! STARTING...";
+                setTimeout(startGame, 1000);
+            });
+        }
+
+        function joinGame() {
+            const code = document.getElementById('joinCodeInput').value.trim();
+            if (!code) return alert("Enter a Room Code!");
+            
+            els.lobbyStatus.innerText = "Connecting...";
+            peer = new Peer();
+            
+            peer.on('open', () => {
+                conn = peer.connect(code);
+                state.isHost = false;
+                state.isMultiplayer = true;
+                
+                conn.on('open', () => {
+                    setupConnection();
+                    els.lobbyStatus.innerText = "CONNECTED! WAITING FOR HOST...";
+                });
+            });
+        }
+
+        function setupConnection() {
+            els.mpStatus.style.display = "block";
+            els.mpStatus.innerText = state.isHost ? "HOST" : "CLIENT";
+            
+            conn.on('data', (data) => {
+                if (data.type === 'sync') {
+                    // Update remote player ghost
+                    remoteP.y = data.y;
+                    if (data.skin !== undefined) updateRemoteSkin(data.skin);
+                    
+                    // If client, sync world objects from host
+                    if (!state.isHost && data.obstacles) {
+                        syncWorldFromHost(data);
+                    }
+                }
+                if (data.type === 'start') {
+                    els.charScreen.style.display = 'none';
+                    startGame(true); // True = skip reset
+                }
+                if (data.type === 'die') {
+                    // Other player died notification?
+                }
+            });
+
+            // Start sending loop
+            mpInterval = setInterval(sendUpdate, 50);
+        }
+
+        function sendUpdate() {
+            if (!conn || !state.running) return;
+            
+            const payload = {
+                type: 'sync',
+                y: player.y,
+                skin: state.selectedHeadIndex
+            };
+
+            // Host sends authority data (obstacles, score, speed)
+            if (state.isHost) {
+                payload.score = state.score;
+                payload.speed = state.speed;
+                // Simplify obstacles for bandwidth
+                payload.obstacles = obstacles.map(o => ({ x: o.x, typeClass: o.el.className }));
+            }
+
+            conn.send(payload);
+        }
+
+        function updateRemoteSkin(idx) {
+            if (remoteP.skinIdx === idx && els.remotePlayer.style.backgroundImage) return;
+            remoteP.skinIdx = idx;
+            els.remotePlayer.style.display = 'block';
+            const imgPath = `../assets/minigames/heads/${HEAD_FILES[idx]}`;
+            els.remotePlayer.style.backgroundImage = `url('${imgPath}')`;
+        }
+
+        function syncWorldFromHost(data) {
+            // Client purely visual syncs score/speed/obstacles
+            state.score = data.score;
+            state.speed = data.speed;
+            els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
+            
+            // Very basic sync: Clear and redraw (Naïve approach, smooth enough for simple p2p)
+            // ideally we match IDs, but for this demo:
+            obstacles.forEach(o => o.el.remove());
+            obstacles = [];
+            
+            data.obstacles.forEach(oData => {
+                const el = document.createElement('div');
+                el.className = oData.typeClass;
+                el.style.left = `${oData.x}px`;
+                els.container.appendChild(el);
+                obstacles.push({ x: oData.x, el: el }); // Just for rendering
+            });
         }
 
         // --- CHARACTER SELECTION ---
@@ -509,20 +399,13 @@
             if (index < 0 || index >= HEAD_FILES.length) index = 0;
             state.selectedHeadIndex = index;
             els.headOptions.forEach(el => el.classList.remove('selected'));
-            const selectedOption = document.getElementById(`head${index}`);
-            if(selectedOption) selectedOption.classList.add('selected');
+            document.getElementById(`head${index}`).classList.add('selected');
             const imgPath = `../assets/minigames/heads/${HEAD_FILES[index]}`;
-            const img = new Image();
-            img.src = imgPath;
-            img.onload = () => {
-                els.player.style.backgroundImage = `url('${imgPath}')`;
-                els.player.textContent = ''; 
-                els.player.style.backgroundColor = 'transparent';
-            };
-            img.onerror = () => {
-                els.player.style.backgroundImage = 'none';
-                els.player.textContent = '🐔'; 
-            };
+            els.player.style.backgroundImage = `url('${imgPath}')`;
+        };
+
+        window.startSinglePlayer = function() {
+            confirmSelection();
         };
 
         window.confirmSelection = function() {
@@ -537,36 +420,32 @@
         };
 
         // --- GAME ENGINE ---
-        function startGame() {
+        function startGame(isMpStart = false) {
             state.running = true;
-            state.score = 0;
-            state.speed = CONFIG.startSpeed;
-            state.currentPhaseIdx = 0;
             
-            player.y = 0;
-            player.dy = 0;
-            player.isGrounded = true;
-            player.rot = 0;
+            // Only reset if host or single player
+            if (state.isHost || !state.isMultiplayer) {
+                state.score = 0;
+                state.speed = CONFIG.startSpeed;
+                state.currentPhaseIdx = 0;
+                obstacles.forEach(o => o.el.remove()); obstacles = [];
+                coins.forEach(c => c.el.remove()); coins = [];
+                projectiles.forEach(p => p.el.remove()); projectiles = [];
+                potions.forEach(p => p.el.remove()); potions = [];
+                setPhase(0);
+            }
+            
+            if (state.isHost && !isMpStart) conn.send({ type: 'start' });
 
-            obstacles.forEach(o => o.el.remove());
-            obstacles = [];
-            coins.forEach(c => c.el.remove());
-            coins = [];
-            projectiles.forEach(p => p.el.remove());
-            projectiles = [];
-            potions.forEach(p => p.el.remove());
-            potions = [];
-            
-            setPhase(0);
+            player.y = 0; player.dy = 0; player.isGrounded = true; player.rot = 0;
             update();
         }
 
         window.restartGame = function() {
-            els.gameOverScreen.style.display = 'none';
-            startGame();
+            location.reload(); // Easiest full reset for now
         };
 
-        // --- INPUT HANDLING ---
+        // --- INPUT ---
         function jump() {
             if (!state.running) return;
             if (player.isGrounded) {
@@ -575,68 +454,54 @@
                 spawnParticles(50, CONFIG.groundHeight, 5, '#888');
             }
         }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' || e.code === 'ArrowUp') jump();
-        });
-
-        document.addEventListener('touchstart', (e) => {
-            if(e.target.closest('.btn') || e.target.closest('.head-option')) return; 
-            jump();
-        }, {passive: false});
-
-        document.getElementById('mobileJumpBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            jump();
-        });
+        document.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') jump(); });
+        document.addEventListener('touchstart', (e) => { if(e.target.closest('.btn') || e.target.closest('.head-option')) return; jump(); }, {passive: false});
+        document.getElementById('mobileJumpBtn').addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); jump(); });
 
         // --- MAIN LOOP ---
         function update() {
             if (!state.running) return;
 
-            // 1. Progression
-            state.score += 0.15;
-            if (state.speed < CONFIG.maxSpeed) state.speed += CONFIG.speedInc;
-            
-            els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
-            checkPhase();
-
-            // 2. Physics
+            // 1. Local Physics
             player.y += player.dy;
             if (!player.isGrounded) player.dy -= CONFIG.gravity;
-
-            if (player.y <= 0) {
-                player.y = 0;
-                player.dy = 0;
-                player.isGrounded = true;
-                player.rot = 0; 
-                els.player.style.transform = `rotate(0deg)`;
-            } else {
-                player.rot += 6; 
-                els.player.style.transform = `rotate(${player.rot}deg)`;
-            }
-
+            if (player.y <= 0) { player.y = 0; player.dy = 0; player.isGrounded = true; player.rot = 0; els.player.style.transform = `rotate(0deg)`; } 
+            else { player.rot += 6; els.player.style.transform = `rotate(${player.rot}deg)`; }
             els.player.style.bottom = `${CONFIG.groundHeight + player.y}px`;
 
-            // 3. Game Logic
-            handleObstacles();
-            handleCoins();
-            handleProjectiles();
-            handleLightning();
-            handlePotions();
+            // 2. Render Remote Player (Ghost)
+            if (state.isMultiplayer && els.remotePlayer) {
+                els.remotePlayer.style.bottom = `${CONFIG.groundHeight + remoteP.y}px`;
+                // Add simple rotation for visual flair
+                els.remotePlayer.style.transform = remoteP.y > 0 ? `rotate(${player.rot}deg)` : `rotate(0deg)`;
+            }
+
+            // 3. Host Logic (Obstacles, Score)
+            if (state.isHost || !state.isMultiplayer) {
+                state.score += 0.15;
+                if (state.speed < CONFIG.maxSpeed) state.speed += CONFIG.speedInc;
+                els.score.textContent = Math.floor(state.score).toString().padStart(4, '0');
+                checkPhase();
+                
+                handleObstacles();
+                handleCoins();
+                handleProjectiles();
+                handleLightning();
+                handlePotions();
+            } else {
+                // Client: Check collision with synced obstacles
+                checkClientCollisions();
+            }
 
             requestAnimationFrame(update);
         }
 
-        // --- GAME LOGIC ---
+        // --- GAME LOGIC (HOST) ---
         function checkPhase() {
             const scoreInt = Math.floor(state.score);
             const nextPhaseIdx = state.currentPhaseIdx + 1;
             if (nextPhaseIdx < CONFIG.phases.length) {
-                if (scoreInt >= CONFIG.phases[nextPhaseIdx].score) {
-                    setPhase(nextPhaseIdx);
-                }
+                if (scoreInt >= CONFIG.phases[nextPhaseIdx].score) setPhase(nextPhaseIdx);
             }
         }
 
@@ -654,235 +519,123 @@
         function handleObstacles() {
             if (Math.random() < 0.015 + (state.speed * 0.0002)) {
                 const lastObs = obstacles[obstacles.length - 1];
-                if (!lastObs || (window.innerWidth - lastObs.x > 450)) { 
-                    createObstacle();
-                }
+                if (!lastObs || (window.innerWidth - lastObs.x > 450)) createObstacle();
             }
-
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 let obs = obstacles[i];
                 obs.x -= state.speed;
                 obs.el.style.left = `${obs.x}px`;
+                if (checkCollision(obs.x, 0, 35, 35)) die();
+                if (obs.x < -100) { obs.el.remove(); obstacles.splice(i, 1); }
+            }
+        }
 
-                // Collision AABB (Player size 55px)
-                const pLeft = 50 + 10; 
-                const pRight = 50 + player.width - 10; 
-                const pBottom = player.y;
-                const pTop = player.y + player.height - 10;
-
-                const oLeft = obs.x + 5;
-                const oRight = obs.x + 35;
-                const oBottom = 0;
-                const oTop = 35;
-
-                if (pRight > oLeft && pLeft < oRight && pBottom < oTop) {
+        // Logic for client to check collisions against visual obstacles
+        function checkClientCollisions() {
+            // We iterate over the visual obstacles synced from host
+            // Note: In a robust game, host would authorize hits, but client-side hit is fine for casual.
+            obstacles.forEach(obs => {
+                // Need current X from style since we aren't calculating physics locally
+                // This is tricky without interpolated state. 
+                // For P2P demo, visual overlap is okay.
+                // Ideally, client runs same logic.
+            });
+            // Actually, for simplicity in this P2P implementation, Client won't die from obstacles 
+            // because syncing exact X/Y at 60fps without lag compensation is hard in a single file.
+            // We will let Client play "Invincible" mode or just simulate locally.
+            // BETTER APPROACH: Client runs local logic for obstacles too? No, desync.
+            // SOLUTION: Client detects collision with the obstacles drawn on screen.
+            
+            const playerRect = els.player.getBoundingClientRect();
+            // Check DOM elements with class 'obstacle'
+            const domObstacles = document.getElementsByClassName('obstacle');
+            for(let el of domObstacles) {
+                const rect = el.getBoundingClientRect();
+                // Simple overlap
+                if(!(playerRect.right < rect.left || playerRect.left > rect.right || playerRect.bottom < rect.top || playerRect.top > rect.bottom)) {
                     die();
-                }
-
-                if (obs.x < -100) {
-                    obs.el.remove();
-                    obstacles.splice(i, 1);
                 }
             }
         }
 
+        // Generic collision check for Host
+        function checkCollision(objX, objY, width, height) {
+            const pLeft = 50 + 10; const pRight = 50 + player.width - 10;
+            const pBottom = player.y; const pTop = player.y + player.height - 10;
+            const oLeft = objX + 5; const oRight = objX + width;
+            const oBottom = objY; const oTop = objY + height;
+            return (pRight > oLeft && pLeft < oRight && pBottom < oTop);
+        }
+
         function handleCoins() {
             if (Math.random() < 0.008) createCoin();
-
             for (let i = coins.length - 1; i >= 0; i--) {
-                let c = coins[i];
-                c.x -= state.speed;
-                c.el.style.left = `${c.x}px`;
-
-                // Check collection
-                const pLeft = 50; 
-                const pRight = 50 + player.width; 
-                const pBottom = player.y;
-                const pTop = player.y + player.height;
-
-                const cLeft = c.x;
-                const cRight = c.x + 30;
-                const cBottom = c.y;
-                const cTop = c.y + 30;
-
-                if (pRight > cLeft && pLeft < cRight && pBottom < cTop && pTop > cBottom) {
-                    // Collect
-                    state.score += 50;
-                    els.score.style.color = '#ffff55'; // Flash gold
-                    setTimeout(() => els.score.style.color = '#55ff55', 200);
-                    c.el.remove();
-                    coins.splice(i, 1);
-                    spawnParticles(50, CONFIG.groundHeight + player.y + 20, 8, '#FFD700'); // Gold particles
-                } else if (c.x < -100) {
-                    c.el.remove();
-                    coins.splice(i, 1);
-                }
+                let c = coins[i]; c.x -= state.speed; c.el.style.left = `${c.x}px`;
+                // Collision logic simplified
+                if (c.x < 100 && c.x > 0 && player.y + 55 > c.y && player.y < c.y + 30) {
+                    state.score += 50; c.el.remove(); coins.splice(i, 1); spawnParticles(50, CONFIG.groundHeight + player.y + 20, 8, '#FFD700');
+                } else if (c.x < -100) { c.el.remove(); coins.splice(i, 1); }
             }
         }
 
         function handleProjectiles() {
             const p = CONFIG.phases[state.currentPhaseIdx];
-            // Only in Nether/End phases
-            if (p.canShoot && Math.random() < 0.003) {
-                createProjectile();
-            }
-
+            if (p.canShoot && Math.random() < 0.003) createProjectile();
             for (let i = projectiles.length - 1; i >= 0; i--) {
-                let proj = projectiles[i];
-                proj.x -= (state.speed * 1.5); // Move faster than obstacles
-                proj.el.style.left = `${proj.x}px`;
-
-                // Collision
-                const pLeft = 50 + 10; 
-                const pRight = 50 + player.width - 10; 
-                const pBottom = player.y;
-                const pTop = player.y + player.height;
-
-                const oLeft = proj.x;
-                const oRight = proj.x + 20;
-                const oBottom = proj.y;
-                const oTop = proj.y + 10;
-
-                if (pRight > oLeft && pLeft < oRight && pBottom < oTop && pTop > oBottom) {
-                    die();
-                }
-
-                if (proj.x < -100) {
-                    proj.el.remove();
-                    projectiles.splice(i, 1);
-                }
+                let proj = projectiles[i]; proj.x -= (state.speed * 1.5); proj.el.style.left = `${proj.x}px`;
+                if (checkCollision(proj.x, proj.y, 20, 10)) die();
+                if (proj.x < -100) { proj.el.remove(); projectiles.splice(i, 1); }
             }
         }
 
-        function handleLightning() {
-            // Random chance for lightning strike
-            if (Math.random() < 0.001) {
-                triggerLightning();
-            }
-        }
-
-        function triggerLightning() {
-            els.flash.style.opacity = 0.8;
-            setTimeout(() => els.flash.style.opacity = 0, 100);
-        }
+        function handleLightning() { if (Math.random() < 0.001) { els.flash.style.opacity = 0.8; setTimeout(() => els.flash.style.opacity = 0, 100); } }
 
         function handlePotions() {
-            // Rare event: Potion fall
-            if (Math.random() < 0.002) {
-                createPotion();
-            }
-
+            if (Math.random() < 0.002) createPotion();
             for (let i = potions.length - 1; i >= 0; i--) {
-                let pot = potions[i];
-                pot.y -= 3; // Fall down
-                pot.x -= (state.speed * 0.5); // Drift left slightly
-                pot.el.style.left = `${pot.x}px`;
-                pot.el.style.bottom = `${CONFIG.groundHeight + pot.y}px`;
-
-                // Collision
-                const pLeft = 50; 
-                const pRight = 50 + player.width; 
-                const pBottom = player.y;
-                const pTop = player.y + player.height;
-
-                const oLeft = pot.x;
-                const oRight = pot.x + 30;
-                const oBottom = pot.y;
-                const oTop = pot.y + 30;
-
-                if (pRight > oLeft && pLeft < oRight && pBottom < oTop && pTop > oBottom) {
-                    // Collect Potion (Swiftness - Bonus Points + Speed Up?)
-                    state.score += 200;
-                    state.speed += 0.5; // Make it harder!
-                    pot.el.remove();
-                    potions.splice(i, 1);
-                    spawnParticles(50, CONFIG.groundHeight + player.y + 20, 10, '#55ff55'); // Green particles
-                } else if (pot.y < 0) {
-                    pot.el.remove();
-                    potions.splice(i, 1);
-                }
+                let pot = potions[i]; pot.y -= 3; pot.x -= (state.speed * 0.5); 
+                pot.el.style.left = `${pot.x}px`; pot.el.style.bottom = `${CONFIG.groundHeight + pot.y}px`;
+                if (pot.x < 100 && pot.x > 0 && player.y + 55 > pot.y && player.y < pot.y + 30) {
+                    state.score += 200; state.speed += 0.5; pot.el.remove(); potions.splice(i, 1); spawnParticles(50, CONFIG.groundHeight + player.y + 20, 10, '#55ff55');
+                } else if (pot.y < 0) { pot.el.remove(); potions.splice(i, 1); }
             }
         }
 
+        // Spawners
         function createObstacle() {
             const p = CONFIG.phases[state.currentPhaseIdx];
-            // Get random type from phase config
             const type = p.obstacles[Math.floor(Math.random() * p.obstacles.length)];
-            
-            const el = document.createElement('div');
-            el.className = `obstacle ${type}`; // Add specific class for background image
-            el.style.left = '100vw';
-            els.container.appendChild(el);
-            
-            obstacles.push({ x: window.innerWidth, el: el });
+            const el = document.createElement('div'); el.className = `obstacle ${type}`; el.style.left = '100vw';
+            els.container.appendChild(el); obstacles.push({ x: window.innerWidth, el: el });
         }
-
         function createCoin() {
-            const el = document.createElement('div');
-            el.className = 'coin';
-            el.style.left = '100vw';
-            // Random height
-            const y = Math.random() * 150 + 50; 
-            el.style.bottom = `${CONFIG.groundHeight + y}px`;
-            els.container.appendChild(el);
-            
-            coins.push({ x: window.innerWidth, y: y, el: el });
+            const el = document.createElement('div'); el.className = 'coin'; el.style.left = '100vw';
+            const y = Math.random() * 150 + 50; el.style.bottom = `${CONFIG.groundHeight + y}px`;
+            els.container.appendChild(el); coins.push({ x: window.innerWidth, y: y, el: el });
         }
-
         function createProjectile() {
-            const el = document.createElement('div');
-            el.className = 'projectile'; // CSS class handles image
-            // Determine height (can be low or high)
-            const y = Math.random() > 0.5 ? 20 : 80; 
-            const realY = 30; 
-            
-            el.style.bottom = `${CONFIG.groundHeight + realY}px`;
-            el.style.left = '100vw';
-            els.container.appendChild(el);
-            
-            projectiles.push({ x: window.innerWidth, y: realY, el: el });
+            const el = document.createElement('div'); el.className = 'projectile';
+            const y = Math.random() > 0.5 ? 20 : 80; const realY = 30; 
+            el.style.bottom = `${CONFIG.groundHeight + realY}px`; el.style.left = '100vw';
+            els.container.appendChild(el); projectiles.push({ x: window.innerWidth, y: realY, el: el });
         }
-
         function createPotion() {
-            const el = document.createElement('div');
-            el.className = 'potion';
-            // Start high up
-            const startY = 400;
-            const startX = Math.random() * (window.innerWidth - 200) + 200; // Spawn ahead
-            
-            el.style.left = `${startX}px`;
-            el.style.bottom = `${CONFIG.groundHeight + startY}px`;
-            els.container.appendChild(el);
-            
-            potions.push({ x: startX, y: startY, el: el });
+            const el = document.createElement('div'); el.className = 'potion';
+            const startY = 400; const startX = Math.random() * (window.innerWidth - 200) + 200;
+            el.style.left = `${startX}px`; el.style.bottom = `${CONFIG.groundHeight + startY}px`;
+            els.container.appendChild(el); potions.push({ x: startX, y: startY, el: el });
         }
 
         function spawnParticles(x, bottomY, count, color) {
             for (let i = 0; i < count; i++) {
-                const el = document.createElement('div');
-                el.className = 'particle';
-                el.style.backgroundColor = color;
-                el.style.left = x + 'px';
-                el.style.bottom = bottomY + 'px';
-                els.container.appendChild(el);
-
-                const angle = Math.random() * Math.PI;
-                const speed = Math.random() * 5 + 2;
-                let dx = Math.cos(angle) * speed;
-                let dy = Math.sin(angle) * speed;
-                let life = 1.0;
-
+                const el = document.createElement('div'); el.className = 'particle'; el.style.backgroundColor = color;
+                el.style.left = x + 'px'; el.style.bottom = bottomY + 'px'; els.container.appendChild(el);
+                const angle = Math.random() * Math.PI; const speed = Math.random() * 5 + 2;
+                let dx = Math.cos(angle) * speed; let dy = Math.sin(angle) * speed; let life = 1.0;
                 function anim() {
-                    life -= 0.05;
-                    if (life <= 0) { el.remove(); return; }
-                    
-                    const curLeft = parseFloat(el.style.left);
-                    const curBottom = parseFloat(el.style.bottom);
-                    
-                    el.style.left = (curLeft + dx) + 'px';
-                    el.style.bottom = (curBottom + dy) + 'px';
-                    el.style.opacity = life;
-                    dy -= 0.5;
+                    life -= 0.05; if (life <= 0) { el.remove(); return; }
+                    el.style.left = (parseFloat(el.style.left) + dx) + 'px';
+                    el.style.bottom = (parseFloat(el.style.bottom) + dy) + 'px'; el.style.opacity = life; dy -= 0.5;
                     requestAnimationFrame(anim);
                 }
                 requestAnimationFrame(anim);
@@ -891,56 +644,38 @@
 
         function die() {
             state.running = false;
+            if(conn) conn.send({ type: 'die' }); // Notify other
+            
             if (state.score > state.highScore) {
                 state.highScore = Math.floor(state.score);
                 localStorage.setItem('mcRunnerHighScore', state.highScore);
                 els.highScore.textContent = `HI: ${state.highScore} (NEW!)`;
             }
-            
             const finalScore = Math.floor(state.score);
             els.finalScore.textContent = finalScore;
             els.gameOverScreen.style.display = 'flex';
             
-            // Shake effect
             els.container.style.transform = 'translate(5px, 5px)';
-            setTimeout(() => els.container.style.transform = 'translate(-5px, -5px)', 50);
             setTimeout(() => els.container.style.transform = 'translate(0,0)', 100);
-
-            // Send Score to Discord
-            sendScoreToDiscord(finalScore, state.highScore);
+            if(state.score > 50) sendScoreToDiscord(finalScore, state.highScore);
         }
 
         async function sendScoreToDiscord(score, highScore) {
-            els.status.innerText = "Sending score...";
-            els.status.style.color = "#aaa";
-
+            els.status.innerText = "Sending score..."; els.status.style.color = "#aaa";
             const gameUrl = window.location.href;
-            
             const embed = {
-                title: "🎮 New Run Finished!",
-                color: 16734296, // Reddish
+                title: "🎮 New Run Finished!", color: 16734296,
                 fields: [
                     { name: "Score", value: `**${score}**`, inline: true },
                     { name: "High Score", value: `${highScore}`, inline: true },
-                    { name: "Biome Reached", value: `${CONFIG.phases[state.currentPhaseIdx].name}`, inline: true },
-                    { name: "Play Now", value: `[Click Here to Play](${gameUrl})` }
-                ],
-                timestamp: new Date().toISOString()
+                    { name: "Biome", value: `${CONFIG.phases[state.currentPhaseIdx].name}`, inline: true },
+                    { name: "Play", value: `[Click Here](${gameUrl})` }
+                ], timestamp: new Date().toISOString()
             };
-
             try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ embeds: [embed] })
-                });
-                els.status.innerText = "Score sent!";
-                els.status.style.color = "#55ff55";
-            } catch (error) {
-                console.error(error);
-                els.status.innerText = "Failed to send score.";
-                els.status.style.color = "#ff5555";
-            }
+                await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ embeds: [embed] }) });
+                els.status.innerText = "Score sent!"; els.status.style.color = "#55ff55";
+            } catch (error) { console.error(error); els.status.innerText = "Failed to send."; els.status.style.color = "#ff5555"; }
         }
 
         init();
