@@ -69,7 +69,7 @@
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="4" height="4" fill="white" stroke="black" stroke-width="1"/><rect x="14" y="0" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="14" y="18" width="4" height="14" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="0" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/><rect x="18" y="14" width="14" height="4" fill="rgba(255,255,255,0.8)" stroke="black" stroke-width="1"/></svg>') 16 16, crosshair;
         }
 
-        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, .game-btn-link, .mobile-menu-item, #biomeToggle, #menuTrigger, .feedback-btn, .feedback-close, .feedback-submit {
+        a, button, .pointer, .nav-item, .nav-icon, .featured-item, .mod-item, .star-btn, .sort-button, .custom-select-trigger, .custom-option, .game-btn-link, .mobile-menu-item, #biomeToggle, #menuTrigger, .feedback-btn, .feedback-close, .feedback-submit, .search-result-item {
             cursor: url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" transform="rotate(-0)"><path d="M22 2 L24 4 L22 6 L24 8 L22 10 L24 12 L14 22 L12 20 L22 10 L20 8 L22 6 L20 4 L22 2 Z" fill="%2355ffff" stroke="black" stroke-width="1"/><rect x="10" y="20" width="4" height="4" fill="%23222" stroke="black" stroke-width="1"/><rect x="6" y="24" width="4" height="4" fill="%23654321" stroke="black" stroke-width="1"/></svg>') 0 0, pointer;
         }
 
@@ -190,6 +190,8 @@
             background-color: #3a3a3a; color: #fff; border: 2px solid #555; padding: 8px 16px;
             cursor: pointer; text-transform: uppercase; transition: all 0.3s ease;
             font-family: 'Press Start 2P', cursive; font-size: 14px;
+            display: inline-flex; align-items: center; justify-content: center; /* Ensures buttons and links align */
+            text-decoration: none;
         }
         .nav-icon { width: 40px; height: 40px; padding: 8px; display: flex; align-items: center; justify-content: center; }
         .nav-item.active, .nav-icon.active { background-color: #555; border-color: #7e7e7e; box-shadow: 0 0 5px rgba(255,255,255,0.3); }
@@ -203,21 +205,103 @@
         .search-box:focus-within { border-color: #7e7e7e; }
         .search-icon { color: #888; margin-right: 12px; }
         
-        /* UPDATED: SEARCH INPUT TO PIXEL FONT */
         .search-input { 
             flex: 1; 
             background: transparent; 
             border: none; 
             color: #fff; 
-            font-size: 12px; /* Adjusted for pixel font */
+            font-size: 12px; 
             outline: none; 
-            font-family: 'Press Start 2P', cursive; /* Now pixelated */
+            font-family: 'Press Start 2P', cursive; 
             line-height: 1.5;
         }
         .search-input::placeholder { color: #888; opacity: 1; }
         
         .clear-search { background: #444; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: none; }
         
+        /* --- NEW: FIXED SEARCH RESULTS STYLING --- */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 15px; /* Matches padding of container */
+            right: 15px; /* Matches padding of container */
+            background: #2c2c2c;
+            border: 2px solid #555;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            margin-top: 2px;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: left; /* Ensure text aligns left in dropdown */
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background: #3a3a3a;
+        }
+
+        .search-result-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 15px;
+            border: 2px solid #444;
+            background: #111;
+        }
+
+        .search-result-info {
+            flex: 1;
+        }
+
+        .search-result-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--mc-green);
+            font-size: 12px;
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.4;
+        }
+
+        .search-result-info p {
+            margin: 0;
+            color: #ccc;
+            font-size: 10px;
+            font-family: Arial, sans-serif;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .no-results {
+            padding: 20px;
+            color: #888;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            text-align: center;
+        }
+
         /* --- FILTER LAYOUT WITH GAME BUTTON --- */
         .filter-container { 
             display: flex; 
@@ -228,7 +312,6 @@
             padding: 0 15px; 
         }
         
-        /* UPDATED GAME BUTTON TO MATCH FILTER BUTTON */
         .game-btn-link {
             background-color: #3a3a3a;
             color: #fff;
@@ -699,6 +782,7 @@
             cursor: pointer;
             box-shadow: 0 4px 0 #222;
             text-transform: uppercase;
+            display: block; /* Added to support <a> tags */
         }
         
         .mobile-menu-item:hover {
@@ -791,6 +875,10 @@
                 <div class="mobile-menu-item" data-target="news">
                     <i class="fas fa-newspaper"></i> NEWS
                 </div>
+                <!-- ADDED: NEW LINK TO OTHER ADDONS -->
+                <a href="https://shadowgamer12k.github.io/other-addons.html" class="mobile-menu-item">
+                    <i class="fas fa-cubes"></i> OTHER ADDONS
+                </a>
                 
                 <div class="menu-footer">
                     Select a destination
@@ -809,6 +897,8 @@
                 <button class="nav-item active" data-target="projects">PROJECTS</button>
                 <button class="nav-item" data-target="social">SOCIAL</button>
                 <button class="nav-item" data-target="news">NEWS</button>
+                <!-- ADDED: NEW LINK TO OTHER ADDONS -->
+                <a href="https://shadowgamer12k.github.io/other-addons.html" class="nav-item">OTHER ADDONS</a>
             </div>
         </nav>
         
@@ -818,6 +908,7 @@
                 <input type="text" id="searchInput" class="search-input" placeholder="Search for addons...">
                 <button id="clearSearch" class="clear-search">✕</button>
             </div>
+            <!-- Results Container (Now styled!) -->
             <div id="searchResults" class="search-results"></div>
         </div>
         
@@ -1413,6 +1504,7 @@
             const clearSearch = document.getElementById('clearSearch');
             const searchResults = document.getElementById('searchResults');
             
+            // Logic to build search index safely (ignoring skeletons)
             const addons = Array.from(document.querySelectorAll('#projectModList .mod-item:not(.skeleton-placeholder)')).map(item => {
                 const h3 = item.querySelector('h3');
                 const img = item.querySelector('img');
@@ -1451,6 +1543,13 @@
                     searchInput.value = '';
                     clearSearch.style.display = 'none';
                     searchResults.classList.remove('active');
+                });
+                
+                // Close search results when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.classList.remove('active');
+                    }
                 });
             }
 
