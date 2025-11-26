@@ -75,7 +75,7 @@
     <!-- EXTERNAL LIBS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- ANALYTICS (Same as main page) -->
+    <!-- ANALYTICS -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -412,8 +412,45 @@
         @media (max-width: 768px) {
             .navbar-menu { display: none; }
             .mobile-nav-icons { display: flex; }
-            .mod-list { grid-template-columns: 1fr; } /* Added to fix grid overflow */
-            .mod-item { width: 100%; max-width: 100%; } /* Adjusted to fill container */
+            
+            /* --- MOBILE GRID FIX: 2 COLUMNS --- */
+            .mod-list { 
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px;
+            }
+            
+            .mod-item { 
+                width: 100%; 
+                max-width: 100%; 
+                padding: 8px; /* Reduced padding */
+            }
+            
+            /* Adjust fonts for 2-column view */
+            .mod-item h3 {
+                font-size: 10px; 
+                margin: 5px 0;
+            }
+            
+            .mod-item p {
+                font-size: 9px; 
+                margin-bottom: 8px;
+                /* Truncate text more aggressively */
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            
+            /* Scale down button */
+            .mod-item .social-link {
+                padding: 6px;
+                font-size: 9px;
+            }
+            
+            /* Scale down stars */
+            .star-btn { font-size: 12px; }
+            
             footer { flex-direction: column; text-align: center !important; gap: 20px; font-size: 10px; }
             .filter-container { flex-direction: column; gap: 15px; align-items: stretch; }
             .sort-dropdown, .sort-button { width: 100%; justify-content: center; box-sizing: border-box; }
