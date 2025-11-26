@@ -412,7 +412,8 @@
         @media (max-width: 768px) {
             .navbar-menu { display: none; }
             .mobile-nav-icons { display: flex; }
-            .mod-item { width: 100%; max-width: 400px; }
+            .mod-list { grid-template-columns: 1fr; } /* Added to fix grid overflow */
+            .mod-item { width: 100%; max-width: 100%; } /* Adjusted to fill container */
             footer { flex-direction: column; text-align: center !important; gap: 20px; font-size: 10px; }
             .filter-container { flex-direction: column; gap: 15px; align-items: stretch; }
             .sort-dropdown, .sort-button { width: 100%; justify-content: center; box-sizing: border-box; }
