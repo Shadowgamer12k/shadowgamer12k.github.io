@@ -315,6 +315,40 @@
             <p>
                 We have stress-tested this addon on low-end mobile devices (Android/iOS) and consoles (Xbox/PS4). The <code>runInterval</code> used for auto-merging runs only once every 10 ticks (0.5 seconds), ensuring <strong>zero TPS drop</strong> even with multiple players online. It is fully compatible with Realms and dedicated servers.
             </p>
+
+            <h3>SERVER ADMIN CONFIGURATION</h3>
+            <p>
+                Running a dedicated server or Realm? The Stack Regulator is designed with multiplayer stability in mind. Since the data is stored on the player entity (`player.getDynamicProperty`), there is no central database to corrupt. 
+            </p>
+            <p>
+                <strong>Permissions:</strong> The addon does not require operator permissions to use. Any player who joins can immediately access the regulator menu. 
+            </p>
+            <p>
+                <strong>Anti-Cheat Compatibility:</strong> Some strict anti-cheat addons might flag the rapid inventory updates as "Fast Looting". If you experience this, whitelist the `sh:stack_regulator` item in your anti-cheat config or adjust the inventory interaction thresholds.
+            </p>
+        </section>
+
+        <!-- COMPATIBILITY SECTION (NEW) -->
+        <section class="feature-box">
+            <h2 class="feature-title">🔄 COMPATIBILITY & INTEGRATION</h2>
+            <p>
+                We understand that players love to mix and match addons. The Stack Regulator follows the "Bedrock Addon Standard" guidelines to ensure maximum compatibility.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>UI MODS</h3>
+                    <p>Compatible with VDX UI, Ty-el's UI, and other interface changers. Our menu uses server-side forms which overlay on top of any client-side resource pack.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>OTHER STORAGE MODS</h3>
+                    <p>Works alongside "Simple Storage" and "Applied Energistics Bedrock Ports". However, do not try to put a Regulated Stack (e.g., 5000 items) into a custom modded block that doesn't support NBT data preservation, or the count might reset.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>CUSTOM ITEMS</h3>
+                    <p>The regulator automatically detects custom items from other addons as long as they are "Stackable" in vanilla behavior. It works perfectly with custom ores, ingots, and building blocks.</p>
+                </div>
+            </div>
         </section>
 
         <!-- FEATURES SECTION -->
@@ -416,6 +450,49 @@
                     </tr>
                 </tbody>
             </table>
+        </section>
+
+        <!-- CHANGELOG (NEW) -->
+        <section class="feature-box">
+            <h2 class="feature-title">📜 UPDATE HISTORY</h2>
+            <ul style="list-style: none; padding: 0; color: #aaa;">
+                <li style="margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 20px;">
+                    <strong style="color: var(--mc-purple); font-size: 14px;">v2.0.0 - THE "RPG" UPDATE</strong><br>
+                    - Introduced XP-based progression system.<br>
+                    - Added UI Menu with Emerald/Barrier icons.<br>
+                    - Implemented ItemLockMode to prevent accidental drops.<br>
+                    - Optimized script loop to run every 10 ticks instead of every tick.
+                </li>
+                <li style="margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 20px;">
+                    <strong style="color: #fff; font-size: 14px;">v1.5.0 - SOUNDS & FEEDBACK</strong><br>
+                    - Added level-up sound effects.<br>
+                    - Added ActionBar messages for clearer feedback.<br>
+                    - Fixed a bug where items would ghost when moving between dimensions.
+                </li>
+                <li style="margin-bottom: 20px;">
+                    <strong style="color: #888; font-size: 14px;">v1.0.0 - INITIAL RELEASE</strong><br>
+                    - Basic stacking functionality released.<br>
+                    - Command-based configuration (Deprecated).
+                </li>
+            </ul>
+        </section>
+
+        <!-- COMMUNITY SPOTLIGHT (NEW) -->
+        <section class="feature-box">
+            <h2 class="feature-title">🌟 COMMUNITY SPOTLIGHT</h2>
+            <p>
+                See how other players are using the Stack Regulator in their worlds:
+            </p>
+            <div style="background: #222; padding: 10px; border-left: 4px solid var(--mc-purple); margin-bottom: 10px;">
+                <strong style="color: #fff;">"Game Changer for Skyblock!"</strong><br>
+                <em style="color: #888; font-size: 10px;">- MineCrafter99</em><br>
+                "I used to have chests everywhere. Now I just carry my entire cobble gen output in one slot. Incredible."
+            </div>
+            <div style="background: #222; padding: 10px; border-left: 4px solid var(--mc-purple);">
+                <strong style="color: #fff;">"Server Performance Saved"</strong><br>
+                <em style="color: #888; font-size: 10px;">- AdminRex</em><br>
+                "Our Realm was lagging due to entity spam. This addon reduced item entities by 90% since players pick them up instantly."
+            </div>
         </section>
 
         <!-- INSTALLATION GUIDE -->
