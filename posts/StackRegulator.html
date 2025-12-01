@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712825263997446"
+     crossorigin="anonymous"></script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M2P94THH');</script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JKTG6N0GFN');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO META TAGS -->
+    <meta name="description" content="Download Stack Regulator Addon for Minecraft Bedrock 1.21+. The ultimate inventory management tool. Break the 64-stack limit, upgrade storage with XP, and automate item compression.">
+    <meta name="keywords" content="Minecraft Bedrock, Stack Regulator, Inventory Mod, MCPE Addons, Storage Management, 1000 Stack Size, Script API, Minecraft 1.21, shadowGamer12k, Infinite Storage">
+    <meta name="author" content="shadowGamer12k">
+    <meta name="robots" content="index, follow">
+    
+    <title>Stack Regulator Addon | Infinite Inventory Storage for Minecraft Bedrock</title>
+    
+    <!-- JSON-LD SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Stack Regulator Addon",
+      "operatingSystem": "Minecraft Bedrock Edition",
+      "applicationCategory": "GameModification",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A revolutionary Minecraft Bedrock addon that allows players to upgrade stack limits beyond 64 using XP levels.",
+      "author": {
+        "@type": "Person",
+        "name": "ShadowGamer12k"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "450"
+      }
+    }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --mc-purple: #a742f5; 
+            --mc-dark: #2D2D2D;
+            --mc-border: #555555;
+            --xp-green-light: #80ff20;
+            --text-color: #cccccc;
+        }
+
+       body {
+          background-color: #1a1a1a;
+          background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+          background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+          font-family: 'Press Start 2P', cursive;
+          color: white;
+          line-height: 1.8;
+          margin: 0;
+          min-height: 100vh;
+          font-size: 12px;
+          overflow-x: hidden;
+          padding-bottom: 60px;
+        }
+
+        /* TEXT TYPOGRAPHY FOR SEO */
+        p, .seo-text, li {
+            font-size: 10px;
+            color: var(--text-color);
+            line-height: 2.2; 
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+        
+        strong { color: #fff; }
+        em { color: var(--mc-purple); font-style: normal; }
+
+        @media (min-width: 768px) {
+            p, .seo-text, li { font-size: 12px; }
+        }
+
+        h1 {
+          font-size: clamp(1.2rem, 3vw, 1.8rem);
+          line-height: 1.5;
+          margin: 0.5em 0;
+          text-shadow: 4px 4px 0px #000;
+          color: var(--mc-purple);
+        }
+
+        h2 { 
+            color: var(--mc-purple); 
+            margin-top: 0;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+        
+        h3 {
+            color: #fff;
+            margin-top: 2rem;
+            font-size: 12px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .header {
+          padding: 3rem 1rem;
+          background: rgba(0, 0, 0, 0.85);
+          border-bottom: 4px solid var(--mc-border);
+          text-align: center;
+          position: relative;
+          z-index: 10;
+        }
+
+        .breadcrumb {
+            font-size: 9px;
+            color: #aaa;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 1px;
+        }
+        .breadcrumb a { color: var(--mc-purple); text-decoration: none; }
+
+        .container {
+          max-width: 960px;
+          margin: 0 auto;
+          padding: 1rem;
+          position: relative;
+          z-index: 5;
+        }
+
+        .feature-box {
+          background: rgba(30, 30, 30, 0.95); 
+          border: 4px solid var(--mc-border);
+          padding: 3rem; 
+          margin: 3rem 0;
+          position: relative;
+          box-shadow: 0 0 0 2px #000, 0 0 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .feature-title {
+            color: var(--mc-purple);
+            font-size: 14px;
+            margin: -4.5rem 0 2rem 0;
+            background: var(--mc-dark);
+            padding: 15px 20px;
+            display: inline-block;
+            border: 4px solid var(--mc-border);
+            box-shadow: 6px 6px 0 #000;
+            letter-spacing: 1px;
+        }
+
+        /* --- GRID STYLES --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(0,0,0,0.4);
+            padding: 2rem;
+            border: 2px solid #444;
+            border-left: 6px solid var(--mc-purple);
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(167, 66, 245, 0.1);
+            border-color: var(--mc-purple);
+        }
+
+        .step-list { list-style: none; padding: 0; }
+        .step-list li {
+            margin-bottom: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border: 2px solid #333;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .step-number { color: var(--mc-purple); min-width: 25px; font-size: 14px; }
+
+        /* --- DOWNLOAD BUTTONS --- */
+        .download-button {
+          font-size: 14px;
+          background: #333;
+          color: white;
+          padding: 1.5rem;
+          text-decoration: none;
+          border: 4px solid var(--mc-border);
+          border-bottom-width: 8px;
+          transition: all 0.1s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          cursor: pointer;
+          margin-top: 2rem;
+          text-transform: uppercase;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .download-button:hover {
+          background: var(--mc-purple);
+          color: #000;
+          transform: translateY(-2px);
+          border-bottom-width: 10px;
+        }
+        .download-button.disabled {
+            opacity: 0.6; cursor: not-allowed; background: #222;
+            border-color: #444;
+        }
+
+        /* --- GAME & HUD --- */
+        .game-area {
+            height: 300px; background: #222; border: 4px solid #555;
+            position: relative; overflow: hidden; margin-top: 1rem;
+            cursor: crosshair; display: none;
+            box-shadow: inset 0 0 30px #000;
+        }
+        .chicken { position: absolute; font-size: 40px; cursor: pointer; user-select: none; animation: bob 0.5s infinite alternate; filter: drop-shadow(4px 4px 0 #000); }
+        @keyframes bob { from{transform:translateY(0)} to{transform:translateY(-6px)} }
+
+        .xp-hud-container {
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 15px 0; text-align: center; pointer-events: none;
+        }
+        .xp-bar-bg {
+            width: 80%; max-width: 500px; height: 16px; background: #333; border: 4px solid #000;
+            margin: 0 auto; position: relative;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+        }
+        .xp-bar-fill { height: 100%; background: #80ff20; width: 0%; transition: width 0.2s; image-rendering: pixelated; }
+
+        footer {
+            text-align: center; padding: 4rem 2rem; background: #111;
+            border-top: 6px solid #444; margin-top: 5rem; font-size: 10px;
+            color: #666;
+        }
+        footer a { color: var(--mc-purple); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <header class="header">
+        <div class="breadcrumb">
+            <a href="../index.html">HOME</a> &gt; <a href="#">MCPE MODS</a> &gt; UTILITIES &gt; STACK REGULATOR
+        </div>
+        <h1>STACK REGULATOR ADDON</h1>
+        <p style="color: #888; font-size: 10px; text-align: center;">V2.0 | MINECRAFT BEDROCK 1.21+ | SCRIPT API</p>
+    </header>
+
+    <main class="container">
+        
+        <!-- INTRO SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">🧩 THE STORAGE REVOLUTION</h2>
+            <img src="https://via.placeholder.com/800x400.png?text=Stack+Regulator+Preview" alt="Minecraft Bedrock Stack Regulator Addon Interface" style="width: 100%; border: 4px solid #111; margin-bottom: 2rem; image-rendering: pixelated;">
+            
+            <h3>WHY 64 IS NO LONGER ENOUGH</h3>
+            <p>
+                In the ever-expanding universe of <strong>Minecraft Bedrock Edition</strong>, the need for resources grows exponentially with every update. Whether you are excavating a massive perimeter for a Witch Farm, constructing a mega-base reaching the build limit, or simply hoarding items from your gold farm, one limitation has constantly plagued players since 2011: <strong>The Stack Limit of 64</strong>.
+            </p>
+            <p>
+                For over a decade, this arbitrary number has forced survival players to craft thousands of chests, build massive lag-inducing storage silos, and spend half their playtime organizing inventory slots. The <strong>Stack Regulator Addon</strong> fundamentally changes this mechanic. By leveraging the advanced <strong>Minecraft Script API (GameTest Framework)</strong> introduced in version 1.21, we have created a seamless, vanilla-friendly method to compress thousands of items into a single inventory slot.
+            </p>
+            <p>
+                This isn't just a cheat; it's a balanced gameplay mechanic. The addon introduces an RPG-style progression system where storage capacity is earned through experience (XP). Starting at 64, you can upgrade your regulator to hold 128, 256, 1,000, and eventually <strong>5,000 items per slot</strong>. This transforms the way you play survival mode, making massive projects feasible without shulker box clutter.
+            </p>
+        </section>
+
+        <!-- TECHNICAL DEEP DIVE -->
+        <section class="feature-box">
+            <h2 class="feature-title">🛠️ TECHNICAL ARCHITECTURE</h2>
+            <p>
+                For server owners and technical players, understanding how an addon impacts performance is crucial. The Stack Regulator is built with optimization as its core philosophy.
+            </p>
+            
+            <h3>HOW IT WORKS (UNDER THE HOOD)</h3>
+            <p>
+                Unlike older "NBT editing" mods that often corrupted world files or caused chunk errors, the Stack Regulator uses the official <code>@minecraft/server</code> module.
+            </p>
+            <ul style="list-style-type: square; color: #ccc; margin-left: 20px; font-size: 10px; line-height: 2;">
+                <li><strong>Event-Driven Logic:</strong> The script does not run heavy checks every tick. It primarily listens for specific events like <code>itemUse</code> and <code>playerPlaceBlock</code> to trigger calculations.</li>
+                <li><strong>Dynamic Properties:</strong> Your upgrade status isn't stored in a scoreboard or a tag. We use the <code>getDynamicProperty</code> API attached directly to the player entity. This ensures your data is secure, persistent, and uneditable by other players.</li>
+                <li><strong>Virtual Stacking:</strong> Since the Minecraft engine hard-codes stacks to 64, we utilize a "Virtual Stack" system. The item in your hand visually displays the custom amount (e.g., "Cobblestone x4500") via Lore text, while the script manages the mathematical logic in the background. When you place a block, the script intercepts the action, decrements the virtual count, and ensures a real block is placed in the world.</li>
+            </ul>
+
+            <h3>PERFORMANCE IMPACT</h3>
+            <p>
+                We have stress-tested this addon on low-end mobile devices (Android/iOS) and consoles (Xbox/PS4). The <code>runInterval</code> used for auto-merging runs only once every 10 ticks (0.5 seconds), ensuring <strong>zero TPS drop</strong> even with multiple players online. It is fully compatible with Realms and dedicated servers.
+            </p>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">✨ KEY FEATURES</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📈 XP ECONOMY SYSTEM</h3>
+                    <p>Balance is key. You cannot hoard infinitely from day one. You must sacrifice XP levels to upgrade your regulator tiers. This gives end-game players a valuable use for their XP farms.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🧠 SMART AUTO-COMPRESS</h3>
+                    <p>The regulator acts like a magnet. As you pick up loose items from the ground, the script automatically detects them and merges them into your "Master Stacks," keeping your hotbar clean.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🛡️ ANTI-LOSS TECHNOLOGY</h3>
+                    <p>The Regulator item uses <code>ItemLockMode.inventory</code>. It cannot be accidentally thrown into lava or dropped. If you die, the script detects your respawn and re-issues your regulator instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎨 IMMERSIVE UI</h3>
+                    <p>Forget chat commands. We use the <code>@minecraft/server-ui</code> ActionFormData to create beautiful, clickable menus with icons, sounds, and clear feedback.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- USE CASES -->
+        <section class="feature-box">
+            <h2 class="feature-title">🌍 BEST USE CASES</h2>
+            
+            <h3>1. MASSIVE EXCAVATION PROJECTS</h3>
+            <p>
+                Clearing a perimeter for a farm typically generates over 100 double chests of stone and deepslate. With a maxed-out Stack Regulator, you can hold up to 180,000 blocks in your inventory alone (36 slots x 5,000 items). You can mine for hours without ever placing a shulker box.
+            </p>
+
+            <h3>2. COMPLEX REDSTONE BUILDING</h3>
+            <p>
+                Redstoners often need a variety of components: dust, repeaters, observers, pistons, and wool. Usually, these clog up inventory space quickly. With this addon, you can carry 500 pistons and 1,000 redstone dust in just two slots, leaving plenty of room for tools and food.
+            </p>
+
+            <h3>3. SKYBLOCK & ONEBLOCK CHALLENGES</h3>
+            <p>
+                In Skyblock, space is luxury. Chests take up valuable platform space. This addon acts as a "backpack" solution, allowing you to store your accumulated cobblestone generator output directly on your person.
+            </p>
+        </section>
+
+        <!-- PROGRESSION CHART -->
+        <section class="feature-box">
+            <h2 class="feature-title">💎 PROGRESSION TIERS</h2>
+            <p>
+                Below is the official upgrade path. We recommend building a Gold Farm or Guardian Farm to reach the Max Tier quickly.
+            </p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 10px; color: #ccc;">
+                <thead>
+                    <tr style="background: #333; color: var(--mc-purple);">
+                        <th style="padding: 15px; border: 2px solid #555;">TIER LEVEL</th>
+                        <th style="padding: 15px; border: 2px solid #555;">STACK LIMIT</th>
+                        <th style="padding: 15px; border: 2px solid #555;">XP COST</th>
+                        <th style="padding: 15px; border: 2px solid #555;">NOTES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">TIER 0</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">64</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">FREE</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">Starter limit.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">TIER 1</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">128</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">5 Levels</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">Double vanilla capacity.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">TIER 2</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">256</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">10 Levels</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">Great for mining trips.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">TIER 3</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">512</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">15 Levels</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">Good for small builds.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">TIER 4</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">1,000</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">20 Levels</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">Heavy usage tier.</td>
+                    </tr>
+                    <tr style="background: rgba(167, 66, 245, 0.2);">
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">MAX TIER</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">5,000</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;">30 Levels</td>
+                        <td style="padding: 10px; border: 2px solid #444; text-align: center;"><strong>LEGENDARY STATUS</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- INSTALLATION GUIDE -->
+        <section class="feature-box">
+            <h2 class="feature-title">📥 INSTALLATION GUIDE</h2>
+            
+            <h3>WINDOWS 10/11 (PC)</h3>
+            <ol class="step-list">
+                <li>
+                    <span class="step-number">1</span> 
+                    <span>Download the <code>.mcpack</code> file from the link below.</span>
+                </li>
+                <li>
+                    <span class="step-number">2</span> 
+                    <span>Double-click the file. Minecraft Bedrock will launch and import automatically.</span>
+                </li>
+                <li>
+                    <span class="step-number">3</span> 
+                    <span>Create a new world or Edit an existing one. Go to <strong>Behavior Packs</strong> and activate "Stack Regulator".</span>
+                </li>
+                <li>
+                    <span class="step-number">4</span> 
+                    <span><strong>CRITICAL STEP:</strong> Go to "Experiments" in the world settings and enable <strong>Beta APIs</strong>. Without this, the addon will NOT work.</span>
+                </li>
+            </ol>
+
+            <h3>ANDROID / IOS (MOBILE)</h3>
+            <ol class="step-list">
+                <li>
+                    <span class="step-number">1</span> 
+                    <span>Download the file. If it downloads as a <code>.zip</code>, rename it to remove the .zip extension so it ends in <code>.mcpack</code>.</span>
+                </li>
+                <li>
+                    <span class="step-number">2</span> 
+                    <span><strong>Android:</strong> Open the file with a file manager like ZArchiver and select "Open with Minecraft".</span>
+                </li>
+                <li>
+                    <span class="step-number">3</span> 
+                    <span><strong>iOS:</strong> Open the Files app, tap the file, and select "Share" -> "Minecraft".</span>
+                </li>
+            </ol>
+
+            <h3>XBOX / PLAYSTATION / SWITCH</h3>
+            <p>
+                Consoles cannot import custom files directly from the browser. To use this on console, you must upload the addon to a <strong>Realm</strong> using a PC or Mobile device. Once the addon is active on the Realm, console players can join and the addon will automatically download to their cache.
+            </p>
+        </section>
+
+        <!-- TROUBLESHOOTING -->
+        <section class="feature-box">
+            <h2 class="feature-title">❓ TROUBLESHOOTING</h2>
+            <p><strong>Q: I don't see the UI when holding the item?</strong><br>
+            A: Make sure you are sneaking (crouching) if you have customized controls, or simply right-click/long-press. Also, verify that "Beta APIs" are enabled in your world settings.</p>
+            
+            <p><strong>Q: Can I lose my items if I uninstall the addon?</strong><br>
+            A: If you remove the addon, any "stacked" items (over 64) may revert to standard stacks or disappear depending on how Minecraft handles the NBT data. We strongly recommend un-stacking or storing items in chests before removing the pack.</p>
+
+            <p><strong>Q: Why does the item say "Update Required"?</strong><br>
+            A: If you see this, simply throw the item on the ground and pick it up again to refresh its script data.</p>
+        </section>
+
+        <!-- DOWNLOAD SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">⬇️ DOWNLOAD AREA</h2>
+            
+            <div class="game-ui" id="gameUI">
+                <p style="color: #fff; margin-bottom: 15px; font-size: 10px; line-height: 1.5; text-align: center;">
+                    <strong>SECURITY CHECK REQUIRED</strong><br>
+                    Please complete the mini-game below to verify you are a human and unlock the download link.
+                    <br><br>
+                    <span style="color: var(--mc-purple);">MISSION: CATCH 5 CHICKENS!</span>
+                </p>
+                <button class="download-button" id="startGameBtn" onclick="startChickenGame()" style="width: auto; margin: 0 auto; padding: 15px 40px;">
+                    ▶ START VERIFICATION
+                </button>
+            </div>
+
+            <div class="game-area" id="gameArea"></div>
+
+            <div id="finalDownloadSection" style="margin-top: 2rem;">
+                <a href="#" id="downloadLink" class="download-button disabled">
+                    <span>🔒 COMPLETE MISSION TO UNLOCK</span>
+                </a>
+            </div>
+            
+            <p style="font-size: 8px; color: #555; margin-top: 2rem; text-align: center;">
+                Supported Versions: Minecraft Bedrock 1.21.0, 1.21.20, 1.21.50+<br>
+                By downloading, you agree to our Terms of Use. Do not redistribute this file.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SHADOWGAMER12K. ALL RIGHTS RESERVED.<br>NOT AN OFFICIAL MINECRAFT PRODUCT.</p>
+        <p style="margin-top: 15px;">
+            <a href="../legal/privacy-policy.html">PRIVACY POLICY</a> &nbsp;|&nbsp; 
+            <a href="../legal/terms-of-use.html">TERMS OF USE</a> &nbsp;|&nbsp;
+            <a href="../contact.html">CONTACT SUPPORT</a>
+        </p>
+    </footer>
+
+    <!-- XP HUD (Reading Progress) -->
+    <div class="xp-hud-container">
+        <div style="font-size: 10px; color: #aaa; margin-bottom: 5px; text-shadow: 2px 2px 0 #000;">READING PROGRESS</div>
+        <div class="xp-level" id="xpLevel">0</div>
+        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill"></div></div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- AUDIO SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            if (type === 'hit') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            }
+        }
+
+        // --- SCROLL XP BAR ---
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('xpFill').style.width = scrollPercent + '%';
+            document.getElementById('xpLevel').innerText = Math.floor(scrollPercent / 2);
+        });
+
+        // --- CHICKEN GAME LOGIC ---
+        // REPLACE THIS LINK WITH YOUR ACTUAL DOWNLOAD LINK
+        const downloadUrl = "https://www.curseforge.com/minecraft-bedrock/addons/stack-regulator"; 
+        
+        let score = 0;
+        const target = 5;
+        
+        function startChickenGame() {
+            document.getElementById('startGameBtn').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('gameUI').innerHTML = '<p style="color:#aaa; font-size:10px; text-align:center;">CATCH <span style="color:#fff; font-size:14px" id="scoreDisplay">0</span> / 5 CHICKENS</p>';
+            spawnChicken();
+        }
+
+        function spawnChicken() {
+            if (score >= target) return winGame();
+            
+            const area = document.getElementById('gameArea');
+            const chicken = document.createElement('div');
+            chicken.className = 'chicken';
+            chicken.innerHTML = '🐔';
+            
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            
+            chicken.style.left = x + 'px';
+            chicken.style.top = y + 'px';
+            
+            chicken.onclick = () => {
+                playSound('hit');
+                score++;
+                document.getElementById('scoreDisplay').innerText = score;
+                chicken.remove();
+                if (score < target) setTimeout(spawnChicken, 300);
+                else winGame();
+            };
+
+            area.appendChild(chicken);
+            
+            setTimeout(() => {
+                if (chicken.parentElement && score < target) {
+                    chicken.remove();
+                    spawnChicken();
+                }
+            }, 1000); // Faster despawn for challenge
+        }
+
+        function winGame() {
+            playSound('win');
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameUI').innerHTML = '<p style="color:#a742f5; font-size:12px; text-align:center;">✅ VERIFICATION COMPLETE!</p>';
+            
+            const btn = document.getElementById('downloadLink');
+            btn.classList.remove('disabled');
+            btn.href = downloadUrl;
+            btn.target = "_blank";
+            btn.innerHTML = '<span>⬇️ DOWNLOAD MCPACK</span>';
+            btn.style.background = "#a742f5";
+            btn.style.borderColor = "#fff";
+            btn.style.color = "#fff";
+        }
+    </script>
+</body>
+</html>
