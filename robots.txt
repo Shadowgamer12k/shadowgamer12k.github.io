@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /private/
 Allow: /
+Sitemap: https://shadowgamer12k.github.io/mysites.xml
