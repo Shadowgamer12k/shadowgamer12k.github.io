@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pocket Waypoint RS - Unlock Content</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    :root {
+      --mc-green: #55ff55;
+      --mc-border: #555;
+      --mc-bg: #2c2c2c;
+      --mc-bg-dark: #1a1a1a;
+      --mc-hover: #3a3a3a;
+    }
+
+    body {
+      background: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
+        linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+      background-size: 40px 40px, 100% 100%;
+      background-position: 0 0, 0 0;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, auto;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: var(--mc-bg);
+      border: 4px solid var(--mc-border);
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
+      padding: 0;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 25px;
+      text-align: center;
+      border-bottom: 3px solid var(--mc-border);
+    }
+
+    h1 {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      margin: 0 0 20px 0;
+      line-height: 1.4;
+      color: var(--mc-green);
+      text-shadow: 2px 2px 0px #000;
+    }
+
+    .subtitle {
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      line-height: 1.6;
+      margin: 0;
+      color: #aaa;
+    }
+
+    .main-content {
+      padding: 30px 25px;
+    }
+
+    .download-btn {
+      background: var(--mc-green);
+      border: 3px solid #000;
+      color: #000;
+      padding: 18px 25px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.6rem, 2vw, 0.9rem);
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      transition: all 0.2s;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .download-btn:hover {
+      background: #44dd44;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 #000, 0 0 15px var(--mc-green);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .progress-section {
+      margin-bottom: 25px;
+    }
+
+    .progress-label {
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .unlock-btn {
+      background: var(--mc-hover);
+      border: 3px solid var(--mc-border);
+      color: #666;
+      padding: 15px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      width: 100%;
+      cursor: not-allowed;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .unlock-btn.active {
+      background: var(--mc-green);
+      color: #000;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, pointer;
+      font-weight: bold;
+      border-color: #000;
+    }
+
+    .unlock-btn.active:hover {
+      background: #44dd44;
+      box-shadow: 0 0 15px var(--mc-green);
+    }
+
+    .support-text {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--mc-border);
+      padding: 15px;
+      font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      color: #ccc;
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.5);
+      border-top: 2px solid var(--mc-border);
+      padding: 15px;
+      font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #aaa;
+    }
+
+    .task-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .task-item {
+      background: var(--mc-hover);
+      border: 3px solid var(--mc-border);
+      padding: 15px;
+      text-align: center;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .task-item:hover:not(.completed) {
+      background: #4a4a4a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 var(--mc-border);
+    }
+
+    .task-item.completed {
+      background: var(--mc-green);
+      color: #000;
+      cursor: default;
+      border-color: #000;
+    }
+
+    .task-item.visiting {
+      background: #ffaa00;
+      color: #000;
+    }
+
+    .task-title {
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .task-item.completed .task-title,
+    .task-item.visiting .task-title {
+      color: #000;
+    }
+
+    .task-status {
+      font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+      color: #aaa;
+    }
+
+    .task-item.completed .task-status {
+      color: #000;
+      font-weight: bold;
+    }
+
+    .task-item.visiting .task-status {
+      color: #000;
+    }
+
+    .task-timer {
+      font-size: clamp(0.6rem, 1.8vw, 0.75rem);
+      color: #ff0000;
+      margin-top: 8px;
+      display: none;
+      font-weight: bold;
+    }
+
+    .spinner {
+      border: 4px solid var(--mc-border);
+      border-top: 4px solid var(--mc-green);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .redirect-message {
+      text-align: center;
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      margin-top: 15px;
+      display: none;
+      color: var(--mc-green);
+    }
+
+    @media (max-width: 600px) {
+      .task-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Redirect Page :P</h1>
+      <p class="subtitle">Complete the actions and unlock the link</p>
+    </div>
+
+    <div class="main-content">
+      <div class="progress-section">
+        <div class="progress-label">UNLOCK PROGRESS: <span id="progress">0/4</span></div>
+      </div>
+
+      <div class="task-list">
+        <div class="task-item" id="task1">
+          <div class="task-title">TASK 1</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task2">
+          <div class="task-title">TASK 2</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task3">
+          <div class="task-title">TASK 3</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+        <div class="task-item" id="task4">
+          <div class="task-title">TASK 4</div>
+          <div class="task-status">Click to Start</div>
+          <div class="task-timer"></div>
+        </div>
+      </div>
+
+      <button class="unlock-btn" id="unlock-btn">Unlock Content</button>
+
+      <div class="support-text">
+        Thank you for downloading my add-on! If you encounter any bugs, issues, or have suggestions for improvement, feel free to reach out through the comments or on my official Discord channel.
+      </div>
+
+      <div class="spinner" id="spinner"></div>
+      <div class="redirect-message" id="redirect-msg"></div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
+
+    const sponsorUrls = {
+      task1: "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
+      task2: "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
+      task3: "https://www.revenuecpmgate.com/xhg20zjs?key=79e1f892607755701946ec162e28dc38",
+      task4: "https://www.revenuecpmgate.com/gjbghcxct3?key=696152caa0a543d7be8acab991206485"
+    };
+
+    let completedCount = 0;
+    const totalTasks = 4;
+    const unlockBtn = document.getElementById("unlock-btn");
+    const progressSpan = document.getElementById("progress");
+
+    document.querySelectorAll(".task-item").forEach(task => {
+      task.addEventListener("click", function() {
+        if (this.classList.contains("completed") || this.classList.contains("visiting")) return;
+
+        const taskId = this.id;
+        const url = sponsorUrls[taskId];
+        const statusEl = this.querySelector(".task-status");
+        const timerEl = this.querySelector(".task-timer");
+
+        this.classList.add("visiting");
+        statusEl.textContent = "Visiting...";
+        timerEl.style.display = "block";
+
+        window.open(url, "_blank");
+
+        let timeLeft = 5;
+        timerEl.textContent = `${timeLeft}s`;
+
+        const timer = setInterval(() => {
+          timeLeft--;
+          timerEl.textContent = `${timeLeft}s`;
+          
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            completeTask(this, timerEl, statusEl);
+          }
+        }, 1000);
+      });
+    });
+
+    function completeTask(taskEl, timerEl, statusEl) {
+      taskEl.classList.remove("visiting");
+      taskEl.classList.add("completed");
+      timerEl.style.display = "none";
+      statusEl.innerHTML = "<i class='fas fa-check'></i> Completed";
+      
+      completedCount++;
+      progressSpan.textContent = `${completedCount}/${totalTasks}`;
+
+      if (completedCount === totalTasks) {
+        unlockBtn.classList.add("active");
+        unlockBtn.disabled = false;
+        unlockBtn.style.cursor = "pointer";
+      }
+    }
+
+    unlockBtn.addEventListener("click", function() {
+      if (!this.classList.contains("active")) return;
+
+      document.querySelector(".task-list").style.display = "none";
+      this.style.display = "none";
+      document.querySelector(".support-text").style.display = "none";
+      document.getElementById("spinner").style.display = "block";
+      
+      const redirectMsg = document.getElementById("redirect-msg");
+      redirectMsg.style.display = "block";
+
+      let countdown = 3;
+      redirectMsg.textContent = `Redirecting in ${countdown}s...`;
+
+      const redirectTimer = setInterval(() => {
+        countdown--;
+        redirectMsg.textContent = `Redirecting in ${countdown}s...`;
+        
+        if (countdown <= 0) {
+          clearInterval(redirectTimer);
+          window.location.href = targetURL;
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
