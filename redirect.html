@@ -29,10 +29,10 @@
       padding: 20px;
       min-height: 100vh;
       display: flex;
-      flex-direction: column; /* Changed to column to stack Ad + Container */
+      flex-direction: column; 
       align-items: center;
       justify-content: center;
-      gap: 20px; /* Space between ad and container */
+      gap: 20px; 
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, auto;
     }
 
@@ -69,36 +69,6 @@
 
     .main-content {
       padding: 30px 25px;
-    }
-
-    .download-btn {
-      background: var(--mc-green);
-      border: 3px solid #000;
-      color: #000;
-      padding: 18px 25px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(0.6rem, 2vw, 0.9rem);
-      cursor: pointer;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      transition: all 0.2s;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-
-    .download-btn:hover {
-      background: #44dd44;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 0 #000, 0 0 15px var(--mc-green);
-    }
-
-    .download-btn:active {
-      transform: translateY(0);
-      box-shadow: none;
     }
 
     .progress-section {
@@ -147,19 +117,6 @@
       color: #ccc;
     }
 
-    .footer {
-      background: rgba(0, 0, 0, 0.5);
-      border-top: 2px solid var(--mc-border);
-      padding: 15px;
-      font-size: clamp(0.5rem, 1.5vw, 0.6rem);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      color: #aaa;
-    }
-
     .task-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -167,6 +124,7 @@
       margin-bottom: 25px;
     }
 
+    /* UPDATED: Task Items are now <a> tags */
     .task-item {
       background: var(--mc-hover);
       border: 3px solid var(--mc-border);
@@ -175,6 +133,8 @@
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, pointer;
       transition: all 0.2s;
       position: relative;
+      text-decoration: none; /* Removes underline for <a> links */
+      display: block; /* Ensures they behave like boxes */
     }
 
     .task-item:hover:not(.completed) {
@@ -252,15 +212,13 @@
       color: var(--mc-green);
     }
 
-    /* Adsterra Header Banner Styling */
     .adsterra-header {
       width: 100%;
       text-align: center;
       margin-bottom: 10px;
-      overflow: hidden; /* Prevents scrollbars on small screens if ad is wide */
+      overflow: hidden; 
     }
 
-    /* Adsterra Native Banner Wrapper */
     .adsterra-native-wrapper {
       margin: 20px 0;
       padding: 10px;
@@ -272,11 +230,6 @@
     @media (max-width: 600px) {
       .task-list {
         grid-template-columns: 1fr;
-      }
-      
-      .footer {
-        flex-direction: column;
-        text-align: center;
       }
     }
   </style>
@@ -308,26 +261,26 @@
       </div>
 
       <div class="task-list">
-        <div class="task-item" id="task1">
+        <a class="task-item" id="task1" href="https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f" target="_blank">
           <div class="task-title">TASK 1</div>
           <div class="task-status">Click to Start</div>
           <div class="task-timer"></div>
-        </div>
-        <div class="task-item" id="task2">
+        </a>
+        <a class="task-item" id="task2" href="https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee" target="_blank">
           <div class="task-title">TASK 2</div>
           <div class="task-status">Click to Start</div>
           <div class="task-timer"></div>
-        </div>
-        <div class="task-item" id="task3">
+        </a>
+        <a class="task-item" id="task3" href="https://otieu.com/4/10287665" target="_blank">
           <div class="task-title">TASK 3</div>
           <div class="task-status">Click to Start</div>
           <div class="task-timer"></div>
-        </div>
-        <div class="task-item" id="task4">
+        </a>
+        <a class="task-item" id="task4" href="https://otieu.com/4/10287664" target="_blank">
           <div class="task-title">TASK 4</div>
           <div class="task-status">Click to Start</div>
           <div class="task-timer"></div>
-        </div>
+        </a>
       </div>
 
       <div class="adsterra-native-wrapper">
@@ -350,24 +303,24 @@
     const params = new URLSearchParams(window.location.search);
     const targetURL = params.get("url") ? decodeURIComponent(params.get("url")) : "https://example.com";
 
-    const sponsorUrls = {
-      task1: "https://www.revenuecpmgate.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f",
-      task2: "https://www.revenuecpmgate.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee",
-      task3: "https://otieu.com/4/10287665",
-      task4: "https://otieu.com/4/10287664"
-    };
-
+    // URLs are now in HTML href attributes, so we don't need the JS object here.
+    
     let completedCount = 0;
     const totalTasks = 4;
     const unlockBtn = document.getElementById("unlock-btn");
     const progressSpan = document.getElementById("progress");
 
     document.querySelectorAll(".task-item").forEach(task => {
-      task.addEventListener("click", function() {
-        if (this.classList.contains("completed") || this.classList.contains("visiting")) return;
+      task.addEventListener("click", function(e) {
+        // If task is already done, prevent opening the link again
+        if (this.classList.contains("completed") || this.classList.contains("visiting")) {
+          e.preventDefault();
+          return;
+        }
 
-        const taskId = this.id;
-        const url = sponsorUrls[taskId];
+        // We DO NOT preventDefault() here. We let the HTML <a> tag open the window.
+        // This ensures the link works even if PopAds logic interferes.
+
         const statusEl = this.querySelector(".task-status");
         const timerEl = this.querySelector(".task-timer");
 
@@ -375,8 +328,7 @@
         statusEl.textContent = "Visiting...";
         timerEl.style.display = "block";
 
-        window.open(url, "_blank");
-
+        // Logic to complete the task after delay
         let timeLeft = 5;
         timerEl.textContent = `${timeLeft}s`;
 
@@ -414,7 +366,6 @@
       document.querySelector(".task-list").style.display = "none";
       this.style.display = "none";
       document.querySelector(".support-text").style.display = "none";
-      // Hide ads during redirect spinner
       document.querySelector(".adsterra-native-wrapper").style.display = "none";
       
       document.getElementById("spinner").style.display = "block";
