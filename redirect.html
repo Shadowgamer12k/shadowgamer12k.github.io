@@ -29,8 +29,10 @@
       padding: 20px;
       min-height: 100vh;
       display: flex;
+      flex-direction: column; /* Changed to column to stack Ad + Container */
       align-items: center;
       justify-content: center;
+      gap: 20px; /* Space between ad and container */
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, auto;
     }
 
@@ -250,6 +252,23 @@
       color: var(--mc-green);
     }
 
+    /* Adsterra Header Banner Styling */
+    .adsterra-header {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+      overflow: hidden; /* Prevents scrollbars on small screens if ad is wide */
+    }
+
+    /* Adsterra Native Banner Wrapper */
+    .adsterra-native-wrapper {
+      margin: 20px 0;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 2px solid var(--mc-border);
+      border-radius: 4px;
+    }
+
     @media (max-width: 600px) {
       .task-list {
         grid-template-columns: 1fr;
@@ -263,6 +282,21 @@
   </style>
 </head>
 <body>
+  
+  <!-- ADSTERRA HEADER 728x90 (Placed above container) -->
+  <div class="adsterra-header">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '1c052379eaa4f622ad59cae13d01ed4f',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
+  </div>
+
   <div class="container">
     <div class="header">
       <h1>Redirect Page :P</h1>
@@ -295,6 +329,12 @@
           <div class="task-status">Click to Start</div>
           <div class="task-timer"></div>
         </div>
+      </div>
+
+      <!-- ADSTERRA NATIVE BANNER (Placed strategically before unlock) -->
+      <div class="adsterra-native-wrapper">
+        <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+        <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
       </div>
 
       <button class="unlock-btn" id="unlock-btn">Unlock Content</button>
@@ -376,6 +416,9 @@
       document.querySelector(".task-list").style.display = "none";
       this.style.display = "none";
       document.querySelector(".support-text").style.display = "none";
+      // Hide ads during redirect spinner
+      document.querySelector(".adsterra-native-wrapper").style.display = "none";
+      
       document.getElementById("spinner").style.display = "block";
       
       const redirectMsg = document.getElementById("redirect-msg");
@@ -395,5 +438,8 @@
       }, 1000);
     });
   </script>
+
+  <!-- ADSTERRA SOCIAL BAR -->
+  <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 </body>
 </html>
