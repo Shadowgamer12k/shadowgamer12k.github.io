@@ -36,11 +36,14 @@
       font-family: 'Changa', sans-serif;
       margin: 0;
       padding: 20px;
+      /* مساحة إضافية في الأسفل للإعلان اللاصق */
+      padding-bottom: 80px; 
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      overflow-x: hidden;
     }
 
     .container {
@@ -52,6 +55,8 @@
       padding: 25px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       text-align: center;
+      position: relative;
+      z-index: 10;
     }
 
     h1 {
@@ -72,6 +77,41 @@
       align-items: center;
       overflow: hidden;
       border-radius: 5px;
+    }
+
+    /* تنسيق الإعلانات الجانبية (Skyscraper) */
+    .sidebar-ad {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 160px;
+        height: 600px;
+        background: rgba(0,0,0,0.5);
+        border: 1px dashed #444;
+        display: none; /* مخفي في الموبايل */
+        z-index: 5;
+    }
+    .left-ad { left: 10px; }
+    .right-ad { right: 10px; }
+
+    /* إظهار الإعلانات الجانبية فقط في الشاشات الكبيرة */
+    @media (min-width: 1200px) {
+        .sidebar-ad { display: flex; justify-content: center; align-items: center; }
+    }
+
+    /* تنسيق الإعلان اللاصق في الأسفل */
+    .sticky-ad {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #1a1a1a;
+        border-top: 2px solid var(--primary-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
     }
 
     /* منطقة المهمة */
@@ -156,6 +196,34 @@
 </head>
 <body>
 
+  <!-- إعلان جانبي أيسر (Desktop Only) -->
+  <div class="sidebar-ad left-ad">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '3517ae94fe615ed9633556c88eb04159',
+          'format' : 'iframe',
+          'height' : 600,
+          'width' : 160,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
+  </div>
+
+  <!-- إعلان جانبي أيمن (Desktop Only) -->
+  <div class="sidebar-ad right-ad">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '3517ae94fe615ed9633556c88eb04159',
+          'format' : 'iframe',
+          'height' : 600,
+          'width' : 160,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
+  </div>
+
   <!-- 3. إعلان بانر علوي (728x90) - Adsterra -->
   <div class="ad-box" style="min-height: 90px; max-width: 728px;">
     <script type="text/javascript">
@@ -200,9 +268,22 @@
     <button id="next-btn" class="next-btn" onclick="goToDestination()" disabled>🔒 الذهاب للرابط</button>
   </div>
 
+  <!-- إعلان لاصق في الأسفل (Sticky Footer) -->
+  <div class="sticky-ad">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '4eafad161c10f4a7fe31aa232d51ec8b',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/4eafad161c10f4a7fe31aa232d51ec8b/invoke.js"></script>
+  </div>
+
   <script>
     // 5. الرابط المباشر (Smartlink) المستخدم في هذه الخطوة
-    // (تم استخدام نفس الرابط الخاص بالخطوة 3 لعدم توفر رابط جديد للخطوة 4، يمكنك تغييره هنا)
     const adsterraLink = "https://www.effectivegatecpm.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee";
 
     // الحصول على رابط التحميل الأصلي (الوجهة النهائية)
