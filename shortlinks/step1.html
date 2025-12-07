@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 1/4 - رابط آمن</title>
   
-  <!-- ADSTERRA POPUNDER -->
+  <!-- ADSTERRA POPUNDER (1) -->
   <script type="text/javascript" src="//pl25775232.effectivegatecpm.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"></script>
 
-  <!-- ADSTERRA SOCIAL BAR -->
+  <!-- ADSTERRA SOCIAL BAR (2) -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
   
   <style>
@@ -46,7 +46,7 @@
     .sidebar-ad { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: rgba(0,0,0,0.5); border: 1px dashed #444; display: none; z-index: 5; }
     .left-ad { left: 10px; } .right-ad { right: 10px; }
     
-    /* تعديل أماكن الإعلانات الجانبية لتتناسب مع الاتجاه العربي إذا لزم الأمر، لكن التموضع المطلق (fixed) يعمل جيداً عادة */
+    /* تعديل أماكن الإعلانات الجانبية لتتناسب مع الاتجاه العربي */
     @media (min-width: 1200px) { .sidebar-ad { display: flex; justify-content: center; align-items: center; } }
     
     .sticky-ad { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: #1a1a1a; border-top: 2px solid var(--mc-green); display: flex; justify-content: center; align-items: center; z-index: 1000; }
@@ -113,17 +113,17 @@
 </head>
 <body>
 
-  <!-- LEFT SKYSCRAPER -->
+  <!-- LEFT SKYSCRAPER (Adsterra 160x600) -->
   <div class="sidebar-ad left-ad">
       <script type="text/javascript"> atOptions = { 'key' : '3517ae94fe615ed9633556c88eb04159', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} }; </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
   </div>
-  <!-- RIGHT SKYSCRAPER -->
+  <!-- RIGHT SKYSCRAPER (Adsterra 160x600) -->
   <div class="sidebar-ad right-ad">
       <script type="text/javascript"> atOptions = { 'key' : '3517ae94fe615ed9633556c88eb04159', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} }; </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
   </div>
-  <!-- TOP BANNER -->
+  <!-- TOP BANNER (Adsterra 728x90) -->
   <div class="ad-box" style="width: 100%; max-width: 728px; min-height: 90px;">
       <script type="text/javascript"> atOptions = { 'key' : '1c052379eaa4f622ad59cae13d01ed4f', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} }; </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
@@ -132,7 +132,7 @@
   <div class="container">
       <h1>الخطوة 1 / 4</h1>
       
-      <!-- MIDDLE AD -->
+      <!-- MIDDLE AD (Adsterra 300x250) -->
       <div class="ad-box" style="width: 100%; min-height: 250px;">
           <script type="text/javascript"> atOptions = { 'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} }; </script>
           <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
@@ -142,13 +142,15 @@
       <div class="task-container">
           <p style="font-size:0.8rem; color:#ffaa00; margin-bottom:10px; font-weight:bold;">إجراء مطلوب</p>
           <p style="font-size:0.7rem; line-height:1.6;">يجب عليك التحقق من الرابط الآمن أدناه لفتح الخطوة التالية.</p>
+          <!-- This button triggers the Smartlink (Ad) -->
           <button id="task-btn" class="task-btn" onclick="unlockProcess()">[+] اضغط هنا لفحص الرابط</button>
       </div>
 
+      <!-- This button only redirects -->
       <button class="next-btn" id="next-btn" onclick="goToNext()" disabled>🔒 مقفل</button>
   </div>
 
-  <!-- STICKY FOOTER -->
+  <!-- STICKY FOOTER (Adsterra 320x50) -->
   <div class="sticky-ad">
       <script type="text/javascript"> atOptions = { 'key' : '4eafad161c10f4a7fe31aa232d51ec8b', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
       <script type="text/javascript" src="//www.highperformanceformat.com/4eafad161c10f4a7fe31aa232d51ec8b/invoke.js"></script>
@@ -156,6 +158,7 @@
 
   <script>
     const nextPageUrl = "step2.html";
+    // Smartlink attached to the SCAN/UNLOCK action
     const adsterraDirectLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
     
     const taskBtn = document.getElementById("task-btn");
@@ -164,7 +167,7 @@
     const finalUrl = params.get("url") || ""; 
 
     function unlockProcess() {
-        // 1. Open the Ad
+        // 1. Open the Ad (Smartlink) - This happens on the "SCAN" button click
         if (adsterraDirectLink) window.open(adsterraDirectLink, '_blank');
         
         // 2. Change Task Button Visuals
@@ -187,6 +190,7 @@
     }
 
     function goToNext() {
+        // This function ONLY redirects, does not open ad.
         if (!nextBtn.classList.contains("unlocked")) return;
         
         nextBtn.innerText = "جاري التحميل...";
