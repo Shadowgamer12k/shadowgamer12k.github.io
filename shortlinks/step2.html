@@ -3,202 +3,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الخطوة 2/4 - رابط آمن</title>
-  
-  <!-- ADSTERRA POPUNDER (1) -->
+  <title>الخطوة 2/4 - فحص الأمان</title>
+
+  <!-- 1. كود Popunder (إعلان الخلفية) - نفس الكود -->
   <script type="text/javascript" src="//pl25775232.effectivegatecpm.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"></script>
 
-  <!-- ADSTERRA SOCIAL BAR (2) -->
+  <!-- 2. كود Social Bar (إعلان الشريط الاجتماعي) - نفس الكود -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
-  
+
   <style>
-    /* استبدال الخط بخط Changa الداعم للعربية */
+    /* استيراد الخط العربي "Changa" */
     @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
 
     :root {
-      --mc-green: #55ff55;
-      --mc-border: #555;
-      --mc-bg: #2c2c2c;
-      --mc-hover: #3a3a3a;
-      --mc-alert: #ffaa00;
+      --primary-color: #55ff55;
+      --bg-color: #1a1a1a;
+      --card-bg: #252525;
+      --border-color: #444;
+      --text-color: #eee;
+      --alert-color: #ffaa00;
     }
 
     body {
-      background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
-      color: #fff;
-      font-family: 'Changa', sans-serif; /* استخدام الخط العربي */
-      margin: 0; padding: 20px; padding-bottom: 100px;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(#333 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--text-color);
+      font-family: 'Changa', sans-serif;
+      margin: 0;
+      padding: 20px;
       min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; gap: 20px;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
     .container {
-      width: 100%; max-width: 600px; background: var(--mc-bg);
-      border: 4px solid var(--mc-border); box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
-      text-align: center; padding: 20px; z-index: 10; position: relative;
+      width: 100%;
+      max-width: 600px;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      text-align: center;
     }
 
-    h1 { font-size: clamp(1rem, 3vw, 1.4rem); color: var(--mc-green); margin-bottom: 20px; border-bottom: 2px solid #555; padding-bottom: 10px; }
-    
-    .ad-box { background: rgba(0,0,0,0.2); border: 2px dashed #555; margin: 15px auto; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-    
-    .sidebar-ad { position: fixed; top: 50%; transform: translateY(-50%); width: 160px; height: 600px; background: rgba(0,0,0,0.5); border: 1px dashed #444; display: none; z-index: 5; }
-    .left-ad { left: 10px; } .right-ad { right: 10px; }
-    
-    /* تعديل أماكن الإعلانات الجانبية لتتناسب مع الاتجاه العربي */
-    @media (min-width: 1200px) { .sidebar-ad { display: flex; justify-content: center; align-items: center; } }
-    
-    .sticky-ad { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: #1a1a1a; border-top: 2px solid var(--mc-green); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-
-    /* UNLOCK TASK STYLES */
-    .task-container {
-        background: rgba(255, 170, 0, 0.1);
-        border: 2px solid var(--mc-alert);
-        padding: 15px;
-        margin: 20px 0;
-        border-radius: 5px;
+    h1 {
+      color: var(--primary-color);
+      margin-top: 0;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 15px;
+      font-size: 1.5rem;
     }
 
-    .task-btn {
-        background: var(--mc-alert);
-        color: #000;
-        border: 2px solid #fff;
-        padding: 12px;
-        font-family: 'Changa', sans-serif;
-        font-size: 0.9rem;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 10px;
-        animation: pulse 2s infinite;
+    /* تنسيق صناديق الإعلانات */
+    .ad-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed #555;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 5px;
+    }
+
+    /* منطقة المهمة */
+    .task-area {
+      background: rgba(255, 170, 0, 0.1);
+      border: 1px solid var(--alert-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .task-title {
+      color: var(--alert-color);
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    .task-desc {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+
+    /* زر الفحص */
+    .scan-btn {
+      background: var(--alert-color);
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      font-family: 'Changa', sans-serif;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+      animation: pulse 2s infinite;
+    }
+
+    .scan-btn:hover {
+      background: #ffcc00;
     }
 
     @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
-        70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(255, 170, 0, 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(255, 170, 0, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
     }
 
+    /* زر التالي */
     .next-btn {
-      background: #444;
-      border: 3px solid #666;
-      color: #888;
-      padding: 18px;
+      background: #333;
+      color: #777;
+      border: 2px solid #444;
+      padding: 15px;
       font-family: 'Changa', sans-serif;
-      font-size: 1rem;
       font-weight: bold;
-      width: 100%;
+      font-size: 1.1rem;
+      border-radius: 5px;
       cursor: not-allowed;
-      text-transform: uppercase;
-      margin-top: 15px;
-      opacity: 0.7;
+      width: 100%;
+      margin-top: 10px;
+      transition: 0.3s;
     }
 
     .next-btn.unlocked {
-      background: var(--mc-green);
+      background: var(--primary-color);
       color: #000;
+      border-color: #00aa00;
       cursor: pointer;
-      border-color: #000;
-      opacity: 1;
-      box-shadow: 0 4px 0 #004400;
+      box-shadow: 0 0 15px rgba(85, 255, 85, 0.4);
     }
 
     .next-btn.unlocked:hover {
       background: #44dd44;
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #004400;
+      transform: translateY(-2px);
     }
+
+    img, iframe { max-width: 100%; }
   </style>
 </head>
 <body>
 
-  <!-- LEFT SKYSCRAPER (Adsterra 160x600) -->
-  <div class="sidebar-ad left-ad">
-      <script type="text/javascript"> atOptions = { 'key' : '3517ae94fe615ed9633556c88eb04159', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} }; </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
-  </div>
-  <!-- RIGHT SKYSCRAPER (Adsterra 160x600) -->
-  <div class="sidebar-ad right-ad">
-      <script type="text/javascript"> atOptions = { 'key' : '3517ae94fe615ed9633556c88eb04159', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} }; </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
-  </div>
-  <!-- TOP BANNER (Adsterra 728x90) -->
-  <div class="ad-box" style="width: 100%; max-width: 728px; min-height: 90px;">
-      <script type="text/javascript"> atOptions = { 'key' : '1c052379eaa4f622ad59cae13d01ed4f', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} }; </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
+  <!-- 3. إعلان بانر علوي (728x90) - نفس الكود -->
+  <div class="ad-box" style="min-height: 90px; max-width: 728px;">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '1c052379eaa4f622ad59cae13d01ed4f',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
   </div>
 
   <div class="container">
-      <h1>الخطوة 2 / 4</h1>
+    <h1>الخطوة 2 من 4</h1>
+
+    <!-- 4. إعلان وسط الصفحة (300x250) - نفس الكود -->
+    <div class="ad-box" style="min-height: 250px; max-width: 300px;">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+    </div>
+
+    <!-- استراتيجية فتح الرابط -->
+    <div class="task-area">
+      <div class="task-title">⚠️ تأكيد المتابعة</div>
+      <div class="task-desc">اضغط على الزر أدناه لتأكيد أنك لست برنامج روبوت وللمتابعة.</div>
       
-      <!-- MIDDLE AD (Adsterra 300x250) -->
-      <div class="ad-box" style="width: 100%; min-height: 250px;">
-          <script type="text/javascript"> atOptions = { 'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} }; </script>
-          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
-      </div>
+      <!-- 5. الزر يفتح الرابط الجديد (Smartlink) -->
+      <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا للمتابعة ]</button>
+    </div>
 
-      <!-- THE UNLOCK STRATEGY -->
-      <div class="task-container">
-          <p style="font-size:0.8rem; color:#ffaa00; margin-bottom:10px; font-weight:bold;">تحقق بشري</p>
-          <p style="font-size:0.7rem; line-height:1.6;">اضغط على الزر أدناه لإثبات أنك لست روبوت.</p>
-          <!-- This button triggers the Smartlink (Ad) -->
-          <button id="task-btn" class="task-btn" onclick="unlockProcess()">[+] اضغط هنا للتحقق</button>
-      </div>
-
-      <!-- This button only redirects -->
-      <button class="next-btn" id="next-btn" onclick="goToNext()" disabled>🔒 مقفل</button>
-  </div>
-
-  <!-- STICKY FOOTER (Adsterra 320x50) -->
-  <div class="sticky-ad">
-      <script type="text/javascript"> atOptions = { 'key' : '4eafad161c10f4a7fe31aa232d51ec8b', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} }; </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/4eafad161c10f4a7fe31aa232d51ec8b/invoke.js"></script>
+    <!-- زر الانتقال للخطوة التالية -->
+    <button id="next-btn" class="next-btn" onclick="goToStep3()" disabled>🔒 الرابط مقفل</button>
   </div>
 
   <script>
-    const nextPageUrl = "step3.html";
-    // Smartlink attached to the SCAN/UNLOCK action
-    const adsterraDirectLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
+    // إعدادات الصفحة
+    const nextPage = "step3.html"; // التوجيه إلى الخطوة الثالثة
     
-    const taskBtn = document.getElementById("task-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const params = new URLSearchParams(window.location.search);
-    const finalUrl = params.get("url") || ""; 
+    // 5. الرابط المباشر الجديد (Smartlink) لهذه الخطوة
+    const adsterraLink = "https://www.effectivegatecpm.com/nwndqjfkd6?key=834f031e34afbd2dcf6c1d89594e5d3f";
 
-    function unlockProcess() {
-        // 1. Open the Ad (Smartlink) - This happens on the "SCAN" button click
-        if (adsterraDirectLink) window.open(adsterraDirectLink, '_blank');
+    // الحصول على رابط التحميل الأصلي
+    const urlParams = new URLSearchParams(window.location.search);
+    const destinationUrl = urlParams.get('url') || "";
+
+    const scanBtn = document.getElementById('scan-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    function startScan() {
+      // 1. فتح الإعلان
+      if(adsterraLink) {
+        window.open(adsterraLink, '_blank');
+      }
+
+      // 2. تغيير شكل الزر
+      scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+      scanBtn.style.backgroundColor = '#555';
+      scanBtn.style.color = '#fff';
+      scanBtn.style.animation = 'none';
+      scanBtn.disabled = true;
+
+      // 3. الانتظار ثم الفتح
+      setTimeout(() => {
+        scanBtn.innerHTML = '✅ تم التأكيد';
+        scanBtn.style.backgroundColor = 'transparent';
+        scanBtn.style.color = '#55ff55';
+        scanBtn.style.border = '1px solid #55ff55';
         
-        // 2. Change Task Button Visuals
-        taskBtn.innerText = "جاري التحقق...";
-        taskBtn.style.animation = "none";
-        taskBtn.style.backgroundColor = "#555";
-        taskBtn.style.color = "#fff";
-        taskBtn.disabled = true;
-
-        // 3. Wait 2 seconds then unlock Next Button
-        setTimeout(() => {
-            taskBtn.innerText = "✅ تم التحقق";
-            taskBtn.style.backgroundColor = "#55ff55";
-            taskBtn.style.color = "#000";
-            
-            nextBtn.disabled = false;
-            nextBtn.classList.add("unlocked");
-            nextBtn.innerText = "الخطوة التالية >>";
-        }, 2000);
+        // تفعيل زر التالي
+        nextBtn.disabled = false;
+        nextBtn.classList.add('unlocked');
+        nextBtn.innerHTML = 'الخطوة التالية >>';
+      }, 2500); 
     }
 
-    function goToNext() {
-        // This function ONLY redirects, does not open ad.
-        if (!nextBtn.classList.contains("unlocked")) return;
-        
-        nextBtn.innerText = "جاري التحميل...";
-        setTimeout(() => {
-            const dest = finalUrl ? `${nextPageUrl}?url=${encodeURIComponent(finalUrl)}` : nextPageUrl;
-            window.location.href = dest;
-        }, 500);
+    function goToStep3() {
+      if(!nextBtn.classList.contains('unlocked')) return;
+
+      nextBtn.innerHTML = 'جاري التوجيه...';
+      
+      setTimeout(() => {
+        if(destinationUrl) {
+          window.location.href = nextPage + "?url=" + encodeURIComponent(destinationUrl);
+        } else {
+          window.location.href = nextPage;
+        }
+      }, 500);
     }
   </script>
+
 </body>
 </html>
