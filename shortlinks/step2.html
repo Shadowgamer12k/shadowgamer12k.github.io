@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الخطوة 2/4 - فحص الأمان</title>
+  <title>الخطوة 2/4 - فحص الأمان (محتوى آمن)</title>
 
+  <!-- 1. كود Popunder الآمن (Adsterra) -->
+  <script type="text/javascript" src="//pl25775232.effectivegatecpm.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"></script>
 
-
-  <!-- 8. كود Social Bar -->
+  <!-- 2. كود Social Bar -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 
   <style>
+    /* استيراد الخط العربي "Changa" */
     @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
 
     :root {
@@ -30,7 +32,6 @@
       font-family: 'Changa', sans-serif;
       margin: 0;
       padding: 20px;
-      padding-bottom: 120px; /* مساحة للإعلان اللاصق */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -70,40 +71,9 @@
       align-items: center;
       overflow: hidden;
       border-radius: 5px;
-    }
-
-    /* إعلانات الجوانب (Skyscrapers) */
-    .sidebar-ad {
-        position: fixed;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.5);
-        border: 1px dashed #444;
-        display: none;
-        z-index: 5;
-        justify-content: center;
-        align-items: center;
-    }
-    .right-ad { right: 10px; width: 160px; height: 600px; } /* كود 3 */
-    .left-ad { left: 10px; width: 160px; height: 300px; }  /* كود 4 */
-
-    @media (min-width: 1300px) {
-        .sidebar-ad { display: flex; }
-    }
-
-    /* الإعلان اللاصق */
-    .sticky-ad {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        background: #1a1a1a;
-        border-top: 2px solid var(--primary-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
+      /* تم تحديد الحد الأقصى للعرض ليكون متجاوباً */
+      width: 100%;
+      max-width: 728px; 
     }
 
     /* منطقة المهمة */
@@ -138,14 +108,6 @@
       animation: pulse 2s infinite;
     }
 
-    .scan-btn:hover { background: #ffcc00; }
-
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
-      70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(255, 170, 0, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
-    }
-
     .next-btn {
       background: #333;
       color: #777;
@@ -168,45 +130,12 @@
       cursor: pointer;
       box-shadow: 0 0 15px rgba(85, 255, 85, 0.4);
     }
-
-    .next-btn.unlocked:hover {
-      background: #44dd44;
-      transform: translateY(-2px);
-    }
   </style>
 </head>
 <body>
 
-  <!-- 3. إعلان جانبي أيمن (160x600) -->
-  <div class="sidebar-ad right-ad">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '3517ae94fe615ed9633556c88eb04159',
-        'format' : 'iframe',
-        'height' : 600,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
-  </div>
-
-  <!-- 4. إعلان جانبي أيسر (160x300) -->
-  <div class="sidebar-ad left-ad">
-    <script type="text/javascript">
-      atOptions = {
-        'key' : '42385376ebb95a07df235585974478e3',
-        'format' : 'iframe',
-        'height' : 300,
-        'width' : 160,
-        'params' : {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/42385376ebb95a07df235585974478e3/invoke.js"></script>
-  </div>
-
-  <!-- 2. إعلان بانر علوي (728x90) -->
-  <div class="ad-box" style="min-height: 90px; max-width: 728px;">
+  <!-- 3. إعلان بانر علوي (728x90) -->
+  <div class="ad-box" style="min-height: 90px;">
     <script type="text/javascript">
       atOptions = {
         'key' : '1c052379eaa4f622ad59cae13d01ed4f',
@@ -222,21 +151,7 @@
   <div class="container">
     <h1>الخطوة 2 من 4</h1>
 
-    <!-- 5. إعلان بانر صغير (468x60) -->
-    <div class="ad-box" style="min-height: 60px; max-width: 468px;">
-        <script type="text/javascript">
-          atOptions = {
-            'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
-            'format' : 'iframe',
-            'height' : 60,
-            'width' : 468,
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
-    </div>
-
-    <!-- 1. إعلان وسط الصفحة (300x250) -->
+    <!-- 4. إعلان وسط الصفحة (300x250) -->
     <div class="ad-box" style="min-height: 250px; max-width: 300px;">
       <script type="text/javascript">
         atOptions = {
@@ -254,36 +169,38 @@
     <div class="task-area">
       <div class="task-title">⚠️ تأكيد المتابعة</div>
       <div class="task-desc">اضغط على الزر أدناه لتأكيد أنك لست برنامج روبوت وللمتابعة.</div>
+      
+      <!-- 7. الزر يفتح الرابط المباشر (Smartlink) -->
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا للمتابعة ]</button>
     </div>
 
-    <!-- 10. إعلان Native Banner (أسفل الزر) -->
-    <div class="ad-box" style="width: 100%; border: none; background: transparent;">
-        <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
-        <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+    <!-- 5. إعلان بانر صغير (468x60) -->
+    <div class="ad-box" style="min-height: 60px; max-width: 468px;">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
     </div>
-
+    
     <button id="next-btn" class="next-btn" onclick="goToStep3()" disabled>🔒 الرابط مقفل</button>
   </div>
 
-  <!-- 9. إعلان لاصق في الأسفل (320x50) -->
-  <div class="sticky-ad">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '4eafad161c10f4a7fe31aa232d51ec8b',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/4eafad161c10f4a7fe31aa232d51ec8b/invoke.js"></script>
+  <!-- 10. إعلان Native Banner (خارج الصندوق الرئيسي) -->
+  <div class="ad-box" style="min-height: 250px; max-width: 300px; margin-top: 30px;">
+      <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+      <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
   </div>
 
   <script>
     const nextPage = "step3.html";
     
-    // 7. الرابط المباشر (Smartlink)
+    // 7. الرابط المباشر (Smartlink) - استخدم نفس الرابط
     const adsterraLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -293,12 +210,12 @@
     const nextBtn = document.getElementById('next-btn');
 
     function startScan() {
-      // فتح Smartlink عند الضغط
+      // 1. فتح Smartlink عند الضغط
       if(adsterraLink) {
         window.open(adsterraLink, '_blank');
       }
 
-      scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+      scanBtn.innerHTML = 'جاري التحقق...';
       scanBtn.style.backgroundColor = '#555';
       scanBtn.style.color = '#fff';
       scanBtn.style.animation = 'none';
