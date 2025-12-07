@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 4/4 - الرابط جاهز</title>
 
-  <!-- 1. كود PopAds (الجديد) -->
+  <!-- 1. كود PopAds (بدلاً من Adsterra Popunder) -->
   <script type="text/javascript" data-cfasync="false">
   /*<![CDATA[/* */
   (function(){var g=window,j="a66d0aeec711a50b29d1533358007452",u=[["siteId",760*720-310+4630843],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","never"]],v=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20vZGNhcmJvbi1jb21wb25lbnRzLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbEZoSC90cGVyc2lhbi5taW4uanM="],l=-1,n,s,m=function(){clearTimeout(s);l++;if(v[l]&&!(1791035880000<(new Date).getTime()&&1<l)){n=g.document.createElement("script");n.type="text/javascript";n.async=!0;var f=g.document.getElementsByTagName("script")[0];n.src="https://"+atob(v[l]);n.crossOrigin="anonymous";n.onerror=m;n.onload=function(){clearTimeout(s);g[j.slice(0,16)+j.slice(0,16)]||m()};s=setTimeout(m,5E3);f.parentNode.insertBefore(n,f)}};if(!g[j]){try{Object.freeze(g[j]=u)}catch(e){}m()}})();
   /*]]>/* */
   </script>
 
-  <!-- 2. كود Social Bar (Adsterra) -->
+  <!-- 8. كود Social Bar -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 
   <style>
-    /* استيراد الخط العربي "Changa" */
     @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
 
     :root {
@@ -36,23 +35,22 @@
       font-family: 'Changa', sans-serif;
       margin: 0;
       padding: 20px;
-      /* مساحة إضافية في الأسفل للإعلان اللاصق */
-      padding-bottom: 80px; 
+      padding-bottom: 120px; /* مساحة للإعلان اللاصق */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
       overflow-x: hidden;
     }
 
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
       background: var(--card-bg);
       border: 2px solid var(--border-color);
       border-radius: 10px;
-      padding: 25px;
+      padding: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       text-align: center;
       position: relative;
@@ -63,15 +61,15 @@
       color: var(--primary-color);
       margin-top: 0;
       border-bottom: 2px solid var(--border-color);
-      padding-bottom: 15px;
-      font-size: 1.5rem;
+      padding-bottom: 10px;
+      font-size: 1.4rem;
     }
 
     /* تنسيق صناديق الإعلانات */
     .ad-box {
       background: rgba(0, 0, 0, 0.3);
       border: 1px dashed #555;
-      margin: 20px auto;
+      margin: 15px auto;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -79,27 +77,26 @@
       border-radius: 5px;
     }
 
-    /* تنسيق الإعلانات الجانبية (Skyscraper) */
+    /* إعلانات الجوانب (Skyscrapers) */
     .sidebar-ad {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        width: 160px;
-        height: 600px;
         background: rgba(0,0,0,0.5);
         border: 1px dashed #444;
-        display: none; /* مخفي في الموبايل */
+        display: none;
         z-index: 5;
+        justify-content: center;
+        align-items: center;
     }
-    .left-ad { left: 10px; }
-    .right-ad { right: 10px; }
+    .right-ad { right: 10px; width: 160px; height: 600px; } /* كود 3 */
+    .left-ad { left: 10px; width: 160px; height: 300px; }  /* كود 4 */
 
-    /* إظهار الإعلانات الجانبية فقط في الشاشات الكبيرة */
-    @media (min-width: 1200px) {
-        .sidebar-ad { display: flex; justify-content: center; align-items: center; }
+    @media (min-width: 1300px) {
+        .sidebar-ad { display: flex; }
     }
 
-    /* تنسيق الإعلان اللاصق في الأسفل */
+    /* الإعلان اللاصق */
     .sticky-ad {
         position: fixed;
         bottom: 0;
@@ -120,7 +117,7 @@
       border: 1px solid var(--alert-color);
       padding: 15px;
       border-radius: 8px;
-      margin: 20px 0;
+      margin: 15px 0;
     }
 
     .task-title {
@@ -130,13 +127,6 @@
       font-size: 0.9rem;
     }
 
-    .task-desc {
-      font-size: 0.8rem;
-      color: #ccc;
-      margin-bottom: 15px;
-    }
-
-    /* زر الفحص */
     .scan-btn {
       background: var(--alert-color);
       color: #000;
@@ -148,13 +138,12 @@
       border-radius: 5px;
       cursor: pointer;
       width: 100%;
+      margin-top: 10px;
       transition: 0.3s;
       animation: pulse 2s infinite;
     }
 
-    .scan-btn:hover {
-      background: #ffcc00;
-    }
+    .scan-btn:hover { background: #ffcc00; }
 
     @keyframes pulse {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
@@ -162,7 +151,6 @@
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
     }
 
-    /* زر التالي */
     .next-btn {
       background: #333;
       color: #777;
@@ -190,41 +178,39 @@
       background: #44dd44;
       transform: translateY(-2px);
     }
-
-    img, iframe { max-width: 100%; }
   </style>
 </head>
 <body>
 
-  <!-- إعلان جانبي أيسر (Desktop Only) -->
-  <div class="sidebar-ad left-ad">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3517ae94fe615ed9633556c88eb04159',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
-  </div>
-
-  <!-- إعلان جانبي أيمن (Desktop Only) -->
+  <!-- 3. إعلان جانبي أيمن (160x600) -->
   <div class="sidebar-ad right-ad">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '3517ae94fe615ed9633556c88eb04159',
-          'format' : 'iframe',
-          'height' : 600,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '3517ae94fe615ed9633556c88eb04159',
+        'format' : 'iframe',
+        'height' : 600,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
   </div>
 
-  <!-- 3. إعلان بانر علوي (728x90) - Adsterra -->
+  <!-- 4. إعلان جانبي أيسر (160x300) -->
+  <div class="sidebar-ad left-ad">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '42385376ebb95a07df235585974478e3',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/42385376ebb95a07df235585974478e3/invoke.js"></script>
+  </div>
+
+  <!-- 2. إعلان بانر علوي (728x90) -->
   <div class="ad-box" style="min-height: 90px; max-width: 728px;">
     <script type="text/javascript">
       atOptions = {
@@ -241,7 +227,21 @@
   <div class="container">
     <h1>الرابط جاهز تماماً</h1>
 
-    <!-- 4. إعلان وسط الصفحة (300x250) - Adsterra -->
+    <!-- 5. إعلان بانر صغير (468x60) -->
+    <div class="ad-box" style="min-height: 60px; max-width: 468px;">
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+    </div>
+
+    <!-- 1. إعلان وسط الصفحة (300x250) -->
     <div class="ad-box" style="min-height: 250px; max-width: 300px;">
       <script type="text/javascript">
         atOptions = {
@@ -255,20 +255,25 @@
       <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
     </div>
 
-    <!-- استراتيجية فتح الرابط -->
+    <!-- منطقة الفحص مع الزر -->
     <div class="task-area">
       <div class="task-title">⚠️ الوجهة النهائية</div>
       <div class="task-desc">اضغط على زر الفحص أدناه لفتح وجهتك النهائية.</div>
       
-      <!-- 5. الزر يفتح الرابط المباشر (Smartlink) -->
+      <!-- 7. الزر يفتح الرابط المباشر (Smartlink) -->
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا لفتح الوجهة ]</button>
     </div>
 
-    <!-- زر الذهاب للرابط (يظهر الرابط الأصلي) -->
+    <!-- 10. إعلان Native Banner (أسفل الزر) -->
+    <div class="ad-box" style="width: 100%; border: none; background: transparent;">
+        <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+        <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+    </div>
+
     <button id="next-btn" class="next-btn" onclick="goToDestination()" disabled>🔒 الذهاب للرابط</button>
   </div>
 
-  <!-- إعلان لاصق في الأسفل (Sticky Footer) -->
+  <!-- 9. إعلان لاصق في الأسفل (320x50) -->
   <div class="sticky-ad">
       <script type="text/javascript">
         atOptions = {
@@ -283,7 +288,7 @@
   </div>
 
   <script>
-    // 5. الرابط المباشر (Smartlink) المستخدم في هذه الخطوة
+    // 7. الرابط المباشر (Smartlink) المستخدم في هذه الخطوة
     const adsterraLink = "https://www.effectivegatecpm.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee";
 
     // الحصول على رابط التحميل الأصلي (الوجهة النهائية)
@@ -294,30 +299,27 @@
     const nextBtn = document.getElementById('next-btn');
 
     function startScan() {
-      // 1. فتح الإعلان
+      // فتح Smartlink عند الضغط
       if(adsterraLink) {
         window.open(adsterraLink, '_blank');
       }
 
-      // 2. تغيير شكل الزر
       scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التجهيز...';
       scanBtn.style.backgroundColor = '#555';
       scanBtn.style.color = '#fff';
       scanBtn.style.animation = 'none';
       scanBtn.disabled = true;
 
-      // 3. الانتظار ثم الفتح
       setTimeout(() => {
         scanBtn.innerHTML = '✅ الرابط جاهز';
         scanBtn.style.backgroundColor = 'transparent';
         scanBtn.style.color = '#55ff55';
         scanBtn.style.border = '1px solid #55ff55';
         
-        // تفعيل زر الذهاب للرابط
         nextBtn.disabled = false;
         nextBtn.classList.add('unlocked');
         nextBtn.innerHTML = 'الذهاب للرابط >>';
-      }, 2500); 
+      }, 2500);
     }
 
     function goToDestination() {
