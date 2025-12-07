@@ -92,10 +92,17 @@
       width: 100%;
       max-width: 728px; 
     }
-    .ad-float-right {
-        float: right;
-        margin-right: 0;
-        margin-left: 20px;
+    /* تنسيق خاص للإعلانات الداخلية */
+    .ad-inline {
+        margin: 20px auto;
+        max-width: 468px;
+        min-height: 60px;
+    }
+    .ad-middle {
+        float: left;
+        margin: 10px 10px 10px 20px;
+        max-width: 300px;
+        min-height: 250px;
     }
 
     /* إعلانات الجوانب (Skyscrapers) */
@@ -110,9 +117,7 @@
         justify-content: center;
         align-items: center;
     }
-    /* البانر الجانبي الأيسر (160x300) */
     .left-ad { left: 10px; width: 160px; height: 300px; } 
-    /* البانر الجانبي الأيمن (160x600) */
     .right-ad { right: 10px; width: 160px; height: 600px; } 
 
     /* إظهار الإعلانات الجانبية فقط على شاشات الكمبيوتر */
@@ -166,21 +171,6 @@
       margin-top: 10px;
       transition: 0.3s;
       animation: pulse 2s infinite;
-    }
-
-    .next-btn {
-      background: #333;
-      color: #777;
-      border: 2px solid #444;
-      padding: 15px;
-      font-family: 'Changa', sans-serif;
-      font-weight: bold;
-      font-size: 1.1rem;
-      border-radius: 5px;
-      cursor: not-allowed;
-      width: 100%;
-      margin-top: 10px;
-      transition: 0.3s;
     }
 
     .next-btn.unlocked {
@@ -246,8 +236,8 @@
           "المودات" هي تعديلات برمجية يقوم بإنشائها مطورون من المجتمع لإضافة محتوى جديد تماماً إلى لعبة ماين كرافت الأصلية. يمكن لهذه الإضافات أن تتراوح بين إضافة أدوات بسيطة أو كتل جديدة، وصولاً إلى تغيير طريقة لعب العالم بالكامل وإضافة أبعاد ومخلوقات ووظائف متقدمة لم تكن موجودة في اللعبة الأساسية. تسمح المودات للاعبين بتوسيع خيالهم وتجربة ماين كرافت بطرق غير محدودة.
         </p>
 
-        <!-- 4. إعلان وسط الصفحة (300x250) - يطفو لليسار في المساحات الواسعة -->
-        <div class="ad-box" style="min-height: 250px; max-width: 300px; float: left; margin: 10px 10px 10px 20px;">
+        <!-- إعلان 4. إعلان وسط الصفحة (300x250) - يطفو لليسار في المساحات الواسعة -->
+        <div class="ad-box ad-middle">
           <script type="text/javascript">
             atOptions = {
               'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
@@ -264,12 +254,19 @@
         <p>
           تعد المودات جزءاً حيوياً من تجربة اللعب الجماعي والفردي. إذا كنت تبحث عن مغامرات جديدة أو تحديات مختلفة، فإن المودات توفر لك تجربة لا تنتهي. أشهر الأمثلة تشمل مودات إضافة الآلات الصناعية، أو مودات السحر والتنانين، أو حتى أدوات تجميل العالم والبيئة. إنها تحول لعبة البناء البسيطة إلى عالم معقد مليء بالتفاصيل والتفاعلات.
         </p>
+        
+        <!-- إعلان إضافي رقم 1: Native Banner (لتكسير المحتوى) -->
+        <div class="ad-box ad-inline" style="min-height: 250px; max-width: 300px;">
+            <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+            <div id="container-f44aa867511a50b29d1533358007452"></div>
+        </div>
+        
         <p>
           المطورون الذين يقفون وراء هذه الإضافات يعملون لساعات طويلة لتقديم هذا المحتوى مجاناً. دعمهم من خلال مشاهدة الإعلانات هو الطريقة الوحيدة لاستمرارهم في تطوير هذه المودات الرائعة.
         </p>
-
-        <!-- 5. إعلان بانر صغير (468x60) - بين الفقرات -->
-        <div class="ad-box" style="min-height: 60px; max-width: 468px; margin: 20px auto;">
+        
+        <!-- إعلان إضافي رقم 2: بانر 468x60 -->
+        <div class="ad-box ad-inline">
             <script type="text/javascript">
               atOptions = {
                 'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
@@ -281,13 +278,47 @@
             </script>
             <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
         </div>
-        
+
         <h2>لماذا نستخدم نظام الروابط الآمنة؟</h2>
         <p>
           نظام الروابط الآمنة هذا يضمن لك الحصول على الملف الأصلي والخالي من أي فيروسات أو برمجيات خبيثة، كما أنه يحمي عمل المطورين. كل ضغطة على زر "الفحص" تفتح إعلاناً واحداً في نافذة جديدة، مما يضمن لهم استمرار الدعم دون إفساد تجربتك داخل الصفحة الرئيسية. هذا النظام يحقق التوازن الأمثل بين تجربة المستخدم والدخل المالي.
         </p>
+        
+        <!-- إعلان إضافي رقم 3: بانر 300x250 إضافي -->
+        <div class="ad-box ad-middle" style="float: right; margin-left: 0; margin-right: 20px; max-width: 300px; min-height: 250px;">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87', /* استخدام نفس كود 300x250 */
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+        
         <p>
           من الضروري جداً إكمال خطوات الفحص الأربعة، حيث أن كل خطوة تطلق إعلانات مختلفة من شبكات مختلفة (كـ Adsterra) لتحقيق أقصى دخل ممكن من الزيارة الواحدة. نعتذر عن الإزعاج المؤقت، ولكن هذا يضمن بقاء المحتوى مجانياً ومتوفراً.
+        </p>
+        
+        <!-- إعلان إضافي رقم 4: بانر 468x60 إضافي -->
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0', /* استخدام نفس كود 468x60 */
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <h2>ملخص الإجراء المطلوب</h2>
+        <p>
+          بمجرد إتمام عملية الفحص بالضغط على الزر أدناه، سيتم فتح زر "الخطوة التالية". هذه هي الطريقة الأسرع والأكثر أماناً للوصول إلى المحتوى المطلوب. شكراً لدعمك المتواصل!
         </p>
 
         <div style="clear: both;"></div>
@@ -305,7 +336,7 @@
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا لفحص الرابط ]</button>
     </div>
 
-    <!-- 10. إعلان Native Banner (أسفل الزر) -->
+    <!-- إعلان Native Banner (أسفل الزر) -->
     <div class="ad-box" style="width: 100%; border: none; background: transparent; margin-bottom: 25px;">
         <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
         <div id="container-f44aa867511a50b29d1533358007452"></div>
