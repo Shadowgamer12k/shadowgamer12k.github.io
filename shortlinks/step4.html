@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 4/4 - الرابط جاهز</title>
 
-  <!-- 1. كود Popunder الآمن (Adsterra) -->
-  <script type="text/javascript" src="//pl25775232.effectivegatecpm.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"></script>
+  <!-- 1. كود PopAds (بدلاً من Adsterra Popunder) -->
+  <script type="text/javascript" data-cfasync="false">
+  /*<![CDATA[/* */
+  (function(){var g=window,j="a66d0aeec711a50b29d1533358007452",u=[["siteId",760*720-310+4630843],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","never"]],v=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20vZGNhcmJvbi1jb21wb25lbnRzLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbEZoSC90cGVyc2lhbi5taW4uanM="],l=-1,n,s,m=function(){clearTimeout(s);l++;if(v[l]&&!(1791035880000<(new Date).getTime()&&1<l)){n=g.document.createElement("script");n.type="text/javascript";n.async=!0;var f=g.document.getElementsByTagName("script")[0];n.src="https://"+atob(v[l]);n.crossOrigin="anonymous";n.onerror=m;n.onload=function(){clearTimeout(s);g[j.slice(0,16)+j.slice(0,16)]||m()};s=setTimeout(m,5E3);f.parentNode.insertBefore(n,f)}};if(!g[j]){try{Object.freeze(g[j]=u)}catch(e){}m()}})();
+  /*]]>/* */
+  </script>
 
-  <!-- 2. كود Social Bar -->
+  <!-- 2. كود Social Bar (Adsterra) -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 
   <style>
-    /* استيراد الخط العربي "Changa" */
     @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
 
     :root {
@@ -22,6 +25,7 @@
       --border-color: #444;
       --text-color: #eee;
       --alert-color: #ffaa00;
+      --content-text-color: #bbb;
     }
 
     body {
@@ -32,6 +36,7 @@
       font-family: 'Changa', sans-serif;
       margin: 0;
       padding: 20px;
+      padding-bottom: 80px; 
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -42,13 +47,13 @@
 
     .container {
       width: 100%;
-      max-width: 650px;
+      max-width: 800px;
       background: var(--card-bg);
       border: 2px solid var(--border-color);
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      text-align: center;
+      text-align: right;
       position: relative;
       z-index: 10;
     }
@@ -58,7 +63,23 @@
       margin-top: 0;
       border-bottom: 2px solid var(--border-color);
       padding-bottom: 10px;
-      font-size: 1.4rem;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+    
+    h2 {
+        color: #fff;
+        font-size: 1.2rem;
+        border-right: 4px solid var(--alert-color);
+        padding-right: 10px;
+        margin-top: 30px;
+    }
+
+    p {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: var(--content-text-color);
+        margin-bottom: 15px;
     }
 
     /* تنسيق صناديق الإعلانات */
@@ -71,18 +92,63 @@
       align-items: center;
       overflow: hidden;
       border-radius: 5px;
-      /* تم تحديد الحد الأقصى للعرض ليكون متجاوباً */
       width: 100%;
       max-width: 728px; 
     }
+    
+    .ad-inline {
+        margin: 20px auto;
+        max-width: 468px;
+        min-height: 60px;
+    }
+    .ad-middle {
+        float: left;
+        margin: 10px 10px 10px 20px;
+        max-width: 300px;
+        min-height: 250px;
+    }
 
-    /* منطقة المهمة */
+    /* إعلانات الجوانب (Skyscrapers) */
+    .sidebar-ad {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        border: 1px dashed #444;
+        display: none; 
+        z-index: 5;
+        justify-content: center;
+        align-items: center;
+    }
+    .left-ad { left: 10px; width: 160px; height: 300px; } 
+    .right-ad { right: 10px; width: 160px; height: 600px; } 
+
+    @media (min-width: 1300px) {
+        .sidebar-ad { display: flex; }
+    }
+    
+    /* الإعلان البديل للـ Sticky Footer */
+    .sticky-ad {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #1a1a1a;
+        border-top: 2px solid var(--primary-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
     .task-area {
       background: rgba(255, 170, 0, 0.1);
       border: 1px solid var(--alert-color);
       padding: 15px;
       border-radius: 8px;
       margin: 15px 0;
+      text-align: center;
     }
 
     .task-title {
@@ -134,6 +200,34 @@
 </head>
 <body>
 
+  <!-- إعلان جانبي أيسر (160x300) -->
+  <div class="sidebar-ad left-ad">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '42385376ebb95a07df235585974478e3',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/42385376ebb95a07df235585974478e3/invoke.js"></script>
+  </div>
+
+  <!-- إعلان جانبي أيمن (160x600) -->
+  <div class="sidebar-ad right-ad">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '3517ae94fe615ed9633556c88eb04159',
+        'format' : 'iframe',
+        'height' : 600,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
+  </div>
+
   <!-- 3. إعلان بانر علوي (728x90) -->
   <div class="ad-box" style="min-height: 90px;">
     <script type="text/javascript">
@@ -149,60 +243,161 @@
   </div>
 
   <div class="container">
-    <h1>الرابط جاهز تماماً</h1>
+    <h1>الخطوة 4 من 4: الرابط جاهز للتحميل</h1>
+    
+    <div class="content-section">
+        <h2>حقائق تقنية عشوائية!</h2>
+        <p>
+          هل تعلم أن أول فأرة كمبيوتر كانت مصنوعة من الخشب؟ اخترعها دوجلاس إنجلبارت في عام 1964. كانت تحتوي على عجلتين معدنيتين وتستطيع التحرك فقط بشكل عمودي أو أفقي، ولم تكن الكرة موجودة بعد!
+        </p>
 
-    <!-- 4. إعلان وسط الصفحة (300x250) -->
-    <div class="ad-box" style="min-height: 250px; max-width: 300px;">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        <!-- 4. إعلان وسط الصفحة (300x250) -->
+        <div class="ad-box ad-middle">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+        
+        <h2>الإنترنت أثقل مما تظن!</h2>
+        <p>
+          نظرياً، إذا قمت بوزن جميع الإلكترونات التي تشكل البيانات والمعلومات الموجودة على الإنترنت في العالم بأسره، فإن وزنها سيعادل تقريباً وزن حبة فراولة واحدة (حوالي 50 جرام). إنه أمر مذهل كيف أن كل هذا المحتوى الرقمي له وزن فيزيائي حقيقي وإن كان ضئيلاً جداً.
+        </p>
+        
+        <!-- إعلان إضافي رقم 1: Native Banner -->
+        <div class="ad-box ad-inline" style="min-height: 250px; max-width: 300px;">
+            <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+            <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+        </div>
+        
+        <p>
+          في المتوسط، يقوم الأشخاص بفتح هواتفهم الذكية حوالي 150 مرة في اليوم. هذا يعني مرة كل 6 دقائق تقريباً خلال ساعات الاستيقاظ. التكنولوجيا أصبحت جزءاً لا يتجزأ من حياتنا اليومية لدرجة أننا لا نلاحظ تكرار استخدامها.
+        </p>
+        
+        <!-- إعلان إضافي رقم 2: بانر 468x60 -->
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <h2>كلمة السر الأكثر شيوعاً</h2>
+        <p>
+          على الرغم من التحذيرات الأمنية المستمرة، لا تزال كلمة السر "123456" هي الأكثر استخداماً حول العالم، تليها كلمة "password". استخدام كلمات مرور قوية ومعقدة هو خط الدفاع الأول لحماية بياناتك الرقمية من الاختراق.
+        </p>
+        
+        <!-- إعلان إضافي رقم 3: بانر 300x250 إضافي -->
+        <div class="ad-box ad-middle" style="float: right; margin-left: 0; margin-right: 20px; max-width: 300px; min-height: 250px;">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+        
+        <p>
+          شكراً لانتظارك. لقد وصلت الآن إلى نهاية عملية التحقق. نحن نقدر صبرك ودعمك المستمر الذي يسمح لنا بتقديم هذا المحتوى مجاناً.
+        </p>
+        
+        <!-- إعلان إضافي رقم 4: بانر 468x60 إضافي -->
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <!-- إعلان إضافي رقم 5: بانر 468x60 إضافي -->
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <!-- إعلان إضافي رقم 6: بانر 300x250 إضافي -->
+        <div class="ad-box ad-middle" style="float: left; margin: 10px 20px 10px 0;">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+
+        <div style="clear: both;"></div>
+
     </div>
 
-    <!-- منطقة الفحص مع الزر -->
     <div class="task-area">
       <div class="task-title">⚠️ الوجهة النهائية</div>
-      <div class="task-desc">اضغط على زر الفحص أدناه لفتح وجهتك النهائية.</div>
+      <div class="task-desc">لقد وصلت! اضغط زر الفحص أدناه لفتح الرابط النهائي.</div>
       
       <!-- 7. الزر يفتح الرابط المباشر (Smartlink) -->
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا لفتح الوجهة ]</button>
     </div>
 
-    <!-- 5. إعلان بانر صغير (468x60) -->
-    <div class="ad-box" style="min-height: 60px; max-width: 468px;">
-        <script type="text/javascript">
-          atOptions = {
-            'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
-            'format' : 'iframe',
-            'height' : 60,
-            'width' : 468,
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
-    </div>
-
-    <!-- 10. إعلان Native Banner (خارج الصندوق الرئيسي) -->
-    <div class="ad-box" style="min-height: 250px; max-width: 300px; margin-top: 30px;">
+    <!-- إعلان Native Banner (أسفل الزر) -->
+    <div class="ad-box" style="width: 100%; border: none; background: transparent; margin-bottom: 25px;">
         <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
         <div id="container-f44aa867511a50b29d1533358007452"></div>
     </div>
-    
+
     <button id="next-btn" class="next-btn" onclick="goToDestination()" disabled>🔒 الذهاب للرابط</button>
   </div>
 
+  <!-- إعلان بديل آمن (بانر عادي) في أسفل الصفحة بدلاً من اللاصق -->
+  <div class="ad-box" style="margin-top: 20px;">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '2daa63f6b0c15a895bcb7aba16a017e0', /* كود 468x60 الآمن */
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+  </div>
 
   <script>
-    // 7. الرابط المباشر (Smartlink) المستخدم في هذه الخطوة
-    const adsterraLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
+    // 7. الرابط المباشر (Smartlink) - استخدم نفس الرابط
+    const adsterraLink = "https://www.effectivegatecpm.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee";
 
-    // الحصول على رابط التحميل الأصلي (الوجهة النهائية)
     const urlParams = new URLSearchParams(window.location.search);
     const destinationUrl = urlParams.get('url') || "https://google.com";
 
@@ -210,7 +405,6 @@
     const nextBtn = document.getElementById('next-btn');
 
     function startScan() {
-      // 1. فتح Smartlink عند الضغط
       if(adsterraLink) {
         window.open(adsterraLink, '_blank');
       }
