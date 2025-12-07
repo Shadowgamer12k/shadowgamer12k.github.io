@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Step 2/4 - Secure Link</title>
+  
+  <!-- 1. MONETAG POPUNDER SCRIPT -->
+  <script>(function(s){s.dataset.zone='10290446',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+  <!-- 2. MONETAG VIGNETTE SCRIPT -->
+  <script>(function(s){s.dataset.zone='10290447',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  
+  <!-- 3. MONETAG IN-PAGE PUSH SCRIPT -->
+  <script>(function(s){s.dataset.zone='10290448',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    :root {
+      --mc-green: #55ff55;
+      --mc-border: #555;
+      --mc-bg: #2c2c2c;
+      --mc-hover: #3a3a3a;
+    }
+
+    body {
+      background: 
+        radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
+        linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+      background-size: 40px 40px, 100% 100%;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      justify-content: center;
+      gap: 20px; 
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--mc-bg);
+      border: 4px solid var(--mc-border);
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      padding: 40px 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    h1 {
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: var(--mc-green);
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 0px #000;
+      border-bottom: 2px solid #555;
+      padding-bottom: 10px;
+    }
+
+    .timer-display {
+        font-size: 2.5rem;
+        color: #ffaa00;
+        margin: 20px 0;
+        text-shadow: 3px 3px 0 #000;
+    }
+
+    .next-btn {
+      background: var(--mc-hover);
+      border: 3px solid var(--mc-border);
+      color: #888;
+      padding: 18px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1rem;
+      width: 100%;
+      cursor: not-allowed;
+      text-transform: uppercase;
+      margin-top: 15px;
+      transition: 0.2s;
+    }
+
+    .next-btn.active {
+      background: var(--mc-green);
+      color: #000;
+      cursor: pointer;
+      border-color: #000;
+      box-shadow: 0 4px 0 #004400;
+    }
+
+    .next-btn.active:hover {
+      background: #44dd44;
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #004400;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+      <h1>STEP 2 / 4</h1>
+      <p style="font-size: 0.8rem; line-height: 1.5; color: #ccc;">
+        Verifying human interaction...<br>
+        Please wait for the secure connection.
+      </p>
+
+      <div class="timer-display" id="timer">10</div>
+
+      <button class="next-btn" id="next-btn" onclick="goToStep3()">PLEASE WAIT...</button>
+  </div>
+
+  <script>
+    // --- CONFIGURATION FOR PAGE 2 ---
+    const waitTime = 10; // Seconds to wait
+    const nextPageUrl = "step3.html"; // The next file name
+    
+    // MONETAG SMARTLINK (Direct Link)
+    const monetagDirectLink = "https://otieu.com/4/10290449"; 
+    // -------------------------------
+
+    // Timer Logic
+    let timeLeft = waitTime;
+    const timerDisplay = document.getElementById("timer");
+    const btn = document.getElementById("next-btn");
+
+    const params = new URLSearchParams(window.location.search);
+    const finalUrl = params.get("url") || ""; 
+
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            btn.classList.add("active");
+            btn.disabled = false;
+            btn.innerText = "NEXT STEP >>";
+        }
+    }, 1000);
+
+    function goToStep3() {
+        if (!btn.classList.contains("active")) return;
+
+        // Open Monetag Direct Link in new tab
+        if (monetagDirectLink) {
+            window.open(monetagDirectLink, '_blank');
+        }
+
+        // Redirect to Step 3
+        btn.innerText = "LOADING...";
+        setTimeout(() => {
+            if(finalUrl) {
+                window.location.href = nextPageUrl + "?url=" + encodeURIComponent(finalUrl);
+            } else {
+                window.location.href = nextPageUrl;
+            }
+        }, 500);
+    }
+  </script>
+
+</body>
+</html>
