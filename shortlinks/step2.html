@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 2/4 - Stack Regulator Addon</title>
 
-  <!-- 1. NEW Anti-AdBlock Popunder (petsrulefondness.com) -->
   <script type="text/javascript" src="//petsrulefondness.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"></script>
 
   <style>
@@ -107,7 +106,7 @@
         min-height: 250px;
     }
 
-    /* Sidebar Ads (Hidden for now until you have new codes) */
+    /* Sidebar Ads */
     .sidebar-ad {
         position: fixed;
         top: 50%;
@@ -155,7 +154,14 @@
       width: 100%;
       margin-top: 10px;
       transition: 0.3s;
-      animation: pulse 2s infinite;
+      animation: pulse 2s infinite; /* Animation applied here */
+    }
+
+    /* Fixed: Added Keyframes for pulse animation */
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 170, 0, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
     }
 
     .next-btn {
@@ -179,25 +185,20 @@
       border-color: #00aa00;
       cursor: pointer;
       box-shadow: 0 0 15px rgba(85, 255, 85, 0.4);
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
 <body>
 
-  <!-- Left Sidebar (Placeholder) -->
   <div class="sidebar-ad left-ad">
-     <!-- PASTE NEW 160x300 CODE HERE -->
-  </div>
+     </div>
 
-  <!-- Right Sidebar (Placeholder) -->
   <div class="sidebar-ad right-ad">
-     <!-- PASTE NEW 160x600 CODE HERE -->
-  </div>
+     </div>
 
-  <!-- 3. Top Banner (Placeholder) -->
   <div class="ad-box">
-     <!-- PASTE NEW 728x90 CODE HERE -->
-  </div>
+     </div>
 
   <div class="container">
     <h1>الخطوة 2 من 4: إضافة Stack Regulator لإدارة المخزون</h1>
@@ -205,54 +206,44 @@
     <div class="content-section">
         <h2>ما هي إضافة Stack Regulator؟</h2>
         <p>
-          هل سئمت من حد الـ 64 قطعة في المخزون؟ إضافة <strong>Stack Regulator</strong> هي الحل الثوري للاعبي ماين كرافت Bedrock. هذه الأداة تسمح لك بكسر القيود الافتراضية وتخزين آلاف العناصر في خانة واحدة، مما يسهل إدارة الموارد بشكل لا يصدق، خاصة في المشاريع الضخمة.
+          هل سئمت من حد الـ 64 قطعة في المخزون؟ إضافة <strong>Stack Regulator</strong> هي الحل الثوري للاعبي ماين كرافت Bedrock. هذه الأداة تسمح لك بكسر القيود الافتراضية وتخزين آلاف العناصر في خانة واحدة، مما يسهل إدارة الموارد بشكل لا يصدق.
         </p>
 
-        <!-- 4. Middle Ad (Placeholder) -->
         <div class="ad-box ad-middle">
-           <!-- PASTE NEW 300x250 CODE HERE -->
-        </div>
+           </div>
         
         <h2>نظام الترقية بالخبرة (XP)</h2>
         <p>
-          الإضافة لا تعطيك تخزيناً لانهائياً مجاناً، بل تعتمد على نظام توازن ذكي. يمكنك ترقية سعة التخزين الخاصة بك باستخدام نقاط الخبرة (XP). ابدأ من 64، ثم قم بالترقية إلى 128، 256، وحتى 5000 قطعة في الخانة الواحدة! هذا يضيف هدفاً جديداً للعب ويجعل مزارع الخبرة أكثر فائدة.
+          الإضافة لا تعطيك تخزيناً لانهائياً مجاناً، بل تعتمد على نظام توازن ذكي. يمكنك ترقية سعة التخزين الخاصة بك باستخدام نقاط الخبرة (XP). ابدأ من 64، ثم قم بالترقية إلى 128، 256، وحتى 5000 قطعة في الخانة الواحدة!
         </p>
         
-        <!-- Native Banner (Placeholder) -->
         <div class="ad-box ad-inline" style="min-height: 250px; max-width: 300px;">
-           <!-- PASTE NEW NATIVE BANNER CODE HERE -->
-        </div>
+           </div>
         
         <h2>المميزات التقنية</h2>
         <ul>
-            <li><strong>الدمج التلقائي الذكي:</strong> تقوم الإضافة تلقائياً بدمج العناصر التي تلتقطها من الأرض داخل المخزون المطور، مما يبقي شريط الأدوات (Hotbar) نظيفاً.</li>
-            <li><strong>تقنية منع الفقدان:</strong> الأدوات المطورة محمية ولا يمكن فقدانها بسهولة، حيث يتم استخدام تقنيات Script API المتقدمة لضمان استقرار البيانات.</li>
-            <li><strong>واجهة مستخدم متطورة:</strong> تحكم كامل في الإعدادات والترقيات عبر قوائم تفاعلية سهلة الاستخدام.</li>
+            <li><strong>الدمج التلقائي الذكي:</strong> تقوم الإضافة تلقائياً بدمج العناصر التي تلتقطها من الأرض داخل المخزون المطور.</li>
+            <li><strong>تقنية منع الفقدان:</strong> الأدوات المطورة محمية ولا يمكن فقدانها بسهولة باستخدام Script API.</li>
+            <li><strong>واجهة مستخدم متطورة:</strong> تحكم كامل في الإعدادات والترقيات عبر قوائم تفاعلية.</li>
         </ul>
         
-        <!-- Ad Banner (Placeholder) -->
         <div class="ad-box ad-inline">
-           <!-- PASTE NEW 468x60 CODE HERE -->
-        </div>
+           </div>
 
         <h2>لماذا هذا المود ضروري؟</h2>
         <p>
-          سواء كنت تقوم بحفر مناطق شاسعة، أو بناء مزارع ضخمة، أو تلعب في عوالم Skyblock المحدودة المساحة، فإن Stack Regulator يوفر لك "حقيبة ظهر" افتراضية دون الحاجة لإضافات خارجية معقدة. إنه يحسن أداء السيرفرات أيضاً بتقليل عدد الكيانات (Entities) الملقاة على الأرض.
+          سواء كنت تقوم بحفر مناطق شاسعة، أو بناء مزارع ضخمة، فإن Stack Regulator يوفر لك "حقيبة ظهر" افتراضية دون الحاجة لإضافات خارجية معقدة.
         </p>
         
-        <!-- Second Middle Ad (Placeholder) -->
         <div class="ad-box ad-middle" style="float: right; margin-left: 0; margin-right: 20px; max-width: 300px; min-height: 250px;">
-           <!-- PASTE NEW 300x250 CODE HERE -->
-        </div>
+           </div>
         
         <p>
-          تأكد من تفعيل خيارات "Beta APIs" في إعدادات العالم لضمان عمل المود بكفاءة. هذا المود متوافق مع إصدارات 1.21 وما بعدها.
+          تأكد من تفعيل خيارات "Beta APIs" في إعدادات العالم لضمان عمل المود بكفاءة.
         </p>
         
-        <!-- Second Banner (Placeholder) -->
         <div class="ad-box ad-inline">
-           <!-- PASTE NEW 468x60 CODE HERE -->
-        </div>
+           </div>
 
         <div style="clear: both;"></div>
     </div>
@@ -264,24 +255,20 @@
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا للمتابعة ]</button>
     </div>
 
-    <!-- Native Banner below button (Placeholder) -->
     <div class="ad-box" style="width: 100%; border: none; background: transparent; margin-bottom: 25px;">
-       <!-- PASTE NEW NATIVE CODE HERE -->
-    </div>
+       </div>
 
     <button id="next-btn" class="next-btn" onclick="goToStep3()" disabled>🔒 الرابط مقفل - تابع الخطوات</button>
   </div>
 
-  <!-- Bottom Ad (Placeholder) -->
   <div class="ad-box" style="margin-top: 20px;">
-     <!-- PASTE NEW 468x60 CODE HERE -->
-  </div>
+     </div>
 
   <script>
     const nextPage = "step3.html";
     
-    // NEW Adsterra Direct Link (petsrulefondness.com)
-    const adsterraLink = "https://firsthandhall.com/eDmFvq";
+    // Direct Link
+    const adsterraLink = "https://firsthandhall.com/eDmFvq"; // تأكد من أن هذا الرابط يعمل
 
     const urlParams = new URLSearchParams(window.location.search);
     const destinationUrl = urlParams.get('url') || "";
@@ -290,17 +277,40 @@
     const nextBtn = document.getElementById('next-btn');
 
     function startScan() {
+      // فتح الإعلان في نافذة جديدة
       if(adsterraLink) {
         window.open(adsterraLink, '_blank');
       }
 
+      // تغيير حالة زر الفحص
       scanBtn.innerHTML = 'جاري التحقق...';
       scanBtn.style.backgroundColor = '#555';
       scanBtn.style.color = '#fff';
       scanBtn.style.animation = 'none';
       scanBtn.disabled = true;
 
+      // الانتظار لمدة 5 ثواني ثم فتح الزر التالي
       setTimeout(() => {
         scanBtn.innerHTML = '✅ تم التأكيد';
         scanBtn.style.backgroundColor = 'transparent';
         scanBtn.style.color = '#55ff55';
+        
+        // فتح الزر التالي
+        nextBtn.disabled = false;
+        nextBtn.classList.add('unlocked');
+        nextBtn.innerHTML = '🔓 اضغط هنا للانتقال للخطوة 3';
+      }, 5000); // 5000 ميلي ثانية = 5 ثواني
+    }
+
+    // دالة الانتقال للصفحة التالية
+    function goToStep3() {
+        // التحقق من وجود رابط الوجهة وتمريره للصفحة التالية
+        if (destinationUrl) {
+            window.location.href = nextPage + "?url=" + encodeURIComponent(destinationUrl);
+        } else {
+            window.location.href = nextPage;
+        }
+    }
+  </script>
+</body>
+</html>
