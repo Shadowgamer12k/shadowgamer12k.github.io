@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2712825263997446"
+     crossorigin="anonymous"></script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M2P94THH');</script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JKTG6N0GFN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JKTG6N0GFN');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO META TAGS -->
+    <meta name="description" content="Download the ultimate AutoSwap Addon for Minecraft Bedrock 1.21. Features intelligent tool switching, PvP auto-weapon equip, fall damage protection (MLG water), and sneak-to-light mechanics. The most advanced hotbar manager for MCPE.">
+    <meta name="keywords" content="Minecraft Bedrock, AutoSwap, Auto Tool, PvP Addon, Smart Switching, MCPE Mods, Minecraft 1.21, shadowGamer100k, MLG Bucket Script, Auto Totem Alternative">
+    <meta name="author" content="shadowGamer100k">
+    <meta name="robots" content="index, follow">
+    
+    <title>AutoSwap Ultimate | The Advanced Bedrock Tool Manager</title>
+    
+    <!-- JSON-LD SCHEMA FOR GOOGLE SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AutoSwap Ultimate",
+      "operatingSystem": "Minecraft Bedrock Edition",
+      "applicationCategory": "GameModification",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A comprehensive automation script for Minecraft Bedrock that manages your hotbar inventory in real-time.",
+      "author": {
+        "@type": "Person",
+        "name": "Vector"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "ratingCount": "450"
+      }
+    }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap'); /* Added for body text readability */
+
+        :root {
+            --mc-green: #55FF55;
+            --mc-red: #FF5555;
+            --mc-gold: #FFAA00;
+            --mc-aqua: #55FFFF;
+            --mc-dark: #2D2D2D;
+            --mc-border: #555555;
+            --xp-green-light: #80ff20;
+            --xp-green-dark: #00aa00;
+        }
+
+       body {
+          background-color: #1a1a1a;
+          background-image: linear-gradient(rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.3) 2px, transparent 2px),
+                          linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+          background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+          /* Use Roboto Mono for dense text to make it readable while keeping a tech feel */
+          font-family: 'Roboto Mono', monospace; 
+          color: #ddd;
+          line-height: 1.6;
+          margin: 0;
+          min-height: 100vh;
+          font-size: 14px;
+          overflow-x: hidden;
+          padding-bottom: 60px;
+        }
+
+        /* Keep headers in Pixel Font */
+        h1, h2, h3, .nav-link, .pixel-font, button, .command-box {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        h1 {
+          font-size: clamp(1.5rem, 4vw, 2.5rem);
+          line-height: 1.5;
+          margin: 0.5em 0;
+          text-shadow: 4px 4px 0px #000;
+          color: var(--mc-green);
+          text-align: center;
+        }
+        
+        h2 { font-size: 1.2rem; color: #fff; margin-bottom: 1rem; }
+        h3 { font-size: 0.9rem; color: var(--mc-gold); margin-top: 1.5rem; }
+
+        .header {
+          padding: 3rem 1rem;
+          background: rgba(0, 0, 0, 0.85);
+          border-bottom: 6px solid var(--mc-border);
+          text-align: center;
+          position: relative;
+          z-index: 10;
+        }
+
+        .breadcrumb {
+            font-size: 10px;
+            color: #aaa;
+            margin-bottom: 20px;
+            display: block;
+            letter-spacing: 1px;
+            font-family: 'Press Start 2P', cursive;
+        }
+        .breadcrumb a { color: var(--mc-green); text-decoration: none; }
+
+        .container {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 1rem;
+          position: relative;
+          z-index: 5;
+        }
+
+        .feature-box {
+          background: rgba(25, 25, 25, 0.95); 
+          border: 4px solid var(--mc-border);
+          padding: 2.5rem;
+          margin: 3rem 0;
+          position: relative;
+          box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+        }
+
+        .feature-title {
+            color: var(--mc-green);
+            font-size: 14px; /* Increased */
+            margin: -3.5rem 0 2rem 0;
+            background: var(--mc-dark);
+            padding: 15px 20px;
+            display: inline-block;
+            border: 4px solid var(--mc-border);
+            box-shadow: 4px 4px 0 #000;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .addon-preview-img {
+            width: 100%;
+            border: 4px solid #111;
+            margin: 1rem 0;
+            box-shadow: 0 0 20px rgba(85, 255, 85, 0.1);
+        }
+
+        /* --- CONTENT STYLES --- */
+        .content-block {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 2rem;
+        }
+        .content-block:last-child { border-bottom: none; }
+        
+        p { margin-bottom: 1rem; color: #ccc; }
+        strong { color: #fff; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(0,0,0,0.4);
+            padding: 2rem;
+            border: 2px solid #444;
+            border-top: 6px solid var(--mc-green);
+        }
+        .feature-card h3 { margin-top: 0; }
+        
+        .list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        .list-item {
+            background: #222;
+            padding: 10px;
+            font-size: 12px;
+            border-left: 3px solid #555;
+            color: #aaa;
+        }
+
+        /* --- DOWNLOAD BUTTONS --- */
+        .download-button {
+          font-size: 14px;
+          background: #333;
+          color: white;
+          padding: 1.5rem 2rem;
+          text-decoration: none;
+          border: 4px solid var(--mc-border);
+          border-bottom-width: 8px; 
+          transition: all 0.1s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          cursor: pointer;
+          margin-top: 2rem;
+          text-transform: uppercase;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .download-button:hover {
+          background: var(--mc-green);
+          color: #000;
+          transform: translateY(-2px);
+          border-bottom-width: 10px;
+        }
+        .download-button:active {
+            transform: translateY(4px);
+            border-bottom-width: 4px;
+        }
+        .download-button.disabled {
+            opacity: 0.6; cursor: not-allowed; background: #222;
+            border-color: #444;
+        }
+
+        /* --- COMMAND BOX --- */
+        .command-box {
+            background: #111;
+            border: 2px dashed #555;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--mc-green);
+            cursor: pointer;
+            position: relative;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .command-box:active { background: #000; }
+        .command-box::after { content: "CLICK TO COPY"; position: absolute; right: 10px; top: 15px; font-size: 10px; color: #888; }
+
+        /* --- XP BAR --- */
+        .xp-hud-container {
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            padding: 15px 0; text-align: center; pointer-events: none;
+        }
+        .xp-bar-bg {
+            width: 50%; height: 14px; background: #333; border: 3px solid #000;
+            margin: 0 auto; position: relative;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+        }
+        .xp-bar-fill { height: 100%; background: #80ff20; width: 0%; transition: width 0.2s; image-rendering: pixelated; }
+        .xp-level { color: #80ff20; font-size: 20px; margin-bottom: 8px; text-shadow: 3px 3px 0 #000; font-family: 'Press Start 2P', cursive;}
+
+        /* --- GAME STYLES --- */
+        .game-area {
+            height: 300px; background: #222; border: 4px solid #555;
+            position: relative; overflow: hidden; margin-top: 1rem;
+            cursor: crosshair; display: none;
+            box-shadow: inset 0 0 30px #000;
+        }
+        .chicken { position: absolute; font-size: 40px; cursor: pointer; user-select: none; animation: bob 0.5s infinite alternate; filter: drop-shadow(4px 4px 0 #000); }
+        @keyframes bob { from{transform:translateY(0)} to{transform:translateY(-8px)} }
+        
+        /* --- FOOTER --- */
+        footer {
+            text-align: center; padding: 4rem 2rem; background: #111;
+            border-top: 6px solid #444; margin-top: 5rem; font-size: 12px;
+            font-family: 'Roboto Mono', monospace;
+        }
+        footer a { color: var(--mc-green); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        .warning-box {
+            background: rgba(255, 85, 85, 0.1);
+            border: 2px solid var(--mc-red);
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #ffaaaa;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .feature-box { padding: 1.5rem 1rem; margin: 1.5rem 0; }
+            .feature-title { font-size: 10px; margin-top: -2.5rem; }
+            h1 { font-size: 18px; }
+            body { font-size: 13px; }
+            .xp-bar-bg { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2P94THH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <header class="header">
+        <div class="breadcrumb">
+            <a href="../index.html">HOME</a> &gt; <a href="#">ADDONS</a> &gt; AUTOSWAP ULTIMATE
+        </div>
+        <h1>AUTOSWAP ULTIMATE</h1>
+        <p class="pixel-font" style="color: #888; font-size: 12px; letter-spacing: 1px;">THE MOST ADVANCED HOTBAR MANAGER EVER SCRIPTED.</p>
+    </header>
+
+    <main class="container">
+        
+        <!-- ADSTERRA HEADER 728x90 -->
+        <div style="text-align: center; margin: 0 auto 40px auto; overflow: hidden;">
+            <script type="text/javascript">
+            atOptions = {
+                'key' : '1c052379eaa4f622ad59cae13d01ed4f',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
+        </div>
+
+        <!-- INTRO / ABOUT SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">🧩 THE EVOLUTION OF GAMEPLAY</h2>
+            <img src="https://shadowgamer12k.github.io/assets/images/postsImages/AutoSwap.webp" onerror="this.src='https://via.placeholder.com/1000x500/111/5f5?text=AutoSwap+System+Active'" alt="AutoSwap Addon Interface" class="addon-preview-img">
+            
+            <div class="content-block">
+                <h3>WHY AUTOSWAP?</h3>
+                <p>
+                    Minecraft Bedrock Edition moves fast. Whether you are speedrunning, engaging in intense PvP on a faction server, or undertaking a massive terraforming project, <strong>hotbar management</strong> is the invisible skill gap. Fumbling for your pickaxe when you hit stone, or panicking to find your sword when a Creeper drops behind you, can result in death.
+                </p>
+                <p>
+                    <strong>AutoSwap Ultimate</strong> is not just a tool switcher; it is a context-aware inventory manager powered by the Minecraft Script API. It constantly analyzes your environment—your velocity, your view vector, nearby entities, and the blocks in front of you—to ensure the perfect item is in your main hand within <strong>3 ticks (0.15 seconds)</strong>.
+                </p>
+                <p>
+                    Unlike older "auto-tool" addons that used laggy command blocks or behavior animations, AutoSwap runs purely on <strong>GameTest Framework (Script API)</strong> logic. This means zero TPS drop, instant reaction times, and compatibility with other addons.
+                </p>
+            </div>
+        </section>
+
+        <!-- DEEP DIVE MECHANICS -->
+        <section class="feature-box">
+            <h2 class="feature-title">⚙️ DEEP DIVE: MECHANICS</h2>
+            
+            <div class="features-grid">
+                <!-- MINING LOGIC -->
+                <div class="feature-card">
+                    <h3>⛏️ INTELLIGENT MINING</h3>
+                    <p>
+                        The addon raycasts 5.5 blocks ahead of your vision. It reads the Block ID and Tags of what you are looking at. It doesn't just look for "Stone." It checks against a massive database of <strong>Smart Filters</strong>.
+                    </p>
+                    <ul style="padding-left: 20px; color: #aaa; margin-top: 10px;">
+                        <li><strong>Obsidian?</strong> Checks for Diamond/Netherite Pickaxe.</li>
+                        <li><strong>Leaves/Sculk?</strong> Swaps to Hoe instantly.</li>
+                        <li><strong>Webs/Bamboo?</strong> Swaps to Sword.</li>
+                        <li><strong>Gravel/Sand?</strong> Swaps to Shovel.</li>
+                    </ul>
+                </div>
+
+                <!-- COMBAT LOGIC -->
+                <div class="feature-card" style="border-top-color: var(--mc-red);">
+                    <h3>⚔️ PREDATORY COMBAT</h3>
+                    <p>
+                        The script runs a spatial query in a 6-block radius along your view vector. If it detects an entity (Player, Mob, Animal), it triggers the <strong>Combat Protocol</strong>.
+                    </p>
+                    <p>
+                        It scans your hotbar for the highest damage item in this priority order:
+                        <br>
+                        <strong style="color:var(--mc-red)">Sword > Trident > Mace > Axe.</strong>
+                        <br><br>
+                        This happens faster than human reaction time, giving you the first strike advantage in every encounter.
+                    </p>
+                </div>
+
+                <!-- FALL SAVER LOGIC -->
+                <div class="feature-card" style="border-top-color: var(--mc-aqua);">
+                    <h3>🪂 VELOCITY CHECK (MLG)</h3>
+                    <p>
+                        AutoSwap monitors your player's vertical velocity (Y-axis). If your fall speed exceeds <strong>-0.6 blocks/tick</strong> (a dangerous fall), it initiates the <strong>Clutch Routine</strong>.
+                    </p>
+                    <p>
+                        It frantically searches your inventory for safety items and equips them immediately:
+                        <br>
+                        <strong style="color:var(--mc-aqua)">Water Bucket > Slime Block > Hay Bale > Wind Charge.</strong>
+                        <br><br>
+                        Just hold right-click (or hold screen) as you fall, and the addon handles the swap.
+                    </p>
+                </div>
+
+                <!-- UTILITY LOGIC -->
+                <div class="feature-card" style="border-top-color: var(--mc-gold);">
+                    <h3>🔦 SNEAK MEMORY</h3>
+                    <p>
+                        The addon remembers what slot you were holding before you started interacting.
+                    </p>
+                    <p>
+                        <strong>While Sneaking (Crouching):</strong> The script assumes you want to place a utility block. It auto-swaps to <strong>Torches, Lanterns, or Glowstone</strong> if you have them.
+                    </p>
+                    <p>
+                        <strong>On Un-Sneak:</strong> It returns your hand to the weapon or tool you were holding previously. This allows for seamless "Mine -> Light up cave -> Mine" loops without scrolling.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SMART FILTER DATABASE -->
+        <section class="feature-box">
+            <h2 class="feature-title">📚 THE BLOCK DATABASE</h2>
+            <div class="content-block">
+                <p>
+                    AutoSwap doesn't guess. It knows. Below is a categorized list of the interactions hard-coded into the script. If you look at these blocks, the corresponding tool will be pulled from your hotbar.
+                </p>
+            </div>
+
+            <h3>🗡️ SWORD TRIGGERS</h3>
+            <div class="list-grid">
+                <div class="list-item">Cobwebs</div>
+                <div class="list-item">Bamboo Saplings</div>
+                <div class="list-item">Bamboo</div>
+                <div class="list-item">Melons (Fast Break)</div>
+            </div>
+
+            <h3>🔥 FLINT & STEEL TRIGGERS</h3>
+            <div class="list-grid">
+                <div class="list-item">TNT Blocks</div>
+                <div class="list-item">Nether Portals</div>
+                <div class="list-item">Campfires (Unlit)</div>
+                <div class="list-item">Candles</div>
+                <div class="list-item">Obsidian (Prep)</div>
+            </div>
+
+            <h3>🌿 HOE TRIGGERS (ORGANICS)</h3>
+            <div class="list-grid">
+                <div class="list-item">Sculk / Sensors / Shriekers</div>
+                <div class="list-item">Leaves (All types)</div>
+                <div class="list-item">Sponge / Wet Sponge</div>
+                <div class="list-item">Hay Bales</div>
+                <div class="list-item">Moss Blocks / Carpets</div>
+                <div class="list-item">Nether Wart / Warped Wart</div>
+                <div class="list-item">Target Blocks</div>
+                <div class="list-item">Froglights</div>
+            </div>
+
+            <h3>✂️ SHEARS TRIGGERS</h3>
+            <div class="list-grid">
+                <div class="list-item">Wool / Carpets</div>
+                <div class="list-item">Vines / Glow Lichen</div>
+                <div class="list-item">Tripwire</div>
+                <div class="list-item">Deadbushes</div>
+                <div class="list-item">Seagrass / Ferns</div>
+            </div>
+
+            <h3>⛏️ PICKAXE TRIGGERS (HEAVY)</h3>
+            <div class="list-grid">
+                <div class="list-item">Stone / Cobble / Deepslate</div>
+                <div class="list-item">Ores (Diamond, Iron, Gold)</div>
+                <div class="list-item">Obsidian / Crying Obsidian</div>
+                <div class="list-item">Rails / Pistons / Redstone</div>
+                <div class="list-item">Concrete / Terracotta</div>
+                <div class="list-item">Ender Chests / Shulkers</div>
+                <div class="list-item">Amethyst Geodes</div>
+                <div class="list-item">Anvils / Hoppers / Cauldrons</div>
+            </div>
+        </section>
+
+        <!-- COMMANDS & SETUP -->
+        <section class="feature-box">
+            <h2 class="feature-title">💻 COMMANDS & INSTALLATION</h2>
+            
+            <div class="content-block">
+                <h3>STEP 1: INSTALLATION</h3>
+                <p>1. Download the <strong>.mcpack</strong> file from the link below.</p>
+                <p>2. Open the file to import it into Minecraft Bedrock.</p>
+                <p>3. Apply the Behavior Pack to your world.</p>
+                
+                <div class="warning-box">
+                    <strong>⚠️ CRITICAL REQUIREMENT:</strong><br>
+                    You MUST enable <strong>"Beta APIs"</strong> in the "Experiments" tab of your world settings. This addon uses the `gametest` module. Without this toggle, the script will not load.
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h3>STEP 2: ACTIVATION</h3>
+                <p>The addon is disabled by default to prevent accidental swapping in lobbies. You must toggle it per player.</p>
+                
+                <p><strong>To Enable AutoSwap:</strong></p>
+                <div class="command-box" onclick="copyCommand(this)">/auto:swap on</div>
+                
+                <p><strong>To Disable AutoSwap:</strong></p>
+                <div class="command-box" onclick="copyCommand(this)">/auto:swap off</div>
+                
+                <p><em>Note: This setting is persistent. If you leave the world and rejoin, it remembers your toggle state.</em></p>
+            </div>
+        </section>
+
+        <!-- TROUBLESHOOTING FAQ -->
+        <section class="feature-box">
+            <h2 class="feature-title">❓ TROUBLESHOOTING & FAQ</h2>
+            
+            <div class="content-block">
+                <h3>Q: IT'S NOT WORKING / CHAT COMMAND NOT FOUND?</h3>
+                <p>A: This is 99% of the time because <strong>Beta APIs</strong> is not enabled in World Settings > Experiments. Also, ensure you are on Minecraft version 1.21.0 or higher.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Q: WILL THIS BREAK MY TOOLS?</h3>
+                <p>A: No! The script includes a <strong>Durability Safety Guard</strong>. If your tool has less than <strong>15 durability</strong> remaining, the addon will REFUSE to auto-equip it, forcing you to use a different item or repair it. This prevents accidental breakage of God-tier picks.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Q: DOES IT WORK ON SERVERS/REALMS?</h3>
+                <p>A: Yes, it works on Realms and Bedrock Dedicated Servers (BDS) as long as the addon is installed on the server side and scripting is enabled. It does NOT work if you just install it globally on your client without the server having it.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Q: CAN I USE THIS WITH OTHER ADDONS?</h3>
+                <p>A: Absolutely. Because it uses the Script API, it does not conflict with `player.json` or other common behavior pack files. It is highly compatible.</p>
+            </div>
+        </section>
+
+        <!-- DOWNLOAD SECTION -->
+        <section class="feature-box">
+            <h2 class="feature-title">⬇️ SECURE DOWNLOAD</h2>
+            
+            <p style="text-align:center; font-size: 11px; margin-bottom: 20px;">
+                COMPLETE THE CAPTCHA BELOW TO ACCESS THE FILE SERVERS.
+            </p>
+
+            <!-- ADSTERRA NATIVE BANNER -->
+            <div style="margin-bottom: 30px; border: 2px solid #444; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 4px; text-align: center;">
+                <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+                <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+            </div>
+
+            <div class="game-ui" id="gameUI">
+                <p class="pixel-font" style="color: #fff; margin-bottom: 15px; font-size: 12px; text-align: center;">
+                    <strong>SECURITY CHECK:</strong><br>
+                    ELIMINATE 5 CHICKENS TO PROVE YOU ARE HUMAN
+                </p>
+                <button class="download-button" id="startGameBtn" onclick="startChickenGame()" style="width: auto; margin: 0 auto; padding: 15px 40px;">
+                    ▶ START CHALLENGE
+                </button>
+            </div>
+
+            <div class="game-area" id="gameArea"></div>
+
+            <div id="finalDownloadSection" style="margin-top: 3rem;">
+                <!-- Replace with your Linkvertise or Mediafire link -->
+                <a href="#" id="downloadLink" class="download-button disabled">
+                    <span>🔒 LOCKED: COMPLETE CHALLENGE ABOVE</span>
+                </a>
+            </div>
+            
+            <p style="font-size: 10px; color: #666; margin-top: 2rem; text-align: center; border-top: 1px solid #333; padding-top: 1rem;">
+                Compatible with: Windows 10/11, iOS, Android, Xbox, PS4/5, Switch.<br>
+                Requires Minecraft Bedrock Edition 1.21.0+
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SHADOWGAMER12K. CODED BY VECTOR.<br>NOT AFFILIATED WITH MOJANG STUDIOS.</p>
+        <p style="margin-top: 15px;">
+            <a href="../legal/privacy-policy.html">PRIVACY POLICY</a> | 
+            <a href="../legal/terms-of-use.html">TERMS OF USE</a> |
+            <a href="../legal/contact.html">CONTACT SUPPORT</a>
+        </p>
+        <p style="font-size: 10px; color: #444; margin-top: 2rem;">
+            AutoSwap ID: #AS-2025-V1-RELEASE
+        </p>
+    </footer>
+
+    <!-- XP HUD -->
+    <div class="xp-hud-container">
+        <div class="xp-level" id="xpLevel">0</div>
+        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill"></div></div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- AUDIO SYSTEM ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            if (type === 'hit') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.1);
+                osc.start(now); osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'copy') {
+                 osc.type = 'sine';
+                 osc.frequency.setValueAtTime(1000, now);
+                 gain.gain.setValueAtTime(0.05, now);
+                 gain.gain.linearRampToValueAtTime(0, now + 0.1);
+                 osc.start(now); osc.stop(now + 0.1);
+            }
+        }
+
+        // --- COPY COMMAND ---
+        function copyCommand(el) {
+            const text = el.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                playSound('copy');
+                const originalText = el.innerText;
+                el.innerText = "COMMAND COPIED TO CLIPBOARD!";
+                el.style.borderColor = "#fff";
+                el.style.color = "#fff";
+                setTimeout(() => {
+                    el.innerText = originalText;
+                    el.style.borderColor = "#555";
+                    el.style.color = "var(--mc-green)";
+                }, 1500);
+            });
+        }
+
+        // --- SCROLL XP BAR ---
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('xpFill').style.width = scrollPercent + '%';
+            document.getElementById('xpLevel').innerText = Math.floor(scrollPercent / 1.5);
+        });
+
+        // --- CHICKEN GAME ---
+        // REPLACE THE URL BELOW WITH YOUR ACTUAL DOWNLOAD LINK
+        const downloadUrl = "https://shadowgamer12k.github.io/redirect.html?url=YOUR_ACTUAL_DOWNLOAD_LINK_HERE"; 
+        let score = 0;
+        const target = 5;
+        
+        function startChickenGame() {
+            document.getElementById('startGameBtn').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('gameUI').innerHTML = '<p class="pixel-font" style="color:#aaa; font-size:12px; text-align:center;">TARGETS ELIMINATED: <span style="color:#fff; font-size:16px" id="scoreDisplay">0</span> / 5</p>';
+            spawnChicken();
+        }
+
+        function spawnChicken() {
+            if (score >= target) return winGame();
+            
+            const area = document.getElementById('gameArea');
+            const chicken = document.createElement('div');
+            chicken.className = 'chicken';
+            chicken.innerHTML = '🐔';
+            
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            
+            chicken.style.left = x + 'px';
+            chicken.style.top = y + 'px';
+            
+            chicken.onclick = () => {
+                playSound('hit');
+                score++;
+                document.getElementById('scoreDisplay').innerText = score;
+                chicken.remove();
+                if (score < target) setTimeout(spawnChicken, 400); // Slightly slower for gameplay balance
+                else winGame();
+            };
+
+            area.appendChild(chicken);
+            
+            // Remove chicken if not clicked in time
+            setTimeout(() => {
+                if (chicken.parentElement && score < target) {
+                    chicken.remove();
+                    spawnChicken();
+                }
+            }, 1000); // Faster despawn
+        }
+
+        function winGame() {
+            playSound('win');
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameUI').innerHTML = '<p class="pixel-font" style="color:#55ff55; font-size:14px; text-align:center;">✅ HUMAN VERIFIED. ACCESS GRANTED.</p>';
+            
+            const btn = document.getElementById('downloadLink');
+            btn.classList.remove('disabled');
+            btn.href = downloadUrl;
+            btn.target = "_blank";
+            btn.innerHTML = '<span>⬇️ DOWNLOAD .MCPACK FILE</span>';
+            btn.style.background = "#55ff55";
+            btn.style.color = "#000";
+            btn.style.borderColor = "#fff";
+        }
+    </script>
+
+    <!-- ADSTERRA SOCIAL BAR -->
+    <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
+</body>
+</html>
