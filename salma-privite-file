@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من أجلكِ</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importing Cairo Font for Arabic support -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #2a2a2a; /* Start dark */
+            font-family: 'Cairo', sans-serif; /* Changed to Arabic font */
+            transition: background-color 2s ease;
+            overflow: hidden;
+        }
+
+        .pixel-font {
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #ffb7b2; border-radius: 4px; }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes gentle-shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-shake:hover { animation: gentle-shake 0.5s ease-in-out infinite; }
+        .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+        
+        .floating-heart {
+            position: absolute;
+            bottom: -20px;
+            animation: float-up 4s ease-in infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Block Textures (CSS Art) */
+        .block {
+            position: relative;
+            transition: all 0.3s ease;
+            image-rendering: pixelated;
+        }
+        
+        /* Minecraft Dirt/Grass logic */
+        .texture-grass {
+            background-color: #7EC984;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 8px 8px;
+            border-top: 4px solid #95E09B;
+            border-right: 4px solid #5FB366;
+            border-bottom: 4px solid #5FB366;
+            border-left: 4px solid #95E09B;
+        }
+
+        .texture-stone {
+            background-color: #7a7a7a;
+            background-image: radial-gradient(#555 15%, transparent 16%), radial-gradient(#666 15%, transparent 16%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            border: 4px solid #555;
+        }
+
+        .texture-wool-pink {
+            background-color: #FFB7B2;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 10px);
+            border: 4px solid #FF9E9E;
+            box-shadow: inset 0 0 10px rgba(255,182,193, 0.5);
+        }
+        
+        .texture-wool-red {
+            background-color: #ff6b6b;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 10px);
+            border: 4px solid #e05252;
+            box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.3);
+        }
+
+        .texture-broken {
+            background-color: #333;
+            border: 2px dashed #555;
+            opacity: 0.8;
+        }
+
+        /* Sanrio Bow CSS */
+        .bow-shape {
+            filter: drop-shadow(0px 2px 0px rgba(0,0,0,0.1));
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Data & Content (Translated to Arabic) ---
+        const STORY_STAGES = [
+            {
+                id: 0,
+                bg: "#2a2a2a",
+                text: "لقد كان المكان هادئاً جداً هنا مؤخراً...",
+                subText: "العالم يبدو ناقصاً ومكسوراً بدوننا.",
+                type: "intro",
+                gridState: "broken"
+            },
+            {
+                id: 1,
+                bg: "#3a3a3a",
+                text: "أعلم أنني أخطأت.",
+                subText: "لقد هدمتُ بعض الأشياء التي لم يكن علي هدمها. لقد آذيتك، وأنا أتحمل مسؤولية ذلك بالكامل.",
+                type: "repair",
+                task: "اضغطي على المكعبات المكسورة لإصلاح الأساس.",
+                requiredClicks: 5
+            },
+            {
+                id: 2,
+                bg: "#4A4A4A", // Getting lighter
+                text: "أريد إعادة بناء هذا، لكن فقط إذا كنتِ مستعدة.",
+                subText: "إصلاح الأمور يحتاج إلى صبر. أنا باقٍ هنا ولن أذهب لأي مكان.",
+                type: "plant",
+                task: "ازرعي الزهور على العشب لتعيدي الألوان.",
+                requiredClicks: 5
+            },
+            {
+                id: 3,
+                bg: "#FFFAF0", // Warm cream
+                text: "شكراً لأنكِ استمعتِ لي.",
+                subText: "أنتِ من يضفي الألوان والدفء على عالمي. تستحقين كل اللطف، والاحترام، والاهتمام.",
+                type: "decoration",
+                task: "ضعي لمسات هيلو كيتي الأخيرة لتكملي العالم.",
+                requiredClicks: 3
+            },
+            {
+                id: 4,
+                bg: "#FFF0F5", // Lavender blush
+                text: "أنا آسف حقاً ومن كل قلبي.",
+                subText: "أحبك. وما سيحدث بعد ذلك يعود لكِ وحدك.",
+                type: "choice"
+            }
+        ];
+
+        // Indices to form a heart shape on a 5x5 grid
+        const HEART_INDICES = [1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 22];
+
+        // --- Components ---
+
+        const PixelHeart = ({ color = "text-red-400" }) => (
+            <svg viewBox="0 0 24 24" className={`w-full h-full ${color} fill-current drop-shadow-md animate-pop`} style={{imageRendering: 'pixelated'}}>
+                <path d="M4 4h4v4H4zM16 4h4v4h-4zM8 8h8v4H8zM4 12h16v4H4zM8 16h8v4H8zM12 20h0v0h0z" />
+            </svg>
+        );
+
+        const HelloKittyBow = () => (
+            <div className="w-full h-full flex items-center justify-center animate-pop">
+                <svg viewBox="0 0 100 60" className="w-10 h-6 bow-shape">
+                    <circle cx="25" cy="30" r="20" fill="#FF6B6B" stroke="white" strokeWidth="4" />
+                    <circle cx="75" cy="30" r="20" fill="#FF6B6B" stroke="white" strokeWidth="4" />
+                    <circle cx="50" cy="30" r="12" fill="#FFD93D" stroke="white" strokeWidth="4" />
+                </svg>
+            </div>
+        );
+
+        const Flower = () => (
+            <div className="w-full h-full flex items-center justify-center animate-pop relative bottom-2">
+                <div className="text-2xl filter drop-shadow-sm">🌷</div>
+            </div>
+        );
+        
+        const Tree = () => (
+            <div className="w-full h-full flex items-center justify-center animate-pop relative bottom-2">
+                <div className="text-3xl filter drop-shadow-sm">🌳</div>
+            </div>
+        );
+
+        const Star = () => (
+            <div className="w-full h-full flex items-center justify-center animate-pop relative bottom-2">
+                <div className="text-3xl filter drop-shadow-sm text-yellow-400">⭐</div>
+            </div>
+        );
+
+        const Butterfly = () => (
+            <div className="w-full h-full flex items-center justify-center animate-pop relative bottom-2">
+                <div className="text-2xl filter drop-shadow-sm">🦋</div>
+            </div>
+        );
+
+        const Block = ({ type, onClick, hasItem, itemType, isVisible = true }) => {
+            if (!isVisible) return <div className="w-12 h-12 sm:w-16 sm:h-16"></div>;
+
+            let baseClass = "w-12 h-12 sm:w-16 sm:h-16 rounded-sm cursor-pointer relative shadow-sm ";
+            
+            if (type === 'broken') baseClass += "texture-broken scale-90";
+            if (type === 'stone') baseClass += "texture-stone";
+            if (type === 'grass') baseClass += "texture-grass";
+            if (type === 'wool') baseClass += "texture-wool-pink";
+            if (type === 'wool-red') baseClass += "texture-wool-red";
+
+            return (
+                <div 
+                    className={`${baseClass} flex items-center justify-center hover:brightness-110 active:scale-95 transition-all duration-300`}
+                    onClick={onClick}
+                >
+                    {hasItem && itemType === 'flower' && <Flower />}
+                    {hasItem && itemType === 'tree' && <Tree />}
+                    {hasItem && itemType === 'bow' && <HelloKittyBow />}
+                    {hasItem && itemType === 'star' && <Star />}
+                    {hasItem && itemType === 'butterfly' && <Butterfly />}
+                    {hasItem && itemType === 'heart' && <div className="p-2"><PixelHeart color="text-pink-100"/></div>}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [stage, setStage] = useState(0);
+            const [grid, setGrid] = useState(Array(25).fill({ type: 'broken', hasItem: false }));
+            const [actionCount, setActionCount] = useState(0);
+            const [endingChoice, setEndingChoice] = useState(null);
+            const [heartMode, setHeartMode] = useState(false);
+            const [heartFull, setHeartFull] = useState(false);
+            const [showTransitionAlert, setShowTransitionAlert] = useState(false);
+            
+            useEffect(() => {
+                document.body.style.backgroundColor = STORY_STAGES[stage].bg;
+            }, [stage]);
+
+            // Initialize grid based on stages
+            useEffect(() => {
+                if (stage === 1) {
+                    setActionCount(0);
+                }
+            }, [stage]);
+
+            const proceedToHeartMode = () => {
+                setShowTransitionAlert(false);
+                setHeartMode(true);
+                // Reset grid to create the heart shape
+                const heartGrid = Array(25).fill({ type: 'wool-red', hasItem: false });
+                setGrid(heartGrid);
+            };
+
+            const handleBlockClick = (index) => {
+                const currentBlock = grid[index];
+                const currentStageData = STORY_STAGES[stage];
+
+                // If heart is full or alert is showing, disable clicks
+                if (heartFull || showTransitionAlert) return;
+
+                if (stage === 1 && currentBlock.type === 'broken') {
+                    // Repair Phase
+                    const newGrid = [...grid];
+                    newGrid[index] = { ...currentBlock, type: 'stone' };
+                    setGrid(newGrid);
+                    setActionCount(prev => prev + 1);
+                    
+                    if (actionCount + 1 >= currentStageData.requiredClicks) {
+                        setTimeout(() => setStage(2), 1000);
+                        setTimeout(() => {
+                            setGrid(g => g.map(b => ({ ...b, type: 'grass' })));
+                        }, 800);
+                    }
+                }
+                else if (stage === 2 && currentBlock.type === 'grass' && !currentBlock.hasItem) {
+                    // Planting Phase
+                    const newGrid = [...grid];
+                    newGrid[index] = { ...currentBlock, hasItem: true, itemType: 'flower' };
+                    setGrid(newGrid);
+                    setActionCount(prev => prev + 1);
+                    
+                    if (actionCount + 1 >= currentStageData.requiredClicks) {
+                        setTimeout(() => setStage(3), 1000);
+                        setTimeout(() => {
+                            setGrid(g => g.map(b => ({ ...b, type: 'wool' })));
+                        }, 800);
+                    }
+                }
+                else if (stage === 3 && currentBlock.type === 'wool' && !currentBlock.hasItem) {
+                    // Decoration Phase
+                    const newGrid = [...grid];
+                    const item = Math.random() > 0.5 ? 'bow' : 'heart';
+                    newGrid[index] = { ...currentBlock, hasItem: true, itemType: item };
+                    setGrid(newGrid);
+                    setActionCount(prev => prev + 1);
+
+                    if (actionCount + 1 >= currentStageData.requiredClicks) {
+                        setTimeout(() => setStage(4), 1500);
+                    }
+                }
+                // --- Free Mode & Heart Mode Logic ---
+                else if (stage === 4 && endingChoice === 'time') {
+                    const newGrid = [...grid];
+                    // Added more items for variety: Star, Butterfly
+                    const types = ['flower', 'tree', 'bow', 'heart', 'star', 'butterfly'];
+                    
+                    // --- CHANGED LOGIC: RANDOM SELECTION ---
+                    // Select a random item directly from the list
+                    const randomType = types[Math.floor(Math.random() * types.length)];
+
+                    // Set the block to this random item (always fill, never empty)
+                    newGrid[index] = { ...currentBlock, hasItem: true, itemType: randomType };
+                    
+                    setGrid(newGrid);
+
+                    // Check if grid is full to trigger Alert then Heart Mode
+                    const occupiedCount = newGrid.filter(b => b.hasItem).length;
+                    
+                    // Logic: If NOT in heart mode yet, AND grid is full (25 items), AND alert not already shown
+                    if (!heartMode && !showTransitionAlert && occupiedCount === 25) {
+                        setTimeout(() => {
+                            setShowTransitionAlert(true);
+                        }, 500);
+                    }
+
+                    // Logic: If IN heart mode, check if heart is full to trigger ENDING
+                    if (heartMode) {
+                        const heartItemsCount = newGrid.filter((b, idx) => HEART_INDICES.includes(idx) && b.hasItem).length;
+                        if (heartItemsCount === HEART_INDICES.length) {
+                             setTimeout(() => {
+                                setHeartFull(true);
+                            }, 500);
+                        }
+                    }
+                }
+            };
+
+            const advanceIntro = () => {
+                setStage(1);
+            };
+
+            const renderDialogue = () => {
+                const data = STORY_STAGES[stage];
+
+                if (stage === 4 && endingChoice) {
+                    if (endingChoice === 'forgive') {
+                        return (
+                            <div className="text-center animate-pop">
+                                <h2 className="text-2xl text-pink-600 font-bold mb-2 pixel-font">شكراً لكِ.</h2>
+                                <p className="text-gray-700 mb-4">لن أخذلكِ هذه المرة. دعينا نبني شيئاً جميلاً معاً.</p>
+                                <div className="flex justify-center gap-2">
+                                    <div className="w-8 h-8"><PixelHeart /></div>
+                                    <div className="w-8 h-8"><PixelHeart /></div>
+                                    <div className="w-8 h-8"><PixelHeart /></div>
+                                </div>
+                            </div>
+                        );
+                    } else {
+                        // "I need time" branch
+                        if (heartFull) {
+                             return (
+                                <div className="text-center animate-fade-in relative z-50">
+                                    <h2 className="text-3xl text-red-600 font-bold mb-2 pixel-font animate-pop">قلبي اكتمل بوجودك.</h2>
+                                    <p className="text-slate-800 mb-4 font-bold text-lg leading-relaxed">
+                                        مهما طال الوقت، ستظلين دائماً الجزء الذي يكملني. شكراً لأنكِ منحتِ هذا القلب حياة جديدة.
+                                    </p>
+                                    <div className="flex justify-center gap-4 text-4xl animate-bounce mt-2">
+                                        <span>💖</span><span>🦋</span><span>✨</span>
+                                    </div>
+                                </div>
+                            );
+                        }
+
+                        if (heartMode) {
+                             return (
+                                <div className="text-center animate-fade-in">
+                                    <h2 className="text-2xl text-red-500 font-bold mb-2 pixel-font animate-pop">أنتِ مميزة جداً...</h2>
+                                    <p className="text-gray-800 mb-4 font-bold text-lg leading-relaxed">
+                                        خلصت المربعات بس عشانك مميزة على قلبي راح اعطيك مربعات زيادة جوا قلبي.
+                                    </p>
+                                    <div className="p-2 bg-pink-100 rounded-lg inline-block animate-pulse">
+                                        <p className="text-sm text-pink-600 font-bold">❤️ املئي قلبي بالأشياء الجميلة</p>
+                                    </div>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <div className="text-center animate-pop">
+                                <h2 className="text-2xl text-slate-600 font-bold mb-2 pixel-font">أنا أتفهم ذلك تماماً.</h2>
+                                <p className="text-gray-700 mb-4">خذي كل الوقت الذي تحتاجينه. سأكون هنا في انتظارك.</p>
+                                <div className="p-3 bg-white/50 rounded-xl inline-block">
+                                    <p className="text-sm text-slate-500 mb-2 font-bold">يمكنكِ الاستمرار في بناء وتزيين هذا العالم كما تحبين.</p>
+                                    <div className="flex justify-center gap-4 opacity-70 text-2xl">
+                                        <span>🌷</span><span>🦋</span><span>⭐</span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }
+                }
+
+                return (
+                    <div className="flex flex-col gap-4">
+                        <div>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-pink-600 pixel-font tracking-wide">
+                                {data.text}
+                            </h2>
+                            <p className="text-md md:text-lg text-gray-700 font-medium leading-relaxed">
+                                {data.subText}
+                            </p>
+                        </div>
+
+                        {data.type === 'intro' && (
+                            <button 
+                                onClick={advanceIntro}
+                                className="mt-4 px-6 py-3 bg-pink-400 text-white font-bold rounded-full hover:bg-pink-500 hover:scale-105 transition-all shadow-md flex items-center justify-center gap-2 mx-auto"
+                            >
+                                <span className="pixel-font text-xl">أنا أستمع...</span>
+                            </button>
+                        )}
+
+                        {data.type === 'repair' && (
+                            <div className="mt-2 text-sm text-gray-500 bg-white/50 p-2 rounded-lg inline-block mx-auto animate-pulse">
+                                ⛏️ اضغطي على المكعبات لإصلاحها (باقي {5 - actionCount})
+                            </div>
+                        )}
+
+                        {data.type === 'plant' && (
+                            <div className="mt-2 text-sm text-green-600 bg-white/50 p-2 rounded-lg inline-block mx-auto animate-pulse">
+                                🌷 اضغطي على العشب لزراعة الزهور (باقي {5 - actionCount})
+                            </div>
+                        )}
+                        
+                        {data.type === 'decoration' && (
+                            <div className="mt-2 text-sm text-pink-500 bg-white/50 p-2 rounded-lg inline-block mx-auto animate-pulse">
+                                🎀 أضيفي اللمسات الأخيرة (باقي {3 - actionCount})
+                            </div>
+                        )}
+
+                        {data.type === 'choice' && !endingChoice && (
+                            <div className="flex flex-col md:flex-row gap-3 justify-center mt-6">
+                                <button 
+                                    onClick={() => setEndingChoice('time')}
+                                    className="px-6 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition-all border-b-4 border-slate-300"
+                                >
+                                    ما زلتُ بحاجة لوقت
+                                </button>
+                                <button 
+                                    onClick={() => setEndingChoice('forgive')}
+                                    className="px-6 py-3 bg-pink-400 text-white font-bold rounded-xl hover:bg-pink-500 hover:scale-105 transition-all border-b-4 border-pink-600 shadow-lg flex items-center justify-center gap-2"
+                                >
+                                    <span>أنا مستعدة للمسامحة</span> 
+                                    <div className="w-4 h-4"><PixelHeart color="text-white"/></div>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 overflow-hidden">
+                    
+                    {/* Background effects for Heart Full ending */}
+                    {heartFull && (
+                        <>
+                            {[...Array(20)].map((_, i) => (
+                                <div key={i} className="floating-heart text-2xl text-red-500" 
+                                     style={{
+                                         left: `${Math.random() * 100}%`,
+                                         animationDelay: `${Math.random() * 5}s`,
+                                         opacity: 0.6
+                                     }}>
+                                    {['❤️', '✨', '🌸'][Math.floor(Math.random() * 3)]}
+                                </div>
+                            ))}
+                        </>
+                    )}
+                    
+                    {/* The Transition Alert Modal */}
+                    {showTransitionAlert && (
+                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+                            <div className="bg-white p-6 rounded-2xl shadow-2xl max-w-sm text-center border-4 border-pink-300 transform scale-100 animate-pop">
+                                <div className="text-4xl mb-4">😲</div>
+                                <h3 className="text-xl font-bold text-gray-800 mb-2 pixel-font">لقد انتهت المربعات!</h3>
+                                <p className="text-gray-600 mb-6">لقد قمتِ بملء المكان بالكامل...</p>
+                                <button 
+                                    onClick={proceedToHeartMode}
+                                    className="px-6 py-2 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600 transition-all shadow-lg animate-pulse"
+                                >
+                                    ماذا الآن؟
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Floating Clouds Background Elements (CSS only) */}
+                    <div className="absolute top-10 left-10 opacity-20 animate-float pointer-events-none">
+                        <div className="w-24 h-8 bg-white rounded-full"></div>
+                        <div className="w-12 h-12 bg-white rounded-full -mt-6 ml-4"></div>
+                    </div>
+                    <div className="absolute top-20 right-20 opacity-20 animate-float pointer-events-none" style={{animationDelay: '1s'}}>
+                        <div className="w-32 h-10 bg-white rounded-full"></div>
+                        <div className="w-16 h-16 bg-white rounded-full -mt-8 ml-6"></div>
+                    </div>
+
+                    {/* Main Content Card */}
+                    <div className="bg-white/90 backdrop-blur-sm p-2 rounded-3xl shadow-2xl max-w-2xl w-full border-4 border-white z-10">
+                        
+                        {/* The Game World */}
+                        <div className="bg-blue-100 rounded-2xl p-6 md:p-8 mb-4 relative overflow-hidden transition-colors duration-1000"
+                             style={{
+                                 backgroundColor: heartMode ? (heartFull ? '#FFF0F5' : '#FFE4E1') : (stage === 0 ? '#2a2a2a' : stage === 1 ? '#87CEEB' : '#E0F7FA')
+                             }}>
+                             
+                            {/* Sun/Moon */}
+                            <div className={`absolute top-4 right-4 w-12 h-12 rounded-full transition-all duration-1000 ${stage === 0 ? 'bg-gray-600' : 'bg-yellow-300 shadow-lg shadow-yellow-200'}`}></div>
+
+                            {/* The Grid */}
+                            <div className="grid grid-cols-5 gap-1 md:gap-2 max-w-[320px] md:max-w-[400px] mx-auto perspective-grid transition-all duration-500">
+                                {grid.map((block, index) => (
+                                    <Block 
+                                        key={index} 
+                                        type={block.type} 
+                                        hasItem={block.hasItem}
+                                        itemType={block.itemType}
+                                        onClick={() => handleBlockClick(index)}
+                                        isVisible={!heartMode || HEART_INDICES.includes(index)}
+                                    />
+                                ))}
+                            </div>
+                            
+                            {/* Character Sprite (Static for simplicity, transitions by stage) */}
+                            <div className="absolute bottom-4 left-4 transition-opacity duration-500 opacity-80">
+                                {stage >= 3 && !heartMode && (
+                                    <div className="animate-float">
+                                        {/* Simple CSS Hello Kitty Head */}
+                                        <div className="w-12 h-10 bg-white rounded-full relative border-2 border-gray-800">
+                                            <div className="absolute -top-2 left-1 w-3 h-4 bg-white border-2 border-gray-800 rounded-t-lg -rotate-15"></div>
+                                            <div className="absolute -top-2 right-1 w-3 h-4 bg-white border-2 border-gray-800 rounded-t-lg rotate-15"></div>
+                                            <div className="absolute top-4 left-2 w-1 h-1 bg-black rounded-full"></div>
+                                            <div className="absolute top-4 right-2 w-1 h-1 bg-black rounded-full"></div>
+                                            <div className="absolute top-5 left-5 w-2 h-1 bg-yellow-400 rounded-full border border-black"></div>
+                                            <div className="absolute -right-1 top-0 w-5 h-4 text-red-500">
+                                                <svg viewBox="0 0 20 20" className="fill-current"><path d="M15 5c0 2-3 2-3 2s3 0 3 2-2 2-2 2-2 0-2-2 3-2 3-2-3 0-3-2 2-2 2-2 2 0 2 2z"/></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Dialogue Section */}
+                        <div className="px-4 pb-4 text-center min-h-[160px] flex items-center justify-center">
+                            {renderDialogue()}
+                        </div>
+                    </div>
+
+                    <div className="mt-8 text-white/50 text-xs text-center font-mono">
+                        Made with pixels & patience.
+                    </div>
+
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
