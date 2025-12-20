@@ -353,23 +353,47 @@
   </div>
 
   <script>
-   // === تغيير هام: ضع هنا اسم الصفحة التالية ===
-    // في صفحة step2 اجعلها step3.html
-    // في صفحة step3 اجعلها step4.html
     const nextPage = "step3.html"; 
+    
+    // إعلان (Direct Link)
+    const adsterraLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
 
-    // جلب البيانات من الرابط
     const urlParams = new URLSearchParams(window.location.search);
     const secureToken = urlParams.get('q'); // النظام الجديد
-    const oldUrl = urlParams.get('url');   // النظام القديم
+    const oldUrl = urlParams.get('url');    // النظام القديم
 
-    // دالة الانتقال (اربطها بزر التالي الخاص بك)
-    function goToNextStep() {
-        // التحقق من تفعيل الزر (إذا كان لديك كود تحقق)
-        const btn = document.getElementById('next-btn'); // تأكد من ID الزر
-        if (btn && btn.disabled) return; 
+    const scanBtn = document.getElementById('scan-btn');
+    const nextBtn = document.getElementById('next-btn');
 
-        // التوجيه مع نقل البيانات
+    function startScan() {
+      if(adsterraLink) {
+        window.open(adsterraLink, '_blank');
+      }
+
+      scanBtn.innerHTML = 'جاري الفحص...';
+      scanBtn.style.backgroundColor = '#555';
+      scanBtn.style.color = '#fff';
+      scanBtn.style.animation = 'none';
+      scanBtn.disabled = true;
+
+      setTimeout(() => {
+        scanBtn.innerHTML = '✅ تم التحقق بنجاح';
+        scanBtn.style.backgroundColor = 'transparent';
+        scanBtn.style.color = '#55ff55';
+        scanBtn.style.border = '1px solid #55ff55';
+        
+        nextBtn.disabled = false;
+        nextBtn.classList.add('unlocked');
+        nextBtn.innerHTML = 'الخطوة التالية >>';
+      }, 2500);
+    }
+
+    // دالة الانتقال للخطوة 3
+    function goToStep3() {
+        if(!nextBtn.classList.contains('unlocked')) return;
+        
+        nextBtn.innerHTML = 'جاري التوجيه...';
+
         setTimeout(() => {
             if (secureToken) {
                 // تمرير الكود المشفر كما هو
@@ -380,16 +404,7 @@
             } else {
                 window.location.href = nextPage;
             }
-        }, 500); // تأخير بسيط اختياري
-    }
-
-    // دالة الانتقال للصفحة التالية
-    function goToStep3() {
-        if (destinationUrl) {
-            window.location.href = nextPage + "?url=" + encodeURIComponent(destinationUrl);
-        } else {
-            window.location.href = nextPage;
-        }
+        }, 500);
     }
   </script>
 </body>
