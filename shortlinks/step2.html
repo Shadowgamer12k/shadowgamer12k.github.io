@@ -353,41 +353,34 @@
   </div>
 
   <script>
-    const nextPage = "step3.html";
-    
-    // Direct Link (من Step 1)
-    const adsterraLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
+   // === تغيير هام: ضع هنا اسم الصفحة التالية ===
+    // في صفحة step2 اجعلها step3.html
+    // في صفحة step3 اجعلها step4.html
+    const nextPage = "step3.html"; 
 
+    // جلب البيانات من الرابط
     const urlParams = new URLSearchParams(window.location.search);
-    const destinationUrl = urlParams.get('url') || "";
+    const secureToken = urlParams.get('q'); // النظام الجديد
+    const oldUrl = urlParams.get('url');   // النظام القديم
 
-    const scanBtn = document.getElementById('scan-btn');
-    const nextBtn = document.getElementById('next-btn');
+    // دالة الانتقال (اربطها بزر التالي الخاص بك)
+    function goToNextStep() {
+        // التحقق من تفعيل الزر (إذا كان لديك كود تحقق)
+        const btn = document.getElementById('next-btn'); // تأكد من ID الزر
+        if (btn && btn.disabled) return; 
 
-    function startScan() {
-      // فتح الإعلان في نافذة جديدة
-      if(adsterraLink) {
-        window.open(adsterraLink, '_blank');
-      }
-
-      // تغيير حالة زر الفحص
-      scanBtn.innerHTML = 'جاري التحقق...';
-      scanBtn.style.backgroundColor = '#555';
-      scanBtn.style.color = '#fff';
-      scanBtn.style.animation = 'none';
-      scanBtn.disabled = true;
-
-      // الانتظار لمدة 5 ثواني ثم فتح الزر التالي
-      setTimeout(() => {
-        scanBtn.innerHTML = '✅ تم التأكيد';
-        scanBtn.style.backgroundColor = 'transparent';
-        scanBtn.style.color = '#55ff55';
-        
-        // فتح الزر التالي
-        nextBtn.disabled = false;
-        nextBtn.classList.add('unlocked');
-        nextBtn.innerHTML = '🔓 اضغط هنا للانتقال للخطوة 3';
-      }, 5000); 
+        // التوجيه مع نقل البيانات
+        setTimeout(() => {
+            if (secureToken) {
+                // تمرير الكود المشفر كما هو
+                window.location.href = nextPage + "?q=" + secureToken;
+            } else if (oldUrl) {
+                // تمرير الرابط القديم
+                window.location.href = nextPage + "?url=" + encodeURIComponent(oldUrl);
+            } else {
+                window.location.href = nextPage;
+            }
+        }, 500); // تأخير بسيط اختياري
     }
 
     // دالة الانتقال للصفحة التالية
