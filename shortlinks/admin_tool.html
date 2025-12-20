@@ -1,45 +1,169 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>مولد الروابط المشفرة (خاص)</title>
-    <style>
-        body { font-family: sans-serif; background: #222; color: #fff; text-align: center; padding: 50px; }
-        input, button { padding: 10px; width: 80%; margin: 10px 0; border-radius: 5px; border: none; }
-        button { background: #4CAF50; color: white; cursor: pointer; font-weight: bold; }
-        .output { background: #333; padding: 15px; word-break: break-all; border: 1px solid #555; display: none; margin-top: 20px;}
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم - مولد الروابط ShadowGamer</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
+
+    :root {
+      --primary-color: #55ff55;
+      --bg-color: #1a1a1a;
+      --card-bg: #252525;
+      --border-color: #444;
+      --text-color: #eee;
+      --alert-color: #ffaa00;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: radial-gradient(#333 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--text-color);
+      font-family: 'Changa', sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--card-bg);
+      border: 2px solid var(--primary-color);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(85, 255, 85, 0.2);
+      text-align: right;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-top: 0;
+      text-align: center;
+      border-bottom: 1px dashed #555;
+      padding-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 10px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      background: #111;
+      border: 1px solid #444;
+      color: var(--primary-color);
+      font-family: monospace;
+      font-size: 1rem;
+      border-radius: 5px;
+      box-sizing: border-box;
+      direction: ltr;
+      text-align: left;
+    }
+
+    button {
+      background: var(--primary-color);
+      color: #000;
+      border: none;
+      padding: 15px;
+      font-family: 'Changa', sans-serif;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 25px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #44ee44;
+      box-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .result-area {
+      margin-top: 30px;
+      background: #000;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      display: none;
+    }
+
+    .result-area p {
+      margin: 0 0 10px 0;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: #151515;
+      color: var(--alert-color);
+      border: 1px solid #333;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      resize: none;
+      box-sizing: border-box;
+      direction: ltr;
+    }
+  </style>
 </head>
 <body>
 
-    <h2>أداة تشفير الروابط للمودات</h2>
-    <input type="text" id="originalLink" placeholder="ضع رابط الميديا فاير هنا...">
-    <button onclick="generateLink()">تشفير وإنشاء الرابط</button>
+  <div class="container">
+    <h1>مولد الروابط الآمن (Admin)</h1>
+    
+    <label>ضع رابط الميديا فاير (أو أي رابط مباشر):</label>
+    <input type="text" id="originalLink" placeholder="https://www.mediafire.com/file/...">
 
-    <div id="resultBox" class="output">
-        <p>انسخ هذا الرابط وضعه في وصف الفيديو:</p>
-        <textarea id="finalUrl" style="width:100%; height:80px; background:#111; color:#0f0;"></textarea>
+    <button onclick="generateLink()">🔒 تشفير وإنشاء الرابط</button>
+
+    <div class="result-area" id="resultBox">
+      <p>انسخ الرابط التالي وانشره للمتابعين:</p>
+      <textarea id="finalUrl" readonly onclick="this.select()"></textarea>
     </div>
+  </div>
 
-    <script>
-        function generateLink() {
-            var rawLink = document.getElementById('originalLink').value.trim();
-            if (!rawLink) return alert("الرجاء وضع رابط!");
+  <script>
+    function generateLink() {
+      const rawLink = document.getElementById('originalLink').value.trim();
+      
+      if (!rawLink) {
+        alert("يرجى وضع رابط أولاً!");
+        return;
+      }
 
-            // 1. تشفير الرابط إلى Base64
-            var base64 = btoa(rawLink);
-            
-            // 2. عكس ترتيب الحروف (الخدعة التي تهزم الذكاء الاصطناعي)
-            var reversed = base64.split("").reverse().join("");
+      // 1. تشفير Base64
+      const base64 = btoa(rawLink);
+      
+      // 2. عكس النص (الحيلة ضد الذكاء الاصطناعي)
+      const reversed = base64.split("").reverse().join("");
 
-            // 3. تجهيز الرابط النهائي
-            // استبدل هذا الرابط برابط موقعك الحقيقي
-            var mySite = "https://shadowgamer12k.github.io/shortlinks/step1.html"; 
-            var fullLink = mySite + "?q=" + reversed;
+      // 3. تكوين الرابط النهائي
+      // تأكد أن هذا هو رابط موقعك الصحيح
+      const baseUrl = "https://shadowgamer12k.github.io/shortlinks/step1.html";
+      const fullLink = `${baseUrl}?q=${reversed}`;
 
-            document.getElementById('resultBox').style.display = 'block';
-            document.getElementById('finalUrl').value = fullLink;
-        }
-    </script>
+      const resultBox = document.getElementById('resultBox');
+      const finalUrl = document.getElementById('finalUrl');
+
+      resultBox.style.display = 'block';
+      finalUrl.value = fullLink;
+    }
+  </script>
+
 </body>
 </html>
