@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 4/4 - الرابط جاهز</title>
 
-  <!-- 1. كود PopAds (بدلاً من Adsterra Popunder) -->
+  <!-- 1. كود PopAds -->
   <script type="text/javascript" data-cfasync="false">
   /*<![CDATA[/* */
   (function(){var g=window,j="a66d0aeec711a50b29d1533358007452",u=[["siteId",760*720-310+4630843],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","never"]],v=["d3d3LmludGVsbGlnZW5jZWFkeC5jb20vZGNhcmJvbi1jb21wb25lbnRzLm1pbi5jc3M=","ZDJrbHg4N2Jnem5nY2UuY2xvdWRmcm9udC5uZXQvbEZoSC90cGVyc2lhbi5taW4uanM="],l=-1,n,s,m=function(){clearTimeout(s);l++;if(v[l]&&!(1791035880000<(new Date).getTime()&&1<l)){n=g.document.createElement("script");n.type="text/javascript";n.async=!0;var f=g.document.getElementsByTagName("script")[0];n.src="https://"+atob(v[l]);n.crossOrigin="anonymous";n.onerror=m;n.onload=function(){clearTimeout(s);g[j.slice(0,16)+j.slice(0,16)]||m()};s=setTimeout(m,5E3);f.parentNode.insertBefore(n,f)}};if(!g[j]){try{Object.freeze(g[j]=u)}catch(e){}m()}})();
   /*]]>/* */
   </script>
 
-  <!-- 2. كود Social Bar (Adsterra) -->
+  <!-- 2. كود Social Bar -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 
   <style>
@@ -380,11 +380,11 @@
     <button id="next-btn" class="next-btn" onclick="goToDestination()" disabled>🔒 الذهاب للرابط</button>
   </div>
 
-  <!-- إعلان بديل آمن (بانر عادي) في أسفل الصفحة بدلاً من اللاصق -->
+  <!-- إعلان بديل آمن -->
   <div class="ad-box" style="margin-top: 20px;">
       <script type="text/javascript">
         atOptions = {
-          'key' : '2daa63f6b0c15a895bcb7aba16a017e0', /* كود 468x60 الآمن */
+          'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
           'format' : 'iframe',
           'height' : 60,
           'width' : 468,
@@ -395,11 +395,26 @@
   </div>
 
   <script>
-    // 7. الرابط المباشر (Smartlink) - استخدم نفس الرابط
     const adsterraLink = "https://www.effectivegatecpm.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee";
 
     const urlParams = new URLSearchParams(window.location.search);
-    const destinationUrl = urlParams.get('url') || "https://google.com";
+    
+    // 1. النظام القديم: رابط مباشر
+    let destinationUrl = urlParams.get('url');
+
+    // 2. النظام الجديد: فك التشفير (Reverse + Base64)
+    const secureToken = urlParams.get('q');
+    if (secureToken) {
+        try {
+            // قلب النص ثم فك التشفير
+            destinationUrl = atob(secureToken.split("").reverse().join(""));
+        } catch (e) {
+            console.error("فشل فك الرابط الآمن");
+        }
+    }
+
+    // fallback إذا لم يوجد رابط
+    if (!destinationUrl) destinationUrl = "https://google.com";
 
     const scanBtn = document.getElementById('scan-btn');
     const nextBtn = document.getElementById('next-btn');
@@ -427,6 +442,7 @@
       }, 2500);
     }
 
+    // دالة التوجيه النهائي
     function goToDestination() {
       if(!nextBtn.classList.contains('unlocked')) return;
 
