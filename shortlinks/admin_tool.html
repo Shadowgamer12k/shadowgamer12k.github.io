@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مولد الروابط المشفرة (خاص)</title>
+    <style>
+        body { font-family: sans-serif; background: #222; color: #fff; text-align: center; padding: 50px; }
+        input, button { padding: 10px; width: 80%; margin: 10px 0; border-radius: 5px; border: none; }
+        button { background: #4CAF50; color: white; cursor: pointer; font-weight: bold; }
+        .output { background: #333; padding: 15px; word-break: break-all; border: 1px solid #555; display: none; margin-top: 20px;}
+    </style>
+</head>
+<body>
+
+    <h2>أداة تشفير الروابط للمودات</h2>
+    <input type="text" id="originalLink" placeholder="ضع رابط الميديا فاير هنا...">
+    <button onclick="generateLink()">تشفير وإنشاء الرابط</button>
+
+    <div id="resultBox" class="output">
+        <p>انسخ هذا الرابط وضعه في وصف الفيديو:</p>
+        <textarea id="finalUrl" style="width:100%; height:80px; background:#111; color:#0f0;"></textarea>
+    </div>
+
+    <script>
+        function generateLink() {
+            var rawLink = document.getElementById('originalLink').value.trim();
+            if (!rawLink) return alert("الرجاء وضع رابط!");
+
+            // 1. تشفير الرابط إلى Base64
+            var base64 = btoa(rawLink);
+            
+            // 2. عكس ترتيب الحروف (الخدعة التي تهزم الذكاء الاصطناعي)
+            var reversed = base64.split("").reverse().join("");
+
+            // 3. تجهيز الرابط النهائي
+            // استبدل هذا الرابط برابط موقعك الحقيقي
+            var mySite = "https://shadowgamer12k.github.io/shortlinks/step1.html"; 
+            var fullLink = mySite + "?q=" + reversed;
+
+            document.getElementById('resultBox').style.display = 'block';
+            document.getElementById('finalUrl').value = fullLink;
+        }
+    </script>
+</body>
+</html>
