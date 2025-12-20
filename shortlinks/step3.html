@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الخطوة 3/4 - حقائق ماين كرافت</title>
 
-  <!-- 1. كود PopAds (بدلاً من Adsterra Popunder) -->
+  <!-- 1. كود PopAds -->
 <script
   type="text/javascript"
   src="https://petsrulefondness.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"
 ></script>
-  <!-- 2. كود Social Bar (Adsterra) -->
+  <!-- 2. كود Social Bar -->
   <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
 
   <style>
@@ -124,21 +124,6 @@
         .sidebar-ad { display: flex; }
     }
     
-    /* الإعلان البديل للـ Sticky Footer */
-    .sticky-ad {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        background: #1a1a1a;
-        border-top: 2px solid var(--primary-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
     .task-area {
       background: rgba(255, 170, 0, 0.1);
       border: 1px solid var(--alert-color);
@@ -369,11 +354,10 @@
       <div class="task-title">⚠️ الفحص قبل الأخير</div>
       <div class="task-desc">أنت قريب جداً من الوجهة النهائية. يرجى فحص الرابط أدناه للمتابعة.</div>
       
-      <!-- 7. الزر يفتح الرابط المباشر (Smartlink) -->
       <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا للفحص ]</button>
     </div>
 
-    <!-- إعلان Native Banner (أسفل الزر) -->
+    <!-- إعلان Native Banner -->
     <div class="ad-box" style="width: 100%; border: none; background: transparent; margin-bottom: 25px;">
         <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
         <div id="container-f44aa867511a50b29d1533358007452"></div>
@@ -382,11 +366,11 @@
     <button id="next-btn" class="next-btn" onclick="goToStep4()" disabled>🔒 الرابط مقفل - تابع الخطوات</button>
   </div>
 
-  <!-- إعلان بديل آمن (بانر عادي) في أسفل الصفحة بدلاً من اللاصق -->
+  <!-- إعلان بديل آمن -->
   <div class="ad-box" style="margin-top: 20px;">
       <script type="text/javascript">
         atOptions = {
-          'key' : '2daa63f6b0c15a895bcb7aba16a017e0', /* كود 468x60 الآمن */
+          'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
           'format' : 'iframe',
           'height' : 60,
           'width' : 468,
@@ -399,11 +383,12 @@
   <script>
     const nextPage = "step4.html";
     
-    // 7. الرابط المباشر (Smartlink)
+    // رابط الإعلان
     const adsterraLink = "https://www.effectivegatecpm.com/ryfhhqmig?key=0eaa926d0267f89e64cae855c77862ee";
 
     const urlParams = new URLSearchParams(window.location.search);
-    const destinationUrl = urlParams.get('url') || "";
+    const secureToken = urlParams.get('q'); // النظام الجديد
+    const oldUrl = urlParams.get('url');    // النظام القديم
 
     const scanBtn = document.getElementById('scan-btn');
     const nextBtn = document.getElementById('next-btn');
@@ -431,17 +416,23 @@
       }, 2500);
     }
 
+    // دالة الانتقال للخطوة 4
     function goToStep4() {
-      if(!nextBtn.classList.contains('unlocked')) return;
+        if(!nextBtn.classList.contains('unlocked')) return;
+        
+        nextBtn.innerHTML = 'جاري التوجيه...';
 
-      nextBtn.innerHTML = 'جاري التوجيه...';
-      setTimeout(() => {
-        if(destinationUrl) {
-          window.location.href = nextPage + "?url=" + encodeURIComponent(destinationUrl);
-        } else {
-          window.location.href = nextPage;
-        }
-      }, 500);
+        setTimeout(() => {
+            if (secureToken) {
+                // تمرير الكود المشفر
+                window.location.href = nextPage + "?q=" + secureToken;
+            } else if (oldUrl) {
+                // تمرير الرابط القديم
+                window.location.href = nextPage + "?url=" + encodeURIComponent(oldUrl);
+            } else {
+                window.location.href = nextPage;
+            }
+        }, 500);
     }
   </script>
 
