@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MineCraft Image Resizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mc-bg: #1e1e1e; /* Deepslate-ish */
+            --mc-panel: #c6c6c6;
+            --mc-panel-dark: #8b8b8b;
+            --mc-panel-light: #ffffff;
+            --mc-panel-border: #373737;
+            --mc-slot: #8b8b8b;
+            --mc-slot-border: #ffffff;
+            --mc-slot-inner: #373737;
+            --mc-green: #55aa55;
+            --mc-green-shadow: #2a6e2a;
+            --mc-purple: #b461ff; /* Enchantment color */
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #12100e;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+/Pp/mixwAAABqUExURf///wAAAHp6evLy8tTU1O7u7rKysujo6Nra2sLCwuDg4L6+vrS0tLS0tLq6uhwcHMzMzLCwsMjIyOzs7LKysrCwsMjIyLi4uB4eHvb29ri4uMbGxr6+vt7e3r6+vmZmZtra2sLCwv///44l21QAAAApdFJOU///////////////////////////////////////////////////////AH/pQKQAAAFZSURBVHjaYmCgIQBOnDzpwoWbN29eAAI3b968cOECiI8s8P8/Q5wKyJ4/f76Z2XyYF0D2/P//H8wL5s+fP3/+fJAAyJ6/f//+/ftBAiD7/v///z/MC/7//v37938wLwBhkD2/f/8D84L//wHihwA2O37//g/i/wcF/v379x+I/wcF4Ar+//8P4v8H4v/v37//g/g/KADi//v3D4j/B+L//wHihwA2O37//gvi/wcF/v379x+I/wcF4Ar+/wfi//+B+P/79+//IP4PCrDQAyr4D8T//wPx//fv3/9B/B8UgCv49+8/EP//A/H/9+/f/0H8HxSAK/j37z8Q//8D8f/379//QfwfFIAreP8fiP//A/H/9+/f/0H8HxSAK/j3H4j//wPx//fv3/9B/B8UgCt4/x+I//8D8f/379//QfwfFIAr+PcfiP//A/H/9+/f/0H8HxSgYQUAAgwA9GQ0+a4h+qEAAAAASUVORK5CYII=');
+            background-rendering: pixelated;
+            color: #3f3f3f;
+            overflow-x: hidden;
+        }
+
+        /* Minecraft UI Panel Style */
+        .mc-panel {
+            background-color: var(--mc-panel);
+            border: 4px solid;
+            border-color: var(--mc-panel-light) var(--mc-panel-dark) var(--mc-panel-dark) var(--mc-panel-light);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            image-rendering: pixelated;
+        }
+
+        /* Minecraft Inset Slot Style */
+        .mc-slot {
+            background-color: var(--mc-slot);
+            border: 2px solid;
+            border-color: var(--mc-slot-inner) var(--mc-slot-border) var(--mc-slot-border) var(--mc-slot-inner);
+            position: relative;
+        }
+
+        /* Stack Count Overlay */
+        .mc-stack-count {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            color: white;
+            font-size: 14px;
+            text-shadow: 2px 2px 0px #3f3f3f;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* Minecraft Button */
+        .mc-button {
+            background-color: var(--mc-panel);
+            border: 2px solid;
+            border-color: var(--mc-panel-light) var(--mc-panel-dark) var(--mc-panel-dark) var(--mc-panel-light);
+            color: #3f3f3f;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.2);
+            transition: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .mc-button:active {
+            border-color: var(--mc-panel-dark) var(--mc-panel-light) var(--mc-panel-light) var(--mc-panel-dark);
+            background-color: #a0a0a0;
+        }
+        .mc-button:disabled {
+            color: #7a7a7a;
+            cursor: not-allowed;
+            background-color: #a0a0a0;
+        }
+
+        .mc-button-green {
+            background-color: var(--mc-green);
+            border-color: #8be08b var(--mc-green-shadow) var(--mc-green-shadow) #8be08b;
+            color: white;
+            text-shadow: 2px 2px 0px #205020;
+        }
+        .mc-button-green:active {
+            background-color: #3e8e3e;
+            border-color: var(--mc-green-shadow) #8be08b #8be08b var(--mc-green-shadow);
+        }
+
+        /* Minecraft Switch Toggle */
+        .mc-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #8b8b8b; /* Off state (stone) */
+            border: 2px solid #373737; /* Dark border */
+            outline: none;
+            cursor: pointer;
+            image-rendering: pixelated;
+            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.3);
+            transition: background-color 0.1s;
+            margin-right: 8px; /* Space between switch and text */
+        }
+
+        .mc-switch:checked {
+            background-color: #55aa55; /* On state (green) */
+        }
+
+        /* The Switch Handle */
+        .mc-switch::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -2px;
+            width: 20px;
+            height: 28px;
+            background-color: #c6c6c6;
+            border: 2px solid;
+            border-color: #ffffff #373737 #373737 #ffffff; /* 3D effect */
+            transition: transform 0.15s steps(2); /* Steps for pixel feel */
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+
+        .mc-switch:checked::after {
+            transform: translateX(24px);
+        }
+
+        /* Crafting Arrow */
+        .arrow-container {
+            width: 50px;
+            height: 34px;
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg width='50' height='34' viewBox='0 0 50 34' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10h28v-8l20 14-20 16v-8h-28z' fill='%238b8b8b' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .arrow-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background-image: url("data:image/svg+xml,%3Csvg width='50' height='34' viewBox='0 0 50 34' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10h28v-8l20 14-20 16v-8h-28z' fill='white' /%3E%3C/svg%3E");
+            background-size: 50px 34px; /* Ensure size matches container */
+            background-repeat: no-repeat;
+            background-position: left center;
+            overflow: hidden;
+            transition: width 0.1s linear;
+        }
+
+        /* Particles */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+        }
+        .xp-orb {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #8aff68;
+            border: 1px solid #236110;
+            box-shadow: 0 0 4px #8aff68;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 50;
+        }
+
+        .pixelated-text {
+            image-rendering: pixelated;
+        }
+        
+        /* Drag overlay */
+        .drag-overlay {
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 4px dashed #3f3f3f;
+        }
+
+        /* Chest Grid */
+        .chest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .chest-slot {
+            aspect-ratio: 1;
+            background-color: var(--mc-slot);
+            border: 2px solid;
+            border-color: var(--mc-slot-inner) var(--mc-slot-border) var(--mc-slot-border) var(--mc-slot-inner);
+            position: relative;
+            cursor: pointer;
+        }
+        .chest-slot:hover {
+            background-color: #a0a0a0;
+        }
+        
+        /* Enchantment Glint Animation (for Text) */
+        @keyframes enchantGlint {
+            0% { color: #b461ff; text-shadow: 2px 2px 0 #3e1b59; }
+            50% { color: #eebbff; text-shadow: 2px 2px 0 #3e1b59; }
+            100% { color: #b461ff; text-shadow: 2px 2px 0 #3e1b59; }
+        }
+        .enchanted-text {
+            animation: enchantGlint 2s infinite;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: #1e1e1e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b8b8b;
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen py-8">
+
+    <!-- Title -->
+    <div class="text-center mb-8 relative group">
+        <h1 class="text-3xl md:text-5xl text-white drop-shadow-[4px_4px_0_rgba(0,0,0,0.8)] mb-2" style="text-shadow: 4px 4px 0 #3f3f3f;">
+            CRAFTING RESIZER
+        </h1>
+        <p class="text-gray-400 text-xs md:text-sm">v1.20.1 &bull; 850x520 Texture Pack</p>
+    </div>
+
+    <!-- Main GUI Container -->
+    <div class="mc-panel p-6 max-w-4xl w-full mx-4 relative">
+        <!-- Close Button (Decorative) -->
+        <div class="absolute -top-3 -right-3 w-8 h-8 bg-red-500 border-4 border-white cursor-pointer hover:bg-red-600 shadow-md"></div>
+
+        <!-- Inventory Labels -->
+        <div class="flex justify-between text-sm mb-2 text-[#3f3f3f]">
+            <span>Input Inventory</span>
+            <span>Result</span>
+        </div>
+
+        <!-- The Crafting Area -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+            
+            <!-- INPUT SLOT -->
+            <div class="flex flex-col items-center gap-2 w-full md:w-1/3">
+                <div class="relative w-full aspect-video mc-slot bg-[#2b2b2b] flex items-center justify-center overflow-hidden cursor-pointer hover:brightness-110 transition group" id="dropZone">
+                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/png, image/jpeg, image/jpg" multiple>
+                    
+                    <div id="inputPlaceholder" class="flex flex-col items-center text-gray-400 text-center p-4">
+                        <div class="w-12 h-12 mb-2 bg-[#8b8b8b] border-2 border-[#373737] flex items-center justify-center text-2xl">+</div>
+                        <span class="text-xs">Drag Images</span>
+                    </div>
+                    
+                    <img id="inputPreview" class="hidden w-full h-full object-contain pixelated-text z-0" alt="Preview">
+                    
+                    <!-- Stack Count Indicator -->
+                    <div id="stackCount" class="mc-stack-count hidden">1</div>
+
+                    <!-- Drag Overlay -->
+                    <div id="dragOverlay" class="absolute inset-0 drag-overlay hidden z-20 flex items-center justify-center">
+                        <span class="text-[#3f3f3f] bg-white p-2">DROP ITEMS</span>
+                    </div>
+                </div>
+                <div class="text-xs text-[#3f3f3f]">Input</div>
+            </div>
+
+            <!-- CRAFTING ARROW -->
+            <div class="flex flex-col items-center justify-center">
+                <div class="arrow-container" id="arrowContainer">
+                    <div class="arrow-fill" id="arrowFill"></div>
+                </div>
+                <!-- Craft Button -->
+                 <button id="craftBtn" class="mt-4 mc-button px-4 py-2 text-xs" disabled>CRAFT</button>
+            </div>
+
+            <!-- OUTPUT SLOT (Preview of first result) -->
+            <div class="flex flex-col items-center gap-2 w-full md:w-1/3">
+                <div class="relative w-full aspect-video mc-slot bg-[#2b2b2b] flex items-center justify-center overflow-hidden">
+                    <div id="outputPlaceholder" class="text-gray-500 text-xs">
+                        Wait for craft...
+                    </div>
+                    <!-- Single Canvas for previewing the first result -->
+                    <canvas id="outputCanvas" class="hidden w-full h-full object-contain pixelated-text"></canvas>
+                    
+                    <!-- Item Frame Border (Overlay) -->
+                    <div class="absolute inset-0 border-[4px] border-[#583822] pointer-events-none opacity-50"></div>
+                </div>
+                <div class="text-xs text-[#3f3f3f]">Output (850x520)</div>
+            </div>
+        </div>
+
+        <!-- Batch Results Area (Hidden by default) -->
+        <div id="chestPanel" class="hidden mb-4">
+            <div class="text-xs mb-1 text-[#3f3f3f]">Result Chest (Click to download individual)</div>
+            <div class="mc-slot bg-[#c6c6c6] p-2">
+                <div id="chestGrid" class="chest-grid">
+                    <!-- Slots will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls / Inventory Footer -->
+        <div class="mc-slot p-4 bg-[#c6c6c6] mt-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="text-xs flex items-center gap-2">
+                        <div class="w-4 h-4 bg-[#373737] inline-block"></div>
+                        <span id="statusText">Idle</span>
+                    </div>
+                    
+                    <div class="w-[2px] h-8 bg-[#8b8b8b] border-l border-white"></div>
+
+                    <!-- Options -->
+                    <div class="flex flex-col gap-2">
+                        <div class="flex gap-2">
+                            <label class="flex items-center gap-2 text-xs cursor-pointer select-none">
+                                <input type="radio" name="fitMode" value="cover" checked class="accent-[#3f3f3f]">
+                                Crop
+                            </label>
+                            <label class="flex items-center gap-2 text-xs cursor-pointer select-none">
+                                <input type="radio" name="fitMode" value="contain" class="accent-[#3f3f3f]">
+                                Fit
+                            </label>
+                        </div>
+                        <!-- Enchantment Toggle (Updated to MC Switch) -->
+                        <label class="flex items-center text-xs cursor-pointer select-none" title="Sharpens image details">
+                            <input type="checkbox" id="enchantToggle" class="mc-switch">
+                            <span class="text-[#b461ff] drop-shadow-sm font-bold">Enchant (Sharpen)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button id="downloadPngBtn" class="mc-button mc-button-green px-6 py-3 text-xs opacity-50 cursor-not-allowed" disabled>
+                        SAVE .PNG
+                    </button>
+                    <button id="downloadJpgBtn" class="mc-button px-6 py-3 text-xs opacity-50 cursor-not-allowed" disabled>
+                        SAVE .JPG
+                    </button>
+                    <button id="downloadAllBtn" class="mc-button px-6 py-3 text-xs opacity-50 cursor-not-allowed hidden" disabled>
+                        SAVE ALL
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const dragOverlay = document.getElementById('dragOverlay');
+        const inputPreview = document.getElementById('inputPreview');
+        const inputPlaceholder = document.getElementById('inputPlaceholder');
+        const stackCount = document.getElementById('stackCount');
+        
+        const craftBtn = document.getElementById('craftBtn');
+        const arrowFill = document.getElementById('arrowFill');
+        
+        const outputCanvas = document.getElementById('outputCanvas');
+        const outputPlaceholder = document.getElementById('outputPlaceholder');
+        
+        const downloadPngBtn = document.getElementById('downloadPngBtn');
+        const downloadJpgBtn = document.getElementById('downloadJpgBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const enchantToggle = document.getElementById('enchantToggle');
+        
+        const statusText = document.getElementById('statusText');
+        const chestPanel = document.getElementById('chestPanel');
+        const chestGrid = document.getElementById('chestGrid');
+
+        let inputImages = []; // Array of { name, imgObject }
+        let processedImages = []; // Array of { name, canvas }
+        let isCrafting = false;
+        
+        const TARGET_WIDTH = 850;
+        const TARGET_HEIGHT = 520;
+
+        // --- Drag & Drop Visuals ---
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragOverlay.classList.remove('hidden');
+        });
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dragOverlay.classList.add('hidden');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragOverlay.classList.add('hidden');
+            if (e.dataTransfer.files.length) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        // --- File Input ---
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFiles(e.target.files);
+            }
+        });
+
+        async function handleFiles(files) {
+            // Reset previous state
+            inputImages = [];
+            
+            const fileArray = Array.from(files).filter(f => f.type.startsWith('image/'));
+            
+            if (fileArray.length === 0) {
+                alert('That block type is invalid! (Images only)');
+                return;
+            }
+
+            statusText.innerText = `Loading ${fileArray.length} blocks...`;
+
+            // Load all images asynchronously
+            const loadPromises = fileArray.map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => resolve({ name: file.name, img: img });
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            inputImages = await Promise.all(loadPromises);
+
+            if (inputImages.length > 0) {
+                // Update input UI
+                inputPreview.src = inputImages[0].img.src;
+                inputPreview.classList.remove('hidden');
+                inputPlaceholder.classList.add('hidden');
+                
+                // Show stack count if multiple
+                if (inputImages.length > 1) {
+                    stackCount.innerText = inputImages.length;
+                    stackCount.classList.remove('hidden');
+                } else {
+                    stackCount.classList.add('hidden');
+                }
+                
+                // Reset Output UI
+                resetOutput();
+                craftBtn.disabled = false;
+                statusText.innerText = `Ready to Craft (${inputImages.length})`;
+            }
+        }
+
+        // --- Crafting Logic ---
+        craftBtn.addEventListener('click', () => {
+            if (inputImages.length === 0 || isCrafting) return;
+            startCrafting();
+        });
+
+        function resetOutput() {
+            outputCanvas.classList.add('hidden');
+            outputPlaceholder.classList.remove('hidden');
+            
+            // Disable buttons
+            const btns = [downloadPngBtn, downloadJpgBtn, downloadAllBtn];
+            btns.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+            downloadAllBtn.classList.add('hidden');
+            downloadPngBtn.classList.remove('hidden');
+            downloadJpgBtn.classList.remove('hidden');
+
+            arrowFill.style.width = '0%';
+            chestPanel.classList.add('hidden');
+            chestGrid.innerHTML = '';
+            processedImages = [];
+        }
+
+        function startCrafting() {
+            isCrafting = true;
+            craftBtn.disabled = true;
+            statusText.innerText = "Smelting...";
+            
+            // Animation loop
+            let progress = 0;
+            const duration = 1500; // 1.5 seconds
+            const intervalTime = 20;
+            const step = 100 / (duration / intervalTime);
+
+            const interval = setInterval(() => {
+                progress += step;
+                arrowFill.style.width = `${Math.min(progress, 100)}%`;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    finishCrafting();
+                }
+            }, intervalTime);
+        }
+
+        function finishCrafting() {
+            isCrafting = false;
+            craftBtn.disabled = false;
+            statusText.innerText = "Crafted!";
+            
+            // Process All Images
+            processAllImages();
+
+            // Spawn Particles
+            spawnParticles();
+
+            // Enable buttons
+            if (processedImages.length > 1) {
+                // Batch mode
+                downloadPngBtn.classList.add('hidden');
+                downloadJpgBtn.classList.add('hidden');
+                
+                downloadAllBtn.classList.remove('hidden');
+                downloadAllBtn.disabled = false;
+                downloadAllBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                downloadAllBtn.innerText = "SAVE ALL";
+                
+                // Show chest
+                renderChest();
+            } else {
+                // Single mode
+                downloadPngBtn.disabled = false;
+                downloadJpgBtn.disabled = false;
+                downloadPngBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                downloadJpgBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // --- Sharpening Filter ---
+        // Basic convolution filter for sharpening
+        function applySharpen(ctx, width, height) {
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+            const w = width;
+            const h = height;
+            
+            // Kernel: 
+            //  0 -1  0
+            // -1  5 -1
+            //  0 -1  0
+            // Weights sum to 1, preserving brightness
+            
+            const kernel = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+            const side = Math.round(Math.sqrt(kernel.length));
+            const halfSide = Math.floor(side / 2);
+            
+            // Output buffer
+            const outputData = new Uint8ClampedArray(data.length);
+            
+            // Loop through pixels (excluding border to simplify)
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const dstOff = (y * w + x) * 4;
+                    
+                    let r=0, g=0, b=0;
+                    
+                    for (let cy = 0; cy < side; cy++) {
+                        for (let cx = 0; cx < side; cx++) {
+                            const scy = y + cy - halfSide;
+                            const scx = x + cx - halfSide;
+                            
+                            if (scy >= 0 && scy < h && scx >= 0 && scx < w) {
+                                const srcOff = (scy * w + scx) * 4;
+                                const wt = kernel[cy * side + cx];
+                                
+                                r += data[srcOff] * wt;
+                                g += data[srcOff+1] * wt;
+                                b += data[srcOff+2] * wt;
+                            }
+                        }
+                    }
+                    
+                    outputData[dstOff] = r;
+                    outputData[dstOff+1] = g;
+                    outputData[dstOff+2] = b;
+                    outputData[dstOff+3] = data[dstOff+3]; // Preserve Alpha
+                }
+            }
+            
+            // Apply new data
+            imageData.data.set(outputData);
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function processAllImages() {
+            const fitMode = document.querySelector('input[name="fitMode"]:checked').value;
+            const doEnchant = enchantToggle.checked;
+
+            processedImages = inputImages.map(item => {
+                const canvas = document.createElement('canvas');
+                canvas.width = TARGET_WIDTH;
+                canvas.height = TARGET_HEIGHT;
+                const ctx = canvas.getContext('2d');
+                
+                // High quality scaling settings
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                const img = item.img;
+                let scale, x, y;
+
+                if (fitMode === 'cover') {
+                    scale = Math.max(TARGET_WIDTH / img.width, TARGET_HEIGHT / img.height);
+                } else {
+                    scale = Math.min(TARGET_WIDTH / img.width, TARGET_HEIGHT / img.height);
+                }
+                
+                x = (TARGET_WIDTH / 2) - (img.width / 2) * scale;
+                y = (TARGET_HEIGHT / 2) - (img.height / 2) * scale;
+                
+                ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                if (doEnchant) {
+                    applySharpen(ctx, TARGET_WIDTH, TARGET_HEIGHT);
+                }
+
+                return { name: item.name, canvas: canvas };
+            });
+
+            // Display first image in the main Output Slot
+            if (processedImages.length > 0) {
+                const firstCanvas = processedImages[0].canvas;
+                const ctx = outputCanvas.getContext('2d');
+                outputCanvas.width = TARGET_WIDTH;
+                outputCanvas.height = TARGET_HEIGHT;
+                ctx.drawImage(firstCanvas, 0, 0);
+                
+                outputPlaceholder.classList.add('hidden');
+                outputCanvas.classList.remove('hidden');
+            }
+        }
+
+        function renderChest() {
+            chestPanel.classList.remove('hidden');
+            chestGrid.innerHTML = '';
+
+            processedImages.forEach((item, index) => {
+                const slot = document.createElement('div');
+                slot.className = 'chest-slot flex items-center justify-center overflow-hidden';
+                slot.title = `Click to download ${item.name}`;
+                
+                const thumb = document.createElement('img');
+                thumb.src = item.canvas.toDataURL('image/png'); // Thumbnails
+                thumb.className = 'w-full h-full object-cover pixelated-text pointer-events-none';
+                
+                slot.appendChild(thumb);
+                
+                // Click to download individual
+                slot.onclick = () => {
+                    const link = document.createElement('a');
+                    const filename = item.name.substring(0, item.name.lastIndexOf('.')) || item.name;
+                    link.download = `${filename}_850x520.png`;
+                    link.href = item.canvas.toDataURL('image/png');
+                    link.click();
+                };
+
+                chestGrid.appendChild(slot);
+            });
+        }
+
+        // --- Particle System ---
+        function spawnParticles() {
+            const container = document.querySelector('.mc-panel');
+            const rect = outputCanvas.getBoundingClientRect();
+            // Need relative position to container
+            const containerRect = container.getBoundingClientRect();
+            
+            const baseX = rect.left - containerRect.left + (rect.width / 2);
+            const baseY = rect.top - containerRect.top + (rect.height / 2);
+
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('xp-orb');
+                
+                // Random position scatter
+                const x = baseX + (Math.random() * 100 - 50);
+                const y = baseY + (Math.random() * 60 - 30);
+                
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.backgroundColor = Math.random() > 0.5 ? '#8aff68' : '#f9ff68'; // Green or Yellow orb color
+                
+                container.appendChild(particle);
+
+                // Remove after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+
+        // --- Download Handlers ---
+        function downloadSingle(format) {
+            if (processedImages.length === 0) return;
+            const item = processedImages[0];
+            const link = document.createElement('a');
+            const filename = item.name.substring(0, item.name.lastIndexOf('.')) || item.name;
+            link.download = `${filename}_850x520.${format}`;
+            link.href = item.canvas.toDataURL(`image/${format}`);
+            link.click();
+        }
+
+        function downloadAllAsImages() {
+            if (processedImages.length === 0) return;
+            statusText.innerText = "Saving items...";
+            
+            // Loop with delay to prevent browser blocking sequential downloads
+            processedImages.forEach((item, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    const filename = item.name.substring(0, item.name.lastIndexOf('.')) || item.name;
+                    link.download = `${filename}_850x520.png`;
+                    link.href = item.canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    if(index === processedImages.length - 1) {
+                         statusText.innerText = "Items saved!";
+                    }
+                }, index * 400); // 400ms delay between each download
+            });
+        }
+
+        downloadPngBtn.addEventListener('click', () => downloadSingle('png'));
+        downloadJpgBtn.addEventListener('click', () => downloadSingle('jpeg'));
+        downloadAllBtn.addEventListener('click', downloadAllAsImages);
+
+    </script>
+</body>
+</html>
