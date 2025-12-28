@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Minecraft 16x16 Texture Converter</title>
+<title>Minecraft 16×16 Blur + BG Remove</title>
 <style>
   body {
-    background: #0f172a;
+    background: #0b1020;
     color: #e5e7eb;
     font-family: Arial, sans-serif;
     display: flex;
@@ -15,26 +15,24 @@
   }
   .box {
     background: #020617;
-    border: 2px dashed #334155;
     padding: 20px;
     border-radius: 10px;
+    width: 360px;
     text-align: center;
-    width: 320px;
   }
   canvas {
-    image-rendering: pixelated;
     border: 1px solid #334155;
     margin-top: 12px;
   }
-  input, button {
+  button, input {
     margin-top: 10px;
     width: 100%;
   }
   button {
     background: #2563eb;
-    color: white;
     border: none;
     padding: 8px;
+    color: white;
     border-radius: 6px;
     cursor: pointer;
   }
@@ -43,8 +41,9 @@
 <body>
 
 <div class="box">
-  <h3>16×16 Minecraft Texture Tool</h3>
-  <input type="file" accept="image/*" id="upload">
+  <h3>16×16 Minecraft Tool</h3>
+  <p style="font-size:12px">Blur + Background Removal</p>
+  <input type="file" id="upload" accept="image/*">
   <canvas id="canvas" width="16" height="16"></canvas>
   <button id="download">Download 16×16 PNG</button>
 </div>
@@ -54,7 +53,8 @@ const upload = document.getElementById("upload");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-ctx.imageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = "high";
 
 upload.addEventListener("change", () => {
   const file = upload.files[0];
@@ -62,9 +62,43 @@ upload.addEventListener("change", () => {
 
   const img = new Image();
   img.onload = () => {
+
+    // Temp canvas for background removal
+    const temp = document.createElement("canvas");
+    temp.width = img.width;
+    temp.height = img.height;
+    const tctx = temp.getContext("2d");
+    tctx.drawImage(img, 0, 0);
+
+    const data = tctx.getImageData(0, 0, temp.width, temp.height);
+    const pixels = data.data;
+
+    // BACKGROUND REMOVAL (light colors)
+    for (let i = 0; i < pixels.length; i += 4) {
+      const r = pixels[i];
+      const g = pixels[i + 1];
+      const b = pixels[i + 2];
+
+      // If pixel is close to white / light gray → remove
+      if (r > 220 && g > 220 && b > 220) {
+        pixels[i + 3] = 0;
+      }
+    }
+
+    tctx.putImageData(data, 0, 0);
+
+    // Draw to final 16x16 canvas
     ctx.clearRect(0, 0, 16, 16);
-    ctx.drawImage(img, 0, 0, 16, 16);
+
+    const scale = Math.min(16 / temp.width, 16 / temp.height);
+    const w = temp.width * scale;
+    const h = temp.height * scale;
+    const x = (16 - w) / 2;
+    const y = (16 - h) / 2;
+
+    ctx.drawImage(temp, x, y, w, h);
   };
+
   img.src = URL.createObjectURL(file);
 });
 
