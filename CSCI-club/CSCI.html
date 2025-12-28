@@ -31,20 +31,16 @@
     </script>
     
     <style>
-        /* Custom Styles for things Tailwind handles awkwardly */
         .glass-nav {
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        
-        /* Hide scrollbar for gallery if needed */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -53,7 +49,6 @@
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-5">
         <div class="container mx-auto px-4 md:px-8 flex justify-between items-center">
-            <!-- Logo -->
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg transform -rotate-3">
                     C
@@ -63,7 +58,6 @@
                 </span>
             </div>
 
-            <!-- Desktop Menu -->
             <div id="desktop-menu" class="hidden md:flex gap-8 font-medium text-slate-200 transition-colors">
                 <a href="#home" class="hover:text-blue-500 transition-colors">Home</a>
                 <a href="#news" class="hover:text-blue-500 transition-colors">News</a>
@@ -76,7 +70,6 @@
                 Join Club
             </button>
 
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-800 focus:outline-none">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
@@ -99,12 +92,11 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
-        <!-- Abstract Background Shapes -->
         <div class="absolute top-0 right-0 w-2/3 h-full bg-blue-50 skew-x-12 translate-x-32 z-0 hidden lg:block"></div>
         <div class="absolute top-20 right-20 w-72 h-72 bg-blue-200/50 rounded-full blur-3xl z-0"></div>
         
         <div class="container mx-auto px-4 md:px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
+            <div class="space-y-6 animate-fade-in-up">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
                     <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse-slow"></span>
                     Season 2025/2026 is LIVE
@@ -126,22 +118,383 @@
                 
                 <div class="pt-8 flex items-center gap-8 text-slate-400">
                     <div class="flex -space-x-4">
-                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden">
-                            <img src="https://i.pravatar.cc/100?img=11" alt="Member" class="w-full h-full object-cover">
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden">
-                            <img src="https://i.pravatar.cc/100?img=12" alt="Member" class="w-full h-full object-cover">
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden">
-                            <img src="https://i.pravatar.cc/100?img=13" alt="Member" class="w-full h-full object-cover">
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden">
-                            <img src="https://i.pravatar.cc/100?img=14" alt="Member" class="w-full h-full object-cover">
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=11" class="w-full h-full object-cover"></div>
+                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=12" class="w-full h-full object-cover"></div>
+                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=13" class="w-full h-full object-cover"></div>
+                        <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white overflow-hidden"><img src="https://i.pravatar.cc/100?img=14" class="w-full h-full object-cover"></div>
                     </div>
-                    <p class="text-sm font-medium"><span class="text-slate-900 font-bold">120+</span> Active Members</p>
+                    <p class="text-sm font-medium"><span class="text-slate-900 font-bold" id="member-count">120+</span> Active Members</p>
                 </div>
             </div>
 
             <div class="relative hidden lg:block">
-                <!-- Decorative Image Composition -->
+                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80&w=1000" alt="Team Sports" class="w-full h-auto object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                      <div class="text-white">
+                        <p class="font-bold text-xl">Championship Finals</p>
+                        <p class="text-sm opacity-80">CSCI vs Engineering Faculty</p>
+                      </div>
+                    </div>
+                 </div>
+                 <div class="absolute -bottom-10 -left-10 w-48 h-48 bg-white p-4 rounded-xl shadow-xl z-20 flex flex-col justify-center items-center gap-2">
+                    <i data-lucide="trophy" class="w-12 h-12 text-yellow-500"></i>
+                    <div class="text-center">
+                      <span class="block text-3xl font-black text-slate-900">1st</span>
+                      <span class="text-sm text-slate-500">Regional League</span>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="bg-slate-900 text-white py-12">
+        <div class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center" id="stats-container">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section id="news" class="py-20">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                <div>
+                    <h4 className="text-blue-600 font-bold uppercase tracking-wider text-sm mb-2">Club Updates</h4>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-900">Latest News</h2>
+                </div>
+                
+                <div class="flex gap-2 bg-slate-100 p-1 rounded-lg" id="news-filters">
+                    <!-- Filters populated by JS -->
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8" id="news-container">
+                <!-- News Items populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="grid lg:grid-cols-3 gap-12">
+                
+                <!-- Left Col: Info -->
+                <div class="lg:col-span-1 space-y-6">
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-900">Match Schedule</h2>
+                    <p class="text-slate-600">
+                        Support your colleagues! Come watch our teams battle it out in the university leagues.
+                    </p>
+                    
+                    <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-lg shadow-blue-500/30">
+                        <div class="flex items-start gap-4">
+                            <i data-lucide="activity" class="w-8 h-8 opacity-80"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Next Big Match</h4>
+                                <p class="text-blue-100 text-sm mb-4" id="highlight-match-text">Loading...</p>
+                                <div class="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+                                    <div class="text-2xl font-black text-center mb-1" id="highlight-match-date">--</div>
+                                    <div class="text-xs text-center uppercase tracking-widest opacity-80" id="highlight-match-time">--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Col: List -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden" id="schedule-container">
+                        <!-- Matches populated by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-slate-900 text-slate-300 py-16">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold transform -rotate-3">C</div>
+                        <span class="text-xl font-bold text-white">CSCI <span class="text-blue-500">SPORT</span></span>
+                    </div>
+                    <p class="max-w-sm text-slate-400 mb-6">Promoting health, teamwork, and competitive spirit within the Computer Science department.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Match Results</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Membership</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="mt-1 text-blue-500 w-4 h-4"></i>
+                            <span>University Campus,<br />CS Dept, Building B</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="text-blue-500 w-4 h-4"></i>
+                            <span>club.csci@university.edu</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-800 text-center text-sm text-slate-500">
+                &copy; 2025 CSCI Sports Club.
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        // ==========================================
+        //  CONTENT MANAGEMENT SYSTEM (DATA SECTION)
+        //  Edit this section to update the website!
+        // ==========================================
+        const clubData = {
+            stats: [
+                { number: "12", label: "Active Teams", color: "text-blue-500" },
+                { number: "45", label: "Trophies Won", color: "text-orange-500" },
+                { number: "300+", label: "Alumni", color: "text-green-500" },
+                { number: "∞", label: "Lines of Code", color: "text-purple-500" }
+            ],
+            news: [
+                {
+                    id: 1,
+                    category: 'Football',
+                    title: 'Victory! CSCI Eagles Win Inter-Department Cup',
+                    date: 'Dec 28, 2025',
+                    excerpt: 'In a thrilling final against the Engineering faculty, our team secured a 2-1 win with a last-minute goal by Ahmed K.',
+                    image: 'https://images.unsplash.com/photo-1522778119026-d647f0565c6a?auto=format&fit=crop&q=80&w=800'
+                },
+                {
+                    id: 2,
+                    category: 'Basketball',
+                    title: 'New Jersey Reveal & Season Opener',
+                    date: 'Dec 25, 2025',
+                    excerpt: 'Check out the new black and gold kits designed by our very own UI/UX club members. Ready for the season start!',
+                    image: 'https://images.unsplash.com/photo-1546519638-68e109498ee2?auto=format&fit=crop&q=80&w=800'
+                },
+                {
+                    id: 3,
+                    category: 'Esports',
+                    title: 'Valorant Tournament Registration Open',
+                    date: 'Dec 20, 2025',
+                    excerpt: 'Physical sports aren\'t our only forte. Join the annual CSCI LAN party and tournament this weekend.',
+                    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=800'
+                }
+            ],
+            matches: [
+                {
+                    sport: 'Futsal',
+                    opponent: 'EST Fes',
+                    date: 'Jan 05',
+                    time: '18:00',
+                    venue: 'Complex Sportif UEMF',
+                    logo: '⚽'
+                },
+                {
+                    sport: 'Basketball',
+                    opponent: 'ENSA Fes',
+                    date: 'Jan 08',
+                    time: '16:30',
+                    venue: 'CSCI Main Court',
+                    logo: '🏀'
+                },
+                {
+                    sport: 'Volleyball',
+                    opponent: 'FST Lions',
+                    date: 'Jan 12',
+                    time: '14:00',
+                    venue: 'City Gym Hall B',
+                    logo: '🏐'
+                }
+            ],
+            highlightMatch: {
+                text: "CSCI Futsal vs EST Fes. The local derby is finally here.",
+                date: "05 JAN",
+                time: "Sunday • 18:00"
+            }
+        };
+
+        // ==========================================
+        //  RENDERING LOGIC (DO NOT EDIT BELOW)
+        // ==========================================
+
+        function renderStats() {
+            const container = document.getElementById('stats-container');
+            container.innerHTML = clubData.stats.map(stat => `
+                <div class="space-y-2">
+                    <h3 class="text-4xl font-bold ${stat.color}">${stat.number}</h3>
+                    <p class="text-slate-400 text-sm uppercase tracking-wider">${stat.label}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderMatches() {
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = clubData.matches.map(match => `
+                <div class="flex items-center justify-between p-6 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
+                    <div class="flex items-center gap-4 md:gap-6">
+                        <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl md:text-3xl">
+                            ${match.logo}
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-blue-600 uppercase mb-1">${match.sport}</div>
+                            <h4 class="font-bold text-slate-900 text-lg md:text-xl">CSCI <span class="text-slate-400 px-1">vs</span> ${match.opponent}</h4>
+                            <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 mt-1 text-sm text-slate-500">
+                                <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${match.date} ${match.time}</span>
+                                <span class="hidden md:block">•</span>
+                                <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${match.venue}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="hidden md:block px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-900 hover:text-white transition-all">
+                        Details
+                    </button>
+                </div>
+            `).join('');
+            
+            // Render Highlight Match
+            document.getElementById('highlight-match-text').textContent = clubData.highlightMatch.text;
+            document.getElementById('highlight-match-date').textContent = clubData.highlightMatch.date;
+            document.getElementById('highlight-match-time').textContent = clubData.highlightMatch.time;
+        }
+
+        let currentFilter = 'All';
+
+        function renderNews() {
+            const container = document.getElementById('news-container');
+            const filterContainer = document.getElementById('news-filters');
+            
+            // Unique categories + All
+            const categories = ['All', ...new Set(clubData.news.map(n => n.category))];
+            
+            // Render Filters
+            filterContainer.innerHTML = categories.map(cat => `
+                <button 
+                    onclick="setFilter('${cat}')"
+                    class="px-4 py-2 rounded-md text-sm font-medium capitalize transition-all ${currentFilter === cat ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}"
+                >
+                    ${cat}
+                </button>
+            `).join('');
+
+            // Filter News
+            const filteredNews = currentFilter === 'All' 
+                ? clubData.news 
+                : clubData.news.filter(n => n.category === currentFilter);
+
+            // Render News Cards
+            container.innerHTML = filteredNews.map(news => `
+                <article class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-900 z-10">
+                            ${news.category}
+                        </div>
+                        <img 
+                            src="${news.image}" 
+                            alt="${news.title}" 
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center gap-2 text-slate-400 text-xs font-medium mb-3">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            <span>${news.date}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                            ${news.title}
+                        </h3>
+                        <p class="text-slate-600 text-sm line-clamp-3 mb-4 flex-grow">
+                            ${news.excerpt}
+                        </p>
+                        <a href="#" class="inline-flex items-center text-blue-600 font-bold text-sm hover:translate-x-1 transition-transform">
+                            Read Full Story <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </a>
+                    </div>
+                </article>
+            `).join('');
+            
+            // Refresh icons after inserting new HTML
+            lucide.createIcons();
+        }
+
+        function setFilter(category) {
+            currentFilter = category;
+            renderNews();
+        }
+
+        // ==========================================
+        //  INIT & UI LOGIC
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Renders
+            renderStats();
+            renderMatches();
+            renderNews();
+            lucide.createIcons();
+
+            // Navbar Scroll Effect
+            const navbar = document.getElementById('navbar');
+            const navText = document.getElementById('nav-text');
+            const desktopMenu = document.getElementById('desktop-menu');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('glass-nav', 'py-3');
+                    navbar.classList.remove('bg-transparent', 'py-5');
+                    navText.classList.remove('md:text-white');
+                    navText.classList.add('text-slate-900');
+                    desktopMenu.classList.remove('text-slate-200');
+                    desktopMenu.classList.add('text-slate-600');
+                } else {
+                    navbar.classList.remove('glass-nav', 'py-3');
+                    navbar.classList.add('bg-transparent', 'py-5');
+                    navText.classList.add('md:text-white');
+                    navText.classList.remove('text-slate-900');
+                    desktopMenu.classList.add('text-slate-200');
+                    desktopMenu.classList.remove('text-slate-600');
+                }
+            });
+
+            // Mobile Menu Toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            let isMenuOpen = false;
+
+            mobileBtn.addEventListener('click', () => {
+                isMenuOpen = !isMenuOpen;
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenu.classList.add('slide-in');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    isMenuOpen = false;
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
