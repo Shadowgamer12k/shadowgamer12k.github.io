@@ -356,7 +356,7 @@
     const nextPage = "step3.html"; 
     
     // إعلان (Direct Link)
-    const adsterraLink = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
+    const link = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
 
     const urlParams = new URLSearchParams(window.location.search);
     const secureToken = urlParams.get('q'); // النظام الجديد
@@ -366,8 +366,8 @@
     const nextBtn = document.getElementById('next-btn');
 
     function startScan() {
-      if(adsterraLink) {
-        window.open(adsterraLink, '_blank');
+      if(link) {
+        window.open(link, '_blank');
       }
 
       scanBtn.innerHTML = 'جاري الفحص...';
