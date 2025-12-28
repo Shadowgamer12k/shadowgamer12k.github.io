@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد يا دكتور</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f9ff; /* Medical light blue */
+            overflow-x: hidden;
+        }
+        
+        /* تأثير البيكسل */
+        .pixelated-img {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            filter: blur(2px) contrast(1.2); /* زيادة تأثير البيكسل والغموض */
+            width: 150px;
+            height: 150px;
+            transition: transform 0.3s ease;
+        }
+
+        .pixelated-img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1.000) both;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale3d(0.3, 0.3, 0.3); opacity: 0; }
+            20% { transform: scale3d(1.1, 1.1, 1.1); }
+            40% { transform: scale3d(0.9, 0.9, 0.9); }
+            60% { transform: scale3d(1.03, 1.03, 1.03); opacity: 1; }
+            80% { transform: scale3d(0.97, 0.97, 0.97); }
+            100% { opacity: 1; transform: scale3d(1, 1, 1); }
+        }
+
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative">
+
+    <!-- خلفية طبية بسيطة (زخرفة) -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none overflow-hidden">
+        <svg class="absolute top-10 left-10 w-20 h-20 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/></svg>
+        <svg class="absolute bottom-10 right-10 w-32 h-32 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M10.5 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+    </div>
+
+    <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-4 border-blue-200 relative z-10 mx-4">
+        
+        <!-- القسم الأول: الترحيب -->
+        <div id="intro-section">
+            <div class="mb-6 flex justify-center">
+                <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-4xl">
+                    👨‍⚕️
+                </div>
+            </div>
+            
+            <h1 class="text-3xl font-black text-blue-800 mb-2">عيد ميلاد سعيد يا دكتور!</h1>
+            <p class="text-gray-600 mb-8 text-lg">بما أنك دكتور وتنقذ حياة الناس، جهزنا لك هدية خاصة جداً تليق بمقامك الطبي.</p>
+            
+            <button onclick="revealGift()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1 hover:shadow-xl text-xl animate-pulse">
+                اضغط لاستلام الجائزة
+            </button>
+        </div>
+
+        <!-- القسم الثاني: المفاجأة -->
+        <div id="gift-section" class="hidden-content mt-4">
+            <h2 class="text-2xl font-bold text-red-500 mb-4 animate-bounce">🎉 مفاجأة! 🎉</h2>
+            
+            <div class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300">
+                <!-- 
+                     ملاحظة: يمكنك تغيير رابط الصورة أدناه (src) بأي صورة تريدها.
+                     لقد استخدمت صورة "باذنجان" كرمز للشيء الذي طلبته حفاظاً على اللباقة :)
+                -->
+                <img 
+                    src="https://em-content.zobj.net/source/microsoft-teams/363/eggplant_1f346.png" 
+                    alt="Pixelated Prize" 
+                    class="pixelated-img mb-4 bounce-in"
+                >
+                
+                <h3 class="text-3xl font-black text-gray-800 mb-2">هذه جائزتك!</h3>
+                <p class="text-sm text-gray-500 font-mono">طبعاً مبكسلة عشان خصوصية المرضى وكذا 😉</p>
+            </div>
+
+            <button onclick="location.reload()" class="mt-6 text-blue-500 hover:text-blue-700 font-medium underline">
+                إعادة المحاولة
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function revealGift() {
+            // تشغيل الصوت (اختياري - يمكنك إضافة ملف صوتي هنا)
+            // const audio = new Audio('tada.mp3'); audio.play();
+
+            // إخفاء المقدمة وإظهار الهدية
+            document.getElementById('intro-section').classList.add('hidden');
+            const giftSection = document.getElementById('gift-section');
+            giftSection.classList.remove('hidden-content');
+            giftSection.classList.add('bounce-in');
+
+            // إطلاق قصاصات الورق (Confetti)
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // جهة اليسار
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                // جهة اليمين
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+            
+            // دفعة قوية في المنتصف عند الظهور
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+</body>
+</html>
