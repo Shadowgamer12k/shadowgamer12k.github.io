@@ -14,18 +14,15 @@
             overflow-x: hidden;
         }
         
-        /* تأثير البيكسل */
-        .pixelated-img {
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            filter: blur(2px) contrast(1.2); /* زيادة تأثير البيكسل والغموض */
+        /* تنسيق الصورة (تم إزالة تأثير البكسلة) */
+        .gift-img {
             width: 150px;
             height: 150px;
             transition: transform 0.3s ease;
+            object-fit: contain;
         }
 
-        .pixelated-img:hover {
+        .gift-img:hover {
             transform: scale(1.1) rotate(5deg);
         }
 
@@ -80,16 +77,15 @@
             <div class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-2xl border-2 border-dashed border-gray-300">
                 <!-- 
                      ملاحظة: يمكنك تغيير رابط الصورة أدناه (src) بأي صورة تريدها.
-                     لقد استخدمت صورة "باذنجان" كرمز للشيء الذي طلبته حفاظاً على اللباقة :)
                 -->
                 <img 
                     src="https://shadowgamer12k.github.io/private/image%20-%202025-12-28T224851.967.png" 
-                    alt="Pixelated Prize" 
-                    class="pixelated-img mb-4 bounce-in"
+                    alt="Prize" 
+                    class="gift-img mb-4 bounce-in"
                 >
                 
                 <h3 class="text-3xl font-black text-gray-800 mb-2">هذه جائزتك!</h3>
-                <p class="text-sm text-gray-500 font-mono">طبعاً مبكسلة عشان خصوصية المرضى وكذا 😉</p>
+                <p class="text-sm text-gray-500 font-mono">هدية بسيطة تعبيراً عن التقدير 😉</p>
             </div>
 
             <button onclick="location.reload()" class="mt-6 text-blue-500 hover:text-blue-700 font-medium underline">
