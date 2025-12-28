@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock Iconizer</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        :root {
+            --mc-green: #55ff55;
+            --mc-border: #555;
+            --mc-bg: #2c2c2c;
+            --mc-bg-dark: #1a1a1a;
+            --mc-hover: #3a3a3a;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--mc-bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--mc-border);
+            border: 2px solid var(--mc-bg-dark);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        body {
+            background: 
+                radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
+                linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            background-size: 40px 40px, 100% 100%;
+            background-position: 0 0, 0 0;
+            color: #fff;
+            font-family: 'Press Start 2P', monospace;
+            margin: 0;
+            padding: 0; /* Remove padding for full screen feel */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Prevent body scroll, handle in container */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, auto;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1600px;
+            height: 90vh; /* Fixed height for dashboard feel */
+            background: var(--mc-bg);
+            border: 4px solid var(--mc-border);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--mc-border);
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: clamp(1rem, 3vw, 1.8rem);
+            margin: 0 0 5px 0;
+            line-height: 1.4;
+            color: var(--mc-green);
+            text-shadow: 3px 3px 0px #000;
+        }
+
+        .subtitle {
+            font-size: 0.7rem;
+            line-height: 1.6;
+            margin: 0;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        /* Main Layout - Split View */
+        .main-content {
+            padding: 0;
+            display: grid;
+            grid-template-columns: 450px 1fr; /* Fixed width controls, flex preview */
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Left Panel - Controls */
+        .controls-panel {
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 3px solid var(--mc-border);
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Right Panel - Preview */
+        .preview-panel {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--mc-bg-dark);
+            position: relative;
+            /* Fancy background for the preview area */
+            background-image: radial-gradient(#2a2a2a 15%, transparent 16%), radial-gradient(#2a2a2a 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        /* --- DROP ZONE --- */
+        .drop-zone {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed var(--mc-border);
+            padding: 30px;
+            text-align: center;
+            color: #ccc;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: var(--mc-green);
+            color: #fff;
+        }
+        .drop-zone input {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .drop-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--mc-border);
+        }
+        .drop-zone:hover .drop-icon {
+            color: var(--mc-green);
+        }
+
+        /* --- CONTROLS GRID --- */
+        .task-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .task-item {
+            background: var(--mc-hover);
+            border: 3px solid var(--mc-border);
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-item.active {
+            background: var(--mc-bg-dark);
+            border-color: var(--mc-green);
+            box-shadow: inset 0 0 10px rgba(85, 255, 85, 0.2);
+        }
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+        }
+        .task-title {
+            font-size: 0.6rem;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .task-status {
+            font-size: 0.5rem;
+            color: #aaa;
+        }
+        .task-item.active .task-status {
+            color: var(--mc-green);
+            text-shadow: 0 0 5px var(--mc-green);
+        }
+
+        /* --- SLIDER --- */
+        .sliders-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column on left panel */
+            gap: 15px;
+        }
+        
+        .slider-container {
+            background: var(--mc-hover);
+            border: 3px solid var(--mc-border);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #000;
+            border: 2px solid #555;
+            box-shadow: 2px 2px 0px #fff; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border: 2px solid #000;
+            background: var(--mc-green);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+            box-shadow: inset 2px 2px 0px #fff; 
+        }
+
+        /* --- PREVIEW --- */
+        .preview-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .pixelated-render {
+            /* Visually larger on desktop for better inspection */
+            width: 256px; 
+            height: 256px;
+            border: 4px solid #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background-color: #2a2a2a;
+            /* Checkerboard */
+            background-image: 
+                linear-gradient(45deg, #333 25%, transparent 25%), 
+                linear-gradient(-45deg, #333 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #333 75%), 
+                linear-gradient(-45deg, transparent 75%, #333 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            image-rendering: pixelated;
+        }
+
+        /* --- BUTTON --- */
+        .unlock-btn {
+            background: var(--mc-hover);
+            border: 3px solid var(--mc-border);
+            color: #666;
+            padding: 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1rem;
+            width: 300px;
+            cursor: not-allowed;
+            text-transform: uppercase;
+            text-align: center;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .unlock-btn.active {
+            background: var(--mc-green);
+            color: #000;
+            cursor: pointer;
+            border-color: #000;
+            box-shadow: 0 6px 0 #004400;
+        }
+
+        .unlock-btn.active:hover {
+            background: #44dd44;
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #004400;
+        }
+
+        .file-info {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            body { padding: 10px; height: auto; display: block; overflow-y: auto; }
+            .container { width: 100%; height: auto; max-width: 100%; overflow: visible; box-shadow: none; }
+            .main-content { grid-template-columns: 1fr; overflow: visible; height: auto; }
+            .controls-panel { border-right: none; border-bottom: 3px solid var(--mc-border); overflow: visible; }
+            .preview-panel { padding: 40px 20px; }
+            .pixelated-render { width: 128px; height: 128px; } /* Smaller visual on mobile */
+            .unlock-btn { width: 100%; }
+            .sliders-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>BEDROCK ICONIZER</h1>
+            <p class="subtitle">Pro Texture Enhancer</p>
+        </div>
+
+        <div class="main-content">
+            
+            <!-- LEFT PANEL: CONTROLS -->
+            <div class="controls-panel">
+                
+                <!-- Upload Area -->
+                <div id="dropZone" class="drop-zone">
+                    <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp">
+                    <div class="drop-icon"><i class="fas fa-file-upload"></i></div>
+                    <div style="font-size: 0.8rem; line-height: 1.5;">DROP FILE HERE<br><span style="font-size: 0.6rem; color: #888;">PNG, JPG, WEBP</span></div>
+                </div>
+
+                <!-- Toggles Grid -->
+                <div class="task-list">
+                    <!-- Toggle 1: BG Remove -->
+                    <div class="task-item active" id="btnToggleBg" onclick="toggleSetting('removeBg')">
+                        <div class="task-title">REMOVE BG</div>
+                        <div class="task-status" id="status-removeBg">ENABLED</div>
+                    </div>
+
+                    <!-- Toggle 2: Auto Trim -->
+                    <div class="task-item active" id="btnToggleTrim" onclick="toggleSetting('autoTrim')">
+                        <div class="task-title">AUTO TRIM</div>
+                        <div class="task-status" id="status-autoTrim">ENABLED</div>
+                    </div>
+
+                    <!-- Toggle 3: Pixel Scale -->
+                    <div class="task-item active" id="btnTogglePixel" onclick="toggleSetting('pixelStyle')">
+                        <div class="task-title">PIXEL MODE</div>
+                        <div class="task-status" id="status-pixelStyle">SHARP</div>
+                    </div>
+
+                    <!-- Toggle 4: Resolution -->
+                    <div class="task-item" id="btnToggleRes" onclick="toggleResolution()">
+                        <div class="task-title">SIZE</div>
+                        <div class="task-status" id="status-res">16x16</div>
+                    </div>
+
+                     <!-- Toggle 5: Outline -->
+                     <div class="task-item" id="btnToggleOutline" onclick="toggleSetting('outline')">
+                        <div class="task-title">OUTLINE</div>
+                        <div class="task-status" id="status-outline">OFF</div>
+                    </div>
+                    
+                     <!-- Toggle 6: Glint -->
+                     <div class="task-item" id="btnToggleGlint" onclick="toggleSetting('glint')">
+                        <div class="task-title">GLINT</div>
+                        <div class="task-status" id="status-glint">OFF</div>
+                    </div>
+
+                    <!-- Toggle 7: Clean Edges -->
+                    <div class="task-item" id="btnToggleClean" onclick="toggleSetting('cleanEdges')">
+                        <div class="task-title">CLEAN EDGES</div>
+                        <div class="task-status" id="status-cleanEdges">OFF</div>
+                    </div>
+
+                     <!-- Placeholder for even grid -->
+                     <div class="task-item" style="opacity:0.3; cursor:default;">
+                        <div class="task-title">FORMAT</div>
+                        <div class="task-status">PNG</div>
+                    </div>
+                </div>
+
+                <!-- Sliders Grid -->
+                <div class="sliders-grid">
+                     <!-- Tolerance -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>BG TOLERANCE</span>
+                            <span id="toleranceValue" style="color: var(--mc-green);">15%</span>
+                        </div>
+                        <input type="range" id="tolerance" min="0" max="100" value="15">
+                    </div>
+
+                    <!-- Sharpen -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>SHARPEN</span>
+                            <span id="sharpenValue" style="color: var(--mc-green);">20%</span>
+                        </div>
+                        <input type="range" id="sharpen" min="0" max="100" value="20">
+                    </div>
+
+                    <!-- Saturation -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>SATURATION</span>
+                            <span id="satValue" style="color: var(--mc-green);">100%</span>
+                        </div>
+                        <input type="range" id="saturation" min="0" max="200" value="100">
+                    </div>
+
+                    <!-- Brightness -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>BRIGHTNESS</span>
+                            <span id="brightValue" style="color: var(--mc-green);">100%</span>
+                        </div>
+                        <input type="range" id="brightness" min="50" max="150" value="100">
+                    </div>
+
+                    <!-- Contrast -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>CONTRAST</span>
+                            <span id="contrastValue" style="color: var(--mc-green);">100%</span>
+                        </div>
+                        <input type="range" id="contrast" min="50" max="150" value="100">
+                    </div>
+
+                    <!-- Noise -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>NOISE (GRAIN)</span>
+                            <span id="noiseValue" style="color: var(--mc-green);">0%</span>
+                        </div>
+                        <input type="range" id="noise" min="0" max="50" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: PREVIEW -->
+            <div class="preview-panel">
+                <div class="preview-wrapper">
+                    <!-- Main Result -->
+                    <canvas id="resultCanvas" width="16" height="16" class="pixelated-render"></canvas>
+                    <!-- Glint Overlay -->
+                    <canvas id="glintCanvas" width="16" height="16" class="pixelated-render" style="position:absolute; top:0; left:0; pointer-events:none; opacity:0; mix-blend-mode: color-dodge; background:transparent; border:none; box-shadow:none;"></canvas>
+                </div>
+                
+                <!-- Download Button -->
+                <button id="downloadBtn" class="unlock-btn" disabled>
+                    DOWNLOAD
+                </button>
+                
+                <div class="file-info" id="fileInfo">WAITING FOR FILE...</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Hidden Processing Canvas -->
+    <canvas id="processCanvas" class="hidden" style="display:none;"></canvas>
+
+    <script>
+        // State
+        const settings = {
+            removeBg: true,
+            autoTrim: true,
+            pixelStyle: true,
+            outline: false,
+            glint: false,
+            cleanEdges: false,
+            resolution: 16,
+            tolerance: 15,
+            saturation: 100,
+            brightness: 100,
+            contrast: 100,
+            sharpen: 20,
+            noise: 0
+        };
+
+        let currentImage = null;
+        let currentFileName = "item";
+        let glintInterval = null;
+
+        // DOM Elements
+        const els = {
+            dropZone: document.getElementById('dropZone'),
+            fileInput: document.getElementById('fileInput'),
+            // Sliders
+            toleranceSlider: document.getElementById('tolerance'),
+            toleranceValue: document.getElementById('toleranceValue'),
+            satSlider: document.getElementById('saturation'),
+            satValue: document.getElementById('satValue'),
+            sharpenSlider: document.getElementById('sharpen'),
+            sharpenValue: document.getElementById('sharpenValue'),
+            brightSlider: document.getElementById('brightness'),
+            brightValue: document.getElementById('brightValue'),
+            contrastSlider: document.getElementById('contrast'),
+            contrastValue: document.getElementById('contrastValue'),
+            noiseSlider: document.getElementById('noise'),
+            noiseValue: document.getElementById('noiseValue'),
+            // Canvases
+            resultCanvas: document.getElementById('resultCanvas'),
+            glintCanvas: document.getElementById('glintCanvas'),
+            processCanvas: document.getElementById('processCanvas'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            fileInfo: document.getElementById('fileInfo'),
+            // Buttons
+            btnToggleBg: document.getElementById('btnToggleBg'),
+            btnToggleTrim: document.getElementById('btnToggleTrim'),
+            btnTogglePixel: document.getElementById('btnTogglePixel'),
+            btnToggleRes: document.getElementById('btnToggleRes'),
+            btnToggleOutline: document.getElementById('btnToggleOutline'),
+            btnToggleGlint: document.getElementById('btnToggleGlint'),
+            btnToggleClean: document.getElementById('btnToggleClean'),
+            // Status Text
+            statusBg: document.getElementById('status-removeBg'),
+            statusTrim: document.getElementById('status-autoTrim'),
+            statusPixel: document.getElementById('status-pixelStyle'),
+            statusRes: document.getElementById('status-res'),
+            statusOutline: document.getElementById('status-outline'),
+            statusGlint: document.getElementById('status-glint'),
+            statusClean: document.getElementById('status-cleanEdges')
+        };
+
+        const ctxResult = els.resultCanvas.getContext('2d', { willReadFrequently: true });
+        const ctxGlint = els.glintCanvas.getContext('2d');
+        const ctxProcess = els.processCanvas.getContext('2d', { willReadFrequently: true });
+
+        // --- UI Logic ---
+
+        function toggleSetting(key) {
+            settings[key] = !settings[key];
+            updateUI();
+            if (currentImage) processImage();
+        }
+
+        function toggleResolution() {
+            settings.resolution = settings.resolution === 16 ? 32 : 16;
+            els.resultCanvas.width = settings.resolution;
+            els.resultCanvas.height = settings.resolution;
+            els.glintCanvas.width = settings.resolution;
+            els.glintCanvas.height = settings.resolution;
+            updateUI();
+            if (currentImage) processImage();
+        }
+
+        function updateUI() {
+            setToggleState(els.btnToggleBg, els.statusBg, settings.removeBg, "ENABLED", "DISABLED");
+            setToggleState(els.btnToggleTrim, els.statusTrim, settings.autoTrim, "ENABLED", "DISABLED");
+            setToggleState(els.btnTogglePixel, els.statusPixel, settings.pixelStyle, "SHARP", "SMOOTH");
+            setToggleState(els.btnToggleOutline, els.statusOutline, settings.outline, "ON", "OFF");
+            setToggleState(els.btnToggleGlint, els.statusGlint, settings.glint, "ON", "OFF");
+            setToggleState(els.btnToggleClean, els.statusClean, settings.cleanEdges, "ON", "OFF");
+            
+            els.statusRes.textContent = settings.resolution + "x" + settings.resolution;
+            els.glintCanvas.style.opacity = settings.glint ? "0.6" : "0";
+            if (settings.glint && !glintInterval) startGlintAnim();
+            if (!settings.glint && glintInterval) stopGlintAnim();
+        }
+
+        function setToggleState(btn, label, isActive, textOn, textOff) {
+            if (isActive) {
+                btn.classList.add('active');
+                label.textContent = textOn;
+            } else {
+                btn.classList.remove('active');
+                label.textContent = textOff;
+            }
+        }
+
+        function enableDownload() {
+            els.downloadBtn.disabled = false;
+            els.downloadBtn.classList.add('active');
+            els.downloadBtn.textContent = "DOWNLOAD TEXTURE";
+        }
+
+        // --- Event Listeners ---
+        // Drag/Drop/File
+        els.dropZone.addEventListener('dragover', (e) => { e.preventDefault(); els.dropZone.classList.add('dragover'); });
+        els.dropZone.addEventListener('dragleave', () => { els.dropZone.classList.remove('dragover'); });
+        els.dropZone.addEventListener('drop', (e) => { e.preventDefault(); els.dropZone.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+        els.fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
+        els.downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = `${currentFileName.replace(/\.[^/.]+$/, "")}_${settings.resolution}x${settings.resolution}.png`;
+            link.href = els.resultCanvas.toDataURL('image/png');
+            link.click();
+        });
+
+        // Sliders
+        const sliderMap = [
+            { el: els.toleranceSlider, val: els.toleranceValue, key: 'tolerance', unit: '%' },
+            { el: els.satSlider, val: els.satValue, key: 'saturation', unit: '%' },
+            { el: els.brightSlider, val: els.brightValue, key: 'brightness', unit: '%' },
+            { el: els.contrastSlider, val: els.contrastValue, key: 'contrast', unit: '%' },
+            { el: els.sharpenSlider, val: els.sharpenValue, key: 'sharpen', unit: '%' },
+            { el: els.noiseSlider, val: els.noiseValue, key: 'noise', unit: '%' }
+        ];
+
+        sliderMap.forEach(s => {
+            s.el.addEventListener('input', (e) => {
+                settings[s.key] = parseInt(e.target.value);
+                s.val.textContent = settings[s.key] + s.unit;
+                if (currentImage) processImage();
+            });
+        });
+
+        // --- Processing Pipeline ---
+
+        function handleFile(file) {
+            if (!file.type.match('image.*')) { alert("Please upload an image file."); return; }
+            currentFileName = file.name;
+            els.fileInfo.textContent = "PROCESSING: " + currentFileName.toUpperCase();
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    enableDownload();
+                    processImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Step-Down Scale (Quality)
+        function stepDownScale(sourceCanvas, srcX, srcY, srcW, srcH, targetW, targetH) {
+            const tempCanvas = document.createElement('canvas');
+            const tCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = srcW;
+            tempCanvas.height = srcH;
+            tCtx.drawImage(sourceCanvas, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
+
+            let curW = srcW;
+            let curH = srcH;
+
+            while (curW * 0.5 > targetW && curH * 0.5 > targetH) {
+                const newW = Math.floor(curW * 0.5);
+                const newH = Math.floor(curH * 0.5);
+                const stepCanvas = document.createElement('canvas');
+                stepCanvas.width = newW;
+                stepCanvas.height = newH;
+                const sCtx = stepCanvas.getContext('2d');
+                
+                sCtx.imageSmoothingEnabled = true;
+                sCtx.imageSmoothingQuality = 'high';
+                sCtx.drawImage(tempCanvas, 0, 0, curW, curH, 0, 0, newW, newH);
+
+                tempCanvas.width = newW;
+                tempCanvas.height = newH;
+                tCtx.drawImage(stepCanvas, 0, 0);
+
+                curW = newW;
+                curH = newH;
+            }
+            return tempCanvas;
+        }
+
+        function processImage() {
+            if (!currentImage) return;
+
+            // --- STEP 1: PRE-PROCESSING (Raw Image Operations) ---
+            
+            // Create a Raw Buffer for the original image
+            const rawCanvas = document.createElement('canvas');
+            rawCanvas.width = currentImage.width;
+            rawCanvas.height = currentImage.height;
+            const ctxRaw = rawCanvas.getContext('2d');
+            ctxRaw.drawImage(currentImage, 0, 0);
+
+            // 1. Remove Background (ON RAW PIXELS)
+            if (settings.removeBg) {
+                removeBackgroundFromContext(ctxRaw, rawCanvas.width, rawCanvas.height);
+            }
+
+            // --- STEP 2: APPLY FILTERS (To the clean image) ---
+
+            // Setup Process Canvas
+            els.processCanvas.width = currentImage.width;
+            els.processCanvas.height = currentImage.height;
+            ctxProcess.clearRect(0, 0, els.processCanvas.width, els.processCanvas.height);
+
+            // Apply Corrections (Sat, Bright, Contrast)
+            const sat = settings.saturation;
+            const bri = settings.brightness;
+            const con = settings.contrast;
+            ctxProcess.filter = `saturate(${sat}%) brightness(${bri}%) contrast(${con}%)`;
+            
+            // Draw the Cleaned Raw Image onto the Process Canvas with filters
+            ctxProcess.drawImage(rawCanvas, 0, 0);
+            ctxProcess.filter = 'none'; // Reset filter
+
+            // --- STEP 3: GEOMETRY & POST-PROCESSING ---
+
+            // 3. Trim Calculation (Based on the filtered, transparent image)
+            let srcX = 0, srcY = 0, srcW = els.processCanvas.width, srcH = els.processCanvas.height;
+            if (settings.autoTrim) {
+                const bbox = getBoundingBox();
+                if (bbox) { srcX = bbox.x; srcY = bbox.y; srcW = bbox.w; srcH = bbox.h; }
+            }
+
+            // 4. Smart Scale to Target
+            ctxResult.clearRect(0, 0, settings.resolution, settings.resolution);
+            const targetSize = settings.resolution;
+            let drawW = targetSize, drawH = targetSize;
+            
+            if (srcW > srcH) { drawH = (srcH / srcW) * targetSize; } 
+            else { drawW = (srcW / srcH) * targetSize; }
+
+            // Get Scaled Data (Smoothing handled in StepDown)
+            const steppedCanvas = stepDownScale(els.processCanvas, srcX, srcY, srcW, srcH, drawW, drawH);
+
+            let drawX = (targetSize - drawW) / 2;
+            let drawY = (targetSize - drawH) / 2;
+
+            if (settings.pixelStyle) {
+                drawX = Math.floor(drawX); drawY = Math.floor(drawY);
+                drawW = Math.floor(drawW); drawH = Math.floor(drawH);
+                ctxResult.imageSmoothingEnabled = false;
+            } else {
+                ctxResult.imageSmoothingEnabled = true;
+                ctxResult.imageSmoothingQuality = 'high';
+            }
+
+            ctxResult.drawImage(steppedCanvas, 0, 0, steppedCanvas.width, steppedCanvas.height, drawX, drawY, drawW, drawH);
+
+            // 5. Post-Process Effects (Pixel Level)
+            
+            // Apply Noise
+            if (settings.noise > 0) applyNoise(settings.noise);
+
+            // Apply Sharpen
+            if (settings.sharpen > 0) applySharpen(settings.sharpen);
+
+            // Clean Edges
+            if (settings.cleanEdges) applyCleanEdges();
+
+            // Outline
+            if (settings.outline) applyOutline();
+        }
+
+        // --- Filters ---
+
+        function applyCleanEdges() {
+            const w = settings.resolution;
+            const h = settings.resolution;
+            const imgData = ctxResult.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const a = data[i + 3];
+                if (a > 0) {
+                    if (a < 128) data[i + 3] = 0;
+                    else data[i + 3] = 255;
+                }
+            }
+            ctxResult.putImageData(imgData, 0, 0);
+        }
+
+        function applyNoise(amount) {
+            const w = settings.resolution;
+            const h = settings.resolution;
+            const imgData = ctxResult.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            const factor = amount * 0.5;
+
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i + 3] === 0) continue; 
+                const rand = (Math.random() - 0.5) * factor;
+                data[i] = Math.min(255, Math.max(0, data[i] + rand));
+                data[i+1] = Math.min(255, Math.max(0, data[i+1] + rand));
+                data[i+2] = Math.min(255, Math.max(0, data[i+2] + rand));
+            }
+            ctxResult.putImageData(imgData, 0, 0);
+        }
+
+        function applySharpen(amount) {
+            const w = settings.resolution;
+            const h = settings.resolution;
+            const imgData = ctxResult.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            const mix = amount / 100.0 * 0.5;
+            const copy = new Uint8ClampedArray(data);
+
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const idx = (y * w + x) * 4;
+                    if (copy[idx + 3] < 10) continue;
+
+                    for (let c = 0; c < 3; c++) {
+                        const val = copy[idx + c];
+                        const up    = (y > 0) ? copy[((y-1)*w + x)*4 + c] : val;
+                        const down  = (y < h-1) ? copy[((y+1)*w + x)*4 + c] : val;
+                        const left  = (x > 0) ? copy[(y*w + x-1)*4 + c] : val;
+                        const right = (x < w-1) ? copy[(y*w + x+1)*4 + c] : val;
+                        const sharpenVal = val * 5 - (up + down + left + right);
+                        data[idx + c] = val * (1 - mix) + sharpenVal * mix;
+                    }
+                }
+            }
+            ctxResult.putImageData(imgData, 0, 0);
+        }
+
+        function applyOutline() {
+            const w = settings.resolution;
+            const h = settings.resolution;
+            const imgData = ctxResult.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            const buffer = new Uint8ClampedArray(data);
+            const getAlpha = (x, y) => {
+                if (x < 0 || x >= w || y < 0 || y >= h) return 0;
+                return buffer[((y * w + x) * 4) + 3];
+            };
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const idx = (y * w + x) * 4;
+                    if (data[idx + 3] === 0) {
+                        if (getAlpha(x+1, y) > 0 || getAlpha(x-1, y) > 0 || 
+                            getAlpha(x, y+1) > 0 || getAlpha(x, y-1) > 0) {
+                            data[idx] = 30; data[idx+1] = 30; data[idx+2] = 30; data[idx+3] = 255;
+                        }
+                    }
+                }
+            }
+            ctxResult.putImageData(imgData, 0, 0);
+        }
+
+        // Updated Remove Background: accepts Context
+        function removeBackgroundFromContext(ctx, width, height) {
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+            const tolerance = settings.tolerance;
+            const r0 = data[0], g0 = data[1], b0 = data[2], a0 = data[3];
+            
+            if (a0 === 0) return; // Top-left is already transparent
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i], g = data[i + 1], b = data[i + 2];
+                const dist = Math.sqrt((r - r0)**2 + (g - g0)**2 + (b - b0)**2);
+                const maxDist = 441 * (tolerance / 100);
+                if (dist <= maxDist) data[i + 3] = 0;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function getBoundingBox() {
+            const w = els.processCanvas.width;
+            const h = els.processCanvas.height;
+            const imgData = ctxProcess.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            let minX = w, minY = h, maxX = 0, maxY = 0, found = false;
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const idx = (y * w + x) * 4;
+                    if (data[idx + 3] > 10) {
+                        if (x < minX) minX = x;
+                        if (x > maxX) maxX = x;
+                        if (y < minY) minY = y;
+                        if (y > maxY) maxY = y;
+                        found = true;
+                    }
+                }
+            }
+            return found ? { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 } : null;
+        }
+
+        // Glint Anim
+        function startGlintAnim() { stopGlintAnim(); glintInterval = setInterval(() => { els.glintCanvas.style.opacity = settings.glint ? "0.6" : "0"; drawGlint(); }, 50); }
+        function stopGlintAnim() { if (glintInterval) clearInterval(glintInterval); glintInterval = null; }
+        let offset = 0;
+        function drawGlint() {
+            offset += 1;
+            const w = settings.resolution; const h = settings.resolution;
+            ctxGlint.clearRect(0, 0, w, h);
+            ctxGlint.globalCompositeOperation = 'source-over';
+            ctxGlint.drawImage(els.resultCanvas, 0, 0);
+            ctxGlint.globalCompositeOperation = 'source-in';
+            ctxGlint.fillStyle = '#b040b0'; 
+            ctxGlint.beginPath();
+            const bandWidth = w * 0.4;
+            const loopMax = w * 3; 
+            const currentX = (offset * 2) % loopMax - w;
+            ctxGlint.moveTo(currentX, 0);
+            ctxGlint.lineTo(currentX + bandWidth, 0);
+            ctxGlint.lineTo(currentX - w + bandWidth, h);
+            ctxGlint.lineTo(currentX - w, h);
+            ctxGlint.fill();
+            ctxGlint.globalCompositeOperation = 'source-over';
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
