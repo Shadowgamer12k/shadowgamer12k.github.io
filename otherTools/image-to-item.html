@@ -127,13 +127,18 @@
         .drop-zone {
             background: rgba(0, 0, 0, 0.3);
             border: 2px dashed var(--mc-border);
-            padding: 30px;
+            padding: 20px;
             text-align: center;
             color: #ccc;
             cursor: pointer;
             position: relative;
             transition: all 0.2s;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         .drop-zone:hover, .drop-zone.dragover {
             background: rgba(0, 0, 0, 0.5);
@@ -148,11 +153,30 @@
         }
         .drop-icon {
             font-size: 2rem;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             color: var(--mc-border);
         }
         .drop-zone:hover .drop-icon {
             color: var(--mc-green);
+        }
+
+        /* Paste Button inside Drop Zone */
+        .paste-btn {
+            background: var(--mc-hover);
+            border: 2px solid var(--mc-border);
+            color: #fff;
+            padding: 8px 12px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            z-index: 10; /* Above file input */
+            transition: all 0.2s;
+        }
+        .paste-btn:hover {
+            background: var(--mc-green);
+            color: #000;
+            border-color: #000;
         }
 
         /* --- CONTROLS GRID --- */
@@ -338,8 +362,22 @@
                 <!-- Upload Area -->
                 <div id="dropZone" class="drop-zone">
                     <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp">
+                    
                     <div class="drop-icon"><i class="fas fa-file-upload"></i></div>
-                    <div style="font-size: 0.8rem; line-height: 1.5;">DROP FILE HERE<br><span style="font-size: 0.6rem; color: #888;">PNG, JPG, WEBP</span></div>
+                    
+                    <div style="font-size: 0.8rem; line-height: 1.5;">
+                        DROP FILE<br>
+                        <span style="font-size: 0.6rem; color: #888;">PNG, JPG, WEBP</span>
+                    </div>
+
+                    <!-- Paste Button -->
+                    <button id="pasteBtn" class="paste-btn">
+                        <i class="fas fa-clipboard"></i> PASTE (CTRL+V)
+                    </button>
+                    
+                    <div style="font-size: 0.5rem; color: var(--mc-green); text-shadow: 1px 1px 0 #000;">
+                        GEMINI COMPATIBLE
+                    </div>
                 </div>
 
                 <!-- Toggles Grid -->
@@ -500,6 +538,7 @@
         const els = {
             dropZone: document.getElementById('dropZone'),
             fileInput: document.getElementById('fileInput'),
+            pasteBtn: document.getElementById('pasteBtn'), // New Paste Button
             // Sliders
             toleranceSlider: document.getElementById('tolerance'),
             toleranceValue: document.getElementById('toleranceValue'),
@@ -602,6 +641,44 @@
             link.click();
         });
 
+        // --- PASTE LOGIC (NEW) ---
+        // 1. Button Click
+        els.pasteBtn.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Stop click from triggering file input
+            try {
+                const clipboardItems = await navigator.clipboard.read();
+                for (const item of clipboardItems) {
+                    const imageTypes = item.types.filter(type => type.startsWith('image/'));
+                    if (imageTypes.length > 0) {
+                        const blob = await item.getType(imageTypes[0]);
+                        handleFile(new File([blob], "pasted_image.png", { type: imageTypes[0] }));
+                        return;
+                    }
+                }
+                alert("No image found in clipboard.");
+            } catch (err) {
+                console.error(err);
+                // Fallback for browsers that don't support read() well, or if permission denied
+                alert("Could not paste. Please use Ctrl+V or check browser permissions.");
+            }
+        });
+
+        // 2. Global Ctrl+V Support
+        document.addEventListener('paste', (e) => {
+            if (e.clipboardData && e.clipboardData.items) {
+                const items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        const blob = items[i].getAsFile();
+                        handleFile(blob);
+                        e.preventDefault(); // Prevent double paste
+                        break;
+                    }
+                }
+            }
+        });
+
+
         // Sliders
         const sliderMap = [
             { el: els.toleranceSlider, val: els.toleranceValue, key: 'tolerance', unit: '%' },
@@ -624,7 +701,8 @@
 
         function handleFile(file) {
             if (!file.type.match('image.*')) { alert("Please upload an image file."); return; }
-            currentFileName = file.name;
+            // If pasted, give it a name
+            currentFileName = file.name || "pasted_image.png";
             els.fileInfo.textContent = "PROCESSING: " + currentFileName.toUpperCase();
             
             const reader = new FileReader();
