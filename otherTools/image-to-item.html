@@ -12,6 +12,7 @@
 
         :root {
             --mc-green: #55ff55;
+            --mc-red: #ff5555;
             --mc-border: #555;
             --mc-bg: #2c2c2c;
             --mc-bg-dark: #1a1a1a;
@@ -43,20 +44,20 @@
             color: #fff;
             font-family: 'Press Start 2P', monospace;
             margin: 0;
-            padding: 0; /* Remove padding for full screen feel */
+            padding: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column; 
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Prevent body scroll, handle in container */
+            overflow: hidden;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="14" y="2" width="4" height="4" fill="%23ff0000"/><rect x="10" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="6" width="4" height="4" fill="%23ffff00"/><rect x="18" y="6" width="4" height="4" fill="%23ffaa00"/><rect x="6" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="10" width="4" height="4" fill="%23ffff00"/><rect x="14" y="10" width="4" height="4" fill="%23ffffff"/><rect x="18" y="10" width="4" height="4" fill="%23ffff00"/><rect x="22" y="10" width="4" height="4" fill="%23ffaa00"/><rect x="2" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="14" width="4" height="4" fill="%23ffff00"/><rect x="10" y="14" width="4" height="4" fill="%23ffffff"/><rect x="14" y="14" width="4" height="4" fill="%23ffffff"/><rect x="18" y="14" width="4" height="4" fill="%23ffffff"/><rect x="22" y="14" width="4" height="4" fill="%23ffff00"/><rect x="26" y="14" width="4" height="4" fill="%23ff0000"/><rect x="6" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="18" width="4" height="4" fill="%23ffff00"/><rect x="14" y="18" width="4" height="4" fill="%23ffffff"/><rect x="18" y="18" width="4" height="4" fill="%23ffff00"/><rect x="22" y="18" width="4" height="4" fill="%23ffaa00"/><rect x="10" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="22" width="4" height="4" fill="%23ffff00"/><rect x="18" y="22" width="4" height="4" fill="%23ffaa00"/><rect x="14" y="26" width="4" height="4" fill="%23ff0000"/></svg>') 16 16, auto;
         }
 
         .container {
             width: 95%;
             max-width: 1600px;
-            height: 90vh; /* Fixed height for dashboard feel */
+            height: 90vh;
             background: var(--mc-bg);
             border: 4px solid var(--mc-border);
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
@@ -92,7 +93,7 @@
         .main-content {
             padding: 0;
             display: grid;
-            grid-template-columns: 450px 1fr; /* Fixed width controls, flex preview */
+            grid-template-columns: 450px 1fr;
             height: 100%;
             overflow: hidden;
         }
@@ -108,6 +109,13 @@
             gap: 20px;
         }
 
+        .section-label {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-bottom: -10px;
+            text-transform: uppercase;
+        }
+
         /* Right Panel - Preview */
         .preview-panel {
             padding: 20px;
@@ -117,7 +125,6 @@
             justify-content: center;
             background: var(--mc-bg-dark);
             position: relative;
-            /* Fancy background for the preview area */
             background-image: radial-gradient(#2a2a2a 15%, transparent 16%), radial-gradient(#2a2a2a 15%, transparent 16%);
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
@@ -160,7 +167,6 @@
             color: var(--mc-green);
         }
 
-        /* Paste Button inside Drop Zone */
         .paste-btn {
             background: var(--mc-hover);
             border: 2px solid var(--mc-border);
@@ -170,7 +176,7 @@
             font-size: 0.6rem;
             cursor: pointer;
             text-transform: uppercase;
-            z-index: 10; /* Above file input */
+            z-index: 10;
             transition: all 0.2s;
         }
         .paste-btn:hover {
@@ -224,10 +230,61 @@
             text-shadow: 0 0 5px var(--mc-green);
         }
 
+        /* --- EDITOR TOOLS --- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border: 3px solid var(--mc-border);
+        }
+        .tool-btn {
+            background: var(--mc-hover);
+            border: 2px solid var(--mc-border);
+            color: #aaa;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .tool-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+        .tool-btn.active {
+            background: var(--mc-bg-dark);
+            border-color: var(--mc-green);
+            color: var(--mc-green);
+            box-shadow: inset 0 0 5px var(--mc-green);
+        }
+        .tool-btn i {
+            font-size: 1rem;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+            background: none;
+            cursor: pointer;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+
         /* --- SLIDER --- */
         .sliders-grid {
             display: grid;
-            grid-template-columns: 1fr; /* Single column on left panel */
+            grid-template-columns: 1fr;
             gap: 15px;
         }
         
@@ -277,9 +334,10 @@
         .preview-wrapper {
             position: relative;
             margin-bottom: 30px;
+            /* Allow cursor override for tools */
+            cursor: crosshair; 
         }
         .pixelated-render {
-            /* Visually larger on desktop for better inspection */
             width: 256px; 
             height: 256px;
             border: 4px solid #000;
@@ -294,6 +352,7 @@
             background-size: 20px 20px;
             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             image-rendering: pixelated;
+            touch-action: none; /* Prevent scrolling while drawing */
         }
 
         /* --- BUTTON --- */
@@ -332,6 +391,14 @@
             text-align: center;
             margin-top: 15px;
         }
+        
+        .editor-hint {
+            font-size: 0.6rem;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+            font-style: italic;
+        }
 
         /* Mobile Responsive */
         @media (max-width: 900px) {
@@ -362,128 +429,101 @@
                 <!-- Upload Area -->
                 <div id="dropZone" class="drop-zone">
                     <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp">
-                    
                     <div class="drop-icon"><i class="fas fa-file-upload"></i></div>
-                    
                     <div style="font-size: 0.8rem; line-height: 1.5;">
                         DROP FILE<br>
                         <span style="font-size: 0.6rem; color: #888;">PNG, JPG, WEBP</span>
                     </div>
-
-                    <!-- Paste Button -->
                     <button id="pasteBtn" class="paste-btn">
                         <i class="fas fa-clipboard"></i> PASTE (CTRL+V)
                     </button>
-                    
                     <div style="font-size: 0.5rem; color: var(--mc-green); text-shadow: 1px 1px 0 #000;">
                         GEMINI COMPATIBLE
                     </div>
                 </div>
 
+                <div class="section-label">Generator</div>
+
                 <!-- Toggles Grid -->
                 <div class="task-list">
-                    <!-- Toggle 1: BG Remove -->
                     <div class="task-item active" id="btnToggleBg" onclick="toggleSetting('removeBg')">
                         <div class="task-title">REMOVE BG</div>
                         <div class="task-status" id="status-removeBg">ENABLED</div>
                     </div>
-
-                    <!-- Toggle 2: Auto Trim -->
                     <div class="task-item active" id="btnToggleTrim" onclick="toggleSetting('autoTrim')">
                         <div class="task-title">AUTO TRIM</div>
                         <div class="task-status" id="status-autoTrim">ENABLED</div>
                     </div>
-
-                    <!-- Toggle 3: Pixel Scale -->
                     <div class="task-item active" id="btnTogglePixel" onclick="toggleSetting('pixelStyle')">
                         <div class="task-title">PIXEL MODE</div>
                         <div class="task-status" id="status-pixelStyle">SHARP</div>
                     </div>
-
-                    <!-- Toggle 4: Resolution -->
                     <div class="task-item" id="btnToggleRes" onclick="toggleResolution()">
                         <div class="task-title">SIZE</div>
                         <div class="task-status" id="status-res">16x16</div>
                     </div>
-
-                     <!-- Toggle 5: Outline -->
                      <div class="task-item" id="btnToggleOutline" onclick="toggleSetting('outline')">
                         <div class="task-title">OUTLINE</div>
                         <div class="task-status" id="status-outline">OFF</div>
                     </div>
-                    
-                     <!-- Toggle 6: Glint -->
                      <div class="task-item" id="btnToggleGlint" onclick="toggleSetting('glint')">
                         <div class="task-title">GLINT</div>
                         <div class="task-status" id="status-glint">OFF</div>
                     </div>
-
-                    <!-- Toggle 7: Clean Edges -->
                     <div class="task-item" id="btnToggleClean" onclick="toggleSetting('cleanEdges')">
                         <div class="task-title">CLEAN EDGES</div>
                         <div class="task-status" id="status-cleanEdges">OFF</div>
                     </div>
-
-                     <!-- Placeholder for even grid -->
                      <div class="task-item" style="opacity:0.3; cursor:default;">
                         <div class="task-title">FORMAT</div>
                         <div class="task-status">PNG</div>
                     </div>
                 </div>
 
+                <div class="section-label">Manual Editor</div>
+
+                <!-- Editor Tools Grid -->
+                <div class="tools-grid">
+                    <div class="tool-btn active" id="toolBrush" onclick="selectTool('brush')" title="Brush (Draw)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <div class="tool-btn" id="toolEraser" onclick="selectTool('eraser')" title="Eraser (Remove)">
+                        <i class="fas fa-eraser"></i>
+                    </div>
+                    <div class="tool-btn" id="toolPicker" onclick="selectTool('picker')" title="Color Picker">
+                        <i class="fas fa-eye-dropper"></i>
+                    </div>
+                    <div class="tool-btn" style="padding:0; overflow:hidden;" title="Brush Color">
+                        <input type="color" id="brushColor" value="#55ff55">
+                    </div>
+                </div>
+
+                <div class="section-label">Filters</div>
+
                 <!-- Sliders Grid -->
                 <div class="sliders-grid">
-                     <!-- Tolerance -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>BG TOLERANCE</span>
-                            <span id="toleranceValue" style="color: var(--mc-green);">15%</span>
-                        </div>
+                        <div class="slider-label"><span>BG TOLERANCE</span><span id="toleranceValue" style="color: var(--mc-green);">15%</span></div>
                         <input type="range" id="tolerance" min="0" max="100" value="15">
                     </div>
-
-                    <!-- Sharpen -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>SHARPEN</span>
-                            <span id="sharpenValue" style="color: var(--mc-green);">20%</span>
-                        </div>
+                        <div class="slider-label"><span>SHARPEN</span><span id="sharpenValue" style="color: var(--mc-green);">20%</span></div>
                         <input type="range" id="sharpen" min="0" max="100" value="20">
                     </div>
-
-                    <!-- Saturation -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>SATURATION</span>
-                            <span id="satValue" style="color: var(--mc-green);">100%</span>
-                        </div>
+                        <div class="slider-label"><span>SATURATION</span><span id="satValue" style="color: var(--mc-green);">100%</span></div>
                         <input type="range" id="saturation" min="0" max="200" value="100">
                     </div>
-
-                    <!-- Brightness -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>BRIGHTNESS</span>
-                            <span id="brightValue" style="color: var(--mc-green);">100%</span>
-                        </div>
+                        <div class="slider-label"><span>BRIGHTNESS</span><span id="brightValue" style="color: var(--mc-green);">100%</span></div>
                         <input type="range" id="brightness" min="50" max="150" value="100">
                     </div>
-
-                    <!-- Contrast -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>CONTRAST</span>
-                            <span id="contrastValue" style="color: var(--mc-green);">100%</span>
-                        </div>
+                        <div class="slider-label"><span>CONTRAST</span><span id="contrastValue" style="color: var(--mc-green);">100%</span></div>
                         <input type="range" id="contrast" min="50" max="150" value="100">
                     </div>
-
-                    <!-- Noise -->
                     <div class="slider-container">
-                        <div class="slider-label">
-                            <span>NOISE (GRAIN)</span>
-                            <span id="noiseValue" style="color: var(--mc-green);">0%</span>
-                        </div>
+                        <div class="slider-label"><span>NOISE (GRAIN)</span><span id="noiseValue" style="color: var(--mc-green);">0%</span></div>
                         <input type="range" id="noise" min="0" max="50" value="0">
                     </div>
                 </div>
@@ -491,19 +531,19 @@
 
             <!-- RIGHT PANEL: PREVIEW -->
             <div class="preview-panel">
-                <div class="preview-wrapper">
+                <div class="preview-wrapper" id="canvasWrapper">
                     <!-- Main Result -->
                     <canvas id="resultCanvas" width="16" height="16" class="pixelated-render"></canvas>
                     <!-- Glint Overlay -->
                     <canvas id="glintCanvas" width="16" height="16" class="pixelated-render" style="position:absolute; top:0; left:0; pointer-events:none; opacity:0; mix-blend-mode: color-dodge; background:transparent; border:none; box-shadow:none;"></canvas>
                 </div>
                 
-                <!-- Download Button -->
                 <button id="downloadBtn" class="unlock-btn" disabled>
                     DOWNLOAD
                 </button>
                 
                 <div class="file-info" id="fileInfo">WAITING FOR FILE...</div>
+                <div class="editor-hint">Manual edits will be overwritten if you change generator settings.</div>
             </div>
 
         </div>
@@ -533,12 +573,22 @@
         let currentImage = null;
         let currentFileName = "item";
         let glintInterval = null;
+        
+        // Editor State
+        let activeTool = 'brush'; // brush, eraser, picker
+        let isDrawing = false;
+        let lastDrawPos = null;
 
         // DOM Elements
         const els = {
             dropZone: document.getElementById('dropZone'),
             fileInput: document.getElementById('fileInput'),
-            pasteBtn: document.getElementById('pasteBtn'), // New Paste Button
+            pasteBtn: document.getElementById('pasteBtn'),
+            // Tools
+            toolBrush: document.getElementById('toolBrush'),
+            toolEraser: document.getElementById('toolEraser'),
+            toolPicker: document.getElementById('toolPicker'),
+            brushColor: document.getElementById('brushColor'),
             // Sliders
             toleranceSlider: document.getElementById('tolerance'),
             toleranceValue: document.getElementById('toleranceValue'),
@@ -553,6 +603,7 @@
             noiseSlider: document.getElementById('noise'),
             noiseValue: document.getElementById('noiseValue'),
             // Canvases
+            wrapper: document.getElementById('canvasWrapper'),
             resultCanvas: document.getElementById('resultCanvas'),
             glintCanvas: document.getElementById('glintCanvas'),
             processCanvas: document.getElementById('processCanvas'),
@@ -579,6 +630,106 @@
         const ctxResult = els.resultCanvas.getContext('2d', { willReadFrequently: true });
         const ctxGlint = els.glintCanvas.getContext('2d');
         const ctxProcess = els.processCanvas.getContext('2d', { willReadFrequently: true });
+
+        // --- EDITOR LOGIC ---
+
+        function selectTool(tool) {
+            activeTool = tool;
+            // Update UI
+            ['brush', 'eraser', 'picker'].forEach(t => {
+                const btn = document.getElementById('tool' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (t === tool) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            
+            // Cursor Update
+            if (tool === 'picker') els.wrapper.style.cursor = 'crosshair';
+            else if (tool === 'eraser') els.wrapper.style.cursor = 'cell';
+            else els.wrapper.style.cursor = 'crosshair';
+        }
+
+        // Mouse/Touch Events for Canvas
+        els.resultCanvas.addEventListener('mousedown', startDrawing);
+        els.resultCanvas.addEventListener('mousemove', draw);
+        els.resultCanvas.addEventListener('mouseup', stopDrawing);
+        els.resultCanvas.addEventListener('mouseleave', stopDrawing);
+        
+        // Touch events (prevent scrolling)
+        els.resultCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); }, {passive: false});
+        els.resultCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); }, {passive: false});
+        els.resultCanvas.addEventListener('touchend', stopDrawing);
+
+        function getCanvasCoords(clientX, clientY) {
+            const rect = els.resultCanvas.getBoundingClientRect();
+            const scaleX = els.resultCanvas.width / rect.width;
+            const scaleY = els.resultCanvas.height / rect.height;
+            return {
+                x: Math.floor((clientX - rect.left) * scaleX),
+                y: Math.floor((clientY - rect.top) * scaleY)
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e); // Draw single dot on click
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            lastDrawPos = null;
+        }
+
+        function draw(e) {
+            if (!isDrawing && e.type !== 'click') return;
+            
+            // Get coordinates
+            const clientX = e.clientX || e.pageX;
+            const clientY = e.clientY || e.pageY;
+            const coords = getCanvasCoords(clientX, clientY);
+            const x = coords.x;
+            const y = coords.y;
+
+            // Bounds check
+            if (x < 0 || x >= els.resultCanvas.width || y < 0 || y >= els.resultCanvas.height) return;
+
+            if (activeTool === 'picker') {
+                const p = ctxResult.getImageData(x, y, 1, 1).data;
+                const hex = rgbToHex(p[0], p[1], p[2]);
+                els.brushColor.value = hex;
+                selectTool('brush'); // Auto switch back to brush
+                isDrawing = false; // Stop picking immediately
+                return;
+            }
+
+            // Draw/Erase
+            const color = activeTool === 'eraser' ? [0,0,0,0] : hexToRgb(els.brushColor.value);
+            
+            // Simple Bresenham or just pixel fill? 
+            // Since resolution is low, mousemove events might gap. 
+            // But simple filling is usually fine for 16x16.
+            
+            const p = ctxResult.createImageData(1, 1);
+            p.data[0] = color[0];
+            p.data[1] = color[1];
+            p.data[2] = color[2];
+            p.data[3] = (activeTool === 'eraser') ? 0 : 255;
+            
+            ctxResult.putImageData(p, x, y);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? [
+                parseInt(result[1], 16),
+                parseInt(result[2], 16),
+                parseInt(result[3], 16)
+            ] : [0, 0, 0];
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
 
         // --- UI Logic ---
 
@@ -641,10 +792,9 @@
             link.click();
         });
 
-        // --- PASTE LOGIC (NEW) ---
-        // 1. Button Click
+        // Paste Logic
         els.pasteBtn.addEventListener('click', async (e) => {
-            e.stopPropagation(); // Stop click from triggering file input
+            e.stopPropagation(); 
             try {
                 const clipboardItems = await navigator.clipboard.read();
                 for (const item of clipboardItems) {
@@ -658,12 +808,10 @@
                 alert("No image found in clipboard.");
             } catch (err) {
                 console.error(err);
-                // Fallback for browsers that don't support read() well, or if permission denied
                 alert("Could not paste. Please use Ctrl+V or check browser permissions.");
             }
         });
 
-        // 2. Global Ctrl+V Support
         document.addEventListener('paste', (e) => {
             if (e.clipboardData && e.clipboardData.items) {
                 const items = e.clipboardData.items;
@@ -671,13 +819,12 @@
                     if (items[i].type.indexOf('image') !== -1) {
                         const blob = items[i].getAsFile();
                         handleFile(blob);
-                        e.preventDefault(); // Prevent double paste
+                        e.preventDefault(); 
                         break;
                     }
                 }
             }
         });
-
 
         // Sliders
         const sliderMap = [
@@ -701,7 +848,6 @@
 
         function handleFile(file) {
             if (!file.type.match('image.*')) { alert("Please upload an image file."); return; }
-            // If pasted, give it a name
             currentFileName = file.name || "pasted_image.png";
             els.fileInfo.textContent = "PROCESSING: " + currentFileName.toUpperCase();
             
@@ -820,17 +966,9 @@
             ctxResult.drawImage(steppedCanvas, 0, 0, steppedCanvas.width, steppedCanvas.height, drawX, drawY, drawW, drawH);
 
             // 5. Post-Process Effects (Pixel Level)
-            
-            // Apply Noise
             if (settings.noise > 0) applyNoise(settings.noise);
-
-            // Apply Sharpen
             if (settings.sharpen > 0) applySharpen(settings.sharpen);
-
-            // Clean Edges
             if (settings.cleanEdges) applyCleanEdges();
-
-            // Outline
             if (settings.outline) applyOutline();
         }
 
