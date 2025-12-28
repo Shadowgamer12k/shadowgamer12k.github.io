@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft 16x16 Texture Converter</title>
+<style>
+  body {
+    background: #0f172a;
+    color: #e5e7eb;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .box {
+    background: #020617;
+    border: 2px dashed #334155;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 320px;
+  }
+  canvas {
+    image-rendering: pixelated;
+    border: 1px solid #334155;
+    margin-top: 12px;
+  }
+  input, button {
+    margin-top: 10px;
+    width: 100%;
+  }
+  button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h3>16×16 Minecraft Texture Tool</h3>
+  <input type="file" accept="image/*" id="upload">
+  <canvas id="canvas" width="16" height="16"></canvas>
+  <button id="download">Download 16×16 PNG</button>
+</div>
+
+<script>
+const upload = document.getElementById("upload");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled = false;
+
+upload.addEventListener("change", () => {
+  const file = upload.files[0];
+  if (!file) return;
+
+  const img = new Image();
+  img.onload = () => {
+    ctx.clearRect(0, 0, 16, 16);
+    ctx.drawImage(img, 0, 0, 16, 16);
+  };
+  img.src = URL.createObjectURL(file);
+});
+
+document.getElementById("download").onclick = () => {
+  const a = document.createElement("a");
+  a.download = "minecraft_item_16x16.png";
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+};
+</script>
+
+</body>
+</html>
