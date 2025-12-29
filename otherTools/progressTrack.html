@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock Addon Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --mc-bg: #48494a;
+            --mc-panel: #313233;
+            --mc-border-light: #5b5b5b;
+            --mc-border-dark: #1e1e1f;
+            --mc-green: #42b74f;
+            --mc-text: #ffffff;
+            --mc-shadow: #212121;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://assets.codepen.io/13471/dirt-bg.jpg'); /* Dirt texture fallback */
+            color: var(--mc-text);
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--mc-bg);
+            border: 4px solid #000;
+            outline: 4px solid var(--mc-border-light);
+            padding: 20px;
+            box-shadow: 10px 10px 0 #000;
+        }
+
+        h1, h2 {
+            text-shadow: 2px 2px #000;
+            text-transform: uppercase;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        h1 { color: #fcfc00; font-size: 2.5rem; }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #262626;
+            padding: 15px;
+            border: 2px solid var(--mc-border-dark);
+            border-bottom: 2px solid var(--mc-border-light);
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-box input {
+            background: transparent;
+            border: none;
+            color: var(--mc-green);
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            width: 80px;
+            text-align: center;
+        }
+
+        /* The Strategy Groups */
+        .reference-box {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            border: 2px solid var(--mc-border-dark);
+        }
+        .reference-box span { color: #aaa; }
+
+        /* Weekly Grid */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .day-card {
+            background-color: var(--mc-panel);
+            border: 2px solid var(--mc-border-dark);
+            border-top: 2px solid var(--mc-border-light);
+            border-left: 2px solid var(--mc-border-light);
+            padding: 10px;
+        }
+
+        .day-title {
+            color: #d1d1d1;
+            border-bottom: 2px solid #555;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        /* Checkboxes */
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .task-item.completed {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        .mc-checkbox {
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border: 2px solid #666;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mc-checkbox::after {
+            content: 'X';
+            color: #fff;
+            display: none;
+            font-size: 1.2rem;
+        }
+
+        .task-item.completed .mc-checkbox::after {
+            display: block;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #7d7d7d;
+            border: 2px solid #000;
+            border-top: 2px solid #a8a8a8;
+            border-left: 2px solid #a8a8a8;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            text-shadow: 2px 2px #000;
+        }
+
+        .btn:active {
+            background-color: #595959;
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            border-bottom: 2px solid #a8a8a8;
+            border-right: 2px solid #a8a8a8;
+        }
+
+        .history-section {
+            margin-top: 30px;
+            border-top: 2px dashed #666;
+            padding-top: 20px;
+        }
+        
+        .history-item {
+            background: #222;
+            padding: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Road To $200 (120 Pts)</h1>
+
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div>Current Points</div>
+                <input type="number" id="currentPoints" value="18" onchange="saveData()">
+            </div>
+            <div class="stat-box">
+                <div>Goal</div>
+                <div style="color: yellow; font-size: 1.5rem;">120</div>
+            </div>
+            <div class="stat-box">
+                <div>Est. Revenue</div>
+                <div>$<span id="revenueDisplay">0.90</span>/day</div>
+            </div>
+        </div>
+
+        <div class="reference-box">
+            <strong>Strategy Groups:</strong><br>
+            <span>[A] Top Tier:</span> Health Bar, Mob Catcher, Land Claim<br>
+            <span>[B] Utility:</span> Tool Swap, Waypoint, Hopper, Overstack<br>
+            <span>[C] Visuals:</span> Hearts, Ender, Soul Eggs, Hide<br>
+            <span>[D] Long Tail:</span> QuickPort, Linked Inv, etc.
+        </div>
+
+        <div class="week-grid" id="weekGrid">
+            </div>
+
+        <button class="btn" onclick="archiveAndReset()">>> FINISH WEEK & ARCHIVE <<</button>
+
+        <div class="history-section">
+            <h2>History Log</h2>
+            <div id="historyLog"></div>
+        </div>
+    </div>
+
+    <script>
+        // Default Strategy Template
+        const defaultWeek = [
+            { day: "Monday", tasks: ["Update Group A (Top Tier)", "Check Comments/Bugs", "Post Short: Existing Mod"] },
+            { day: "Tuesday", tasks: ["Code: New Micro-Utility (2hrs)", "Update Group B (Utility)"] },
+            { day: "Wednesday", tasks: ["Polish New Utility", "Update Group C (Visuals)"] },
+            { day: "Thursday", tasks: ["Create Thumbnail/Desc", "Update Group D"] },
+            { day: "Friday", tasks: ["RELEASE: New Utility Addon", "Post Short: New Release"] },
+            { day: "Saturday", tasks: ["Update Group A (Again)", "Reply to Comments"] },
+            { day: "Sunday", tasks: ["Rest / Analytics Review"] }
+        ];
+
+        let appData = {
+            points: 18,
+            currentWeekData: JSON.parse(JSON.stringify(defaultWeek)), // Deep copy
+            history: []
+        };
+
+        // Load from LocalStorage
+        function loadData() {
+            const saved = localStorage.getItem('bedrockTracker_v1');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+            document.getElementById('currentPoints').value = appData.points;
+            updateRevenue();
+            renderWeek();
+            renderHistory();
+        }
+
+        // Save to LocalStorage
+        function saveData() {
+            appData.points = document.getElementById('currentPoints').value;
+            localStorage.setItem('bedrockTracker_v1', JSON.stringify(appData));
+            updateRevenue();
+        }
+
+        function updateRevenue() {
+            const pts = document.getElementById('currentPoints').value;
+            const rev = (pts * 0.05).toFixed(2);
+            document.getElementById('revenueDisplay').innerText = rev;
+        }
+
+        // Render the Grid
+        function renderWeek() {
+            const grid = document.getElementById('weekGrid');
+            grid.innerHTML = '';
+
+            appData.currentWeekData.forEach((dayObj, dayIndex) => {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day-card';
+                
+                let tasksHtml = '';
+                dayObj.tasks.forEach((taskStr, taskIndex) => {
+                    // Check if task is an object (saved state) or string (default)
+                    const isObj = typeof taskStr === 'object';
+                    const text = isObj ? taskStr.text : taskStr;
+                    const done = isObj ? taskStr.done : false;
+
+                    // Normalize data structure if it was a string
+                    if (!isObj) {
+                        appData.currentWeekData[dayIndex].tasks[taskIndex] = { text: text, done: false };
+                    }
+
+                    tasksHtml += `
+                        <div class="task-item ${done ? 'completed' : ''}" onclick="toggleTask(${dayIndex}, ${taskIndex})">
+                            <div class="mc-checkbox"></div>
+                            <span>${text}</span>
+                        </div>
+                    `;
+                });
+
+                dayDiv.innerHTML = `<div class="day-title">${dayObj.day}</div>${tasksHtml}`;
+                grid.appendChild(dayDiv);
+            });
+        }
+
+        // Toggle Task Status
+        function toggleTask(dayIndex, taskIndex) {
+            const task = appData.currentWeekData[dayIndex].tasks[taskIndex];
+            task.done = !task.done;
+            saveData();
+            renderWeek();
+        }
+
+        // Archive and Reset
+        function archiveAndReset() {
+            if(!confirm("Finish this week? This will save to history and reset checkboxes.")) return;
+
+            // Calculate score
+            let totalTasks = 0;
+            let completedTasks = 0;
+            appData.currentWeekData.forEach(day => {
+                day.tasks.forEach(t => {
+                    totalTasks++;
+                    if(t.done) completedTasks++;
+                });
+            });
+
+            const date = new Date().toLocaleDateString();
+            const percentage = Math.round((completedTasks / totalTasks) * 100);
+
+            // Add to history
+            appData.history.unshift({
+                date: date,
+                score: `${completedTasks}/${totalTasks}`,
+                percent: percentage
+            });
+
+            // Reset current week
+            appData.currentWeekData = JSON.parse(JSON.stringify(defaultWeek));
+            
+            saveData();
+            renderWeek();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const log = document.getElementById('historyLog');
+            log.innerHTML = '';
+            appData.history.forEach(h => {
+                let color = '#ff5555'; // Red
+                if(h.percent > 50) color = '#ffff55'; // Yellow
+                if(h.percent > 80) color = '#55ff55'; // Green
+
+                log.innerHTML += `
+                    <div class="history-item">
+                        <span>${h.date}</span>
+                        <span style="color:${color}">Completion: ${h.percent}%</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Init
+        loadData();
+
+    </script>
+</body>
+</html>
