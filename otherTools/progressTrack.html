@@ -32,6 +32,7 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
@@ -53,6 +54,8 @@
             margin-bottom: 30px;
             border-bottom: 3px solid var(--mc-border-dark);
             padding-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         h1 { 
@@ -193,17 +196,6 @@
     </style>
 </head>
 <body>
-
-    <!-- NEW DAY MODAL -->
-    <div id="newDayModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-title">NEW DAY DETECTED!</div>
-            <p style="font-size:0.8rem; line-height:1.6">Enter today's CurseForge points:</p>
-            <input type="number" id="dailyPointsInput" class="modal-input" placeholder="0">
-            <input type="text" id="dailyNoteInput" class="modal-input" style="font-size:0.8rem; width:200px;" placeholder="Optional Note">
-            <button class="modal-btn" onclick="confirmDailyPoints()">CONFIRM</button>
-        </div>
-    </div>
 
     <div id="weeklyAuditModal" class="modal-overlay">
         <div class="modal-box" style="border-color: var(--mc-red);">
@@ -346,9 +338,13 @@
         <button class="btn" onclick="archiveAndReset()">>> FINISH WEEK & ARCHIVE <<</button>
     </div>
 
-    <script>
+    <!-- UPGRADED SCRIPT TO USE FIREBASE FIRESTORE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         // --- 0. DATA MODEL ---
-        // FIX #1: Initialize pointsLog as empty array to prevent undefined errors
         let appData = {
             points: 18, 
             goal: 120, 
@@ -369,42 +365,70 @@
             ],
             groups: { A: [], B: [], C: [], D: [] }, 
             history: [], 
-            pointsLog: [] // FIX: Ensure initialized
+            pointsLog: [] 
         };
 
-        // --- 1. CORE HELPERS (Hoisting Safety) ---
+        let db, auth, user;
+        let firestoreDocRef = null;
+        let useFirestore = false;
+
+        // --- 1. CORE HELPERS ---
+        function escapeHtml(text) {
+            if (!text) return "";
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function getTodayString() {
+            return new Date().toLocaleDateString('en-US');
+        }
+
         function getRate() { 
             const el = document.getElementById('pointRate');
             return el ? (parseFloat(el.value) || 0.05) : 0.05; 
         }
 
+        // UPGRADED SAVE FUNCTION
         function saveData() {
+            // Update appData from DOM elements first
             const elPoints = document.getElementById('currentPoints');
             if(elPoints) appData.points = elPoints.value;
             const elGoal = document.getElementById('goalPoints');
             if(elGoal) appData.goal = elGoal.value;
             const elRate = document.getElementById('pointRate');
             if(elRate) appData.rate = elRate.value;
-            localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(appData));
+
+            if (useFirestore && firestoreDocRef) {
+                // Save to Cloud
+                setDoc(firestoreDocRef, appData)
+                    .catch(e => console.error("Error saving to cloud:", e));
+            } else {
+                // Save to Local (Fallback)
+                localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(appData));
+            }
         }
 
-        // --- 2. RENDERERS ---
-        function renderLogTable() {
+        // --- 2. RENDERERS (Same logic, accessible globally) ---
+        window.renderLogTable = function() {
             const tbody = document.getElementById('logTableBody');
             if(!tbody) return;
             const rate = getRate();
             tbody.innerHTML = "";
-            // FIX #2: Add null check for pointsLog before reversing
             if (appData.pointsLog && appData.pointsLog.length > 0) {
                 [...appData.pointsLog].reverse().forEach((l,i) => {
                     const earn = (l.value*rate) + (l.externalRevenue||0);
                     const idx = appData.pointsLog.length - 1 - i;
-                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${l.value}</td><td>${l.note||'-'}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
+                    const safeNote = escapeHtml(l.note||'-');
+                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${l.value}</td><td>${safeNote}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
             }
         }
 
-        function renderGroups() {
+        window.renderGroups = function() {
             const container = document.getElementById('groupsDisplay');
             if(!container) return;
             container.innerHTML = "";
@@ -414,16 +438,16 @@
                 projects.forEach(p => {
                     const dl = parseInt(p.downloads) || 0;
                     totalDL += dl;
-                    // FIX #3: Add null check for lastDiff to prevent NaN display
+                    const safeName = escapeHtml(p.name);
                     let diffHtml = (p.lastDiff && p.lastDiff > 0) ? `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>` : "";
-                    rows += `<div class="project-row-display"><span>${p.name}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    rows += `<div class="project-row-display"><span>${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
                 const color = g === 'A' ? "var(--mc-yellow)" : "#aaa";
                 container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
             });
         }
 
-        function renderWeek() {
+        window.renderWeek = function() {
             const grid = document.getElementById('weekGrid');
             if(!grid) return;
             grid.innerHTML = '';
@@ -432,13 +456,14 @@
                 day.tasks.forEach((t, ti) => {
                     const done = typeof t === 'object' ? t.done : false;
                     const text = typeof t === 'object' ? t.text : t;
-                    tasks += `<div class="task-item ${done?'completed':''}" onclick="toggleTask(${di},${ti})"><div class="mc-checkbox"></div><span>${text}</span></div>`;
+                    const safeText = escapeHtml(text);
+                    tasks += `<div class="task-item ${done?'completed':''}" onclick="toggleTask(${di},${ti})"><div class="mc-checkbox"></div><span>${safeText}</span></div>`;
                 });
                 grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day}</div>${tasks}</div>`;
             });
         }
 
-        function drawChart() {
+        window.drawChart = function() {
             const canvas = document.getElementById('growthChart');
             if(!canvas || !canvas.parentElement) return; 
             const ctx = canvas.getContext('2d');
@@ -448,7 +473,6 @@
             ctx.fillStyle = "#222"; 
             ctx.fillRect(0, 0, w, h);
             
-            // FIX #4: Add safety check for pointsLog existence
             const logs = (appData.pointsLog && appData.pointsLog.length > 0) ? appData.pointsLog : [];
             if (logs.length === 0) {
                 ctx.fillStyle = "#555"; 
@@ -475,11 +499,9 @@
 
             function drawCurve(data, color, fillStyle, labelDir) {
                 if(data.length === 0) return;
-                
                 ctx.beginPath();
-                ctx.strokeStyle = color;
+                ctx.strokeStyle = color; 
                 ctx.lineWidth = 4;
-
                 if (data.length === 1) {
                     const x = getX(0); 
                     const y = getY(data[0]);
@@ -498,8 +520,6 @@
                         ctx.bezierCurveTo(cp1x, y1, cp1x, y2, x2, y2);
                     }
                     ctx.stroke();
-
-                    // Area Fill
                     ctx.lineTo(getX(data.length - 1), h - padY);
                     ctx.lineTo(getX(0), h - padY);
                     ctx.closePath();
@@ -509,8 +529,6 @@
                     ctx.fillStyle = grad;
                     ctx.fill();
                 }
-
-                // Points & Labels
                 data.forEach((val, i) => {
                     const x = getX(i);
                     const y = getY(val);
@@ -518,21 +536,17 @@
                     ctx.beginPath(); 
                     ctx.arc(x, y, 5, 0, Math.PI*2); 
                     ctx.fill();
-                    
                     ctx.fillStyle = "#fff";
                     ctx.textAlign = "center";
                     ctx.font = "8px 'Press Start 2P'";
                     const offset = labelDir === 1 ? -15 : 25;
                     ctx.fillText("$" + val.toFixed(2), x, y + offset);
-                    
                     if (labelDir === 1) {
                         ctx.fillStyle = "#666";
                         ctx.fillText(logs[i].date, x, h - 15);
                     }
                 });
             }
-
-            // FIX #5: Draw grid lines with proper stroke reset
             ctx.strokeStyle = "#333";
             ctx.setLineDash([5, 5]);
             for(let i=0; i<logs.length; i++) {
@@ -542,22 +556,16 @@
                 ctx.stroke();
             }
             ctx.setLineDash([]);
-
-            // FIX #6: Use actual color values instead of CSS variables which don't work in canvas
             drawCurve(cfData, "#42b74f", "rgba(66, 183, 79, 0.3)", 1);
             drawCurve(extData, "#e67e22", "rgba(230, 126, 34, 0.3)", -1);
         }
 
         // --- 3. CALCULATIONS ---
-        function calculateHistoricalTotals() {
+        window.calculateHistoricalTotals = function() {
             const rate = getRate();
             const now = new Date(); 
             now.setHours(0,0,0,0);
-            let sum7 = 0; 
-            let prev7 = 0; 
-            let sum30 = 0;
-            
-            // FIX #7: Add null check for pointsLog
+            let sum7 = 0; let prev7 = 0; let sum30 = 0;
             if (appData.pointsLog && appData.pointsLog.length > 0) {
                 appData.pointsLog.forEach(log => {
                     const d = new Date(log.date); 
@@ -569,28 +577,21 @@
                     if(diff >= 0 && diff < 30) sum30 += val;
                 });
             }
-            
             const el7 = document.getElementById('last7TotalDisplay');
             if (el7) el7.innerText = sum7.toFixed(2);
-            
             const el30 = document.getElementById('last30TotalDisplay');
             if (el30) el30.innerText = sum30.toFixed(2);
-            
             const momEl = document.getElementById('mom7');
             if (momEl) {
                 momEl.innerText = sum7 >= prev7 ? "⬆️" : "⬇️";
                 momEl.style.color = sum7 >= prev7 ? "#55ff55" : "#ff5555";
             }
-
-            // FIX #8: Safe lifetime calculation with proper default
             let lifetime = 0;
             if (appData.pointsLog && appData.pointsLog.length > 0) {
                 lifetime = appData.pointsLog.reduce((a,b) => a + (parseInt(b.value)*rate) + (b.externalRevenue||0), 0);
             }
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
-
-            // FIX #9: Safe average calculation
             if(appData.pointsLog && appData.pointsLog.length > 0) {
                  const recent = appData.pointsLog.slice(-7);
                  let recentSum = 0;
@@ -600,21 +601,18 @@
             }
         }
 
-        function updateRevenue() {
+        window.updateRevenue = function() {
             const ptsInput = document.getElementById('currentPoints');
-            const pts = ptsInput ? (parseInt(ptsInput.value) || 0) : 0;
+            const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '') : "0";
+            const pts = parseInt(ptsVal) || 0;
             const rate = getRate();
             let extTotal = 0;
-            // FIX #10: Add null check for revenueSources
             if (appData.revenueSources && appData.revenueSources.length > 0) {
                 appData.revenueSources.forEach(s => extTotal += parseFloat(s.val)||0);
             }
-            
             const gross = (pts * rate) + extTotal;
             const revDisp = document.getElementById('revenueDisplay');
             if (revDisp) revDisp.innerText = gross.toFixed(2);
-            
-            // FIX #11: Update revenue hub display when modal is open
             const revHubCF = document.getElementById('revHubCF');
             if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(2);
             const revHubTotal = document.getElementById('revHubTotal');
@@ -626,60 +624,64 @@
             drawChart();
         }
 
-        function refreshAll() {
+        window.refreshAll = function() {
             updateRevenue(); 
             renderGroups(); 
             renderWeek();
             const streakVal = document.getElementById('streakValue');
             if (streakVal) streakVal.innerText = appData.streak || 0;
+            
+            // UI Sync: Points
+            const elP = document.getElementById('currentPoints');
+            if (elP) elP.value = appData.points || 18;
+            const elG = document.getElementById('goalPoints');
+            if (elG) elG.value = appData.goal || 120;
+            const elR = document.getElementById('pointRate');
+            if (elR) elR.value = appData.rate || 0.05;
         }
 
         // --- 4. HANDLERS ---
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
-            const current = elPts ? parseInt(elPts.value) : 0;
+            const current = elPts ? parseInt(elPts.value.replace(/,/g,'')) || 0 : 0;
             const note = elNote ? elNote.value : "";
-            const date = new Date().toLocaleDateString('en-US', {month:'numeric', day:'numeric'});
+            const todayStr = getTodayString();
+            
+            if (appData.lastLoginDate !== todayStr) {
+                 const last = appData.lastLoginDate ? new Date(appData.lastLoginDate) : null;
+                 if (last) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const yesterdayStr = yesterday.toLocaleDateString('en-US');
+                    if (appData.lastLoginDate === yesterdayStr) {
+                         appData.streak = (appData.streak || 0) + 1;
+                    } else {
+                         appData.streak = 1; 
+                    }
+                 } else {
+                    appData.streak = 1;
+                 }
+                 appData.lastLoginDate = todayStr;
+            }
+
             let ext = 0; 
-            // FIX #12: Safe loop through revenue sources
             if (appData.revenueSources && appData.revenueSources.length > 0) {
                 appData.revenueSources.forEach(s => ext += parseFloat(s.val)||0);
             }
             
-            // FIX #13: Initialize pointsLog if it doesn't exist
-            if (!appData.pointsLog) {
-                appData.pointsLog = [];
-            }
-            
-            appData.pointsLog.push({date, value:current, note, externalRevenue:ext});
+            if (!appData.pointsLog) appData.pointsLog = [];
+            appData.pointsLog.push({date: todayStr, value:current, note, externalRevenue:ext});
             if(appData.pointsLog.length > 30) appData.pointsLog.shift();
-            
-            // FIX #14: Clear the note input after logging
             if (elNote) elNote.value = "";
             
             updateRevenue(); 
+            refreshAll(); 
             alert("Logged!");
-        }
-
-        window.confirmDailyPoints = function() {
-            const v = document.getElementById('dailyPointsInput').value;
-            const noteVal = document.getElementById('dailyNoteInput').value;
-            if(v) { 
-                const el = document.getElementById('currentPoints');
-                if (el) el.value = v;
-                const elNote = document.getElementById('logNote');
-                if (elNote) elNote.value = noteVal || "";
-                window.logPoints(); 
-            }
-            document.getElementById('newDayModal').style.display='none';
-            appData.lastLoginDate = new Date().toLocaleDateString();
-            saveData();
         }
 
         window.deleteLogEntry = function(index) { 
             if(confirm("Delete?")) { 
-                // FIX #15: Safe array splice with bounds checking
                 if (appData.pointsLog && index >= 0 && index < appData.pointsLog.length) {
                     appData.pointsLog.splice(index, 1); 
                     saveData();
@@ -689,39 +691,32 @@
         }
         
         window.saveGoal = function() { saveData(); drawChart(); }
-        
         window.toggleLogTable = () => { 
             const el=document.getElementById('logTableContainer'); 
             if(el) el.style.display = el.style.display==='none'?'block':'none'; 
         }
-        
         window.toggleUtility = () => { 
             const el=document.getElementById('utilityTool'); 
             if(el) el.style.display=el.style.display==='none'?'grid':'none'; 
         }
-        
         window.openRevenueHub = () => {
              const c = document.getElementById('revSourcesContainer'); 
              if(!c) return;
              c.innerHTML="";
-             // FIX #16: Initialize revenueSources if missing
              if (!appData.revenueSources) {
                  appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
              }
              appData.revenueSources.forEach((s,i) => {
-                 c.innerHTML += `<div class='rev-row'><span>${s.name}</span><input type='number' class='rev-input' value='${s.val}' onchange='appData.revenueSources[${i}].val=parseFloat(this.value)||0; updateRevenue();'></div>`;
+                 c.innerHTML += `<div class='rev-row'><span>${escapeHtml(s.name)}</span><input type='number' class='rev-input' value='${s.val}' onchange='appData.revenueSources[${i}].val=parseFloat(this.value)||0; updateRevenue();'></div>`;
              });
              document.getElementById('revenueHubModal').style.display='flex';
-             // Update display when opening
              updateRevenue();
         };
-
         window.saveRevenueHub = () => { 
             document.getElementById('revenueHubModal').style.display='none'; 
             saveData();
             updateRevenue(); 
         };
-        
         window.addRevenueSource = () => { 
             const n = prompt("Name:"); 
             if(n) { 
@@ -730,29 +725,24 @@
                 window.openRevenueHub(); 
             } 
         };
-        
         window.resetInactivityTimer = () => { 
-            appData.lastCFLogin = new Date().toLocaleDateString(); 
+            appData.lastCFLogin = getTodayString(); 
             saveData(); 
             alert("Reset!"); 
         };
-        
         window.openEditGroups = () => { 
             document.getElementById('editGroupsModal').style.display='flex'; 
             renderEditModalContent(); 
         };
         
         let tempGroups = {};
-        
         function renderEditModalContent() {
-            // FIX #17: Deep clone with proper initialization
             tempGroups = {
                 A: appData.groups.A ? JSON.parse(JSON.stringify(appData.groups.A)) : [],
                 B: appData.groups.B ? JSON.parse(JSON.stringify(appData.groups.B)) : [],
                 C: appData.groups.C ? JSON.parse(JSON.stringify(appData.groups.C)) : [],
                 D: appData.groups.D ? JSON.parse(JSON.stringify(appData.groups.D)) : []
             };
-            
             const c = document.getElementById('groupEditContainer'); 
             if(!c) return;
             c.innerHTML="";
@@ -761,8 +751,7 @@
                  d.innerHTML = `<div style="margin-bottom:5px; color:#aaa;">GROUP ${g}</div>`;
                  if (tempGroups[g] && tempGroups[g].length > 0) {
                      tempGroups[g].forEach((p,i) => {
-                         // FIX #18: Escape quotes in project names to prevent HTML breaking
-                         const safeName = (p.name || '').replace(/"/g, '&quot;');
+                         const safeName = escapeHtml(p.name);
                          d.innerHTML += `<div class='project-edit-row'><input class='proj-name-input' value="${safeName}" onchange="tempGroups['${g}'][${i}].name=this.value"><input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="tempGroups['${g}'][${i}].downloads=this.value"><div class='proj-del-btn' onclick="tempGroups['${g}'].splice(${i},1);renderEditModalContent();">X</div></div>`;
                      });
                  }
@@ -770,13 +759,10 @@
                  c.appendChild(d);
             });
         }
-        
         window.saveGroups = () => {
-             // FIX #19: Calculate diff for all groups with proper initialization
              ['A','B','C','D'].forEach(g => {
                  if (!appData.groups[g]) appData.groups[g] = [];
                  if (!tempGroups[g]) tempGroups[g] = [];
-                 
                  tempGroups[g].forEach(np => {
                      const op = appData.groups[g].find(x => x.name === np.name);
                      if(op) {
@@ -793,68 +779,45 @@
         };
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
-        
         window.copyScraperScript = () => {
-             // FIX #20: Updated scraper with better error handling
              const s = `(function() {
     let projects = [];
-    // 1. Target dashboard table rows
     let rows = document.querySelectorAll('table tbody tr');
-    
-    // Fallback for list view if table is empty
     if (rows.length === 0) rows = document.querySelectorAll('.project-listing-row, .project-card');
 
     rows.forEach(row => {
-        // --- FIND NAME ---
-        // Priority 1: Look for class names often used for titles
         let nameEl = row.querySelector('.project-name, .name h3, h3, .project-title');
-        
-        // Priority 2: If no class, find the first link that is NOT "Edit/Manage"
         if (!nameEl) {
             let links = row.querySelectorAll('a');
             for(let link of links) {
                 let txt = link.innerText.trim();
-                // Filter out bad words
                 if (txt.length > 1 && txt !== "Edit" && txt !== "Manage" && txt !== "Delete" && txt !== "View") {
                     nameEl = link;
-                    break; // Found the first real text link
+                    break;
                 }
             }
         }
-
-        // --- FIND DOWNLOADS ---
         let dlText = "0";
-        // Look for specific download classes
         let dlEl = row.querySelector('.downloads, .download-count');
-        
         if (dlEl) {
             dlText = dlEl.innerText;
         } else {
-            // Fallback: Check all cells for a number pattern (e.g. "25.9k" or "4,200")
             let cells = row.querySelectorAll('td, span');
             for (let cell of cells) {
                 let txt = cell.innerText.trim();
-                // Matches numbers, excludes dates (/) and times (:)
-                if (txt.match(/^[\d,.]+[kKmM]?$/) && !txt.includes('/') && !txt.includes(':')) {
+                if (txt.match(/^[\\d,.]+[kKmM]?$/) && !txt.includes('/') && !txt.includes(':')) {
                     dlText = txt;
                 }
             }
         }
-
-        // --- SAVE DATA ---
         if (nameEl) {
             let name = nameEl.innerText.trim();
-            // Final safety check
             if (name === "Edit") return;
-
-            // Process number
             let raw = dlText.toLowerCase().replace(/,/g, '').replace('downloads','').trim();
             let multiplier = 1;
             if (raw.includes('k')) { multiplier = 1000; raw = raw.replace('k', ''); }
             if (raw.includes('m')) { multiplier = 1000000; raw = raw.replace('m', ''); }
-            
             let count = parseFloat(raw) * multiplier;
-            
             if (!isNaN(count) && count > 0) {
                 projects.push({ name: name, downloads: count });
             }
@@ -865,15 +828,13 @@
         const jsonOutput = JSON.stringify(projects);
         console.log("✅ FIXED LIST:");
         console.log(jsonOutput);
-        
-        // Auto-copy
         const el = document.createElement('textarea');
         el.value = jsonOutput;
         document.body.appendChild(el);
         el.select();
         document.execCommand('copy');
         document.body.removeChild(el);
-        alert("SUCCESS! Copied " + projects.length + " projects with correct names.\nGo paste it in your Tracker now.");
+        alert("SUCCESS! Copied " + projects.length + " projects with correct names.\\nGo paste it in your Tracker now.");
     } else {
         alert("❌ No projects found. Ensure you are on the 'My Projects' list page.");
     }
@@ -893,7 +854,6 @@
                  if (!Array.isArray(arr)) throw new Error("Invalid data format");
                  
                  arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
-                 // FIX #21: Initialize groups properly before slicing
                  appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
@@ -910,9 +870,7 @@
         };
 
         window.toggleTask = (di, ti) => {
-            // FIX #22: Bounds checking for task toggle
             if (!appData.currentWeekData[di] || !appData.currentWeekData[di].tasks[ti]) return;
-            
             let t = appData.currentWeekData[di].tasks[ti];
             if(typeof t === 'string') {
                 appData.currentWeekData[di].tasks[ti] = {text: t, done: true};
@@ -925,7 +883,6 @@
 
         window.archiveAndReset = () => {
             if(!confirm("Archive this week and start fresh?")) return;
-            // FIX #23: Keep historical data, only reset weekly tasks
             appData.currentWeekData.forEach(day => {
                 day.tasks = day.tasks.map(t => {
                     if (typeof t === 'object') return t.text;
@@ -953,14 +910,11 @@
             r.onload = (e) => { 
                 try {
                     const imported = JSON.parse(e.target.result);
-                    // FIX #24: Validate imported data structure
                     if (imported && typeof imported === 'object') {
                         appData = { ...appData, ...imported };
-                        // Ensure critical arrays exist
                         if (!appData.pointsLog) appData.pointsLog = [];
                         if (!appData.revenueSources) appData.revenueSources = [];
                         if (!appData.groups) appData.groups = { A: [], B: [], C: [], D: [] };
-                        
                         saveData(); 
                         location.reload();
                     } else {
@@ -973,130 +927,131 @@
             r.readAsText(f);
         }
 
-        function confirmAudit() {
-             // FIX #25: Safe audit confirmation with validation
+        window.confirmAudit = function() {
              ['A','B','C','D'].forEach(g => {
                  if (!appData.groups[g]) appData.groups[g] = [];
-                 
                  appData.groups[g].forEach((p,i) => {
                      const el = document.getElementById(`audit-${g}-${i}`);
                      if (el && el.value) {
-                         const newVal = parseInt(el.value) || 0;
+                         const valStr = el.value.replace(/,/g,'');
+                         const newVal = parseInt(valStr) || 0;
                          p.lastDiff = newVal - (parseInt(p.downloads) || 0);
                          p.downloads = newVal;
                      }
                  });
              });
-             appData.lastAuditDate = new Date().toLocaleDateString();
+             appData.lastAuditDate = getTodayString();
              saveData(); 
              refreshAll(); 
              document.getElementById('weeklyAuditModal').style.display='none';
         }
 
-        // --- 5. INITIALIZATION ---
-        function loadData() {
-            const saved = localStorage.getItem('bedrockTracker_v36_core');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    appData = { ...appData, ...parsed };
-                    
-                    // FIX #26: Ensure all required properties exist after loading
-                    if (!appData.pointsLog) appData.pointsLog = [];
-                    if (!appData.revenueSources) appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
-                    if (!appData.groups) appData.groups = { A: [], B: [], C: [], D: [] };
-                    if (!appData.currentWeekData) {
-                        appData.currentWeekData = [
-                            { day: "MON", tasks: ["Update Group A", "Check Comments"] },
-                            { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
-                            { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
-                            { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-                            { day: "FRI", tasks: ["RELEASE DAY"] },
-                            { day: "SAT", tasks: ["Update Group A", "Reply Comments"] },
-                            { day: "SUN", tasks: ["Rest / Analytics"] }
-                        ];
-                    }
-                } catch(e) { 
-                    console.error("Error loading data:", e); 
-                    // Keep default appData
-                }
-            }
-            
-            // FIX #27: Safe value restoration
-            const elP = document.getElementById('currentPoints');
-            if (elP) elP.value = appData.points || 18;
-            
-            const elG = document.getElementById('goalPoints');
-            if (elG) elG.value = appData.goal || 120;
-            
-            const elR = document.getElementById('pointRate');
-            if (elR) elR.value = appData.rate || 0.05;
-            
-            refreshAll();
-        }
-
-        window.onload = function() {
-            loadData();
-            
-            // FIX #28: Clock update with proper date formatting
+        // --- 5. APP INITIALIZATION (FIREBASE + LOCAL FALLBACK) ---
+        function initApp() {
+            // Setup Clock
             setInterval(() => { 
                 const clock = document.getElementById('clockDisplay');
                 if (clock) {
                     const now = new Date();
                     clock.innerText = now.toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
                     }); 
                 }
             }, 1000);
 
-            // FIX #29: New day modal with proper date comparison
-            const today = new Date().toLocaleDateString();
-            if(appData.lastLoginDate !== today) {
-                const modal = document.getElementById('newDayModal');
-                if (modal) {
-                    // Small delay to ensure DOM is ready
-                    setTimeout(() => {
-                        modal.style.display='flex';
-                    }, 500);
-                }
-            }
-            
-            // FIX #30: Weekly audit check with safe date parsing
+            // Audit Check
             const lastAudit = appData.lastAuditDate ? new Date(appData.lastAuditDate) : new Date(0);
             const diff = (new Date() - lastAudit)/(1000*60*60*24);
-            
             if(diff > 7) {
                 const c = document.getElementById('auditContainer'); 
                 if (c) {
                     c.innerHTML="";
                     let hasProjects = false;
-                    
                     ['A','B','C','D'].forEach(g => {
                         if(appData.groups[g] && appData.groups[g].length > 0) {
                             hasProjects = true;
                             c.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px;">GROUP ${g}</div>`;
                             appData.groups[g].forEach((p,i) => {
-                                c.innerHTML += `<div class='stat-input-row'><span>${p.name}</span><input type='number' id='audit-${g}-${i}' value='${p.downloads || 0}'></div>`;
+                                c.innerHTML += `<div class='stat-input-row'><span>${escapeHtml(p.name)}</span><input type='number' id='audit-${g}-${i}' value='${p.downloads || 0}'></div>`;
                             });
                         }
                     });
-                    
-                    // Only show modal if there are projects to audit
                     if (hasProjects) {
                         const auditModal = document.getElementById('weeklyAuditModal');
-                        if (auditModal) {
-                            setTimeout(() => {
-                                auditModal.style.display='flex';
-                            }, 1000);
-                        }
+                        if (auditModal) setTimeout(() => { auditModal.style.display='flex'; }, 1000);
                     }
                 }
             }
-        };
+        }
+
+        // Firebase Setup
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                useFirestore = true;
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+                // AUTH + SNAPSHOT
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                };
+                initAuth();
+
+                onAuthStateChanged(auth, (currentUser) => {
+                    if (currentUser) {
+                        user = currentUser;
+                        firestoreDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'tracker_core');
+                        
+                        // Listen for Realtime Updates
+                        onSnapshot(firestoreDocRef, (snapshot) => {
+                            if (snapshot.exists()) {
+                                // Cloud has data -> Load it
+                                appData = { ...appData, ...snapshot.data() };
+                                refreshAll();
+                            } else {
+                                // Cloud is empty -> Check LocalStorage for migration
+                                const savedLocal = localStorage.getItem('bedrockTracker_v36_core');
+                                if (savedLocal) {
+                                    try {
+                                        const parsed = JSON.parse(savedLocal);
+                                        appData = { ...appData, ...parsed };
+                                        console.log("Migrating LocalStorage to Firestore...");
+                                        // Save immediately to Cloud
+                                        setDoc(firestoreDocRef, appData);
+                                    } catch(e) { console.error(e); }
+                                } else {
+                                    // New User -> Initialize Cloud
+                                    setDoc(firestoreDocRef, appData);
+                                }
+                                refreshAll();
+                            }
+                        });
+                    }
+                });
+            } else {
+                throw new Error("No config");
+            }
+        } catch (e) {
+            console.log("Running in Local Mode (LocalStorage)");
+            useFirestore = false;
+            const saved = localStorage.getItem('bedrockTracker_v36_core');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appData = { ...appData, ...parsed };
+                } catch(e) {}
+            }
+            refreshAll();
+        }
+
+        initApp(); // Run UI helpers
 
     </script>
 </body>
