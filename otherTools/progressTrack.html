@@ -344,8 +344,8 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 0. DATA MODEL ---
-        let appData = {
+        // --- 0. DATA MODEL (FIX: Attached to window for inline HTML access) ---
+        window.appData = {
             points: 18, 
             goal: 120, 
             streak: 0, 
@@ -367,6 +367,9 @@
             history: [], 
             pointsLog: [] 
         };
+
+        // Temporary data for edits (FIX: Attached to window)
+        window.tempGroups = {};
 
         let db, auth, user;
         let firestoreDocRef = null;
@@ -396,32 +399,32 @@
         function saveData() {
             // Update appData from DOM elements first
             const elPoints = document.getElementById('currentPoints');
-            if(elPoints) appData.points = elPoints.value;
+            if(elPoints) window.appData.points = elPoints.value;
             const elGoal = document.getElementById('goalPoints');
-            if(elGoal) appData.goal = elGoal.value;
+            if(elGoal) window.appData.goal = elGoal.value;
             const elRate = document.getElementById('pointRate');
-            if(elRate) appData.rate = elRate.value;
+            if(elRate) window.appData.rate = elRate.value;
 
             if (useFirestore && firestoreDocRef) {
                 // Save to Cloud
-                setDoc(firestoreDocRef, appData)
+                setDoc(firestoreDocRef, window.appData)
                     .catch(e => console.error("Error saving to cloud:", e));
             } else {
                 // Save to Local (Fallback)
-                localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(appData));
+                localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(window.appData));
             }
         }
 
-        // --- 2. RENDERERS (Same logic, accessible globally) ---
+        // --- 2. RENDERERS ---
         window.renderLogTable = function() {
             const tbody = document.getElementById('logTableBody');
             if(!tbody) return;
             const rate = getRate();
             tbody.innerHTML = "";
-            if (appData.pointsLog && appData.pointsLog.length > 0) {
-                [...appData.pointsLog].reverse().forEach((l,i) => {
+            if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                [...window.appData.pointsLog].reverse().forEach((l,i) => {
                     const earn = (l.value*rate) + (l.externalRevenue||0);
-                    const idx = appData.pointsLog.length - 1 - i;
+                    const idx = window.appData.pointsLog.length - 1 - i;
                     const safeNote = escapeHtml(l.note||'-');
                     tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${l.value}</td><td>${safeNote}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
@@ -433,7 +436,7 @@
             if(!container) return;
             container.innerHTML = "";
             ['A','B','C','D'].forEach(g => {
-                const projects = appData.groups[g] || [];
+                const projects = window.appData.groups[g] || [];
                 let totalDL = 0; let rows = "";
                 projects.forEach(p => {
                     const dl = parseInt(p.downloads) || 0;
@@ -451,7 +454,7 @@
             const grid = document.getElementById('weekGrid');
             if(!grid) return;
             grid.innerHTML = '';
-            appData.currentWeekData.forEach((day, di) => {
+            window.appData.currentWeekData.forEach((day, di) => {
                 let tasks = "";
                 day.tasks.forEach((t, ti) => {
                     const done = typeof t === 'object' ? t.done : false;
@@ -473,7 +476,7 @@
             ctx.fillStyle = "#222"; 
             ctx.fillRect(0, 0, w, h);
             
-            const logs = (appData.pointsLog && appData.pointsLog.length > 0) ? appData.pointsLog : [];
+            const logs = (window.appData.pointsLog && window.appData.pointsLog.length > 0) ? window.appData.pointsLog : [];
             if (logs.length === 0) {
                 ctx.fillStyle = "#555"; 
                 ctx.textAlign="center"; 
@@ -566,8 +569,8 @@
             const now = new Date(); 
             now.setHours(0,0,0,0);
             let sum7 = 0; let prev7 = 0; let sum30 = 0;
-            if (appData.pointsLog && appData.pointsLog.length > 0) {
-                appData.pointsLog.forEach(log => {
+            if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                window.appData.pointsLog.forEach(log => {
                     const d = new Date(log.date); 
                     d.setHours(0,0,0,0);
                     const diff = Math.round((now - d) / (1000*60*60*24));
@@ -587,13 +590,13 @@
                 momEl.style.color = sum7 >= prev7 ? "#55ff55" : "#ff5555";
             }
             let lifetime = 0;
-            if (appData.pointsLog && appData.pointsLog.length > 0) {
-                lifetime = appData.pointsLog.reduce((a,b) => a + (parseInt(b.value)*rate) + (b.externalRevenue||0), 0);
+            if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseInt(b.value)*rate) + (b.externalRevenue||0), 0);
             }
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
-            if(appData.pointsLog && appData.pointsLog.length > 0) {
-                 const recent = appData.pointsLog.slice(-7);
+            if(window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                 const recent = window.appData.pointsLog.slice(-7);
                  let recentSum = 0;
                  recent.forEach(l => recentSum += (parseInt(l.value)*rate)+(l.externalRevenue||0));
                  const elAvg = document.getElementById('avg7DayDisplay');
@@ -607,8 +610,8 @@
             const pts = parseInt(ptsVal) || 0;
             const rate = getRate();
             let extTotal = 0;
-            if (appData.revenueSources && appData.revenueSources.length > 0) {
-                appData.revenueSources.forEach(s => extTotal += parseFloat(s.val)||0);
+            if (window.appData.revenueSources && window.appData.revenueSources.length > 0) {
+                window.appData.revenueSources.forEach(s => extTotal += parseFloat(s.val)||0);
             }
             const gross = (pts * rate) + extTotal;
             const revDisp = document.getElementById('revenueDisplay');
@@ -629,15 +632,15 @@
             renderGroups(); 
             renderWeek();
             const streakVal = document.getElementById('streakValue');
-            if (streakVal) streakVal.innerText = appData.streak || 0;
+            if (streakVal) streakVal.innerText = window.appData.streak || 0;
             
             // UI Sync: Points
             const elP = document.getElementById('currentPoints');
-            if (elP) elP.value = appData.points || 18;
+            if (elP) elP.value = window.appData.points || 18;
             const elG = document.getElementById('goalPoints');
-            if (elG) elG.value = appData.goal || 120;
+            if (elG) elG.value = window.appData.goal || 120;
             const elR = document.getElementById('pointRate');
-            if (elR) elR.value = appData.rate || 0.05;
+            if (elR) elR.value = window.appData.rate || 0.05;
         }
 
         // --- 4. HANDLERS ---
@@ -648,31 +651,31 @@
             const note = elNote ? elNote.value : "";
             const todayStr = getTodayString();
             
-            if (appData.lastLoginDate !== todayStr) {
-                 const last = appData.lastLoginDate ? new Date(appData.lastLoginDate) : null;
+            if (window.appData.lastLoginDate !== todayStr) {
+                 const last = window.appData.lastLoginDate ? new Date(window.appData.lastLoginDate) : null;
                  if (last) {
                     const yesterday = new Date();
                     yesterday.setDate(yesterday.getDate() - 1);
                     const yesterdayStr = yesterday.toLocaleDateString('en-US');
-                    if (appData.lastLoginDate === yesterdayStr) {
-                         appData.streak = (appData.streak || 0) + 1;
+                    if (window.appData.lastLoginDate === yesterdayStr) {
+                         window.appData.streak = (window.appData.streak || 0) + 1;
                     } else {
-                         appData.streak = 1; 
+                         window.appData.streak = 1; 
                     }
                  } else {
-                    appData.streak = 1;
+                    window.appData.streak = 1;
                  }
-                 appData.lastLoginDate = todayStr;
+                 window.appData.lastLoginDate = todayStr;
             }
 
             let ext = 0; 
-            if (appData.revenueSources && appData.revenueSources.length > 0) {
-                appData.revenueSources.forEach(s => ext += parseFloat(s.val)||0);
+            if (window.appData.revenueSources && window.appData.revenueSources.length > 0) {
+                window.appData.revenueSources.forEach(s => ext += parseFloat(s.val)||0);
             }
             
-            if (!appData.pointsLog) appData.pointsLog = [];
-            appData.pointsLog.push({date: todayStr, value:current, note, externalRevenue:ext});
-            if(appData.pointsLog.length > 30) appData.pointsLog.shift();
+            if (!window.appData.pointsLog) window.appData.pointsLog = [];
+            window.appData.pointsLog.push({date: todayStr, value:current, note, externalRevenue:ext});
+            if(window.appData.pointsLog.length > 30) window.appData.pointsLog.shift();
             if (elNote) elNote.value = "";
             
             updateRevenue(); 
@@ -682,8 +685,8 @@
 
         window.deleteLogEntry = function(index) { 
             if(confirm("Delete?")) { 
-                if (appData.pointsLog && index >= 0 && index < appData.pointsLog.length) {
-                    appData.pointsLog.splice(index, 1); 
+                if (window.appData.pointsLog && index >= 0 && index < window.appData.pointsLog.length) {
+                    window.appData.pointsLog.splice(index, 1); 
                     saveData();
                     refreshAll(); 
                 }
@@ -703,11 +706,11 @@
              const c = document.getElementById('revSourcesContainer'); 
              if(!c) return;
              c.innerHTML="";
-             if (!appData.revenueSources) {
-                 appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
+             if (!window.appData.revenueSources) {
+                 window.appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
              }
-             appData.revenueSources.forEach((s,i) => {
-                 c.innerHTML += `<div class='rev-row'><span>${escapeHtml(s.name)}</span><input type='number' class='rev-input' value='${s.val}' onchange='appData.revenueSources[${i}].val=parseFloat(this.value)||0; updateRevenue();'></div>`;
+             window.appData.revenueSources.forEach((s,i) => {
+                 c.innerHTML += `<div class='rev-row'><span>${escapeHtml(s.name)}</span><input type='number' class='rev-input' value='${s.val}' onchange='window.appData.revenueSources[${i}].val=parseFloat(this.value)||0; updateRevenue();'></div>`;
              });
              document.getElementById('revenueHubModal').style.display='flex';
              updateRevenue();
@@ -720,28 +723,27 @@
         window.addRevenueSource = () => { 
             const n = prompt("Name:"); 
             if(n) { 
-                if (!appData.revenueSources) appData.revenueSources = [];
-                appData.revenueSources.push({name:n, val:0}); 
+                if (!window.appData.revenueSources) window.appData.revenueSources = [];
+                window.appData.revenueSources.push({name:n, val:0}); 
                 window.openRevenueHub(); 
             } 
         };
         window.resetInactivityTimer = () => { 
-            appData.lastCFLogin = getTodayString(); 
+            window.appData.lastCFLogin = getTodayString(); 
             saveData(); 
             alert("Reset!"); 
         };
         window.openEditGroups = () => { 
             document.getElementById('editGroupsModal').style.display='flex'; 
-            renderEditModalContent(); 
+            window.renderEditModalContent(); 
         };
         
-        let tempGroups = {};
-        function renderEditModalContent() {
-            tempGroups = {
-                A: appData.groups.A ? JSON.parse(JSON.stringify(appData.groups.A)) : [],
-                B: appData.groups.B ? JSON.parse(JSON.stringify(appData.groups.B)) : [],
-                C: appData.groups.C ? JSON.parse(JSON.stringify(appData.groups.C)) : [],
-                D: appData.groups.D ? JSON.parse(JSON.stringify(appData.groups.D)) : []
+        window.renderEditModalContent = function() {
+            window.tempGroups = {
+                A: window.appData.groups.A ? JSON.parse(JSON.stringify(window.appData.groups.A)) : [],
+                B: window.appData.groups.B ? JSON.parse(JSON.stringify(window.appData.groups.B)) : [],
+                C: window.appData.groups.C ? JSON.parse(JSON.stringify(window.appData.groups.C)) : [],
+                D: window.appData.groups.D ? JSON.parse(JSON.stringify(window.appData.groups.D)) : []
             };
             const c = document.getElementById('groupEditContainer'); 
             if(!c) return;
@@ -749,22 +751,22 @@
             ['A','B','C','D'].forEach(g => {
                  const d = document.createElement('div');
                  d.innerHTML = `<div style="margin-bottom:5px; color:#aaa;">GROUP ${g}</div>`;
-                 if (tempGroups[g] && tempGroups[g].length > 0) {
-                     tempGroups[g].forEach((p,i) => {
+                 if (window.tempGroups[g] && window.tempGroups[g].length > 0) {
+                     window.tempGroups[g].forEach((p,i) => {
                          const safeName = escapeHtml(p.name);
-                         d.innerHTML += `<div class='project-edit-row'><input class='proj-name-input' value="${safeName}" onchange="tempGroups['${g}'][${i}].name=this.value"><input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="tempGroups['${g}'][${i}].downloads=this.value"><div class='proj-del-btn' onclick="tempGroups['${g}'].splice(${i},1);renderEditModalContent();">X</div></div>`;
+                         d.innerHTML += `<div class='project-edit-row'><input class='proj-name-input' value="${safeName}" onchange="window.tempGroups['${g}'][${i}].name=this.value"><input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="window.tempGroups['${g}'][${i}].downloads=this.value"><div class='proj-del-btn' onclick="window.tempGroups['${g}'].splice(${i},1);window.renderEditModalContent();">X</div></div>`;
                      });
                  }
-                 d.innerHTML += `<div class='add-proj-btn' onclick="tempGroups['${g}'].push({name:'New',downloads:0,lastDiff:0});renderEditModalContent();">+ ADD</div>`;
+                 d.innerHTML += `<div class='add-proj-btn' onclick="window.tempGroups['${g}'].push({name:'New',downloads:0,lastDiff:0});window.renderEditModalContent();">+ ADD</div>`;
                  c.appendChild(d);
             });
         }
         window.saveGroups = () => {
              ['A','B','C','D'].forEach(g => {
-                 if (!appData.groups[g]) appData.groups[g] = [];
-                 if (!tempGroups[g]) tempGroups[g] = [];
-                 tempGroups[g].forEach(np => {
-                     const op = appData.groups[g].find(x => x.name === np.name);
+                 if (!window.appData.groups[g]) window.appData.groups[g] = [];
+                 if (!window.tempGroups[g]) window.tempGroups[g] = [];
+                 window.tempGroups[g].forEach(np => {
+                     const op = window.appData.groups[g].find(x => x.name === np.name);
                      if(op) {
                          np.lastDiff = parseInt(np.downloads || 0) - parseInt(op.downloads || 0);
                      } else {
@@ -772,7 +774,7 @@
                      }
                  });
              });
-             appData.groups = tempGroups; 
+             window.appData.groups = window.tempGroups; 
              saveData(); 
              renderGroups(); 
              document.getElementById('editGroupsModal').style.display='none';
@@ -854,10 +856,10 @@
                  if (!Array.isArray(arr)) throw new Error("Invalid data format");
                  
                  arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
-                 appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 appData.groups.D = arr.slice(12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.D = arr.slice(12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  
                  saveData(); 
                  refreshAll(); 
@@ -870,10 +872,10 @@
         };
 
         window.toggleTask = (di, ti) => {
-            if (!appData.currentWeekData[di] || !appData.currentWeekData[di].tasks[ti]) return;
-            let t = appData.currentWeekData[di].tasks[ti];
+            if (!window.appData.currentWeekData[di] || !window.appData.currentWeekData[di].tasks[ti]) return;
+            let t = window.appData.currentWeekData[di].tasks[ti];
             if(typeof t === 'string') {
-                appData.currentWeekData[di].tasks[ti] = {text: t, done: true};
+                window.appData.currentWeekData[di].tasks[ti] = {text: t, done: true};
             } else {
                 t.done = !t.done;
             }
@@ -883,7 +885,7 @@
 
         window.archiveAndReset = () => {
             if(!confirm("Archive this week and start fresh?")) return;
-            appData.currentWeekData.forEach(day => {
+            window.appData.currentWeekData.forEach(day => {
                 day.tasks = day.tasks.map(t => {
                     if (typeof t === 'object') return t.text;
                     return t;
@@ -894,7 +896,7 @@
         }
 
         window.exportData = () => { 
-            const b=new Blob([JSON.stringify(appData, null, 2)],{type:'application/json'}); 
+            const b=new Blob([JSON.stringify(window.appData, null, 2)],{type:'application/json'}); 
             const u=URL.createObjectURL(b); 
             const a=document.createElement('a'); 
             a.href=u; 
@@ -911,10 +913,10 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported && typeof imported === 'object') {
-                        appData = { ...appData, ...imported };
-                        if (!appData.pointsLog) appData.pointsLog = [];
-                        if (!appData.revenueSources) appData.revenueSources = [];
-                        if (!appData.groups) appData.groups = { A: [], B: [], C: [], D: [] };
+                        window.appData = { ...window.appData, ...imported };
+                        if (!window.appData.pointsLog) window.appData.pointsLog = [];
+                        if (!window.appData.revenueSources) window.appData.revenueSources = [];
+                        if (!window.appData.groups) window.appData.groups = { A: [], B: [], C: [], D: [] };
                         saveData(); 
                         location.reload();
                     } else {
@@ -929,8 +931,8 @@
 
         window.confirmAudit = function() {
              ['A','B','C','D'].forEach(g => {
-                 if (!appData.groups[g]) appData.groups[g] = [];
-                 appData.groups[g].forEach((p,i) => {
+                 if (!window.appData.groups[g]) window.appData.groups[g] = [];
+                 window.appData.groups[g].forEach((p,i) => {
                      const el = document.getElementById(`audit-${g}-${i}`);
                      if (el && el.value) {
                          const valStr = el.value.replace(/,/g,'');
@@ -940,7 +942,7 @@
                      }
                  });
              });
-             appData.lastAuditDate = getTodayString();
+             window.appData.lastAuditDate = getTodayString();
              saveData(); 
              refreshAll(); 
              document.getElementById('weeklyAuditModal').style.display='none';
@@ -960,7 +962,7 @@
             }, 1000);
 
             // Audit Check
-            const lastAudit = appData.lastAuditDate ? new Date(appData.lastAuditDate) : new Date(0);
+            const lastAudit = window.appData.lastAuditDate ? new Date(window.appData.lastAuditDate) : new Date(0);
             const diff = (new Date() - lastAudit)/(1000*60*60*24);
             if(diff > 7) {
                 const c = document.getElementById('auditContainer'); 
@@ -968,10 +970,10 @@
                     c.innerHTML="";
                     let hasProjects = false;
                     ['A','B','C','D'].forEach(g => {
-                        if(appData.groups[g] && appData.groups[g].length > 0) {
+                        if(window.appData.groups[g] && window.appData.groups[g].length > 0) {
                             hasProjects = true;
                             c.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px;">GROUP ${g}</div>`;
-                            appData.groups[g].forEach((p,i) => {
+                            window.appData.groups[g].forEach((p,i) => {
                                 c.innerHTML += `<div class='stat-input-row'><span>${escapeHtml(p.name)}</span><input type='number' id='audit-${g}-${i}' value='${p.downloads || 0}'></div>`;
                             });
                         }
@@ -1013,7 +1015,7 @@
                         onSnapshot(firestoreDocRef, (snapshot) => {
                             if (snapshot.exists()) {
                                 // Cloud has data -> Load it
-                                appData = { ...appData, ...snapshot.data() };
+                                window.appData = { ...window.appData, ...snapshot.data() };
                                 refreshAll();
                             } else {
                                 // Cloud is empty -> Check LocalStorage for migration
@@ -1021,14 +1023,14 @@
                                 if (savedLocal) {
                                     try {
                                         const parsed = JSON.parse(savedLocal);
-                                        appData = { ...appData, ...parsed };
+                                        window.appData = { ...window.appData, ...parsed };
                                         console.log("Migrating LocalStorage to Firestore...");
                                         // Save immediately to Cloud
-                                        setDoc(firestoreDocRef, appData);
+                                        setDoc(firestoreDocRef, window.appData);
                                     } catch(e) { console.error(e); }
                                 } else {
                                     // New User -> Initialize Cloud
-                                    setDoc(firestoreDocRef, appData);
+                                    setDoc(firestoreDocRef, window.appData);
                                 }
                                 refreshAll();
                             }
@@ -1045,7 +1047,7 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    appData = { ...appData, ...parsed };
+                    window.appData = { ...window.appData, ...parsed };
                 } catch(e) {}
             }
             refreshAll();
