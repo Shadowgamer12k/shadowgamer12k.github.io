@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bedrock Addon Tracker</title>
+    <title>Bedrock Addon Tracker (Core)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -18,11 +18,12 @@
             --mc-yellow: #fcfc00;
             --mc-purple: #b266ff;
             --mc-text: #ffffff;
+            --mc-orange: #e67e22;
         }
 
         body {
             background-color: #1a1a1a;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://assets.codepen.io/13471/dirt-bg.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://assets.codepen.io/13471/dirt-bg.jpg');
             color: var(--mc-text);
             font-family: 'Press Start 2P', cursive;
             font-size: 12px;
@@ -44,7 +45,7 @@
             position: relative;
         }
 
-        /* Header Layout */
+        /* Header */
         .header-section {
             display: flex;
             justify-content: space-between;
@@ -58,60 +59,28 @@
             color: var(--mc-yellow); 
             font-size: 1.5rem; 
             text-shadow: 3px 3px #000;
-            text-transform: uppercase;
             margin: 0;
+            text-transform: uppercase;
         }
 
-        .header-right {
-            text-align: right;
-        }
-
-        .date-display {
-            font-size: 0.7rem;
-            color: #aaa;
-            line-height: 1.6;
-        }
-        .date-display span {
-            color: #fff;
-            display: block;
-        }
-
-        .streak-display {
-            color: #ff9933; /* Orange */
-            font-size: 0.7rem;
-            margin-top: 5px;
-            text-shadow: 2px 2px #000;
-        }
-
-        .rank-display {
-            font-size: 0.6rem;
-            margin-top: 5px;
-            padding: 5px;
-            border: 2px solid #555;
-            background: #222;
-            display: inline-block;
-        }
+        .header-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        .date-display { font-size: 0.7rem; color: #aaa; }
+        .streak-display { color: var(--mc-orange); font-size: 0.7rem; text-shadow: 2px 2px #000; }
 
         h2 {
             font-size: 1rem;
             text-shadow: 2px 2px #000;
-            margin-bottom: 15px;
-            margin-top: 30px;
+            margin: 30px 0 15px 0;
             border-bottom: 2px solid #555;
             padding-bottom: 5px;
         }
 
         /* Stats Grid */
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 15px;
-            background: #262626;
-            padding: 20px;
-            border: 3px solid var(--mc-border-dark);
-            border-bottom: 3px solid var(--mc-border-light);
-            margin-bottom: 25px;
-            align-items: start;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px;
+            background: #262626; padding: 20px;
+            border: 3px solid var(--mc-border-dark); border-bottom: 3px solid var(--mc-border-light);
+            margin-bottom: 25px; align-items: start;
         }
 
         .stat-box {
@@ -119,439 +88,154 @@
             background: rgba(0,0,0,0.2);
             padding: 10px 5px;
             border: 1px solid #444;
-            position: relative;
         }
         
         .stat-box div:first-child {
-            color: #aaa;
-            margin-bottom: 8px;
-            font-size: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #aaa; margin-bottom: 8px; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 1px;
         }
         
         .stat-box input {
-            background: transparent;
-            border: none;
-            color: var(--mc-green);
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            width: 100%;
-            text-align: center;
+            background: transparent; border: none; color: var(--mc-green);
+            font-family: 'Press Start 2P'; font-size: 0.8rem;
+            width: 100%; text-align: center;
         }
 
-        /* Value Colors */
-        .val-green { color: var(--mc-green); font-size: 0.8rem; }
-        .val-yellow { color: var(--mc-yellow); font-size: 0.8rem; }
-        .val-blue { color: var(--mc-blue); font-size: 0.8rem; }
-        .val-purple { color: var(--mc-purple); font-size: 0.8rem; }
-        .val-red { color: var(--mc-red); font-size: 0.8rem; }
-        .trend-up { color: #55ff55; font-size: 0.5rem; }
-        .trend-down { color: #ff5555; font-size: 0.5rem; }
-
-        .stat-box input.goal-input { color: var(--mc-yellow); }
-        .stat-box input.rate-input { color: #aaa; border-bottom: 1px dashed #555; }
+        .val-green { color: #55ff55; font-size: 0.8rem; }
+        .val-yellow { color: #ffff55; font-size: 0.8rem; }
+        .val-blue { color: #5555ff; font-size: 0.8rem; }
+        .val-purple { color: #ff55ff; font-size: 0.8rem; }
+        .val-red { color: #ff5555; font-size: 0.8rem; }
 
         .action-btn {
-            background: #555;
-            border: 2px solid #000;
-            color: white;
-            font-family: 'Press Start 2P';
-            font-size: 0.6rem;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin-left: 5px;
+            background: #555; border: 2px solid #000; color: white;
+            font-family: 'Press Start 2P'; font-size: 0.6rem;
+            padding: 5px 10px; cursor: pointer; margin-left: 5px;
         }
         .action-btn:hover { background: #777; }
-
+        
         .log-input-group {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            align-items: center;
+            flex-direction: column; gap: 5px; align-items: center;
         }
         .note-input {
-            background: #222;
-            border: 2px solid #555;
-            color: #fff;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.5rem;
-            padding: 3px;
-            width: 90%;
-            text-align: center;
+            background: #222; border: 2px solid #555; color: #fff;
+            font-family: 'Press Start 2P', cursive; font-size: 0.5rem;
+            padding: 3px; width: 90%; text-align: center;
         }
-        .note-input::placeholder { color: #555; }
 
-        /* Graph Section */
+        /* Graph */
         .chart-container {
-            background: #222;
-            border: 3px solid var(--mc-border-dark);
+            background: #222; border: 3px solid var(--mc-border-dark);
             border-bottom: 3px solid var(--mc-border-light);
-            padding: 10px;
-            margin-bottom: 10px;
-            position: relative;
+            padding: 10px; margin-bottom: 10px; position: relative;
         }
-        canvas {
-            width: 100%;
-            height: 200px;
-            display: block;
-        }
+        canvas { width: 100%; height: 350px; display: block; }
+        .chart-legend { display: flex; justify-content: center; gap: 20px; font-size: 0.6rem; margin-top: 5px; color: #aaa; }
+        .legend-item span { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border: 1px solid #000; }
 
-        /* Achievements Section */
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .achievement-card {
-            background: #222;
-            border: 2px solid #000;
-            padding: 10px;
-            text-align: center;
-            opacity: 0.4;
-            filter: grayscale(100%);
-        }
-        .achievement-card.unlocked {
-            opacity: 1;
-            filter: grayscale(0%);
-            border-color: var(--mc-yellow);
-            background: #332200;
-        }
-        .ach-icon { font-size: 1.5rem; margin-bottom: 5px; display:block; }
-        .ach-title { color: var(--mc-yellow); font-size: 0.6rem; margin-bottom: 5px; display:block; }
-        .ach-desc { color: #aaa; font-size: 0.5rem; line-height: 1.2; }
-
-        /* Data Management Table */
+        /* Tables */
         .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.7rem;
-            margin-bottom: 30px;
-            background: #222;
-            border: 2px solid var(--mc-border-dark);
+            width: 100%; border-collapse: collapse; font-size: 0.7rem;
+            margin-bottom: 30px; background: #222; border: 2px solid var(--mc-border-dark);
         }
-        .data-table th {
-            background: #333;
-            padding: 10px;
-            text-align: left;
-            color: #aaa;
-            border-bottom: 2px solid var(--mc-border-light);
-        }
-        .data-table td {
-            padding: 10px;
-            border-bottom: 1px solid #444;
-        }
+        .data-table th { background: #333; padding: 10px; text-align: left; color: #aaa; }
+        .data-table td { padding: 10px; border-bottom: 1px solid #444; }
         .data-table tr:hover { background: #2a2a2a; }
-        .delete-btn { color: var(--mc-red); cursor: pointer; text-decoration: underline; }
-        .delete-btn:hover { color: #fff; background: var(--mc-red); text-decoration: none; }
+        .delete-btn { color: #ff5555; cursor: pointer; text-decoration: underline; }
 
-        /* The Strategy Groups (Main Display) */
+        /* Groups */
         .reference-box {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            font-size: 0.7rem;
-            margin-bottom: 25px;
-            border: 3px solid var(--mc-border-dark);
-            line-height: 1.8;
-            position: relative;
+            background: rgba(0,0,0,0.3); padding: 15px; font-size: 0.7rem;
+            margin-bottom: 25px; border: 3px solid var(--mc-border-dark);
+            line-height: 1.8; position: relative;
         }
-        .reference-box span { color: #aaa; }
-        .reference-box strong { color: var(--mc-yellow); }
         .edit-groups-btn {
-            position: absolute;
-            top: 10px; right: 10px;
-            background: #555; color: #fff;
-            border: 1px solid #000;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.5rem;
-            padding: 5px; cursor: pointer;
+            position: absolute; top: 10px; right: 10px;
+            background: #555; color: #fff; border: 1px solid #000;
+            font-family: 'Press Start 2P'; font-size: 0.5rem; padding: 5px; cursor: pointer;
         }
-        .edit-groups-btn:hover { background: #777; }
-
-        .group-block {
-            margin-bottom: 15px;
-            border-left: 2px solid #555;
-            padding-left: 10px;
-        }
+        .group-block { margin-bottom: 15px; border-left: 2px solid #555; padding-left: 10px; }
         .project-row-display {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.6rem;
-            color: #ddd;
-            border-bottom: 1px solid #333;
-            padding: 2px 0;
+            display: flex; justify-content: space-between; font-size: 0.6rem;
+            color: #ddd; border-bottom: 1px solid #333; padding: 2px 0;
         }
-        .project-row-display:last-child { border-bottom: none; }
         .growth-indicator { color: var(--mc-green); font-size: 0.5rem; margin-left: 5px; }
 
         /* Weekly Grid */
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .day-card {
-            background-color: var(--mc-panel);
-            border: 3px solid var(--mc-border-dark);
-            border-top: 3px solid var(--mc-border-light);
-            border-left: 3px solid var(--mc-border-light);
-            padding: 15px;
-        }
-        .day-title {
-            color: #d1d1d1;
-            border-bottom: 3px solid #555;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-        .task-item {
-            display: flex; align-items: flex-start;
-            margin-bottom: 12px; cursor: pointer;
-            transition: opacity 0.2s; font-size: 0.65rem;
-        }
+        .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .day-card { background-color: var(--mc-panel); border: 3px solid var(--mc-border-dark); padding: 15px; }
+        .day-title { color: #d1d1d1; border-bottom: 3px solid #555; padding-bottom: 8px; margin-bottom: 15px; font-size: 0.8rem; text-align: center; }
+        .task-item { display: flex; align-items: flex-start; margin-bottom: 12px; cursor: pointer; font-size: 0.65rem; }
         .task-item.completed { opacity: 0.5; text-decoration: line-through; }
-        .mc-checkbox {
-            min-width: 16px; min-height: 16px;
-            background: #000; border: 2px solid #666;
-            margin-right: 10px; margin-top: 2px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .mc-checkbox::after {
-            content: ''; width: 8px; height: 8px;
-            background-color: var(--mc-green); display: none;
-            box-shadow: 2px 2px 0 #006400;
-        }
-        .task-item.completed .mc-checkbox::after { display: block; }
+        .mc-checkbox { min-width: 16px; min-height: 16px; background: #000; border: 2px solid #666; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .task-item.completed .mc-checkbox::after { content: ''; width: 8px; height: 8px; background-color: var(--mc-green); display: block; }
+        .btn { background-color: #7d7d7d; border: 3px solid #000; color: #fff; font-family: 'Press Start 2P'; font-size: 0.9rem; padding: 15px 20px; cursor: pointer; width: 100%; margin-top: 30px; }
 
-        /* Buttons */
-        .btn {
-            background-color: #7d7d7d;
-            border: 3px solid #000; border-top: 3px solid #a8a8a8; border-left: 3px solid #a8a8a8;
-            color: #fff; font-family: 'Press Start 2P', cursive;
-            font-size: 0.9rem; padding: 15px 20px;
-            cursor: pointer; width: 100%; margin-top: 30px;
-            text-shadow: 2px 2px #000;
-        }
-        .btn:active {
-            background-color: #595959;
-            border-top: 3px solid #000; border-left: 3px solid #000;
-            border-bottom: 3px solid #a8a8a8; border-right: 3px solid #a8a8a8;
-            transform: translateY(2px);
-        }
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .modal-box { background: var(--mc-bg); border: 4px solid white; outline: 4px solid black; padding: 30px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.8); max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-title { color: var(--mc-yellow); margin-bottom: 20px; font-size: 1.2rem; }
+        .modal-input { background: #222; border: 2px solid #555; color: white; font-family: 'Press Start 2P'; font-size: 1rem; padding: 10px; width: 100px; text-align: center; display: block; margin: 10px auto; }
+        .modal-btn { background: var(--mc-green); border: 2px solid #000; color: white; font-family: 'Press Start 2P'; padding: 15px 30px; cursor: pointer; }
+        #cfPasteModal { z-index: 2000 !important; }
 
-        .history-section {
-            margin-top: 40px; border-top: 2px dashed #666; padding-top: 20px;
-        }
-        .history-item {
-            background: #222; padding: 12px;
-            margin-bottom: 8px; display: flex;
-            justify-content: space-between; font-size: 0.7rem;
-            border: 2px solid #000;
-        }
-
-        /* --- MODAL STYLES --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none; justify-content: center; align-items: center;
-            z-index: 999;
-        }
+        .project-edit-row { display: flex; gap: 5px; margin-bottom: 5px; align-items: center; }
+        .proj-name-input { background: #111; border: 1px solid #555; color: white; font-family: 'Press Start 2P'; font-size: 0.6rem; padding: 5px; flex-grow: 1; }
+        .proj-dl-input { background: #111; border: 1px solid #555; color: var(--mc-green); font-family: 'Press Start 2P'; font-size: 0.6rem; padding: 5px; width: 60px; text-align: right; }
+        .proj-del-btn { background: var(--mc-red); color: white; border: 1px solid #000; cursor: pointer; padding: 5px; font-size: 0.6rem; }
+        .stat-input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; color: #ddd; }
+        .stat-input-row input { width: 100px; padding: 5px; background: #111; border: 1px solid #555; color: white; font-family: 'Press Start 2P'; text-align: right; }
         
-        .modal-box {
-            background: var(--mc-bg);
-            border: 4px solid white; outline: 4px solid black;
-            padding: 30px; text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            max-width: 600px; width: 90%;
-            max-height: 80vh; overflow-y: auto;
-        }
-
-        .modal-title {
-            color: var(--mc-yellow); margin-bottom: 20px;
-            font-size: 1.2rem; text-shadow: 2px 2px 0 #000;
-        }
-
-        .modal-input {
-            background: #222; border: 2px solid #555; color: white;
-            font-family: 'Press Start 2P'; font-size: 1.5rem;
-            padding: 10px; width: 100px; text-align: center;
-            margin: 20px auto; display: block;
-        }
-
-        .modal-btn {
-            background: #42b74f; border: 2px solid #000; color: white;
-            font-family: 'Press Start 2P'; padding: 15px 30px;
-            cursor: pointer; box-shadow: 4px 4px 0 #004d00;
-        }
-        .modal-btn:active {
-            transform: translate(2px, 2px); box-shadow: 2px 2px 0 #004d00;
-        }
-
-        /* --- PROJECT EDIT ROW STYLES --- */
-        .project-edit-row {
-            display: flex; gap: 5px; margin-bottom: 5px;
-            align-items: center;
-        }
-        .proj-name-input {
-            background: #111; border: 1px solid #555; color: white;
-            font-family: 'Press Start 2P'; font-size: 0.6rem;
-            padding: 5px; flex-grow: 1;
-        }
-        .proj-dl-input {
-            background: #111; border: 1px solid #555; color: var(--mc-green);
-            font-family: 'Press Start 2P'; font-size: 0.6rem;
-            padding: 5px; width: 60px; text-align: right;
-        }
-        .proj-del-btn {
-            background: var(--mc-red); color: white; border: 1px solid #000;
-            cursor: pointer; padding: 5px; font-size: 0.6rem;
-        }
-        .group-section {
-            margin-bottom: 20px; border-bottom: 1px dashed #555; padding-bottom: 10px;
-        }
-        .add-proj-btn {
-            background: #333; color: #aaa; border: 1px dashed #666;
-            width: 100%; font-size: 0.6rem; padding: 5px; cursor: pointer;
-            margin-top: 5px;
-        }
-        .add-proj-btn:hover { background: #444; color: white; }
-
-        /* --- UTILITY & COMP STYLES --- */
-        .utility-panel {
-            background: #222; border: 3px solid var(--mc-border-dark);
-            padding: 15px; display: none; margin-top: 10px; margin-bottom: 30px;
-        }
-        .utility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
-        .utility-box { background: var(--mc-panel); border: 2px solid #555; padding: 15px; text-align: center; }
-        .comparison-inputs { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .file-upload-box { background: var(--mc-panel); border: 2px solid #555; padding: 10px; text-align: center; width: 200px; }
-        .file-upload-box label { display: block; margin-bottom: 5px; color: #aaa; font-size: 0.6rem; }
-        input[type="file"] { font-size: 0.6rem; max-width: 100%; }
-        .comp-stats { display: flex; justify-content: space-around; margin-top: 15px; border-top: 2px solid #444; padding-top: 15px; }
-        .comp-stat-col { text-align: center; }
-        .comp-val-a { color: var(--mc-yellow); font-size: 1.2rem; }
-        .comp-val-b { color: var(--mc-green); font-size: 1.2rem; }
-        .count-safe { color: var(--mc-green); }
-        .count-warn { color: var(--mc-yellow); }
-        .count-danger { color: var(--mc-red); }
-
-        /* Audit Styles */
-        .audit-label { color: #aaa; font-size: 0.6rem; text-align: left; margin-top: 10px; }
-        .stat-input-row {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; font-size: 0.8rem; color: #ddd;
-        }
-        .stat-input-row input {
-            width: 100px; padding: 5px; background: #111;
-            border: 1px solid #555; color: white;
-            font-family: 'Press Start 2P'; text-align: right;
-        }
-
-        /* Note Input Area */
-        .scratchpad {
-            width: 100%; height: 200px;
-            background: #111; color: #ddd; border: 2px solid #555;
-            font-family: 'Press Start 2P', monospace; font-size: 0.7rem;
-            padding: 10px; box-sizing: border-box; line-height: 1.5;
-        }
-
-        /* Revenue Hub Styles */
-        .rev-row {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px;
-        }
-        .rev-input {
-            background: #111; border: 1px solid #555; color: var(--mc-green);
-            font-family: 'Press Start 2P'; font-size: 0.7rem; width: 80px; text-align: right;
-        }
-        .rev-total-disp { color: var(--mc-green); font-size: 1rem; margin-top: 20px; }
-
-        /* Paste Box */
-        .paste-textarea {
-            width: 100%; height: 200px;
-            background: #000; color: #0f0; border: 2px solid #555;
-            font-family: monospace; font-size: 0.6rem;
-            padding: 10px; box-sizing: border-box; resize: vertical;
-        }
-
-        /* Feature 1: Theme Switcher */
-        .theme-selector {
-            font-size: 0.6rem; background: #222; border: 1px solid #555; color: #fff; padding: 2px; font-family: 'Press Start 2P'; margin-top: 5px;
-        }
-
-        /* Feature 10: Backup Warning */
-        .backup-warn::after {
-            content: '!'; position: absolute; top: -5px; right: -5px; background: red; color: white; width: 15px; height: 15px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center;
-        }
-        
-        /* Paste Modal Specifics */
-        #cfPasteModal {
-            z-index: 2000 !important; 
-        }
+        .rev-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .rev-input { background: #111; border: 1px solid #555; color: var(--mc-green); font-family: 'Press Start 2P'; font-size: 0.7rem; width: 80px; text-align: right; }
+        .paste-textarea { width: 100%; height: 200px; background: #000; color: #0f0; border: 2px solid #555; font-family: monospace; font-size: 0.6rem; padding: 10px; box-sizing: border-box; resize: vertical; }
+        .add-proj-btn { background: #333; color: #aaa; border: 1px dashed #666; width: 100%; font-size: 0.6rem; padding: 5px; cursor: pointer; margin-top: 5px; }
     </style>
 </head>
-<body class="theme-overworld">
+<body>
 
     <!-- NEW DAY MODAL -->
     <div id="newDayModal" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-title">NEW DAY DETECTED!</div>
-            <p style="font-size:0.8rem; line-height:1.6">It's a new day!<br>Enter your points:</p>
+            <p style="font-size:0.8rem; line-height:1.6">Enter today's CurseForge points:</p>
             <input type="number" id="dailyPointsInput" class="modal-input" placeholder="0">
             <input type="text" id="dailyNoteInput" class="modal-input" style="font-size:0.8rem; width:200px;" placeholder="Optional Note">
             <button class="modal-btn" onclick="confirmDailyPoints()">CONFIRM</button>
         </div>
     </div>
 
-    <!-- WEEKLY AUDIT MODAL (FORCED) -->
     <div id="weeklyAuditModal" class="modal-overlay">
         <div class="modal-box" style="border-color: var(--mc-red);">
-            <div class="modal-title" style="color:var(--mc-red);">⚠️ WEEKLY PROJECT CHECK ⚠️</div>
-            <p style="font-size:0.6rem; color:#aaa; margin-bottom:20px;">
-                You must update the TOTAL DOWNLOADS for every project.<br>Check your CurseForge Dashboard!
-            </p>
+            <div class="modal-title" style="color:var(--mc-red);">⚠️ WEEKLY PROJECT CHECK</div>
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:20px;">You must update the TOTAL DOWNLOADS for every project.<br>Check your CurseForge Dashboard!</p>
             <div id="auditContainer" style="text-align: left;"></div>
             <button class="modal-btn" style="background:var(--mc-red); margin-top:20px;" onclick="confirmAudit()">UPDATE ALL STATS</button>
         </div>
     </div>
 
-    <!-- REVENUE HUB MODAL -->
     <div id="revenueHubModal" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-title" style="color:var(--mc-green);">REVENUE HUB</div>
-            <p style="font-size:0.6rem; color:#aaa; margin-bottom:20px;">Enter earnings from other sources for today.</p>
-            
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:20px;">External Earnings for Today</p>
             <div id="revSourcesContainer"></div>
-            
-            <div style="margin:15px 0; border-top:1px solid #444; padding-top:10px;">
-                <div style="font-size:0.6rem; margin-bottom:5px;">TAX / FEES %</div>
-                <input type="number" id="taxRateInput" class="modal-input" value="0" placeholder="0" style="width:60px;" onchange="updateTaxRate(this.value)">
-            </div>
-
             <div class="rev-row" style="margin-top:10px;">
                 <span style="color:var(--mc-yellow)">CurseForge Est:</span>
                 <span id="revHubCF">$0.00</span>
             </div>
-            
             <div style="font-size:1rem; margin-top:20px; color:var(--mc-green)">
-                TOTAL: $<span id="revHubTotal">0.00</span> 
-                <span id="revHubNet" style="font-size:0.6rem; display:block; color:#aaa;">(Net: $0.00)</span>
+                TOTAL: $<span id="revHubTotal">0.00</span>
             </div>
-
             <button class="modal-btn" style="margin-top:20px;" onclick="saveRevenueHub()">SAVE & CLOSE</button>
             <button class="action-btn" style="background:#444; margin-top:10px;" onclick="addRevenueSource()">+ ADD SOURCE</button>
         </div>
     </div>
 
-    <!-- CURSEFORGE PASTE MODAL (Highest Z-Index) -->
     <div id="cfPasteModal" class="modal-overlay">
         <div class="modal-box" style="max-width:700px;">
             <div class="modal-title" style="color:var(--mc-blue);">IMPORT CF DATA</div>
-            <button class="action-btn" style="background:#e67e22; margin-bottom:10px;" onclick="copyScraperScript()">[COPY CONSOLE SCRIPT]</button>
-            <p style="font-size:0.6rem; color:#aaa; margin-bottom:10px;">Paste the array [...] below:</p>
+            <button class="action-btn" style="background:var(--mc-orange); margin-bottom:10px;" onclick="copyScraperScript()">[COPY CONSOLE SCRIPT]</button>
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:10px;">Paste the array [...] from the console script below:</p>
             <textarea id="cfPasteArea" class="paste-textarea" placeholder='[{"name":"Project A","downloads":100} ...]'></textarea>
             <div style="margin-top:15px;">
                 <button class="modal-btn" onclick="processCFPaste()">LOAD DATA</button>
@@ -560,48 +244,22 @@
         </div>
     </div>
 
-    <!-- EDIT GROUPS & PROJECTS MODAL -->
     <div id="editGroupsModal" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-title">MANAGE PROJECTS</div>
-            <p style="font-size:0.6rem; color:#aaa; margin-bottom:10px;">Add projects and set their current downloads.</p>
             <div id="groupEditContainer"></div>
             <button class="modal-btn" onclick="saveGroups()">SAVE CHANGES</button>
             <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                <!-- UPDATED BUTTON: Opens the new paste modal -->
-                <button class="action-btn" style="background:#5555ff; border:2px solid #fff;" onclick="openCFPasteModal()">[PASTE CURSEFORGE DATA]</button>
+                <button class="action-btn" style="background:#5555ff;" onclick="openCFPasteModal()">[PASTE CF DATA]</button>
                 <button class="action-btn" style="background:#444;" onclick="document.getElementById('editGroupsModal').style.display='none'">CANCEL</button>
             </div>
         </div>
     </div>
 
-    <!-- REPORT MODAL -->
-    <div id="reportModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-title">WEEKLY REPORT</div>
-            <textarea id="reportArea" class="paste-textarea" style="height:150px;"></textarea>
-            <button class="modal-btn" onclick="document.getElementById('reportModal').style.display='none'">CLOSE</button>
-        </div>
-    </div>
-
     <div class="container">
-        <!-- HEADER -->
         <div class="header-section">
             <div style="display:flex; flex-direction:column;">
                 <h1>Road To $200</h1>
-                <!-- Feature 1: Rank + Feature 2: XP -->
-                <div class="rank-display" id="creatorRank">WOOD RANK ($0)</div>
-                <div class="xp-container">
-                    <div class="xp-fill" id="xpFill"></div>
-                    <div class="xp-text" id="xpText">0 / 50 XP</div>
-                </div>
-                <!-- Feature 1: Theme Switcher -->
-                <select class="theme-selector" onchange="changeTheme(this.value)">
-                    <option value="theme-overworld">Theme: Overworld</option>
-                    <option value="theme-nether">Theme: Nether</option>
-                    <option value="theme-end">Theme: The End</option>
-                    <option value="theme-deep">Theme: Deep Dark</option>
-                </select>
             </div>
             <div class="header-right">
                 <div class="date-display" id="clockDisplay">Loading...</div>
@@ -609,12 +267,8 @@
             </div>
         </div>
 
-        <!-- Achievements -->
-        <div class="achievements-grid" id="achievementsGrid"></div>
-
-        <!-- Stats -->
+        <!-- Stats Bar -->
         <div class="stats-bar">
-            <!-- Row 1: Controls -->
             <div class="stat-box">
                 <div>$/Pt Rate</div>
                 <input type="number" id="pointRate" value="0.05" class="rate-input" step="0.01" onchange="updateRevenue()">
@@ -631,80 +285,50 @@
                     <button class="action-btn" onclick="logPoints()">LOG</button>
                 </div>
             </div>
-            
-            <!-- Row 2: Financials (With Revenue Hub) -->
             <div class="stat-box" style="cursor:pointer; border:1px solid var(--mc-green);" onclick="openRevenueHub()">
-                <div>Total Daily $</div>
-                <div class="val-green">$<span id="revenueDisplay">0.90</span></div>
+                <div>Daily $</div>
+                <div class="val-green">$<span id="revenueDisplay">0.00</span></div>
             </div>
             <div class="stat-box">
                 <div>Last 7 Days</div>
-                <div class="val-blue">$<span id="last7TotalDisplay">0.00</span> <span id="mom7" class="trend-up"></span></div>
+                <div class="val-blue">$<span id="last7TotalDisplay">0.00</span> <span id="mom7"></span></div>
             </div>
             <div class="stat-box">
-                <div>Last 30 Days</div>
-                <div class="val-purple">$<span id="last30TotalDisplay">0.00</span></div>
-            </div>
-
-            <!-- Row 3: Estimates & Lifetime -->
-            <div class="stat-box">
-                <div>Est. Month</div>
-                <div class="val-blue">$<span id="estMonthDisplay">0.00</span></div>
-            </div>
-            <div class="stat-box">
-                <div>Est. Year</div>
-                <div class="val-purple">$<span id="estYearDisplay">0.00</span></div>
-            </div>
-            <div class="stat-box">
-                <div>Lifetime</div>
+                <div>Lifetime $</div>
                 <div class="val-purple">$<span id="lifetimeDisplay">0.00</span></div>
             </div>
-
-            <!-- Row 4: Performance -->
             <div class="stat-box">
-                <div>7-Day Avg ($)</div>
+                <div>7-Day Avg</div>
                 <div class="val-yellow">$<span id="avg7DayDisplay">0.00</span></div>
             </div>
-            <div class="stat-box">
-                <div>Need Today</div>
-                <div class="val-red" id="dailyPaceDisplay">0</div>
+        </div>
+
+        <!-- Graph -->
+        <h2>Earnings Graph</h2>
+        <div class="chart-container">
+            <canvas id="growthChart"></canvas>
+            <div class="chart-legend">
+                <div class="legend-item"><span style="background:var(--mc-green);"></span>CurseForge</div>
+                <div class="legend-item"><span style="background:var(--mc-orange);"></span>External Sources</div>
             </div>
         </div>
 
-        <input type="hidden" id="goalPoints" value="120">
-
-        <!-- Graph -->
-        <h2>Points History</h2>
-        <div class="chart-container">
-            <canvas id="growthChart"></canvas>
-        </div>
-
-        <!-- Logs & Export -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div style="cursor:pointer; color:#aaa; font-size:0.6rem;" onclick="toggleLogTable()">
                 [Click to Toggle Data Table]
             </div>
             <div style="display:flex; gap:5px;">
                  <label class="action-btn" style="background:#42b74f; cursor:pointer;">
-                    IMPORT JSON <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData()">
+                    IMPORT <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData()">
                  </label>
-                 <!-- Feature 6: CSV Export -->
-                 <button class="action-btn" style="background:#2299cc;" onclick="exportCSV()">CSV</button>
-                 <!-- Feature 10: Backup Warn -->
-                 <button id="btnExportJson" class="action-btn" style="background:#5555ff; position:relative;" onclick="exportData()">EXPORT JSON</button>
+                 <button class="action-btn" style="background:#5555ff;" onclick="exportData()">EXPORT</button>
             </div>
         </div>
 
         <div id="logTableContainer" style="display:none;">
             <table class="data-table">
                 <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Points</th>
-                        <th>Note</th>
-                        <th>Earnings</th>
-                        <th>Action</th>
-                    </tr>
+                    <tr><th>Date</th><th>Points</th><th>Note</th><th>Total $</th><th>Action</th></tr>
                 </thead>
                 <tbody id="logTableBody"></tbody>
             </table>
@@ -717,158 +341,227 @@
             <div id="groupsDisplay"></div>
         </div>
 
-        <!-- Tasks -->
+        <!-- Weekly Grid -->
         <div class="week-grid" id="weekGrid"></div>
         <button class="btn" onclick="archiveAndReset()">>> FINISH WEEK & ARCHIVE <<</button>
-
-        <!-- Utility Belt -->
-        <h2 style="margin-top:50px; border-top: 4px solid #fff; padding-top:20px;">UTILITY BELT</h2>
-        <div style="text-align:center;">
-             <button class="action-btn" onclick="toggleUtility()">[OPEN TOOLS]</button>
-             <!-- Feature 8: Report Gen -->
-             <button class="action-btn" style="background:var(--mc-yellow); color:#000;" onclick="generateWeeklyReport()">GENERATE REPORT</button>
-        </div>
-
-        <div id="utilityTool" class="utility-panel">
-            <div class="utility-grid">
-                <!-- Feature 3: Pomodoro -->
-                <div class="utility-box">
-                    <div style="color:var(--mc-red); margin-bottom:10px;">FOCUS TIMER</div>
-                    <div class="timer-display" id="pomoTimer">25:00</div>
-                    <button class="action-btn" onclick="startPomo()">START</button>
-                    <button class="action-btn" onclick="resetPomo()">RESET</button>
-                </div>
-
-                <div class="utility-box">
-                    <div style="color:var(--mc-blue); margin-bottom:10px;">BEST DAY</div>
-                    <div style="font-size:1.2rem; margin-bottom:10px; color:#fff;" id="bestDayName">--</div>
-                    <div style="font-size:0.6rem; color:#aaa;">Highest Avg. Points</div>
-                </div>
-
-                <div class="utility-box">
-                    <div style="color:var(--mc-purple); margin-bottom:10px;">NEXT MILESTONE</div>
-                    <div style="font-size:1.2rem; margin-bottom:5px; color:#fff;" id="nextMilestoneTarget">$100</div>
-                    <div style="font-size:0.7rem; color:var(--mc-green);" id="nextMilestoneDate">--</div>
-                </div>
-
-                <div class="utility-box">
-                    <div style="color:var(--mc-yellow); margin-bottom:10px;">INACTIVITY</div>
-                    <div style="font-size:2rem; margin-bottom:5px;" id="inactivityCount">60</div>
-                    <button class="action-btn" style="background:#42b74f;" onclick="resetInactivityTimer()">I LOGGED IN</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notebook -->
-        <h2 style="margin-top:30px;">ADDON IDEAS</h2>
-        <div style="text-align:center; margin-bottom:10px;">
-             <button class="action-btn" onclick="toggleNotebook()">[OPEN NOTEBOOK]</button>
-             <!-- Feature 4: Idea Gen -->
-             <button class="action-btn" style="background:var(--mc-purple);" onclick="inspireMe()">INSPIRE ME</button>
-        </div>
-        <div id="notebookPanel" class="utility-panel">
-            <textarea id="ideaScratchpad" class="scratchpad" placeholder="Jot down ideas..." oninput="saveScratchpad()"></textarea>
-        </div>
-
-        <!-- Comparison -->
-        <h2 style="margin-top:30px;">DATA COMPARISON</h2>
-        <div style="text-align:center;">
-            <button class="action-btn" onclick="toggleComparison()">[OPEN COMPARISON]</button>
-        </div>
-        <div id="comparisonTool" class="utility-panel">
-            <div class="comparison-inputs">
-                <div class="file-upload-box"><label style="color:var(--mc-yellow)">FILE A</label><input type="file" id="fileA" accept=".json" onchange="loadComparisonFiles()"></div>
-                <div class="file-upload-box"><label style="color:var(--mc-green)">FILE B</label><input type="file" id="fileB" accept=".json" onchange="loadComparisonFiles()"></div>
-            </div>
-            <div class="chart-container"><canvas id="compChart"></canvas></div>
-            <div class="comp-stats">
-                <div class="comp-stat-col"><div style="color:#aaa;">AVG (A)</div><div class="comp-val-a" id="statAvgA">0</div></div>
-                <div class="comp-stat-col"><div style="color:#aaa;">AVG (B)</div><div class="comp-val-b" id="statAvgB">0</div></div>
-            </div>
-        </div>
     </div>
 
     <script>
-        // --- 1. CONFIG & DATA ---
-        const defaultWeek = [
-            { day: "MON", tasks: ["Update Group A", "Check Comments"] },
-            { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
-            { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
-            { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-            { day: "FRI", tasks: ["RELEASE DAY"] },
-            { day: "SAT", tasks: ["Update Group A", "Reply Comments"] },
-            { day: "SUN", tasks: ["Rest / Analytics"] }
-        ];
-
-        const defaultGroups = { A: [], B: [], C: [], D: [] };
-
+        // --- 0. DATA MODEL ---
+        // FIX #1: Initialize pointsLog as empty array to prevent undefined errors
         let appData = {
-            points: 18, goal: 120, streak: 0, rate: 0.05, 
-            lastLoginDate: "", lastCFLogin: "", lastAuditDate: "", lastBackupDate: "",
-            scratchpad: "", taxRate: 0,
+            points: 18, 
+            goal: 120, 
+            streak: 0, 
+            rate: 0.05, 
+            lastLoginDate: "", 
+            lastCFLogin: "", 
+            lastAuditDate: "",
             revenueSources: [ {name:"Adsterra", val:0}, {name:"YouTube", val:0} ], 
-            currentWeekData: JSON.parse(JSON.stringify(defaultWeek)),
-            groups: JSON.parse(JSON.stringify(defaultGroups)), 
-            history: [], pointsLog: []
+            currentWeekData: [
+                { day: "MON", tasks: ["Update Group A", "Check Comments"] },
+                { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
+                { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
+                { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
+                { day: "FRI", tasks: ["RELEASE DAY"] },
+                { day: "SAT", tasks: ["Update Group A", "Reply Comments"] },
+                { day: "SUN", tasks: ["Rest / Analytics"] }
+            ],
+            groups: { A: [], B: [], C: [], D: [] }, 
+            history: [], 
+            pointsLog: [] // FIX: Ensure initialized
         };
 
-        const achievementsList = [
-            { id: "streak7", title: "Iron Streak", desc: "Log data 7 days in a row", icon: "⛓️", req: (d) => d.streak >= 7 },
-            { id: "streak30", title: "Gold Streak", desc: "Log data 30 days in a row", icon: "🥇", req: (d) => d.streak >= 30 },
-            { id: "high120", title: "Diamond Day", desc: "Hit 120 Points in one day", icon: "💎", req: (d) => d.pointsLog.some(p => p.value >= 120) },
-            { id: "high200", title: "Netherite Day", desc: "Hit 200 Points in one day", icon: "🔥", req: (d) => d.pointsLog.some(p => p.value >= 200) },
-            { id: "total100", title: "Merchant", desc: "Earn $100 total lifetime", icon: "💰", req: (d) => calcLifetime(d) >= 100 }
-        ];
-
-        // --- 2. HELPER FUNCTIONS ---
+        // --- 1. CORE HELPERS (Hoisting Safety) ---
         function getRate() { 
             const el = document.getElementById('pointRate');
             return el ? (parseFloat(el.value) || 0.05) : 0.05; 
         }
-        
-        function calcLifetime(data) {
-            if(!data.pointsLog) return 0;
-            return data.pointsLog.reduce((a,b) => a + (parseInt(b.value)*getRate()) + (b.externalRevenue||0), 0);
-        }
 
-        // --- 3. CORE RENDERING FUNCTIONS (Declared first) ---
-        function updateRevenue() {
+        function saveData() {
             const elPoints = document.getElementById('currentPoints');
-            if(!elPoints) return;
-            const pts = parseInt(elPoints.value) || 0;
-            const rate = getRate();
-            let extTotal = 0;
-            if(appData.revenueSources) {
-                appData.revenueSources.forEach(s => extTotal += parseFloat(s.val)||0);
-            }
-            const gross = (pts * rate) + extTotal;
-            
-            const elRev = document.getElementById('revenueDisplay');
-            if(elRev) elRev.innerText = gross.toFixed(2);
-            
-            // Estimates
-            const elMonth = document.getElementById('estMonthDisplay');
-            if(elMonth) elMonth.innerText = (gross*30).toFixed(2);
-            
-            const elYear = document.getElementById('estYearDisplay');
-            if(elYear) elYear.innerText = (gross*365).toFixed(2);
-
-            saveData();
-            calculateHistoricalTotals();
-            updateLifetimeStats();
-            updateRank();
-            renderLogTable(); // Depends on rate
-            calculateDailyPace();
+            if(elPoints) appData.points = elPoints.value;
+            const elGoal = document.getElementById('goalPoints');
+            if(elGoal) appData.goal = elGoal.value;
+            const elRate = document.getElementById('pointRate');
+            if(elRate) appData.rate = elRate.value;
+            localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(appData));
         }
 
+        // --- 2. RENDERERS ---
+        function renderLogTable() {
+            const tbody = document.getElementById('logTableBody');
+            if(!tbody) return;
+            const rate = getRate();
+            tbody.innerHTML = "";
+            // FIX #2: Add null check for pointsLog before reversing
+            if (appData.pointsLog && appData.pointsLog.length > 0) {
+                [...appData.pointsLog].reverse().forEach((l,i) => {
+                    const earn = (l.value*rate) + (l.externalRevenue||0);
+                    const idx = appData.pointsLog.length - 1 - i;
+                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${l.value}</td><td>${l.note||'-'}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
+                });
+            }
+        }
+
+        function renderGroups() {
+            const container = document.getElementById('groupsDisplay');
+            if(!container) return;
+            container.innerHTML = "";
+            ['A','B','C','D'].forEach(g => {
+                const projects = appData.groups[g] || [];
+                let totalDL = 0; let rows = "";
+                projects.forEach(p => {
+                    const dl = parseInt(p.downloads) || 0;
+                    totalDL += dl;
+                    // FIX #3: Add null check for lastDiff to prevent NaN display
+                    let diffHtml = (p.lastDiff && p.lastDiff > 0) ? `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>` : "";
+                    rows += `<div class="project-row-display"><span>${p.name}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                });
+                const color = g === 'A' ? "var(--mc-yellow)" : "#aaa";
+                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
+            });
+        }
+
+        function renderWeek() {
+            const grid = document.getElementById('weekGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            appData.currentWeekData.forEach((day, di) => {
+                let tasks = "";
+                day.tasks.forEach((t, ti) => {
+                    const done = typeof t === 'object' ? t.done : false;
+                    const text = typeof t === 'object' ? t.text : t;
+                    tasks += `<div class="task-item ${done?'completed':''}" onclick="toggleTask(${di},${ti})"><div class="mc-checkbox"></div><span>${text}</span></div>`;
+                });
+                grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day}</div>${tasks}</div>`;
+            });
+        }
+
+        function drawChart() {
+            const canvas = document.getElementById('growthChart');
+            if(!canvas || !canvas.parentElement) return; 
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.offsetWidth;
+            const h = canvas.height = 320;
+
+            ctx.fillStyle = "#222"; 
+            ctx.fillRect(0, 0, w, h);
+            
+            // FIX #4: Add safety check for pointsLog existence
+            const logs = (appData.pointsLog && appData.pointsLog.length > 0) ? appData.pointsLog : [];
+            if (logs.length === 0) {
+                ctx.fillStyle = "#555"; 
+                ctx.textAlign="center"; 
+                ctx.font = "12px monospace";
+                ctx.fillText("NO DATA TO DISPLAY", w/2, h/2);
+                return;
+            }
+
+            const rate = getRate();
+            const cfData = logs.map(l => (parseInt(l.value) * rate));
+            const extData = logs.map(l => parseFloat(l.externalRevenue) || 0);
+
+            const maxVal = Math.max(...cfData, ...extData, 1);
+            const padY = 60;
+            const padX = 50; 
+            const drawH = h - (padY * 2);
+            const drawW = w - (padX * 2);
+            
+            const stepX = logs.length > 1 ? drawW / (logs.length - 1) : 0;
+
+            function getX(i) { return logs.length > 1 ? padX + (i * stepX) : w/2; }
+            function getY(val) { return h - padY - ((val / maxVal) * drawH); }
+
+            function drawCurve(data, color, fillStyle, labelDir) {
+                if(data.length === 0) return;
+                
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 4;
+
+                if (data.length === 1) {
+                    const x = getX(0); 
+                    const y = getY(data[0]);
+                    ctx.fillStyle = color; 
+                    ctx.beginPath(); 
+                    ctx.arc(x, y, 6, 0, Math.PI*2); 
+                    ctx.fill();
+                } else {
+                    ctx.moveTo(getX(0), getY(data[0]));
+                    for (let i = 0; i < data.length - 1; i++) {
+                        const x1 = getX(i);
+                        const y1 = getY(data[i]);
+                        const x2 = getX(i+1);
+                        const y2 = getY(data[i+1]);
+                        const cp1x = x1 + (x2 - x1) / 2;
+                        ctx.bezierCurveTo(cp1x, y1, cp1x, y2, x2, y2);
+                    }
+                    ctx.stroke();
+
+                    // Area Fill
+                    ctx.lineTo(getX(data.length - 1), h - padY);
+                    ctx.lineTo(getX(0), h - padY);
+                    ctx.closePath();
+                    const grad = ctx.createLinearGradient(0, padY, 0, h - padY);
+                    grad.addColorStop(0, fillStyle);
+                    grad.addColorStop(1, "rgba(0,0,0,0)");
+                    ctx.fillStyle = grad;
+                    ctx.fill();
+                }
+
+                // Points & Labels
+                data.forEach((val, i) => {
+                    const x = getX(i);
+                    const y = getY(val);
+                    ctx.fillStyle = color;
+                    ctx.beginPath(); 
+                    ctx.arc(x, y, 5, 0, Math.PI*2); 
+                    ctx.fill();
+                    
+                    ctx.fillStyle = "#fff";
+                    ctx.textAlign = "center";
+                    ctx.font = "8px 'Press Start 2P'";
+                    const offset = labelDir === 1 ? -15 : 25;
+                    ctx.fillText("$" + val.toFixed(2), x, y + offset);
+                    
+                    if (labelDir === 1) {
+                        ctx.fillStyle = "#666";
+                        ctx.fillText(logs[i].date, x, h - 15);
+                    }
+                });
+            }
+
+            // FIX #5: Draw grid lines with proper stroke reset
+            ctx.strokeStyle = "#333";
+            ctx.setLineDash([5, 5]);
+            for(let i=0; i<logs.length; i++) {
+                ctx.beginPath(); 
+                ctx.moveTo(getX(i), padY); 
+                ctx.lineTo(getX(i), h-padY); 
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // FIX #6: Use actual color values instead of CSS variables which don't work in canvas
+            drawCurve(cfData, "#42b74f", "rgba(66, 183, 79, 0.3)", 1);
+            drawCurve(extData, "#e67e22", "rgba(230, 126, 34, 0.3)", -1);
+        }
+
+        // --- 3. CALCULATIONS ---
         function calculateHistoricalTotals() {
             const rate = getRate();
-            const now = new Date(); now.setHours(0,0,0,0);
-            let sum7 = 0; let sum30 = 0; let prev7 = 0;
+            const now = new Date(); 
+            now.setHours(0,0,0,0);
+            let sum7 = 0; 
+            let prev7 = 0; 
+            let sum30 = 0;
             
-            if(appData.pointsLog) {
+            // FIX #7: Add null check for pointsLog
+            if (appData.pointsLog && appData.pointsLog.length > 0) {
                 appData.pointsLog.forEach(log => {
-                    const d = new Date(log.date); d.setHours(0,0,0,0);
+                    const d = new Date(log.date); 
+                    d.setHours(0,0,0,0);
                     const diff = Math.round((now - d) / (1000*60*60*24));
                     const val = (parseInt(log.value)*rate) + (log.externalRevenue||0);
                     if(diff >= 0 && diff < 7) sum7 += val;
@@ -877,418 +570,534 @@
                 });
             }
             
-            let arrow = "";
-            if (sum7 > prev7) arrow = "⬆️";
-            else if (sum7 < prev7) arrow = "⬇️";
-            
             const el7 = document.getElementById('last7TotalDisplay');
-            if(el7) el7.innerText = sum7.toFixed(2);
-            
-            const elMom = document.getElementById('mom7');
-            if(elMom) elMom.innerText = arrow;
+            if (el7) el7.innerText = sum7.toFixed(2);
             
             const el30 = document.getElementById('last30TotalDisplay');
-            if(el30) el30.innerText = sum30.toFixed(2);
+            if (el30) el30.innerText = sum30.toFixed(2);
+            
+            const momEl = document.getElementById('mom7');
+            if (momEl) {
+                momEl.innerText = sum7 >= prev7 ? "⬆️" : "⬇️";
+                momEl.style.color = sum7 >= prev7 ? "#55ff55" : "#ff5555";
+            }
 
-            // Calc avg for display
-            if(appData.pointsLog.length > 0) {
+            // FIX #8: Safe lifetime calculation with proper default
+            let lifetime = 0;
+            if (appData.pointsLog && appData.pointsLog.length > 0) {
+                lifetime = appData.pointsLog.reduce((a,b) => a + (parseInt(b.value)*rate) + (b.externalRevenue||0), 0);
+            }
+            const elLife = document.getElementById('lifetimeDisplay');
+            if (elLife) elLife.innerText = lifetime.toFixed(2);
+
+            // FIX #9: Safe average calculation
+            if(appData.pointsLog && appData.pointsLog.length > 0) {
                  const recent = appData.pointsLog.slice(-7);
                  let recentSum = 0;
                  recent.forEach(l => recentSum += (parseInt(l.value)*rate)+(l.externalRevenue||0));
                  const elAvg = document.getElementById('avg7DayDisplay');
-                 if(elAvg) elAvg.innerText = (recentSum/recent.length).toFixed(2);
+                 if (elAvg) elAvg.innerText = (recentSum/recent.length).toFixed(2);
             }
         }
 
-        function updateLifetimeStats() {
-            const elLife = document.getElementById('lifetimeDisplay');
-            if(!elLife) return;
-            const total = calcLifetime(appData);
-            elLife.innerText = total.toFixed(2);
-        }
-
-        function renderAchievements() {
-            const grid = document.getElementById('achievementsGrid');
-            if(!grid) return;
-            grid.innerHTML = "";
-            achievementsList.forEach(ach => {
-                const unlocked = ach.req(appData);
-                const div = document.createElement('div');
-                div.className = `achievement-card ${unlocked ? 'unlocked' : ''}`;
-                div.innerHTML = `<span class="ach-icon">${ach.icon}</span><span class="ach-title">${ach.title}</span><span class="ach-desc">${ach.desc}</span>`;
-                grid.appendChild(div);
-            });
-        }
-
-        function renderGroups() {
-            const container = document.getElementById('groupsDisplay');
-            if(!container) return;
-            container.innerHTML = "";
-            
-            let maxDiff = 0; let bestProjName = "";
-            ['A','B','C','D'].forEach(g => {
-                appData.groups[g].forEach(p => {
-                    if (p.lastDiff > maxDiff) { maxDiff = p.lastDiff; bestProjName = p.name; }
-                });
-            });
-
-            ['A','B','C','D'].forEach(g => {
-                const projects = appData.groups[g];
-                let totalDL = 0; let rows = "";
-                projects.forEach(p => {
-                    const dl = parseInt(p.downloads) || 0;
-                    totalDL += dl;
-                    let diffHtml = "";
-                    if (p.lastDiff > 0) diffHtml = `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>`;
-                    
-                    let icon = "";
-                    if (p.name === bestProjName && maxDiff > 0) icon = " 🏆";
-                    if (p.lastDiff === 0 && dl > 0) icon += " <span class='stagnant-icon'>💤</span>";
-
-                    rows += `<div class="project-row-display"><span>${p.name}${icon}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
-                });
-                const color = g === 'A' ? "var(--mc-yellow)" : "#aaa";
-                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
-            });
-        }
-        
-        function renderWeek() {
-            const grid = document.getElementById('weekGrid');
-            if(!grid) return;
-            grid.innerHTML = '';
-            appData.currentWeekData.forEach((dayObj, dayIndex) => {
-                const dayDiv = document.createElement('div'); dayDiv.className = 'day-card';
-                let tasksHtml = '';
-                dayObj.tasks.forEach((taskStr, taskIndex) => {
-                    const isObj = typeof taskStr === 'object';
-                    const text = isObj ? taskStr.text : taskStr;
-                    const done = isObj ? taskStr.done : false;
-                    tasksHtml += `<div class="task-item ${done ? 'completed' : ''}" onclick="toggleTask(${dayIndex}, ${taskIndex})"><div class="mc-checkbox"></div><span>${text}</span></div>`;
-                });
-                dayDiv.innerHTML = `<div class="day-title">${dayObj.day}</div>${tasksHtml}`;
-                grid.appendChild(dayDiv);
-            });
-        }
-        
-        function renderHistory() {
-            const log = document.getElementById('historyLog');
-            if(!log) return;
-            log.innerHTML = '';
-            appData.history.forEach(h => {
-                let color = '#ff5555'; 
-                if(h.percent > 50) color = '#ffff55'; 
-                if(h.percent > 80) color = '#55ff55'; 
-                log.innerHTML += `<div class="history-item"><span>${h.date}</span><span style="color:${color}">COMP: ${h.percent}%</span></div>`;
-            });
-        }
-        
-        function renderLogTable() {
-            const tbody = document.getElementById('logTableBody');
-            if(!tbody) return;
+        function updateRevenue() {
+            const ptsInput = document.getElementById('currentPoints');
+            const pts = ptsInput ? (parseInt(ptsInput.value) || 0) : 0;
             const rate = getRate();
-            let htmlContent = "";
-            if (appData.pointsLog && appData.pointsLog.length > 0) {
-                [...appData.pointsLog].reverse().forEach((log, index) => {
-                    const originalIndex = appData.pointsLog.length - 1 - index;
-                    const cfEarn = (log.value * rate);
-                    const extEarn = log.externalRevenue || 0;
-                    const totalEarn = cfEarn + extEarn;
-                    const note = log.note ? `<span style="color:#aaa;">${log.note}</span>` : "-";
-                    
-                    let earnDisplay = `$${totalEarn.toFixed(2)}`;
-                    if(extEarn > 0) earnDisplay += ` <span style="font-size:0.5rem; color:#aaa;">(CF:$${cfEarn.toFixed(2)} + Ext:$${extEarn.toFixed(2)})</span>`;
-
-                    htmlContent += `<tr><td>${log.date}</td><td style="color:#42b74f">${log.value}</td><td>${note}</td><td>${earnDisplay}</td><td><span class="delete-btn" onclick="deleteLogEntry(${originalIndex})">[DEL]</span></td></tr>`;
-                });
-            } else { htmlContent = "<tr><td colspan='5' style='text-align:center;'>No logs found</td></tr>"; }
-            tbody.innerHTML = htmlContent;
-        }
-
-        function drawChart() {
-             const c = document.getElementById('growthChart');
-             if(!c || !c.parentElement) return; 
-             const ctx = c.getContext('2d');
-             ctx.fillStyle="#222"; ctx.fillRect(0,0,c.width,c.height);
-             ctx.fillStyle="var(--mc-green)";
-             
-             if(appData.pointsLog.length === 0) return;
-             
-             // Simple Bar Chart
-             const maxVal = Math.max(...appData.pointsLog.map(p => parseInt(p.value))) || 100;
-             const barWidth = (c.width / appData.pointsLog.length) - 2;
-             
-             appData.pointsLog.forEach((l,i) => {
-                 const h = (parseInt(l.value) / maxVal) * (c.height - 20);
-                 ctx.fillRect(i * (barWidth + 2), c.height - h, barWidth, h);
-             });
-        }
-        
-        function updateUtilityBelt() {
-            // Inactivity
-            const days = Math.floor((new Date() - new Date(appData.lastCFLogin))/(1000*60*60*24));
-            const elInact = document.getElementById('inactivityCount');
-            if(elInact) elInact.innerText = 60 - days;
-            
-            // Best Day
-            const best = calculateBestDay();
-            const elBest = document.getElementById('bestDayName');
-            if(elBest) elBest.innerText = best.name;
-
-            // Milestone
-            const mile = calculateMilestone();
-            const elT = document.getElementById('nextMilestoneTarget');
-            if(elT) elT.innerText = mile.target;
-            const elD = document.getElementById('nextMilestoneDate');
-            if(elD) elD.innerText = mile.date;
-        }
-        
-        function calculateBestDay() {
-            if (!appData.pointsLog || appData.pointsLog.length < 5) return { name: "Need Data", avg: 0 };
-            const days = { 0:"Sun", 1:"Mon", 2:"Tue", 3:"Wed", 4:"Thu", 5:"Fri", 6:"Sat" };
-            const totals = {}; const counts = {};
-            appData.pointsLog.forEach(log => {
-                const date = new Date(log.date);
-                if (isNaN(date.getTime())) return; 
-                const dayIdx = date.getDay();
-                if (!totals[dayIdx]) { totals[dayIdx] = 0; counts[dayIdx] = 0; }
-                totals[dayIdx] += parseInt(log.value); counts[dayIdx]++;
-            });
-            let bestDay = ""; let highestAvg = 0;
-            for (let i = 0; i <= 6; i++) {
-                if (totals[i] && counts[i] > 0) {
-                    const avg = totals[i] / counts[i];
-                    if (avg > highestAvg) { highestAvg = avg; bestDay = days[i]; }
-                }
-            }
-            return { name: bestDay || "Calculating...", avg: highestAvg };
-        }
-
-        function calculateMilestone() {
-            const total = calcLifetime(appData);
-            const rate = getRate();
-            if (!appData.pointsLog || appData.pointsLog.length === 0) return { target: "$10", date: "No Data" };
-            
-            const recent = appData.pointsLog.slice(-7);
-            const sumPts = recent.reduce((a, b) => a + parseInt(b.value), 0);
-            const avgDailyRev = (sumPts / recent.length) * rate;
-            if (avgDailyRev === 0) return { target: "$??", date: "Log more points" };
-            
-            const milestones = [10, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
-            const nextTarget = milestones.find(m => m > total) || (total + 100);
-            const amountNeeded = nextTarget - total;
-            const daysToGo = Math.ceil(amountNeeded / avgDailyRev);
-            
-            const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + daysToGo);
-            return { target: "$" + nextTarget, date: targetDate.toLocaleDateString() };
-        }
-
-        function calculateDailyPace() {
-            const el = document.getElementById('dailyPaceDisplay');
-            if(!el) return;
-            const now = new Date();
-            const dailyGoal = parseInt(appData.goal);
-            const monthlyGoal = dailyGoal * 30;
-            let earnedThisMonth = 0;
-            appData.pointsLog.forEach(log => {
-                const d = new Date(log.date);
-                if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
-                    earnedThisMonth += parseInt(log.value);
-                }
-            });
-            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            const daysLeft = daysInMonth - now.getDate() + 1; 
-            let neededTotal = monthlyGoal - earnedThisMonth;
-            if (neededTotal < 0) neededTotal = 0;
-            const neededDaily = Math.ceil(neededTotal / daysLeft);
-            el.innerText = neededDaily + " pts";
-        }
-
-        function updateRank() {
-            const lifetime = calcLifetime(appData);
-            const el = document.getElementById('creatorRank');
-            const xpFill = document.getElementById('xpFill');
-            const xpText = document.getElementById('xpText');
-            if(!el) return;
-            
-            const totalXP = Math.floor(lifetime * 100);
-            
-            let rank = "WOOD RANK"; let color = "#aaa"; let nextGoal = 5000;
-            if (lifetime >= 10000) { rank = "NETHERITE RANK"; color = "#5D4060"; nextGoal = 9999999; }
-            else if (lifetime >= 5000) { rank = "DIAMOND RANK"; color = "#33ebcb"; nextGoal = 1000000; }
-            else if (lifetime >= 1000) { rank = "GOLD RANK"; color = "#fcfc00"; nextGoal = 500000; }
-            else if (lifetime >= 200) { rank = "IRON RANK"; color = "#fff"; nextGoal = 100000; }
-            else if (lifetime >= 50) { rank = "STONE RANK"; color = "#888"; nextGoal = 20000; }
-
-            el.innerText = `${rank} ($${lifetime.toFixed(0)})`;
-            el.style.borderColor = color; el.style.color = color;
-            
-            let percent = Math.min(100, (totalXP / nextGoal) * 100);
-            if(lifetime >= 10000) percent = 100; 
-            if(xpFill) xpFill.style.width = percent + "%";
-            if(xpText) xpText.innerText = `${totalXP.toLocaleString()} / ${nextGoal.toLocaleString()} XP`;
-        }
-
-        function checkWeeklyAudit() {
-             const diff = (new Date() - new Date(appData.lastAuditDate))/(1000*60*60*24);
-             if(diff > 7) {
-                 const c = document.getElementById('auditContainer'); c.innerHTML="";
-                 ['A','B','C','D'].forEach(g => {
-                     if(appData.groups[g].length > 0) {
-                         c.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px;">GROUP ${g}</div>`;
-                         appData.groups[g].forEach((p,i) => {
-                             c.innerHTML += `<div class='stat-input-row'><span>${p.name}</span><input type='number' id='audit-${g}-${i}' value='${p.downloads}'></div>`;
-                         });
-                     }
-                 });
-                 document.getElementById('weeklyAuditModal').style.display='flex';
-             }
-        }
-        
-        function checkBackupStatus() {
-            const btn = document.getElementById('btnExportJson');
-            if(!btn) return;
-            if(appData.lastBackupDate && (new Date() - new Date(appData.lastBackupDate))/(1000*60*60*24) > 7) btn.classList.add('backup-warn');
-        }
-
-        // --- 4. INIT & CORE LOGIC ---
-        function startClock() {
-            setInterval(() => {
-                const now = new Date();
-                const el = document.getElementById('clockDisplay');
-                if(el) el.innerHTML = `<span>${now.toLocaleDateString()}</span>${now.toLocaleTimeString()}`;
-            }, 1000);
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem('bedrockTracker_v28_3'); // New Key
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    appData = { ...appData, ...parsed }; 
-                    if(!appData.pointsLog) appData.pointsLog = [];
-                    // Ensure arrays
-                    ['A','B','C','D'].forEach(g => { if(!Array.isArray(appData.groups[g])) appData.groups[g]=[]; });
-                    if(!appData.revenueSources) appData.revenueSources = [];
-                    if(!appData.lastCFLogin) appData.lastCFLogin = new Date().toLocaleDateString();
-                    if(!appData.lastAuditDate) appData.lastAuditDate = new Date().toLocaleDateString();
-                } catch(e) { console.error(e); }
+            let extTotal = 0;
+            // FIX #10: Add null check for revenueSources
+            if (appData.revenueSources && appData.revenueSources.length > 0) {
+                appData.revenueSources.forEach(s => extTotal += parseFloat(s.val)||0);
             }
             
-            // Set UI values
-            const elPoints = document.getElementById('currentPoints');
-            if(elPoints) elPoints.value = appData.points;
+            const gross = (pts * rate) + extTotal;
+            const revDisp = document.getElementById('revenueDisplay');
+            if (revDisp) revDisp.innerText = gross.toFixed(2);
             
-            const elGoal = document.getElementById('goalPoints');
-            if(elGoal) elGoal.value = appData.goal;
+            // FIX #11: Update revenue hub display when modal is open
+            const revHubCF = document.getElementById('revHubCF');
+            if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(2);
+            const revHubTotal = document.getElementById('revHubTotal');
+            if (revHubTotal) revHubTotal.innerText = gross.toFixed(2);
             
-            const elRate = document.getElementById('pointRate');
-            if(elRate) elRate.value = appData.rate;
-            
-            const elStreak = document.getElementById('streakValue');
-            if(elStreak) elStreak.innerText = appData.streak;
-            
-            const elScratch = document.getElementById('ideaScratchpad');
-            if(elScratch) elScratch.value = appData.scratchpad;
-            
-            const elTax = document.getElementById('taxRateInput');
-            if(elTax) elTax.value = appData.taxRate || 0;
-
-            refreshAll();
+            saveData();
+            calculateHistoricalTotals();
+            renderLogTable(); 
+            drawChart();
         }
-        
+
         function refreshAll() {
-            // Calling all renderers in order
             updateRevenue(); 
-            renderAchievements(); 
-            renderWeek(); 
-            renderGroups();
-            renderHistory(); 
-            drawChart(); 
-            renderLogTable();
-            checkNewDay(); 
-            updateUtilityBelt(); 
-            checkWeeklyAudit(); 
-            calculateDailyPace(); 
-            updateRank(); 
-            checkBackupStatus();
+            renderGroups(); 
+            renderWeek();
+            const streakVal = document.getElementById('streakValue');
+            if (streakVal) streakVal.innerText = appData.streak || 0;
         }
 
-        function saveData() {
-            const elPoints = document.getElementById('currentPoints');
-            if(elPoints) appData.points = elPoints.value;
-            
-            const elGoal = document.getElementById('goalPoints');
-            if(elGoal) appData.goal = elGoal.value;
-            
-            const elRate = document.getElementById('pointRate');
-            if(elRate) appData.rate = elRate.value;
-            
-            localStorage.setItem('bedrockTracker_v28_3', JSON.stringify(appData));
-        }
-
-        // --- 5. WINDOW GLOBAL HANDLERS (For HTML onclick) ---
-        window.saveGoal = function() { saveData(); drawChart(); calculateDailyPace(); }
-        
+        // --- 4. HANDLERS ---
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
-            const current = parseInt(elPts.value);
-            const note = elNote.value;
+            const current = elPts ? parseInt(elPts.value) : 0;
+            const note = elNote ? elNote.value : "";
             const date = new Date().toLocaleDateString('en-US', {month:'numeric', day:'numeric'});
-            let ext = 0; appData.revenueSources.forEach(s => ext += s.val);
+            let ext = 0; 
+            // FIX #12: Safe loop through revenue sources
+            if (appData.revenueSources && appData.revenueSources.length > 0) {
+                appData.revenueSources.forEach(s => ext += parseFloat(s.val)||0);
+            }
+            
+            // FIX #13: Initialize pointsLog if it doesn't exist
+            if (!appData.pointsLog) {
+                appData.pointsLog = [];
+            }
+            
             appData.pointsLog.push({date, value:current, note, externalRevenue:ext});
-            if(appData.pointsLog.length > 50) appData.pointsLog.shift();
-            saveData(); refreshAll(); alert("Logged!");
-        }
-
-        window.checkNewDay = function() {
-             if(appData.lastLoginDate !== new Date().toLocaleDateString()) document.getElementById('newDayModal').style.display='flex';
+            if(appData.pointsLog.length > 30) appData.pointsLog.shift();
+            
+            // FIX #14: Clear the note input after logging
+            if (elNote) elNote.value = "";
+            
+            updateRevenue(); 
+            alert("Logged!");
         }
 
         window.confirmDailyPoints = function() {
             const v = document.getElementById('dailyPointsInput').value;
-            if(v) { document.getElementById('currentPoints').value = v; window.logPoints(); }
+            const noteVal = document.getElementById('dailyNoteInput').value;
+            if(v) { 
+                const el = document.getElementById('currentPoints');
+                if (el) el.value = v;
+                const elNote = document.getElementById('logNote');
+                if (elNote) elNote.value = noteVal || "";
+                window.logPoints(); 
+            }
             document.getElementById('newDayModal').style.display='none';
             appData.lastLoginDate = new Date().toLocaleDateString();
             saveData();
         }
 
-        window.deleteLogEntry = function(index) {
-             if(confirm("Delete?")) { appData.pointsLog.splice(index, 1); saveData(); refreshAll(); }
-        }
-
-        window.changeTheme = function(theme) { document.body.className = theme; }
-        
-        window.startPomo = function() { /* (Same as before) */ } // Re-add if needed, kept brief to ensure no errors
-        window.resetPomo = function() { /* ... */ }
-
-        window.updateTaxRate = function(val) {
-            appData.taxRate = parseFloat(val) || 0;
-            saveData(); updateRevenue();
+        window.deleteLogEntry = function(index) { 
+            if(confirm("Delete?")) { 
+                // FIX #15: Safe array splice with bounds checking
+                if (appData.pointsLog && index >= 0 && index < appData.pointsLog.length) {
+                    appData.pointsLog.splice(index, 1); 
+                    saveData();
+                    refreshAll(); 
+                }
+            } 
         }
         
-        // ... (Export/Import/Edit Group functions would go here, mapped to window) ...
-        // Re-adding essential ones for UI to work
-        window.toggleLogTable = () => { const el=document.getElementById('logTableContainer'); el.style.display = el.style.display==='none'?'block':'none'; }
+        window.saveGoal = function() { saveData(); drawChart(); }
+        
+        window.toggleLogTable = () => { 
+            const el=document.getElementById('logTableContainer'); 
+            if(el) el.style.display = el.style.display==='none'?'block':'none'; 
+        }
+        
+        window.toggleUtility = () => { 
+            const el=document.getElementById('utilityTool'); 
+            if(el) el.style.display=el.style.display==='none'?'grid':'none'; 
+        }
+        
         window.openRevenueHub = () => {
-             const c = document.getElementById('revSourcesContainer'); c.innerHTML="";
+             const c = document.getElementById('revSourcesContainer'); 
+             if(!c) return;
+             c.innerHTML="";
+             // FIX #16: Initialize revenueSources if missing
+             if (!appData.revenueSources) {
+                 appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
+             }
              appData.revenueSources.forEach((s,i) => {
-                 c.innerHTML += `<div class='rev-row'><span>${s.name}</span><input type='number' class='rev-input' value='${s.val}' onchange='updateRevSource(${i},this.value)'></div>`;
+                 c.innerHTML += `<div class='rev-row'><span>${s.name}</span><input type='number' class='rev-input' value='${s.val}' onchange='appData.revenueSources[${i}].val=parseFloat(this.value)||0; updateRevenue();'></div>`;
              });
              document.getElementById('revenueHubModal').style.display='flex';
+             // Update display when opening
+             updateRevenue();
         };
-        window.updateRevSource = (i,v) => { appData.revenueSources[i].val = parseFloat(v)||0; saveData(); updateRevenue(); };
-        window.saveRevenueHub = () => { document.getElementById('revenueHubModal').style.display='none'; updateRevenue(); };
-        window.addRevenueSource = () => { const n = prompt("Name:"); if(n) { appData.revenueSources.push({name:n, val:0}); window.openRevenueHub(); } };
-        window.updateRevenue = updateRevenue; // Expose the internal function
 
-        // Init
-        window.addEventListener('DOMContentLoaded', () => {
+        window.saveRevenueHub = () => { 
+            document.getElementById('revenueHubModal').style.display='none'; 
+            saveData();
+            updateRevenue(); 
+        };
+        
+        window.addRevenueSource = () => { 
+            const n = prompt("Name:"); 
+            if(n) { 
+                if (!appData.revenueSources) appData.revenueSources = [];
+                appData.revenueSources.push({name:n, val:0}); 
+                window.openRevenueHub(); 
+            } 
+        };
+        
+        window.resetInactivityTimer = () => { 
+            appData.lastCFLogin = new Date().toLocaleDateString(); 
+            saveData(); 
+            alert("Reset!"); 
+        };
+        
+        window.openEditGroups = () => { 
+            document.getElementById('editGroupsModal').style.display='flex'; 
+            renderEditModalContent(); 
+        };
+        
+        let tempGroups = {};
+        
+        function renderEditModalContent() {
+            // FIX #17: Deep clone with proper initialization
+            tempGroups = {
+                A: appData.groups.A ? JSON.parse(JSON.stringify(appData.groups.A)) : [],
+                B: appData.groups.B ? JSON.parse(JSON.stringify(appData.groups.B)) : [],
+                C: appData.groups.C ? JSON.parse(JSON.stringify(appData.groups.C)) : [],
+                D: appData.groups.D ? JSON.parse(JSON.stringify(appData.groups.D)) : []
+            };
+            
+            const c = document.getElementById('groupEditContainer'); 
+            if(!c) return;
+            c.innerHTML="";
+            ['A','B','C','D'].forEach(g => {
+                 const d = document.createElement('div');
+                 d.innerHTML = `<div style="margin-bottom:5px; color:#aaa;">GROUP ${g}</div>`;
+                 if (tempGroups[g] && tempGroups[g].length > 0) {
+                     tempGroups[g].forEach((p,i) => {
+                         // FIX #18: Escape quotes in project names to prevent HTML breaking
+                         const safeName = (p.name || '').replace(/"/g, '&quot;');
+                         d.innerHTML += `<div class='project-edit-row'><input class='proj-name-input' value="${safeName}" onchange="tempGroups['${g}'][${i}].name=this.value"><input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="tempGroups['${g}'][${i}].downloads=this.value"><div class='proj-del-btn' onclick="tempGroups['${g}'].splice(${i},1);renderEditModalContent();">X</div></div>`;
+                     });
+                 }
+                 d.innerHTML += `<div class='add-proj-btn' onclick="tempGroups['${g}'].push({name:'New',downloads:0,lastDiff:0});renderEditModalContent();">+ ADD</div>`;
+                 c.appendChild(d);
+            });
+        }
+        
+        window.saveGroups = () => {
+             // FIX #19: Calculate diff for all groups with proper initialization
+             ['A','B','C','D'].forEach(g => {
+                 if (!appData.groups[g]) appData.groups[g] = [];
+                 if (!tempGroups[g]) tempGroups[g] = [];
+                 
+                 tempGroups[g].forEach(np => {
+                     const op = appData.groups[g].find(x => x.name === np.name);
+                     if(op) {
+                         np.lastDiff = parseInt(np.downloads || 0) - parseInt(op.downloads || 0);
+                     } else {
+                         np.lastDiff = 0;
+                     }
+                 });
+             });
+             appData.groups = tempGroups; 
+             saveData(); 
+             renderGroups(); 
+             document.getElementById('editGroupsModal').style.display='none';
+        };
+
+        window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
+        
+        window.copyScraperScript = () => {
+             // FIX #20: Updated scraper with better error handling
+             const s = `(function() {
+    let projects = [];
+    // 1. Target dashboard table rows
+    let rows = document.querySelectorAll('table tbody tr');
+    
+    // Fallback for list view if table is empty
+    if (rows.length === 0) rows = document.querySelectorAll('.project-listing-row, .project-card');
+
+    rows.forEach(row => {
+        // --- FIND NAME ---
+        // Priority 1: Look for class names often used for titles
+        let nameEl = row.querySelector('.project-name, .name h3, h3, .project-title');
+        
+        // Priority 2: If no class, find the first link that is NOT "Edit/Manage"
+        if (!nameEl) {
+            let links = row.querySelectorAll('a');
+            for(let link of links) {
+                let txt = link.innerText.trim();
+                // Filter out bad words
+                if (txt.length > 1 && txt !== "Edit" && txt !== "Manage" && txt !== "Delete" && txt !== "View") {
+                    nameEl = link;
+                    break; // Found the first real text link
+                }
+            }
+        }
+
+        // --- FIND DOWNLOADS ---
+        let dlText = "0";
+        // Look for specific download classes
+        let dlEl = row.querySelector('.downloads, .download-count');
+        
+        if (dlEl) {
+            dlText = dlEl.innerText;
+        } else {
+            // Fallback: Check all cells for a number pattern (e.g. "25.9k" or "4,200")
+            let cells = row.querySelectorAll('td, span');
+            for (let cell of cells) {
+                let txt = cell.innerText.trim();
+                // Matches numbers, excludes dates (/) and times (:)
+                if (txt.match(/^[\d,.]+[kKmM]?$/) && !txt.includes('/') && !txt.includes(':')) {
+                    dlText = txt;
+                }
+            }
+        }
+
+        // --- SAVE DATA ---
+        if (nameEl) {
+            let name = nameEl.innerText.trim();
+            // Final safety check
+            if (name === "Edit") return;
+
+            // Process number
+            let raw = dlText.toLowerCase().replace(/,/g, '').replace('downloads','').trim();
+            let multiplier = 1;
+            if (raw.includes('k')) { multiplier = 1000; raw = raw.replace('k', ''); }
+            if (raw.includes('m')) { multiplier = 1000000; raw = raw.replace('m', ''); }
+            
+            let count = parseFloat(raw) * multiplier;
+            
+            if (!isNaN(count) && count > 0) {
+                projects.push({ name: name, downloads: count });
+            }
+        }
+    });
+
+    if(projects.length > 0) {
+        const jsonOutput = JSON.stringify(projects);
+        console.log("✅ FIXED LIST:");
+        console.log(jsonOutput);
+        
+        // Auto-copy
+        const el = document.createElement('textarea');
+        el.value = jsonOutput;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        alert("SUCCESS! Copied " + projects.length + " projects with correct names.\nGo paste it in your Tracker now.");
+    } else {
+        alert("❌ No projects found. Ensure you are on the 'My Projects' list page.");
+    }
+})();`;
+             const textArea = document.createElement("textarea");
+             textArea.value = s;
+             document.body.appendChild(textArea);
+             textArea.select();
+             document.execCommand('copy');
+             document.body.removeChild(textArea);
+             alert("SCRAPER SCRIPT COPIED!");
+        };
+
+        window.processCFPaste = () => {
+             try {
+                 const arr = JSON.parse(document.getElementById('cfPasteArea').value);
+                 if (!Array.isArray(arr)) throw new Error("Invalid data format");
+                 
+                 arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+                 // FIX #21: Initialize groups properly before slicing
+                 appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 appData.groups.D = arr.slice(12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 
+                 saveData(); 
+                 refreshAll(); 
+                 document.getElementById('cfPasteModal').style.display='none';
+                 alert("Projects imported successfully!");
+             } catch(e) { 
+                 alert("Invalid JSON format. Please paste valid data."); 
+                 console.error(e);
+             }
+        };
+
+        window.toggleTask = (di, ti) => {
+            // FIX #22: Bounds checking for task toggle
+            if (!appData.currentWeekData[di] || !appData.currentWeekData[di].tasks[ti]) return;
+            
+            let t = appData.currentWeekData[di].tasks[ti];
+            if(typeof t === 'string') {
+                appData.currentWeekData[di].tasks[ti] = {text: t, done: true};
+            } else {
+                t.done = !t.done;
+            }
+            saveData(); 
+            renderWeek();
+        };
+
+        window.archiveAndReset = () => {
+            if(!confirm("Archive this week and start fresh?")) return;
+            // FIX #23: Keep historical data, only reset weekly tasks
+            appData.currentWeekData.forEach(day => {
+                day.tasks = day.tasks.map(t => {
+                    if (typeof t === 'object') return t.text;
+                    return t;
+                });
+            });
+            saveData(); 
+            location.reload();
+        }
+
+        window.exportData = () => { 
+            const b=new Blob([JSON.stringify(appData, null, 2)],{type:'application/json'}); 
+            const u=URL.createObjectURL(b); 
+            const a=document.createElement('a'); 
+            a.href=u; 
+            a.download='tracker_backup_' + new Date().toISOString().split('T')[0] + '.json'; 
+            a.click(); 
+            URL.revokeObjectURL(u);
+        }
+        
+        window.importData = function() {
+            const f = document.getElementById('importFile').files[0];
+            if(!f) return;
+            const r = new FileReader();
+            r.onload = (e) => { 
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    // FIX #24: Validate imported data structure
+                    if (imported && typeof imported === 'object') {
+                        appData = { ...appData, ...imported };
+                        // Ensure critical arrays exist
+                        if (!appData.pointsLog) appData.pointsLog = [];
+                        if (!appData.revenueSources) appData.revenueSources = [];
+                        if (!appData.groups) appData.groups = { A: [], B: [], C: [], D: [] };
+                        
+                        saveData(); 
+                        location.reload();
+                    } else {
+                        throw new Error("Invalid file format");
+                    }
+                } catch(err) {
+                    alert("Error importing file: " + err.message);
+                }
+            };
+            r.readAsText(f);
+        }
+
+        function confirmAudit() {
+             // FIX #25: Safe audit confirmation with validation
+             ['A','B','C','D'].forEach(g => {
+                 if (!appData.groups[g]) appData.groups[g] = [];
+                 
+                 appData.groups[g].forEach((p,i) => {
+                     const el = document.getElementById(`audit-${g}-${i}`);
+                     if (el && el.value) {
+                         const newVal = parseInt(el.value) || 0;
+                         p.lastDiff = newVal - (parseInt(p.downloads) || 0);
+                         p.downloads = newVal;
+                     }
+                 });
+             });
+             appData.lastAuditDate = new Date().toLocaleDateString();
+             saveData(); 
+             refreshAll(); 
+             document.getElementById('weeklyAuditModal').style.display='none';
+        }
+
+        // --- 5. INITIALIZATION ---
+        function loadData() {
+            const saved = localStorage.getItem('bedrockTracker_v36_core');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appData = { ...appData, ...parsed };
+                    
+                    // FIX #26: Ensure all required properties exist after loading
+                    if (!appData.pointsLog) appData.pointsLog = [];
+                    if (!appData.revenueSources) appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
+                    if (!appData.groups) appData.groups = { A: [], B: [], C: [], D: [] };
+                    if (!appData.currentWeekData) {
+                        appData.currentWeekData = [
+                            { day: "MON", tasks: ["Update Group A", "Check Comments"] },
+                            { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
+                            { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
+                            { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
+                            { day: "FRI", tasks: ["RELEASE DAY"] },
+                            { day: "SAT", tasks: ["Update Group A", "Reply Comments"] },
+                            { day: "SUN", tasks: ["Rest / Analytics"] }
+                        ];
+                    }
+                } catch(e) { 
+                    console.error("Error loading data:", e); 
+                    // Keep default appData
+                }
+            }
+            
+            // FIX #27: Safe value restoration
+            const elP = document.getElementById('currentPoints');
+            if (elP) elP.value = appData.points || 18;
+            
+            const elG = document.getElementById('goalPoints');
+            if (elG) elG.value = appData.goal || 120;
+            
+            const elR = document.getElementById('pointRate');
+            if (elR) elR.value = appData.rate || 0.05;
+            
+            refreshAll();
+        }
+
+        window.onload = function() {
             loadData();
-            startClock();
-            window.addEventListener('resize', () => { if(typeof drawChart === 'function') drawChart(); });
-        });
+            
+            // FIX #28: Clock update with proper date formatting
+            setInterval(() => { 
+                const clock = document.getElementById('clockDisplay');
+                if (clock) {
+                    const now = new Date();
+                    clock.innerText = now.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }); 
+                }
+            }, 1000);
+
+            // FIX #29: New day modal with proper date comparison
+            const today = new Date().toLocaleDateString();
+            if(appData.lastLoginDate !== today) {
+                const modal = document.getElementById('newDayModal');
+                if (modal) {
+                    // Small delay to ensure DOM is ready
+                    setTimeout(() => {
+                        modal.style.display='flex';
+                    }, 500);
+                }
+            }
+            
+            // FIX #30: Weekly audit check with safe date parsing
+            const lastAudit = appData.lastAuditDate ? new Date(appData.lastAuditDate) : new Date(0);
+            const diff = (new Date() - lastAudit)/(1000*60*60*24);
+            
+            if(diff > 7) {
+                const c = document.getElementById('auditContainer'); 
+                if (c) {
+                    c.innerHTML="";
+                    let hasProjects = false;
+                    
+                    ['A','B','C','D'].forEach(g => {
+                        if(appData.groups[g] && appData.groups[g].length > 0) {
+                            hasProjects = true;
+                            c.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px;">GROUP ${g}</div>`;
+                            appData.groups[g].forEach((p,i) => {
+                                c.innerHTML += `<div class='stat-input-row'><span>${p.name}</span><input type='number' id='audit-${g}-${i}' value='${p.downloads || 0}'></div>`;
+                            });
+                        }
+                    });
+                    
+                    // Only show modal if there are projects to audit
+                    if (hasProjects) {
+                        const auditModal = document.getElementById('weeklyAuditModal');
+                        if (auditModal) {
+                            setTimeout(() => {
+                                auditModal.style.display='flex';
+                            }, 1000);
+                        }
+                    }
+                }
+            }
+        };
+
     </script>
 </body>
 </html>
