@@ -6,7 +6,6 @@
     <title>Bedrock Iconizer</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://petsrulefondness.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -466,19 +465,40 @@
                         <div class="task-title">OUTLINE</div>
                         <div class="task-status" id="status-outline">OFF</div>
                     </div>
-                     <div class="task-item" id="btnToggleGlint" onclick="toggleSetting('glint')">
-                        <div class="task-title">GLINT</div>
-                        <div class="task-status" id="status-glint">OFF</div>
+                    <!-- NEW: Smooth Input Toggle (Pre-Blur) -->
+                    <div class="task-item" id="btnToggleSmooth" onclick="toggleSetting('smooth')">
+                        <div class="task-title">SMOOTH INPUT</div>
+                        <div class="task-status" id="status-smooth">OFF</div>
                     </div>
                     <div class="task-item" id="btnToggleClean" onclick="toggleSetting('cleanEdges')">
                         <div class="task-title">CLEAN EDGES</div>
                         <div class="task-status" id="status-cleanEdges">OFF</div>
                     </div>
-                     <div class="task-item" style="opacity:0.3; cursor:default;">
-                        <div class="task-title">FORMAT</div>
-                        <div class="task-status">PNG</div>
+                    <!-- NEW: Denoise Toggle -->
+                    <div class="task-item" id="btnToggleDenoise" onclick="toggleSetting('denoise')">
+                        <div class="task-title">DENOISE</div>
+                        <div class="task-status" id="status-denoise">OFF</div>
                     </div>
                 </div>
+                <!-- Extra Glint (Moved from grid to save space for new features, or just added to grid if fits) -->
+                <!-- The grid was 4 rows of 2. We have 8 slots. 
+                     1. BG, 2. Trim, 
+                     3. Pixel, 4. Size, 
+                     5. Outline, 6. Smooth (was Glint),
+                     7. Clean, 8. Denoise (was Format)
+                     Wait, I removed Glint from the main slots? 
+                     Let's keep Glint, maybe sacrifice "Format" (which was dummy) and... 
+                     Let's expand the grid or squeeze Glint in. 
+                     I'll add Glint below the grid or keep it.
+                     Let's just make the grid adapt.
+                -->
+                 <div class="section-label" style="margin-top: 10px;">Extras</div>
+                 <div class="task-list" style="grid-template-columns: repeat(2, 1fr);">
+                    <div class="task-item" id="btnToggleGlint" onclick="toggleSetting('glint')">
+                        <div class="task-title">GLINT</div>
+                        <div class="task-status" id="status-glint">OFF</div>
+                    </div>
+                 </div>
 
                 <div class="section-label">Manual Editor</div>
 
@@ -507,8 +527,9 @@
                         <input type="range" id="tolerance" min="0" max="100" value="15">
                     </div>
                     <div class="slider-container">
-                        <div class="slider-label"><span>SHARPEN</span><span id="sharpenValue" style="color: var(--mc-green);">20%</span></div>
-                        <input type="range" id="sharpen" min="0" max="100" value="20">
+                        <div class="slider-label"><span>SHARPEN</span><span id="sharpenValue" style="color: var(--mc-green);">10%</span></div>
+                        <!-- Default lowered from 20 to 10 to help with noise -->
+                        <input type="range" id="sharpen" min="0" max="100" value="10">
                     </div>
                     <div class="slider-container">
                         <div class="slider-label"><span>SATURATION</span><span id="satValue" style="color: var(--mc-green);">100%</span></div>
@@ -561,12 +582,14 @@
             outline: false,
             glint: false,
             cleanEdges: false,
+            smooth: false, // New: Pre-blur
+            denoise: false, // New: Post-process despeckle
             resolution: 16,
             tolerance: 15,
             saturation: 100,
             brightness: 100,
             contrast: 100,
-            sharpen: 20,
+            sharpen: 10, // Lowered default
             noise: 0
         };
 
@@ -617,6 +640,8 @@
             btnToggleOutline: document.getElementById('btnToggleOutline'),
             btnToggleGlint: document.getElementById('btnToggleGlint'),
             btnToggleClean: document.getElementById('btnToggleClean'),
+            btnToggleSmooth: document.getElementById('btnToggleSmooth'),
+            btnToggleDenoise: document.getElementById('btnToggleDenoise'),
             // Status Text
             statusBg: document.getElementById('status-removeBg'),
             statusTrim: document.getElementById('status-autoTrim'),
@@ -624,7 +649,9 @@
             statusRes: document.getElementById('status-res'),
             statusOutline: document.getElementById('status-outline'),
             statusGlint: document.getElementById('status-glint'),
-            statusClean: document.getElementById('status-cleanEdges')
+            statusClean: document.getElementById('status-cleanEdges'),
+            statusSmooth: document.getElementById('status-smooth'),
+            statusDenoise: document.getElementById('status-denoise')
         };
 
         const ctxResult = els.resultCanvas.getContext('2d', { willReadFrequently: true });
@@ -704,10 +731,6 @@
             // Draw/Erase
             const color = activeTool === 'eraser' ? [0,0,0,0] : hexToRgb(els.brushColor.value);
             
-            // Simple Bresenham or just pixel fill? 
-            // Since resolution is low, mousemove events might gap. 
-            // But simple filling is usually fine for 16x16.
-            
             const p = ctxResult.createImageData(1, 1);
             p.data[0] = color[0];
             p.data[1] = color[1];
@@ -756,6 +779,8 @@
             setToggleState(els.btnToggleOutline, els.statusOutline, settings.outline, "ON", "OFF");
             setToggleState(els.btnToggleGlint, els.statusGlint, settings.glint, "ON", "OFF");
             setToggleState(els.btnToggleClean, els.statusClean, settings.cleanEdges, "ON", "OFF");
+            setToggleState(els.btnToggleSmooth, els.statusSmooth, settings.smooth, "ON", "OFF");
+            setToggleState(els.btnToggleDenoise, els.statusDenoise, settings.denoise, "ON", "OFF");
             
             els.statusRes.textContent = settings.resolution + "x" + settings.resolution;
             els.glintCanvas.style.opacity = settings.glint ? "0.6" : "0";
@@ -921,13 +946,25 @@
             els.processCanvas.height = currentImage.height;
             ctxProcess.clearRect(0, 0, els.processCanvas.width, els.processCanvas.height);
 
-            // Apply Corrections (Sat, Bright, Contrast)
+            // Apply Corrections
             const sat = settings.saturation;
             const bri = settings.brightness;
             const con = settings.contrast;
-            ctxProcess.filter = `saturate(${sat}%) brightness(${bri}%) contrast(${con}%)`;
+            let filterString = `saturate(${sat}%) brightness(${bri}%) contrast(${con}%)`;
+
+            // NEW: Pre-Smoothing (Smart Blur)
+            // If the image is large and we are downsizing to 16x16, high frequencies become noise.
+            // A slight blur before downscaling acts as a low-pass filter (anti-aliasing).
+            if (settings.smooth) {
+                const ratio = Math.max(currentImage.width, currentImage.height) / settings.resolution;
+                // Only blur if we are actually downscaling significantly
+                if (ratio > 2) {
+                    const blurAmount = Math.min(2, Math.max(0.5, ratio / 20)); // Dynamic blur 0.5px to 2px
+                    filterString += ` blur(${blurAmount}px)`;
+                }
+            }
             
-            // Draw the Cleaned Raw Image onto the Process Canvas with filters
+            ctxProcess.filter = filterString;
             ctxProcess.drawImage(rawCanvas, 0, 0);
             ctxProcess.filter = 'none'; // Reset filter
 
@@ -966,6 +1003,7 @@
             ctxResult.drawImage(steppedCanvas, 0, 0, steppedCanvas.width, steppedCanvas.height, drawX, drawY, drawW, drawH);
 
             // 5. Post-Process Effects (Pixel Level)
+            if (settings.denoise) applyDespeckle(); // NEW: Despeckle before other effects
             if (settings.noise > 0) applyNoise(settings.noise);
             if (settings.sharpen > 0) applySharpen(settings.sharpen);
             if (settings.cleanEdges) applyCleanEdges();
@@ -973,6 +1011,63 @@
         }
 
         // --- Filters ---
+
+        // NEW: Smart Despeckle (Median-ish filter for Pixel Art)
+        // Removes single pixels that don't match any of their neighbors
+        function applyDespeckle() {
+            const w = settings.resolution;
+            const h = settings.resolution;
+            const imgData = ctxResult.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            const copy = new Uint8ClampedArray(data); // Read from copy, write to data
+
+            const getPixel = (x, y) => {
+                if (x < 0 || x >= w || y < 0 || y >= h) return null;
+                const i = (y * w + x) * 4;
+                if (copy[i+3] === 0) return null; // Ignore transparent
+                return { r: copy[i], g: copy[i+1], b: copy[i+2], a: copy[i+3] };
+            };
+
+            const isSimilar = (p1, p2) => {
+                if (!p1 || !p2) return false;
+                const dist = Math.abs(p1.r - p2.r) + Math.abs(p1.g - p2.g) + Math.abs(p1.b - p2.b);
+                return dist < 80; // Similarity threshold
+            };
+
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    const idx = (y * w + x) * 4;
+                    if (copy[idx+3] === 0) continue; // Skip transparent center pixels
+
+                    const center = { r: copy[idx], g: copy[idx+1], b: copy[idx+2] };
+                    const neighbors = [
+                        getPixel(x, y-1), // Top
+                        getPixel(x, y+1), // Bottom
+                        getPixel(x-1, y), // Left
+                        getPixel(x+1, y)  // Right
+                    ].filter(n => n !== null);
+
+                    if (neighbors.length === 0) continue; // Isolated island, leave it (or remove?)
+
+                    // Check if center matches ANY neighbor
+                    const matchesAny = neighbors.some(n => isSimilar(center, n));
+
+                    // If it matches NO neighbors, it's a speckle
+                    if (!matchesAny) {
+                        // Find most frequent neighbor color to replace
+                        // Simple approach: Average of neighbors (smooth) or First neighbor (hard)
+                        // For pixel art, let's average valid neighbors to blend
+                        let r = 0, g = 0, b = 0, count = 0;
+                        neighbors.forEach(n => { r+=n.r; g+=n.g; b+=n.b; count++; });
+                        data[idx] = r / count;
+                        data[idx+1] = g / count;
+                        data[idx+2] = b / count;
+                        // Alpha remains
+                    }
+                }
+            }
+            ctxResult.putImageData(imgData, 0, 0);
+        }
 
         function applyCleanEdges() {
             const w = settings.resolution;
