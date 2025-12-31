@@ -263,7 +263,8 @@
         <div class="stats-bar">
             <div class="stat-box">
                 <div>$/Pt Rate</div>
-                <input type="number" id="pointRate" value="0.05" class="rate-input" step="0.01" onchange="updateRevenue()">
+                <!-- CHANGED: step="any" allows any decimal precision -->
+                <input type="number" id="pointRate" value="0.05" class="rate-input" step="any" onchange="updateRevenue()">
             </div>
             <div class="stat-box">
                 <div>Daily Goal</div>
@@ -272,8 +273,8 @@
             <div class="stat-box" style="flex-grow:2;">
                 <div>Log Pts</div>
                 <div class="log-input-group">
-                    <!-- CHANGED: Added step="0.01" to allow decimals -->
-                    <input type="number" id="currentPoints" value="18" step="0.01" onchange="updateRevenue()">
+                    <!-- CHANGED: step="any" allows any decimal precision -->
+                    <input type="number" id="currentPoints" value="18" step="any" onchange="updateRevenue()">
                     <input type="text" id="logNote" class="note-input" placeholder="Note">
                     <button class="action-btn" onclick="logPoints()">LOG</button>
                 </div>
@@ -429,8 +430,8 @@
                     const earn = (val * rate) + (l.externalRevenue||0);
                     const idx = window.appData.pointsLog.length - 1 - i;
                     const safeNote = escapeHtml(l.note||'-');
-                    // Display val directly (it might be a decimal)
-                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${val}</td><td>${safeNote}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
+                    // CHANGED: Display exact 'val' (no rounding) and earn with 4 decimals
+                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${val}</td><td>${safeNote}</td><td>$${earn.toFixed(4)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
             }
         }
@@ -548,7 +549,8 @@
                     ctx.textAlign = "center";
                     ctx.font = "8px 'Press Start 2P'";
                     const offset = labelDir === 1 ? -15 : 25;
-                    ctx.fillText("$" + val.toFixed(2), x, y + offset);
+                    // CHANGED: Display revenue value with 4 decimals for exact precision
+                    ctx.fillText("$" + val.toFixed(4), x, y + offset);
                     if (labelDir === 1) {
                         ctx.fillStyle = "#666";
                         ctx.fillText(logs[i].date, x, h - 15);
@@ -614,7 +616,8 @@
 
         window.updateRevenue = function() {
             const ptsInput = document.getElementById('currentPoints');
-            const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '') : "0";
+            // CHANGED: Replace comma with dot for international support (e.g. 18,96 -> 18.96)
+            const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '.') : "0";
             // CHANGED: Use parseFloat so live revenue update respects decimals
             const pts = parseFloat(ptsVal) || 0;
             const rate = getRate();
@@ -624,11 +627,12 @@
             }
             const gross = (pts * rate) + extTotal;
             const revDisp = document.getElementById('revenueDisplay');
-            if (revDisp) revDisp.innerText = gross.toFixed(2);
+            // CHANGED: Higher precision for live check
+            if (revDisp) revDisp.innerText = gross.toFixed(4);
             const revHubCF = document.getElementById('revHubCF');
-            if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(2);
+            if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(4);
             const revHubTotal = document.getElementById('revHubTotal');
-            if (revHubTotal) revHubTotal.innerText = gross.toFixed(2);
+            if (revHubTotal) revHubTotal.innerText = gross.toFixed(4);
             
             saveData();
             calculateHistoricalTotals();
@@ -656,8 +660,13 @@
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
-            // CHANGED: Use parseFloat here so we log decimals (e.g. 18.96) instead of integers (18)
-            const current = elPts ? parseFloat(elPts.value.replace(/,/g,'')) || 0 : 0;
+            
+            // CHANGED: Robust parsing. Replace commas with dots, parse as float.
+            // If user typed "18,96", this becomes "18.96" instead of "1896" or "18".
+            let currentValString = elPts ? elPts.value : "0";
+            currentValString = currentValString.replace(/,/g, '.');
+            const current = parseFloat(currentValString) || 0;
+
             const note = elNote ? elNote.value : "";
             const todayStr = getTodayString();
             
@@ -690,7 +699,7 @@
             
             updateRevenue(); 
             refreshAll(); 
-            alert("Logged!");
+            alert("Logged: " + current);
         }
 
         window.deleteLogEntry = function(index) { 
