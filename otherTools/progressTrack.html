@@ -272,7 +272,8 @@
             <div class="stat-box" style="flex-grow:2;">
                 <div>Log Pts</div>
                 <div class="log-input-group">
-                    <input type="number" id="currentPoints" value="18" onchange="updateRevenue()">
+                    <!-- CHANGED: Added step="0.01" to allow decimals -->
+                    <input type="number" id="currentPoints" value="18" step="0.01" onchange="updateRevenue()">
                     <input type="text" id="logNote" class="note-input" placeholder="Note">
                     <button class="action-btn" onclick="logPoints()">LOG</button>
                 </div>
@@ -423,10 +424,13 @@
             tbody.innerHTML = "";
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 [...window.appData.pointsLog].reverse().forEach((l,i) => {
-                    const earn = (l.value*rate) + (l.externalRevenue||0);
+                    // CHANGED: Use parseFloat to respect decimals in log calculation
+                    const val = parseFloat(l.value) || 0;
+                    const earn = (val * rate) + (l.externalRevenue||0);
                     const idx = window.appData.pointsLog.length - 1 - i;
                     const safeNote = escapeHtml(l.note||'-');
-                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${l.value}</td><td>${safeNote}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
+                    // Display val directly (it might be a decimal)
+                    tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${val}</td><td>${safeNote}</td><td>$${earn.toFixed(2)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
             }
         }
@@ -486,7 +490,8 @@
             }
 
             const rate = getRate();
-            const cfData = logs.map(l => (parseInt(l.value) * rate));
+            // CHANGED: Use parseFloat for graph data
+            const cfData = logs.map(l => (parseFloat(l.value || 0) * rate));
             const extData = logs.map(l => parseFloat(l.externalRevenue) || 0);
 
             const maxVal = Math.max(...cfData, ...extData, 1);
@@ -574,7 +579,8 @@
                     const d = new Date(log.date); 
                     d.setHours(0,0,0,0);
                     const diff = Math.round((now - d) / (1000*60*60*24));
-                    const val = (parseInt(log.value)*rate) + (log.externalRevenue||0);
+                    // CHANGED: Use parseFloat for history calculations
+                    const val = (parseFloat(log.value)*rate) + (log.externalRevenue||0);
                     if(diff >= 0 && diff < 7) sum7 += val;
                     if(diff >= 7 && diff < 14) prev7 += val;
                     if(diff >= 0 && diff < 30) sum30 += val;
@@ -591,14 +597,16 @@
             }
             let lifetime = 0;
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
-                lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseInt(b.value)*rate) + (b.externalRevenue||0), 0);
+                // CHANGED: Use parseFloat for lifetime calculations
+                lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseFloat(b.value)*rate) + (b.externalRevenue||0), 0);
             }
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
             if(window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                  const recent = window.appData.pointsLog.slice(-7);
                  let recentSum = 0;
-                 recent.forEach(l => recentSum += (parseInt(l.value)*rate)+(l.externalRevenue||0));
+                 // CHANGED: Use parseFloat for average calculations
+                 recent.forEach(l => recentSum += (parseFloat(l.value)*rate)+(l.externalRevenue||0));
                  const elAvg = document.getElementById('avg7DayDisplay');
                  if (elAvg) elAvg.innerText = (recentSum/recent.length).toFixed(2);
             }
@@ -607,7 +615,8 @@
         window.updateRevenue = function() {
             const ptsInput = document.getElementById('currentPoints');
             const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '') : "0";
-            const pts = parseInt(ptsVal) || 0;
+            // CHANGED: Use parseFloat so live revenue update respects decimals
+            const pts = parseFloat(ptsVal) || 0;
             const rate = getRate();
             let extTotal = 0;
             if (window.appData.revenueSources && window.appData.revenueSources.length > 0) {
@@ -647,7 +656,8 @@
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
-            const current = elPts ? parseInt(elPts.value.replace(/,/g,'')) || 0 : 0;
+            // CHANGED: Use parseFloat here so we log decimals (e.g. 18.96) instead of integers (18)
+            const current = elPts ? parseFloat(elPts.value.replace(/,/g,'')) || 0 : 0;
             const note = elNote ? elNote.value : "";
             const todayStr = getTodayString();
             
