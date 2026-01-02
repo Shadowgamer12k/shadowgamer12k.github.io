@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MC Texture Forge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mc-bg: #3b3b3b;
+            --mc-button: #727272;
+            --mc-button-light: #8b8b8b;
+            --mc-button-dark: #494949;
+            --mc-border-light: #a0a0a0;
+            --mc-border-dark: #202020;
+            --mc-text: #ffffff;
+            --mc-text-shadow: #3f3f3f;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #2e2e2e;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAACVJREFUeNpiYIQABgYs4C4jE04gjEw4gTAy4QTCyIQTCGEDw4AAACwAA/3X148AAAAASUVORK5CYII='); /* Dark dirt pattern */
+            background-size: 64px;
+            color: var(--mc-text);
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            font-size: 10px; 
+        }
+
+        /* Minecraft Button Style */
+        .mc-btn {
+            background-color: var(--mc-button);
+            border-top: 2px solid var(--mc-border-light);
+            border-left: 2px solid var(--mc-border-light);
+            border-bottom: 2px solid var(--mc-border-dark);
+            border-right: 2px solid var(--mc-border-dark);
+            color: white;
+            text-shadow: 2px 2px 0px var(--mc-text-shadow);
+            cursor: pointer;
+            transition: filter 0.1s;
+            image-rendering: pixelated;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mc-btn:active {
+            border-top: 2px solid var(--mc-border-dark);
+            border-left: 2px solid var(--mc-border-dark);
+            border-bottom: 2px solid var(--mc-border-light);
+            border-right: 2px solid var(--mc-border-light);
+            background-color: var(--mc-button-dark);
+        }
+
+        .mc-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .mc-btn.selected {
+            background-color: #5c5c5c;
+            border: 2px solid #ffff55; /* Gold selection border */
+        }
+        
+        .mc-btn.active-toggle {
+            background-color: #3a3a3a;
+            border-top: 2px solid var(--mc-border-dark);
+            border-left: 2px solid var(--mc-border-dark);
+            border-bottom: 2px solid var(--mc-border-light);
+            border-right: 2px solid var(--mc-border-light);
+            color: #55ff55;
+        }
+
+        /* Panel Style */
+        .mc-panel {
+            background-color: #c6c6c6;
+            border: 2px solid #000;
+            box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #555;
+            color: #202020;
+        }
+        
+        .mc-panel-dark {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--mc-border-light);
+            border-radius: 2px;
+        }
+
+        .checkerboard {
+            background-color: #202020;
+            background-image: linear-gradient(45deg, #303030 25%, transparent 25%, transparent 75%, #303030 75%, #303030),
+            linear-gradient(45deg, #303030 25%, transparent 25%, transparent 75%, #303030 75%, #303030);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        .checkerboard-sm {
+            background-color: #202020;
+            background-image: linear-gradient(45deg, #303030 25%, transparent 25%, transparent 75%, #303030 75%, #303030),
+            linear-gradient(45deg, #303030 25%, transparent 25%, transparent 75%, #303030 75%, #303030);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+
+        #grid-overlay {
+            pointer-events: none; 
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+            z-index: 20;
+        }
+
+        .mc-input {
+            background-color: #000;
+            border: 2px solid #a0a0a0;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            padding: 8px;
+            outline: none;
+            font-size: 12px;
+        }
+        
+        canvas {
+            image-rendering: pixelated;
+            cursor: crosshair;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(2px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #222; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+            border: 1px solid #aaa;
+        }
+        
+        .heart-btn {
+            transition: transform 0.1s;
+        }
+        .heart-btn:active {
+            transform: scale(0.9);
+        }
+        .liked {
+            color: #ff5555;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+        .liked svg path {
+            fill: #ff5555;
+        }
+
+        /* SVG Pixel Art Style */
+        .pixel-svg {
+            width: 20px;
+            height: 20px;
+            shape-rendering: crispEdges; /* Forces no anti-aliasing for SVG */
+            fill: currentColor;
+            display: inline-block;
+        }
+        .pixel-svg-sm {
+            width: 14px;
+            height: 14px;
+            shape-rendering: crispEdges;
+            fill: currentColor;
+            display: inline-block;
+        }
+        .pixel-svg-lg {
+            width: 24px;
+            height: 24px;
+            shape-rendering: crispEdges;
+            fill: currentColor;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col text-xs">
+
+    <!-- Header -->
+    <header class="h-14 bg-[#222] border-b-4 border-[#111] flex items-center justify-between px-4 shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <img src="https://minecraft.wiki/images/Crafting_Table_JE4_BE3.png" class="w-8 h-8 pixelated" alt="Logo">
+            <h1 class="text-sm md:text-lg text-yellow-400 drop-shadow-md leading-none pt-1 hidden sm:block">MC Texture Forge</h1>
+        </div>
+        <div class="flex gap-2 items-center">
+            <input type="file" id="file-import" class="hidden" accept="image/png">
+            
+            <button id="btn-profile" class="mc-btn px-2 py-2 text-xs flex gap-2 items-center bg-[#202020] border-[#555]">
+                <span id="header-username" class="mr-2">Guest</span> 
+                <!-- Profile Icon -->
+                <svg class="pixel-svg-sm" viewBox="0 0 16 16"><path d="M4 14h8v-2H4v2zm-2 0h2v-4h8v4h2v-6H2v6zM5 2h6v6H5V2z"/></svg>
+            </button>
+
+            <button id="btn-gallery" class="mc-btn px-2 py-2 text-xs flex gap-2 items-center bg-[#5e7c16] border-[#7d9e2a] hover:brightness-110">
+                <span class="hidden sm:inline">Gallery</span> 
+                <!-- Earth Icon -->
+                <svg class="pixel-svg-sm" viewBox="0 0 16 16"><path d="M6 1h4v1h2v2h1v2h1v4h-1v2h-1v2h-2v1H6v-1H4v-2H3v-2H2V6h1V4h1V2h2V1zm-1 5h1V4H5v2zm0 4h1v2H5v-2zm6-4h-1V4h1v2zm0 4h-1v2h1v-2z"/></svg>
+            </button>
+            <button id="btn-share" class="mc-btn px-2 py-2 text-xs flex gap-2 items-center bg-[#3c44aa] border-[#5e66d6] hover:brightness-110">
+                <span class="hidden sm:inline">Share</span> 
+                <!-- Cloud Icon -->
+                <svg class="pixel-svg-sm" viewBox="0 0 16 16"><path d="M4 10H2V7h2V5h2V3h6v2h2v2h2v3h-2v2H4v-2z"/></svg>
+            </button>
+            
+            <button id="btn-import" class="mc-btn px-2 py-2 text-xs flex gap-2 items-center">
+                <span class="hidden md:inline">Import</span> 
+                <!-- Folder Icon -->
+                <svg class="pixel-svg-sm" viewBox="0 0 16 16"><path d="M1 3h6v2h8v9H1V3zm2 4v5h10V7H3z"/></svg>
+            </button>
+            <button id="btn-export" class="mc-btn px-2 py-2 text-xs">Save</button>
+            <button id="btn-new" class="mc-btn px-2 py-2 text-xs">New</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 flex overflow-hidden relative">
+        
+        <!-- Left Toolbar -->
+        <div class="w-16 sm:w-20 bg-[#c6c6c6] border-r-4 border-[#555] flex flex-col items-center py-4 gap-3 shrink-0 z-10 shadow-lg overflow-y-auto">
+            
+            <!-- Tools -->
+            <div class="flex flex-col gap-2 w-full px-2">
+                <button id="tool-pencil" class="mc-btn w-full aspect-square flex items-center justify-center selected" title="Pencil (P)">
+                    <!-- Pencil Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M11 2h3v3h-1v1h-3V5h-1V2h2z M10 6h2v2h-2z M8 8h2v2H8z M6 10h2v2H6z M4 12h2v2H4z M2 14h2v2H2z"/></svg>
+                </button>
+                <button id="tool-eraser" class="mc-btn w-full aspect-square flex items-center justify-center" title="Eraser (E)">
+                    <!-- Eraser Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M6 3h6v4h-2v2h-2v2h-2v2H2V9h2V7h2V5z"/></svg>
+                </button>
+                <button id="tool-bucket" class="mc-btn w-full aspect-square flex items-center justify-center" title="Bucket (B)">
+                    <!-- Bucket Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M3 4h10v2h-1v8H4V6H3V4zm2 2v6h6V6H5z"/></svg>
+                </button>
+                <button id="tool-replace" class="mc-btn w-full aspect-square flex items-center justify-center" title="Replace Color (R)">
+                    <!-- Recycle/Replace Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M4 6V4h4V2h2v4H8V5H5v2H4zm8 4v2h-4v2H6v-4h2v1h3V9h1z"/></svg>
+                </button>
+                <button id="tool-shade" class="mc-btn w-full aspect-square flex items-center justify-center" title="Shade/Lighten (S)">
+                    <!-- Shade Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M2 2h12v12H2V2zm6 11V3H3v10h5z"/></svg>
+                </button>
+                <button id="tool-picker" class="mc-btn w-full aspect-square flex items-center justify-center" title="Picker (I)">
+                    <!-- Picker Icon -->
+                    <svg class="pixel-svg-lg" viewBox="0 0 16 16"><path d="M10 2h4v4h-2v2h-2v2h-2v2H4v-4h2V6h2V4h2V2zm-4 8H4v2h2v-2z"/></svg>
+                </button>
+            </div>
+
+            <div class="h-1 w-10 bg-[#555] rounded opacity-50 my-1"></div>
+            
+            <!-- Modifiers -->
+            <div class="flex flex-col gap-2 w-full px-2">
+                <button id="toggle-mirror-x" class="mc-btn w-full py-2 flex items-center justify-center" title="Mirror X">
+                    <!-- Mirror Icon -->
+                    <svg class="pixel-svg" viewBox="0 0 16 16"><path d="M7 2v12H6V2h1zm3 3l3 3-3 3V5zm-4 0v6L3 8l3-3z"/></svg>
+                </button>
+            </div>
+
+            <div class="h-1 w-10 bg-[#555] rounded opacity-50 my-1"></div>
+
+            <!-- Color Picker -->
+            <div class="flex flex-col gap-2 items-center">
+                <label class="text-[#202020] text-[10px] font-bold">COLOR</label>
+                <input type="color" id="color-picker" value="#ff0000" class="w-10 h-10 border-4 border-[#555] p-0 cursor-pointer">
+                <div id="palette" class="grid grid-cols-2 gap-1 px-1">
+                    <!-- Generated via JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Canvas Container -->
+        <div id="canvas-container" class="flex-1 relative bg-[#2a2a2a] overflow-hidden flex items-center justify-center checkerboard">
+            <div class="relative">
+                <canvas id="main-canvas" class="z-10 block"></canvas>
+                <!-- Mirror Line Indicator -->
+                <div id="mirror-line-x" class="absolute top-0 bottom-0 w-[1px] bg-red-500 opacity-50 hidden z-30 pointer-events-none" style="left: 50%;"></div>
+                <div id="grid-overlay" class="absolute top-0 left-0 w-full h-full hidden"></div>
+            </div>
+            
+            <!-- Zoom Controls Overlay -->
+            <div class="absolute bottom-4 right-4 flex gap-2">
+                <div class="mc-panel-dark px-2 py-2 text-white text-xs flex items-center gap-2">
+                    <button id="zoom-out" class="mc-btn w-6 h-6 flex items-center justify-center text-[10px]">-</button>
+                    <span id="zoom-level">100%</span>
+                    <button id="zoom-in" class="mc-btn w-6 h-6 flex items-center justify-center text-[10px]">+</button>
+                </div>
+            </div>
+            
+            <!-- Coordinates Overlay -->
+            <div class="absolute top-4 left-4">
+                <div class="mc-panel-dark px-2 py-2 text-white text-xs">
+                    <span id="coords">0, 0</span>
+                </div>
+            </div>
+            
+             <!-- Auto Save Indicator -->
+            <div id="autosave-indicator" class="absolute bottom-4 left-4 hidden">
+                <div class="text-white text-[10px] opacity-70">Saved...</div>
+            </div>
+        </div>
+
+        <!-- Right Preview Panel -->
+        <div class="hidden lg:flex w-72 bg-[#c6c6c6] border-l-4 border-[#555] flex-col p-4 gap-4 shrink-0 z-10">
+            <h2 class="text-[#202020] text-sm font-bold border-b-2 border-[#555] pb-2 text-center">PREVIEW</h2>
+            
+            <div class="flex flex-col gap-2 items-center w-full flex-1 min-h-0 overflow-y-auto">
+                <!-- Enhanced Preview Box Wrapper -->
+                <div id="preview-container-wrapper" class="p-2 bg-[#8b8b8b] border-t-2 border-l-2 border-[#373737] border-b-2 border-r-2 border-[#fff] shadow-sm flex items-center justify-center transition-all duration-200">
+                    <div class="w-full h-full bg-[#101010] border-2 border-[#000] checkerboard-sm flex items-center justify-center overflow-hidden shadow-inner">
+                        <!-- Canvas fills the container exactly now -->
+                        <canvas id="preview-canvas" class="w-full h-full object-fill" style="image-rendering: pixelated;"></canvas>
+                    </div>
+                </div>
+                
+                <div class="mc-panel px-3 py-1 mt-1 shrink-0">
+                    <p class="text-[#202020] text-center text-[10px]">SIZE: <span id="size-display">16x16</span></p>
+                </div>
+            
+                <div class="flex flex-col gap-2 w-full mt-2 shrink-0">
+                     <button id="btn-grid-toggle" class="mc-btn w-full py-2 text-xs">Toggle Grid</button>
+                     <button id="btn-clear" class="mc-btn w-full py-2 bg-red-800 text-red-200 border-red-900 text-xs">Clear All</button>
+                </div>
+    
+                <!-- Banner Ad Space -->
+                <div class="mt-auto w-full flex flex-col items-center gap-1 shrink-0 pt-4">
+                    <span class="text-[#555] text-[8px]">ADVERTISEMENT</span>
+                    <div class="w-full h-[200px] bg-[#202020] border-4 border-[#111] flex flex-col items-center justify-center text-[#555] relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, #303030 0px, #303030 10px, #202020 10px, #202020 20px);"></div>
+                        <span class="z-10 text-xs border border-[#555] p-2">BANNER AD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- New File Modal -->
+    <div id="new-file-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden">
+        <div class="mc-panel w-[90%] max-w-md p-1">
+            <div class="bg-[#c6c6c6] border-2 border-[#fff] border-b-[#555] border-r-[#555] p-6 flex flex-col gap-4">
+                <h2 class="text-sm text-[#202020] text-center mb-2 leading-6">CREATE NEW TEXTURE</h2>
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-[#202020] text-xs">Presets:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="mc-btn py-3 text-xs preset-btn" data-size="16">16 x 16 (Item)</button>
+                        <button class="mc-btn py-3 text-xs preset-btn" data-size="32">32 x 32 (HD)</button>
+                        <button class="mc-btn py-3 text-xs preset-btn" data-size="64">64 x 64 (Ultra)</button>
+                        <button class="mc-btn py-3 text-xs preset-btn" data-size="128">128 x 128</button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-2">
+                    <label class="text-[#202020] text-xs">Custom Size:</label>
+                    <div class="flex gap-2 items-center">
+                        <input type="number" id="custom-w" class="mc-input w-16 text-xs" value="16" min="1" max="512">
+                        <span class="text-[#202020]">x</span>
+                        <input type="number" id="custom-h" class="mc-input w-16 text-xs" value="16" min="1" max="512">
+                        <button id="btn-create-custom" class="mc-btn px-4 py-2 text-xs flex-1">Create</button>
+                    </div>
+                </div>
+                
+                <button id="btn-cancel-modal" class="text-[#555] underline text-xs text-center mt-2">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="fixed inset-0 modal-overlay z-[60] flex items-center justify-center hidden">
+        <div class="mc-panel w-[90%] max-w-sm p-1">
+             <div class="bg-[#c6c6c6] border-2 border-[#fff] border-b-[#555] border-r-[#555] p-6 flex flex-col gap-4">
+                 <h2 class="text-sm text-[#202020] text-center mb-2">SHARE TEXTURE</h2>
+                 <p class="text-[#555] text-[10px] text-center">Share your creation with the world!</p>
+                 
+                 <div class="flex flex-col gap-1">
+                     <label class="text-[#202020] text-[10px]">Texture Name:</label>
+                     <input type="text" id="share-name" class="mc-input w-full" placeholder="e.g. Ruby Sword">
+                 </div>
+                 
+                 <div class="flex flex-col gap-1">
+                     <label class="text-[#202020] text-[10px]">Creator Name:</label>
+                     <input type="text" id="share-author" class="mc-input w-full bg-[#333] text-[#aaa]" readonly>
+                 </div>
+
+                 <button id="btn-confirm-share" class="mc-btn py-3 text-xs mt-2 bg-[#3c44aa]">
+                    Upload to Gallery 
+                    <svg class="pixel-svg-sm ml-2" viewBox="0 0 16 16"><path d="M4 10H2V7h2V5h2V3h6v2h2v2h2v3h-2v2H4v-2z"/></svg>
+                 </button>
+                 <button onclick="document.getElementById('share-modal').classList.add('hidden')" class="text-[#555] underline text-xs text-center">Cancel</button>
+             </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="fixed inset-0 modal-overlay z-[60] flex items-center justify-center hidden">
+        <div class="mc-panel w-[90%] max-w-sm p-1">
+             <div class="bg-[#c6c6c6] border-2 border-[#fff] border-b-[#555] border-r-[#555] p-6 flex flex-col gap-4">
+                 <h2 class="text-sm text-[#202020] text-center mb-2">USER PROFILE</h2>
+                 
+                 <div class="flex flex-col gap-1">
+                     <label class="text-[#202020] text-[10px]">Display Name:</label>
+                     <input type="text" id="profile-name" class="mc-input w-full" maxlength="20" placeholder="Your Username">
+                 </div>
+
+                 <button id="btn-save-profile" class="mc-btn py-3 text-xs mt-2 bg-[#5e7c16]">
+                    Save Profile 
+                    <svg class="pixel-svg-sm ml-2" viewBox="0 0 16 16"><path d="M2 2h12v12H2V2zm2 10h8V8H4v4zm0-6h8V4H4v2z"/></svg>
+                 </button>
+                 <button onclick="document.getElementById('profile-modal').classList.add('hidden')" class="text-[#555] underline text-xs text-center">Cancel</button>
+             </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="fixed inset-0 modal-overlay z-[60] flex items-center justify-center hidden">
+        <div class="mc-panel w-[95%] max-w-4xl h-[80vh] p-1 flex flex-col">
+             <div class="bg-[#c6c6c6] border-2 border-[#fff] border-b-[#555] border-r-[#555] p-4 flex flex-col gap-4 h-full">
+                 <div class="flex justify-between items-center border-b-2 border-[#555] pb-2">
+                    <h2 class="text-sm text-[#202020]">COMMUNITY GALLERY</h2>
+                    <button onclick="document.getElementById('gallery-modal').classList.add('hidden')" class="mc-btn px-2 py-1 text-xs bg-red-800">X</button>
+                 </div>
+                 
+                 <div id="gallery-grid" class="flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 bg-[#2a2a2a] inner-shadow border-2 border-[#555]">
+                     <p class="text-white col-span-full text-center mt-10">Loading community textures...</p>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 modal-overlay z-[70] flex items-center justify-center hidden">
+        <div class="mc-panel p-1 min-w-[300px]">
+             <div class="bg-[#c6c6c6] border-2 border-[#fff] border-b-[#555] border-r-[#555] p-6 flex flex-col items-center gap-4">
+                 <p id="alert-msg" class="text-[#202020] text-xs text-center leading-5"></p>
+                 <button onclick="document.getElementById('alert-modal').classList.add('hidden')" class="mc-btn px-6 py-2 text-xs">OK</button>
+             </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // --- Firebase Init ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyApt0QkInFFtJRvKayFTaD40QlYx1e9M9A",
+            authDomain: "paint-website-6ec38.firebaseapp.com",
+            projectId: "paint-website-6ec38",
+            storageBucket: "paint-website-6ec38.firebasestorage.app",
+            messagingSenderId: "964813564106",
+            appId: "1:964813564106:web:877924ce9ca1ee1c52ec33",
+            measurementId: "G-F0KBMXHF3M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Use the project ID to namespace the collection to avoid conflicts or use a static ID
+        const appId = 'paint-website-6ec38';
+        
+        let currentUser = null;
+        let userProfile = { displayName: "Guest" };
+        let permissionAlertShown = false;
+
+        const initAuth = async () => {
+             // For public deployment, we simply use anonymous sign-in.
+             await signInAnonymously(auth);
+        };
+        initAuth();
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            if (user) {
+                // Fetch user profile from DB
+                const userRef = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'data');
+                try {
+                    const snap = await getDoc(userRef);
+                    if (snap.exists()) {
+                        userProfile = snap.data();
+                        updateProfileUI();
+                    } else {
+                        // Create default if not exists
+                        await setDoc(userRef, { displayName: "User_" + user.uid.substring(0, 4) });
+                        userProfile = { displayName: "User_" + user.uid.substring(0, 4) };
+                        updateProfileUI();
+                    }
+                } catch (e) {
+                    console.error("Profile fetch error", e);
+                    // Handle "Missing or insufficient permissions" gracefully
+                    if (e.code === 'permission-denied' && !permissionAlertShown) {
+                        permissionAlertShown = true;
+                        showAlert("Database Locked: Please go to Firebase Console -> Firestore Database -> Rules tab and change 'allow read, write: if false;' to 'allow read, write: if true;' to enable saving.");
+                    }
+                    // Fallback to Guest
+                    userProfile = { displayName: "Guest" };
+                    updateProfileUI();
+                }
+            }
+        });
+
+        function updateProfileUI() {
+            document.getElementById('header-username').innerText = userProfile.displayName;
+            document.getElementById('profile-name').value = userProfile.displayName;
+        }
+
+        // --- App State ---
+        const state = {
+            width: 16,
+            height: 16,
+            scale: 20, 
+            isDrawing: false,
+            tool: 'pencil', 
+            color: '#ff0000',
+            pixels: [], 
+            showGrid: true,
+            mirrorX: false,
+            history: [],
+            historyIndex: -1
+        };
+
+        // --- DOM Elements ---
+        const canvas = document.getElementById('main-canvas');
+        const gridOverlay = document.getElementById('grid-overlay');
+        const mirrorLineX = document.getElementById('mirror-line-x');
+        const ctx = canvas.getContext('2d');
+        const previewCanvas = document.getElementById('preview-canvas');
+        const previewCtx = previewCanvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        const colorInput = document.getElementById('color-picker');
+        
+        // --- Initialization ---
+        function init() {
+            setupPalette();
+            const savedData = localStorage.getItem('mc_texture_data');
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    state.width = parsed.width;
+                    state.height = parsed.height;
+                    state.pixels = parsed.pixels;
+                    canvas.width = state.width;
+                    canvas.height = state.height;
+                    previewCanvas.width = state.width;
+                    previewCanvas.height = state.height;
+                    document.getElementById('size-display').innerText = `${state.width}x${state.height}`;
+                    updatePreviewContainer(state.width, state.height);
+                    centerCanvas();
+                    draw();
+                    saveHistory(false); 
+                } catch(e) {
+                    console.error(e);
+                    resizeCanvas(16, 16);
+                    document.getElementById('new-file-modal').classList.remove('hidden');
+                }
+            } else {
+                resizeCanvas(16, 16);
+                document.getElementById('new-file-modal').classList.remove('hidden');
+            }
+            setupEventListeners();
+        }
+
+        // --- Canvas Logic ---
+        function resizeCanvas(w, h) {
+            state.width = parseInt(w);
+            state.height = parseInt(h);
+            state.pixels = Array(state.height).fill(null).map(() => Array(state.width).fill(null)); 
+            canvas.width = state.width;
+            canvas.height = state.height;
+            previewCanvas.width = state.width;
+            previewCanvas.height = state.height;
+            document.getElementById('size-display').innerText = `${state.width}x${state.height}`;
+            updatePreviewContainer(state.width, state.height);
+            centerCanvas();
+            draw();
+            saveHistory();
+        }
+
+        function updatePreviewContainer(w, h) {
+            const wrapper = document.getElementById('preview-container-wrapper');
+            const maxWidth = 240; 
+            const maxHeight = 240; 
+            const ratio = w / h;
+            let finalW, finalH;
+            if (w > h) { finalW = maxWidth; finalH = maxWidth / ratio; }
+            else { finalH = maxHeight; finalW = maxHeight * ratio; }
+            wrapper.style.width = `${finalW}px`;
+            wrapper.style.height = `${finalH}px`;
+        }
+
+        function centerCanvas() {
+            const containerW = container.clientWidth;
+            const containerH = container.clientHeight;
+            const maxScaleW = (containerW * 0.8) / state.width;
+            const maxScaleH = (containerH * 0.8) / state.height;
+            state.scale = Math.floor(Math.min(maxScaleW, maxScaleH));
+            if (state.scale < 1) state.scale = 1;
+            updateCanvasTransform();
+            updateZoomDisplay();
+        }
+
+        function updateCanvasTransform() {
+            const cssW = `${state.width * state.scale}px`;
+            const cssH = `${state.height * state.scale}px`;
+            canvas.style.width = cssW;
+            canvas.style.height = cssH;
+            gridOverlay.style.backgroundSize = `${state.scale}px ${state.scale}px`;
+            gridOverlay.style.width = cssW;
+            gridOverlay.style.height = cssH;
+            if (state.showGrid && state.scale >= 4) gridOverlay.classList.remove('hidden');
+            else gridOverlay.classList.add('hidden');
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, state.width, state.height);
+            previewCtx.clearRect(0, 0, state.width, state.height);
+            for (let y = 0; y < state.height; y++) {
+                for (let x = 0; x < state.width; x++) {
+                    const color = state.pixels[y][x];
+                    if (color) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x, y, 1, 1);
+                        previewCtx.fillStyle = color;
+                        previewCtx.fillRect(x, y, 1, 1);
+                    }
+                }
+            }
+        }
+
+        // --- Tools ---
+        function handlePointer(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = Math.floor((e.clientX - rect.left) * scaleX);
+            const y = Math.floor((e.clientY - rect.top) * scaleY);
+            document.getElementById('coords').innerText = `${Math.max(0, Math.min(x, state.width-1))}, ${Math.max(0, Math.min(y, state.height-1))}`;
+            const isRightClick = e.button === 2;
+            if (e.type === 'pointerdown') {
+                state.isDrawing = true;
+                useTool(x, y, isRightClick);
+            } else if (e.type === 'pointermove' && state.isDrawing) {
+                useTool(x, y, isRightClick);
+            } else if (e.type === 'pointerup' || e.type === 'pointerleave') {
+                if(state.isDrawing) saveHistory();
+                state.isDrawing = false;
+            }
+        }
+
+        function useTool(x, y, alternate = false) {
+            if (x < 0 || x >= state.width || y < 0 || y >= state.height) return;
+            const apply = (tx, ty) => {
+                if (state.tool === 'pencil') {
+                    if (state.pixels[ty][tx] !== state.color) state.pixels[ty][tx] = state.color;
+                } else if (state.tool === 'eraser') {
+                    state.pixels[ty][tx] = null;
+                } else if (state.tool === 'bucket') {
+                    fill(tx, ty, state.pixels[ty][tx], state.color);
+                    state.isDrawing = false; 
+                } else if (state.tool === 'picker') {
+                    const color = state.pixels[ty][tx];
+                    if (color) { setColor(color); setTool('pencil'); state.isDrawing = false; }
+                } else if (state.tool === 'replace') {
+                    replaceColor(state.pixels[ty][tx], state.color);
+                    state.isDrawing = false;
+                } else if (state.tool === 'shade') {
+                    const factor = alternate ? 15 : -15;
+                    if (state.pixels[ty][tx]) state.pixels[ty][tx] = adjustColor(state.pixels[ty][tx], factor);
+                }
+            };
+            apply(x, y);
+            if (state.mirrorX && state.tool !== 'picker' && state.tool !== 'replace' && state.tool !== 'bucket') {
+                const mx = state.width - 1 - x;
+                if (mx !== x) apply(mx, y);
+            }
+            draw();
+        }
+
+        function replaceColor(targetColor, replacementColor) {
+            if (targetColor === replacementColor) return;
+            for (let y = 0; y < state.height; y++) {
+                for (let x = 0; x < state.width; x++) {
+                    if (state.pixels[y][x] === targetColor) state.pixels[y][x] = replacementColor;
+                }
+            }
+        }
+
+        function adjustColor(hex, amount) {
+            let col = hex.slice(1);
+            let num = parseInt(col, 16);
+            let r = (num >> 16) + amount;
+            let g = ((num >> 8) & 0x00FF) + amount;
+            let b = (num & 0x0000FF) + amount;
+            r = Math.max(Math.min(255, r), 0);
+            g = Math.max(Math.min(255, g), 0);
+            b = Math.max(Math.min(255, b), 0);
+            return "#" + (g | (b << 8) | (r << 16)).toString(16).padStart(6,0);
+        }
+
+        function fill(startX, startY, targetColor, replacementColor) {
+            if (targetColor === replacementColor) return;
+            const stack = [[startX, startY]];
+            while (stack.length) {
+                const [x, y] = stack.pop();
+                if (x < 0 || x >= state.width || y < 0 || y >= state.height) continue;
+                if (state.pixels[y][x] !== targetColor) continue;
+                state.pixels[y][x] = replacementColor;
+                stack.push([x + 1, y]);
+                stack.push([x - 1, y]);
+                stack.push([x, y + 1]);
+                stack.push([x, y - 1]);
+            }
+        }
+
+        function saveHistory(doAutoSave = true) {
+            const snapshot = JSON.stringify(state.pixels);
+            if (state.historyIndex < state.history.length - 1) state.history = state.history.slice(0, state.historyIndex + 1);
+            state.history.push(snapshot);
+            state.historyIndex++;
+            if(state.history.length > 30) { state.history.shift(); state.historyIndex--; }
+            if (doAutoSave) {
+                localStorage.setItem('mc_texture_data', JSON.stringify({
+                    width: state.width,
+                    height: state.height,
+                    pixels: state.pixels
+                }));
+                const indicator = document.getElementById('autosave-indicator');
+                indicator.classList.remove('hidden');
+                setTimeout(() => indicator.classList.add('hidden'), 1000);
+            }
+        }
+        
+        // --- UI Handling ---
+        function setupPalette() {
+            const colors = ['#1d1d21', '#b02e26', '#5e7c16', '#3c44aa', '#8932b8', '#169c9c', '#9d9d97', '#474f52', '#f38baa', '#80c71f', '#fed83d', '#3ab3da', '#c74ebd', '#f9801d', '#f9fffe', '#000000', '#597d27', '#6e3c15', '#22e0b5', '#a020f0'];
+            const pContainer = document.getElementById('palette');
+            colors.forEach(c => {
+                const btn = document.createElement('div');
+                btn.className = "w-6 h-6 border-2 border-[#555] cursor-pointer hover:scale-110 transition-transform";
+                btn.style.backgroundColor = c;
+                btn.onclick = () => setColor(c);
+                pContainer.appendChild(btn);
+            });
+        }
+
+        function setColor(hex) {
+            state.color = hex;
+            colorInput.value = hex;
+        }
+
+        function setTool(toolName) {
+            state.tool = toolName;
+            document.querySelectorAll('.mc-btn.selected').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`tool-${toolName}`).classList.add('selected');
+        }
+
+        function handleFileImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > 128 || h > 128) if (!confirm("Image is large. Import anyway?")) return;
+                    resizeCanvas(w, h);
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = w;
+                    tempCanvas.height = h;
+                    const tCtx = tempCanvas.getContext('2d');
+                    tCtx.drawImage(img, 0, 0);
+                    const imgData = tCtx.getImageData(0, 0, w, h);
+                    const data = imgData.data;
+                    for (let y = 0; y < h; y++) {
+                        for (let x = 0; x < w; x++) {
+                            const i = (y * w + x) * 4;
+                            const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+                            if (a > 10) state.pixels[y][x] = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                            else state.pixels[y][x] = null;
+                        }
+                    }
+                    draw();
+                    saveHistory();
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+            e.target.value = ''; 
+        }
+
+        // --- Profile Logic ---
+        async function saveProfile() {
+            if(!currentUser) return;
+            const newName = document.getElementById('profile-name').value.trim();
+            if(!newName) return showAlert("Name cannot be empty");
+            
+            const userRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'profile', 'data');
+            try {
+                await setDoc(userRef, { displayName: newName });
+                userProfile.displayName = newName;
+                updateProfileUI();
+                document.getElementById('profile-modal').classList.add('hidden');
+                showAlert("Profile saved!");
+            } catch(e) {
+                showAlert("Error saving profile.");
+            }
+        }
+
+        // --- Sharing & Gallery ---
+        async function shareTexture() {
+            if (!currentUser) return showAlert("Not connected. Please wait...");
+            const name = document.getElementById('share-name').value.trim() || "Untitled Texture";
+            const previewData = canvas.toDataURL('image/png');
+            if (previewData.length > 1000000) return showAlert("Texture is too complex/large to share (Over 1MB).");
+            
+            document.getElementById('share-modal').classList.add('hidden');
+            showAlert("Uploading...");
+            try {
+                const texturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'shared_textures');
+                await addDoc(texturesRef, {
+                    name: name,
+                    width: state.width,
+                    height: state.height,
+                    preview: previewData, 
+                    createdAt: Date.now(),
+                    author: userProfile.displayName || "Anon",
+                    likes: 0,
+                    likedBy: []
+                });
+                showAlert("Success! Texture shared to gallery.");
+            } catch (e) {
+                showAlert("Upload failed: " + e.message);
+            }
+        }
+
+        async function openGallery() {
+            document.getElementById('gallery-modal').classList.remove('hidden');
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '<p class="text-white col-span-full text-center mt-10">Loading textures...</p>';
+            try {
+                const texturesRef = collection(db, 'artifacts', appId, 'public', 'data', 'shared_textures');
+                const snapshot = await getDocs(texturesRef);
+                const docs = [];
+                snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+                docs.sort((a, b) => b.createdAt - a.createdAt);
+                
+                grid.innerHTML = '';
+                if (docs.length === 0) {
+                     grid.innerHTML = '<p class="text-white col-span-full text-center mt-10">No textures shared yet.</p>';
+                     return;
+                }
+                docs.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-[#3b3b3b] border-2 border-[#000] p-2 flex flex-col gap-2 hover:brightness-110 transition-all relative";
+                    
+                    const img = document.createElement('img');
+                    img.src = item.preview;
+                    img.className = "w-full aspect-square object-contain bg-[#101010] border border-[#555] checkerboard-sm pixelated";
+                    img.style.imageRendering = "pixelated";
+
+                    const title = document.createElement('h3');
+                    title.className = "text-white text-[10px] truncate font-bold";
+                    title.innerText = item.name;
+                    
+                    const info = document.createElement('div');
+                    info.className = "flex justify-between text-[#888] text-[8px]";
+                    info.innerHTML = `<span>${item.width}x${item.height}</span><span>User: ${item.author || 'Anon'}</span>`;
+
+                    // Like Button
+                    const likeContainer = document.createElement('div');
+                    likeContainer.className = "flex justify-between items-center mt-1";
+                    
+                    const likeBtn = document.createElement('button');
+                    const isLiked = item.likedBy && item.likedBy.includes(currentUser?.uid);
+                    likeBtn.className = `text-xs heart-btn ${isLiked ? 'liked' : 'text-gray-400'}`;
+                    // Heart Pixel Icon
+                    const heartPath = "M2 4h2v-2h2v-2h4v2h2v2h2v4h-2v2h-2v2h-2v2h-2v2h-2v-2h-2v-2h-2v-2h-2v-4z";
+                    likeBtn.innerHTML = `
+                        <svg class="pixel-svg-sm mr-1" viewBox="0 0 16 16">
+                           <path d="${heartPath}"/>
+                        </svg> 
+                        <span id="likes-${item.id}">${item.likes || 0}</span>`;
+                    likeBtn.onclick = (e) => { e.stopPropagation(); toggleLike(item, likeBtn); };
+
+                    const loadBtn = document.createElement('button');
+                    loadBtn.className = "mc-btn px-2 py-1 text-[8px]";
+                    loadBtn.innerText = "LOAD";
+                    loadBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        loadSharedTexture(item);
+                    };
+
+                    likeContainer.appendChild(likeBtn);
+                    likeContainer.appendChild(loadBtn);
+
+                    card.appendChild(img);
+                    card.appendChild(title);
+                    card.appendChild(info);
+                    card.appendChild(likeContainer);
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                grid.innerHTML = '<p class="text-red-400 col-span-full text-center mt-10">Error loading gallery.</p>';
+            }
+        }
+
+        async function toggleLike(item, btnElement) {
+            if (!currentUser) return showAlert("Please wait for connection...");
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_textures', item.id);
+            const isLiked = item.likedBy && item.likedBy.includes(currentUser.uid);
+            const countSpan = btnElement.querySelector('span');
+            let currentCount = parseInt(countSpan.innerText);
+
+            if (isLiked) {
+                btnElement.classList.remove('liked');
+                btnElement.classList.add('text-gray-400');
+                countSpan.innerText = currentCount - 1;
+                item.likedBy = item.likedBy.filter(uid => uid !== currentUser.uid);
+                item.likes--;
+                await updateDoc(docRef, {
+                    likes: increment(-1),
+                    likedBy: arrayRemove(currentUser.uid)
+                });
+            } else {
+                btnElement.classList.add('liked');
+                btnElement.classList.remove('text-gray-400');
+                countSpan.innerText = currentCount + 1;
+                if(!item.likedBy) item.likedBy = [];
+                item.likedBy.push(currentUser.uid);
+                item.likes = (item.likes || 0) + 1;
+                await updateDoc(docRef, {
+                    likes: increment(1),
+                    likedBy: arrayUnion(currentUser.uid)
+                });
+            }
+        }
+
+        function loadSharedTexture(item) {
+             if (!confirm(`Load "${item.name}"? This will replace your current canvas.`)) return;
+             const img = new Image();
+             img.crossOrigin = "Anonymous"; 
+             img.onload = function() {
+                 // Use true image dimensions
+                 state.width = img.width;
+                 state.height = img.height;
+                 
+                 canvas.width = state.width;
+                 canvas.height = state.height;
+                 previewCanvas.width = state.width;
+                 previewCanvas.height = state.height;
+                 
+                 const tempCanvas = document.createElement('canvas');
+                 tempCanvas.width = state.width;
+                 tempCanvas.height = state.height;
+                 const tCtx = tempCanvas.getContext('2d');
+                 tCtx.drawImage(img, 0, 0);
+                 
+                 const imgData = tCtx.getImageData(0, 0, state.width, state.height);
+                 const data = imgData.data;
+                 
+                 state.pixels = Array(state.height).fill(null).map(() => Array(state.width).fill(null));
+                 
+                 for (let y = 0; y < state.height; y++) {
+                    for (let x = 0; x < state.width; x++) {
+                        const i = (y * state.width + x) * 4;
+                        const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+                        if (a > 10) {
+                            state.pixels[y][x] = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                        } else {
+                            state.pixels[y][x] = null;
+                        }
+                    }
+                 }
+                 
+                 document.getElementById('size-display').innerText = `${state.width}x${state.height}`;
+                 updatePreviewContainer(state.width, state.height);
+                 centerCanvas();
+                 draw();
+                 saveHistory();
+                 
+                 document.getElementById('gallery-modal').classList.add('hidden');
+                 showAlert(`Loaded "${item.name}"!`);
+             };
+             img.onerror = function() {
+                 showAlert("Error: Failed to load texture image.");
+             };
+             img.src = item.preview;
+        }
+
+        function setupEventListeners() {
+            canvas.addEventListener('pointerdown', handlePointer);
+            canvas.addEventListener('pointermove', handlePointer);
+            canvas.addEventListener('pointerup', handlePointer);
+            canvas.addEventListener('pointerleave', handlePointer);
+            canvas.addEventListener('contextmenu', e => e.preventDefault());
+            document.getElementById('tool-pencil').onclick = () => setTool('pencil');
+            document.getElementById('tool-eraser').onclick = () => setTool('eraser');
+            document.getElementById('tool-bucket').onclick = () => setTool('bucket');
+            document.getElementById('tool-picker').onclick = () => setTool('picker');
+            document.getElementById('tool-replace').onclick = () => setTool('replace');
+            document.getElementById('tool-shade').onclick = () => setTool('shade');
+            document.getElementById('toggle-mirror-x').onclick = (e) => {
+                state.mirrorX = !state.mirrorX;
+                e.currentTarget.classList.toggle('active-toggle');
+                mirrorLineX.classList.toggle('hidden');
+            };
+            document.getElementById('btn-import').onclick = () => document.getElementById('file-import').click();
+            document.getElementById('file-import').onchange = handleFileImport;
+            document.getElementById('btn-share').onclick = () => {
+                document.getElementById('share-author').value = userProfile.displayName;
+                document.getElementById('share-modal').classList.remove('hidden');
+            };
+            document.getElementById('btn-confirm-share').onclick = shareTexture;
+            document.getElementById('btn-gallery').onclick = openGallery;
+            document.getElementById('btn-profile').onclick = () => document.getElementById('profile-modal').classList.remove('hidden');
+            document.getElementById('btn-save-profile').onclick = saveProfile;
+            colorInput.addEventListener('input', (e) => state.color = e.target.value);
+            document.getElementById('zoom-in').onclick = () => {
+                state.scale += 2;
+                updateCanvasTransform();
+                updateZoomDisplay();
+            };
+            document.getElementById('zoom-out').onclick = () => {
+                if(state.scale > 2) state.scale -= 2;
+                updateCanvasTransform();
+                updateZoomDisplay();
+            };
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.onclick = () => {
+                    resizeCanvas(btn.dataset.size, btn.dataset.size);
+                    document.getElementById('new-file-modal').classList.add('hidden');
+                };
+            });
+            document.getElementById('btn-create-custom').onclick = () => {
+                const w = document.getElementById('custom-w').value;
+                const h = document.getElementById('custom-h').value;
+                resizeCanvas(w, h);
+                document.getElementById('new-file-modal').classList.add('hidden');
+            };
+            document.getElementById('btn-cancel-modal').onclick = () => document.getElementById('new-file-modal').classList.add('hidden');
+            document.getElementById('btn-new').onclick = () => document.getElementById('new-file-modal').classList.remove('hidden');
+            document.getElementById('btn-clear').onclick = () => {
+                state.pixels = Array(state.height).fill(null).map(() => Array(state.width).fill(null));
+                draw();
+                saveHistory();
+            };
+            document.getElementById('btn-export').onclick = downloadImage;
+            document.getElementById('btn-grid-toggle').onclick = () => {
+                state.showGrid = !state.showGrid;
+                updateCanvasTransform();
+            };
+            window.addEventListener('keydown', (e) => {
+                if (!document.getElementById('new-file-modal').classList.contains('hidden')) return;
+                if (!document.getElementById('share-modal').classList.contains('hidden')) return;
+                if (!document.getElementById('profile-modal').classList.contains('hidden')) return;
+                if (e.key === 'p') setTool('pencil');
+                if (e.key === 'e') setTool('eraser');
+                if (e.key === 'b') setTool('bucket');
+                if (e.key === 'i') setTool('picker');
+                if (e.key === 'r') setTool('replace');
+                if (e.key === 's') setTool('shade');
+                if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+                    if(state.historyIndex > 0) {
+                        state.historyIndex--;
+                        state.pixels = JSON.parse(state.history[state.historyIndex]);
+                        draw();
+                        localStorage.setItem('mc_texture_data', JSON.stringify({width: state.width, height: state.height, pixels: state.pixels}));
+                    }
+                }
+            });
+        }
+        function updateZoomDisplay() { document.getElementById('zoom-level').innerText = `${state.scale}x`; }
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'texture.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showAlert("Texture downloaded!");
+        }
+        function showAlert(msg) {
+            document.getElementById('alert-msg').innerText = msg;
+            document.getElementById('alert-modal').classList.remove('hidden');
+        }
+        window.loadSharedTexture = loadSharedTexture;
+        init();
+    </script>
+</body>
+</html>
