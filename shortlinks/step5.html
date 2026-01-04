@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الخطوة 2/4 - Stack Regulator Addon</title>
+
+<script
+  type="text/javascript"
+  src="https://petsrulefondness.com/ce/c3/ff/cec3fffa19ec312a6f3e913ea42f39e7.js"
+></script>
+  <script type="text/javascript" src="//pl25818958.effectivegatecpm.com/e7/e5/9d/e7e59dd20cde20d805842c0f5d81b184.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
+
+    :root {
+      --primary-color: #55ff55;
+      --bg-color: #1a1a1a;
+      --card-bg: #252525;
+      --border-color: #444;
+      --text-color: #eee;
+      --alert-color: #ffaa00;
+      --content-text-color: #bbb;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: radial-gradient(#333 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: var(--text-color);
+      font-family: 'Changa', sans-serif;
+      margin: 0;
+      padding: 20px;
+      padding-bottom: 80px; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      text-align: right;
+      position: relative;
+      z-index: 10;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-top: 0;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+    
+    h2 {
+        color: #fff;
+        font-size: 1.2rem;
+        border-right: 4px solid var(--alert-color);
+        padding-right: 10px;
+        margin-top: 30px;
+    }
+
+    p, li {
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: var(--content-text-color);
+        margin-bottom: 15px;
+    }
+
+    ul {
+        margin-right: 20px;
+        padding-left: 0;
+    }
+
+    /* Ad Box Styles */
+    .ad-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px dashed #555;
+      margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 728px; 
+      min-height: 90px;
+    }
+    
+    .ad-inline {
+        margin: 20px auto;
+        max-width: 468px;
+        min-height: 60px;
+    }
+    .ad-middle {
+        float: left;
+        margin: 10px 10px 10px 20px;
+        max-width: 300px;
+        min-height: 250px;
+    }
+
+    /* Sidebar Ads */
+    .sidebar-ad {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        border: 1px dashed #444;
+        display: none; 
+        z-index: 5;
+        justify-content: center;
+        align-items: center;
+    }
+    .left-ad { left: 10px; width: 160px; height: 300px; } 
+    .right-ad { right: 10px; width: 160px; height: 600px; } 
+
+    @media (min-width: 1300px) {
+        .sidebar-ad { display: flex; }
+    }
+    
+    .task-area {
+      background: rgba(255, 170, 0, 0.1);
+      border: 1px solid var(--alert-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .task-title {
+      color: var(--alert-color);
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    .scan-btn {
+      background: var(--alert-color);
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      font-family: 'Changa', sans-serif;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: 0.3s;
+      animation: pulse 2s infinite;
+    }
+
+    /* Keyframes for pulse animation */
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 170, 0, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
+    }
+
+    .next-btn {
+      background: #333;
+      color: #777;
+      border: 2px solid #444;
+      padding: 15px;
+      font-family: 'Changa', sans-serif;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      cursor: not-allowed;
+      width: 100%;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .next-btn.unlocked {
+      background: var(--primary-color);
+      color: #000;
+      border-color: #00aa00;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(85, 255, 85, 0.4);
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar-ad left-ad">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '42385376ebb95a07df235585974478e3',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/42385376ebb95a07df235585974478e3/invoke.js"></script>
+  </div>
+
+  <div class="sidebar-ad right-ad">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '3517ae94fe615ed9633556c88eb04159',
+        'format' : 'iframe',
+        'height' : 600,
+        'width' : 160,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/3517ae94fe615ed9633556c88eb04159/invoke.js"></script>
+  </div>
+
+  <div class="ad-box" style="min-height: 90px;">
+    <script type="text/javascript">
+      atOptions = {
+        'key' : '1c052379eaa4f622ad59cae13d01ed4f',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/1c052379eaa4f622ad59cae13d01ed4f/invoke.js"></script>
+  </div>
+
+  <div class="container">
+    <h1>الخطوة 2 من 4: إضافة Stack Regulator لإدارة المخزون</h1>
+    
+    <div class="content-section">
+        <h2>ما هي إضافة Stack Regulator؟</h2>
+        <p>
+          هل سئمت من حد الـ 64 قطعة في المخزون؟ إضافة <strong>Stack Regulator</strong> هي الحل الثوري للاعبي ماين كرافت Bedrock. هذه الأداة تسمح لك بكسر القيود الافتراضية وتخزين آلاف العناصر في خانة واحدة.
+        </p>
+
+        <div class="ad-box ad-middle">
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+        
+        <h2>نظام الترقية بالخبرة (XP)</h2>
+        <p>
+          الإضافة لا تعطيك تخزيناً لانهائياً مجاناً، بل تعتمد على نظام توازن ذكي. يمكنك ترقية سعة التخزين الخاصة بك باستخدام نقاط الخبرة (XP). ابدأ من 64، ثم قم بالترقية إلى 128، 256، وحتى 5000 قطعة!
+        </p>
+        
+        <div class="ad-box ad-inline" style="min-height: 250px; max-width: 300px;">
+            <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+            <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+        </div>
+        
+        <h2>المميزات التقنية</h2>
+        <ul>
+            <li><strong>الدمج التلقائي الذكي:</strong> تقوم الإضافة تلقائياً بدمج العناصر التي تلتقطها من الأرض داخل المخزون المطور.</li>
+            <li><strong>تقنية منع الفقدان:</strong> الأدوات المطورة محمية ولا يمكن فقدانها بسهولة باستخدام Script API.</li>
+            <li><strong>واجهة مستخدم متطورة:</strong> تحكم كامل في الإعدادات والترقيات عبر قوائم تفاعلية.</li>
+        </ul>
+        
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <h2>لماذا هذا المود ضروري؟</h2>
+        <p>
+          سواء كنت تقوم بحفر مناطق شاسعة، أو بناء مزارع ضخمة، فإن Stack Regulator يوفر لك "حقيبة ظهر" افتراضية دون الحاجة لإضافات خارجية معقدة.
+        </p>
+        
+        <div class="ad-box ad-middle" style="float: right; margin-left: 0; margin-right: 20px; max-width: 300px; min-height: 250px;">
+           <script type="text/javascript">
+            atOptions = {
+              'key' : '4fe73cfda77ad7552dfbe63d6f8e1f87',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script type="text/javascript" src="//www.highperformanceformat.com/4fe73cfda77ad7552dfbe63d6f8e1f87/invoke.js"></script>
+        </div>
+        
+        <p>
+          تأكد من تفعيل خيارات "Beta APIs" في إعدادات العالم لضمان عمل المود بكفاءة.
+        </p>
+        
+        <div class="ad-box ad-inline">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+        </div>
+
+        <div style="clear: both;"></div>
+    </div>
+
+    <div class="task-area">
+      <div class="task-title">⚠️ تأكيد المتابعة</div>
+      <div class="task-desc">اضغط على الزر أدناه لتأكيد أنك لست برنامج روبوت وللمتابعة.</div>
+      
+      <button id="scan-btn" class="scan-btn" onclick="startScan()">[ اضغط هنا للمتابعة ]</button>
+    </div>
+
+    <div class="ad-box" style="width: 100%; border: none; background: transparent; margin-bottom: 25px;">
+        <script async="async" data-cfasync="false" src="//pl28204793.effectivegatecpm.com/f44aa8675141ce4eb20c3eb9381c77b5/invoke.js"></script>
+        <div id="container-f44aa8675141ce4eb20c3eb9381c77b5"></div>
+    </div>
+
+    <button id="next-btn" class="next-btn" onclick="goToStep3()" disabled>🔒 الرابط مقفل - تابع الخطوات</button>
+  </div>
+
+  <div class="ad-box" style="margin-top: 20px;">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '2daa63f6b0c15a895bcb7aba16a017e0',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/2daa63f6b0c15a895bcb7aba16a017e0/invoke.js"></script>
+  </div>
+
+  <script>
+    const nextPage = "step3.html"; 
+    
+    // إعلان (Direct Link)
+    const link = "https://www.effectivegatecpm.com/ky93gczyq?key=d20ee465a03539f6a6c886340a69d83d";
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const secureToken = urlParams.get('q'); // النظام الجديد
+    const oldUrl = urlParams.get('url');    // النظام القديم
+
+    const scanBtn = document.getElementById('scan-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    function startScan() {
+      if(link) {
+        window.open(link, '_blank');
+      }
+
+      scanBtn.innerHTML = 'جاري الفحص...';
+      scanBtn.style.backgroundColor = '#555';
+      scanBtn.style.color = '#fff';
+      scanBtn.style.animation = 'none';
+      scanBtn.disabled = true;
+
+      setTimeout(() => {
+        scanBtn.innerHTML = '✅ تم التحقق بنجاح';
+        scanBtn.style.backgroundColor = 'transparent';
+        scanBtn.style.color = '#55ff55';
+        scanBtn.style.border = '1px solid #55ff55';
+        
+        nextBtn.disabled = false;
+        nextBtn.classList.add('unlocked');
+        nextBtn.innerHTML = 'الخطوة التالية >>';
+      }, 2500);
+    }
+
+    // دالة الانتقال للخطوة 3
+    function goToStep3() {
+        if(!nextBtn.classList.contains('unlocked')) return;
+        
+        nextBtn.innerHTML = 'جاري التوجيه...';
+
+        setTimeout(() => {
+            if (secureToken) {
+                // تمرير الكود المشفر كما هو
+                window.location.href = nextPage + "?q=" + secureToken;
+            } else if (oldUrl) {
+                // تمرير الرابط القديم
+                window.location.href = nextPage + "?url=" + encodeURIComponent(oldUrl);
+            } else {
+                window.location.href = nextPage;
+            }
+        }, 500);
+    }
+  </script>
+</body>
+</html>
