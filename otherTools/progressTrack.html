@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bedrock Addon Tracker (Core)</title>
+    <title>Bedrock Addon Tracker (Pro)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -108,6 +108,12 @@
         .val-blue { color: #5555ff; font-size: 0.8rem; }
         .val-purple { color: #ff55ff; font-size: 0.8rem; }
         .val-red { color: #ff5555; font-size: 0.8rem; }
+        .val-orange { color: var(--mc-orange); font-size: 0.8rem; }
+
+        /* Percentages */
+        .pct-up { color: #55ff55; font-size: 0.6rem; display: block; margin-top: 3px; }
+        .pct-down { color: #ff5555; font-size: 0.6rem; display: block; margin-top: 3px; }
+        .pct-neutral { color: #aaa; font-size: 0.6rem; display: block; margin-top: 3px; }
 
         .action-btn {
             background: #555; border: 2px solid #000; color: white;
@@ -263,17 +269,20 @@
         <div class="stats-bar">
             <div class="stat-box">
                 <div>$/Pt Rate</div>
-                <!-- CHANGED: step="any" allows any decimal precision -->
                 <input type="number" id="pointRate" value="0.05" class="rate-input" step="any" onchange="updateRevenue()">
             </div>
             <div class="stat-box">
                 <div>Daily Goal</div>
                 <input type="number" id="goalPoints" value="120" class="goal-input" onchange="saveGoal()">
             </div>
+            <!-- FEATURE: Est. Month -->
+            <div class="stat-box">
+                <div>Est. Month</div>
+                <div class="val-orange">$<span id="projMonthDisplay">0.00</span></div>
+            </div>
             <div class="stat-box" style="flex-grow:2;">
                 <div>Log Pts</div>
                 <div class="log-input-group">
-                    <!-- CHANGED: step="any" allows any decimal precision -->
                     <input type="number" id="currentPoints" value="18" step="any" onchange="updateRevenue()">
                     <input type="text" id="logNote" class="note-input" placeholder="Note">
                     <button class="action-btn" onclick="logPoints()">LOG</button>
@@ -283,17 +292,15 @@
                 <div>Daily $</div>
                 <div class="val-green">$<span id="revenueDisplay">0.00</span></div>
             </div>
+            <!-- FEATURE: Revenue Growth % -->
             <div class="stat-box">
                 <div>Last 7 Days</div>
-                <div class="val-blue">$<span id="last7TotalDisplay">0.00</span> <span id="mom7"></span></div>
+                <div class="val-blue">$<span id="last7TotalDisplay">0.00</span></div>
+                <span id="weekGrowthPct" class="pct-neutral">--</span>
             </div>
             <div class="stat-box">
                 <div>Lifetime $</div>
                 <div class="val-purple">$<span id="lifetimeDisplay">0.00</span></div>
-            </div>
-            <div class="stat-box">
-                <div>7-Day Avg</div>
-                <div class="val-yellow">$<span id="avg7DayDisplay">0.00</span></div>
             </div>
         </div>
 
@@ -312,6 +319,8 @@
                 [Click to Toggle Data Table]
             </div>
             <div style="display:flex; gap:5px;">
+                 <!-- FEATURE: Copy Backup -->
+                 <button class="action-btn" style="background:#e67e22;" onclick="copyDataToClipboard()">COPY DATA</button>
                  <label class="action-btn" style="background:#42b74f; cursor:pointer;">
                     IMPORT <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData()">
                  </label>
@@ -331,7 +340,8 @@
         <!-- Groups -->
         <div class="reference-box">
             <button class="edit-groups-btn" onclick="openEditGroups()">[MANAGE PROJECTS]</button>
-            <strong>Strategy Groups:</strong><br><br>
+            <!-- FEATURE: Download Growth % -->
+            <strong>Strategy Groups</strong> <span id="globalDownloadGrowth" style="font-size:0.6rem; margin-left:10px; color:#888;"></span><br><br>
             <div id="groupsDisplay"></div>
         </div>
 
@@ -346,7 +356,7 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 0. DATA MODEL (FIX: Attached to window for inline HTML access) ---
+        // --- 0. DATA MODEL ---
         window.appData = {
             points: 18, 
             goal: 120, 
@@ -370,9 +380,7 @@
             pointsLog: [] 
         };
 
-        // Temporary data for edits (FIX: Attached to window)
         window.tempGroups = {};
-
         let db, auth, user;
         let firestoreDocRef = null;
         let useFirestore = false;
@@ -380,26 +388,17 @@
         // --- 1. CORE HELPERS ---
         function escapeHtml(text) {
             if (!text) return "";
-            return String(text)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        function getTodayString() {
-            return new Date().toLocaleDateString('en-US');
-        }
+        function getTodayString() { return new Date().toLocaleDateString('en-US'); }
 
         function getRate() { 
             const el = document.getElementById('pointRate');
             return el ? (parseFloat(el.value) || 0.05) : 0.05; 
         }
 
-        // UPGRADED SAVE FUNCTION
         function saveData() {
-            // Update appData from DOM elements first
             const elPoints = document.getElementById('currentPoints');
             if(elPoints) window.appData.points = elPoints.value;
             const elGoal = document.getElementById('goalPoints');
@@ -408,11 +407,8 @@
             if(elRate) window.appData.rate = elRate.value;
 
             if (useFirestore && firestoreDocRef) {
-                // Save to Cloud
-                setDoc(firestoreDocRef, window.appData)
-                    .catch(e => console.error("Error saving to cloud:", e));
+                setDoc(firestoreDocRef, window.appData).catch(e => console.error("Error saving to cloud:", e));
             } else {
-                // Save to Local (Fallback)
                 localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(window.appData));
             }
         }
@@ -425,12 +421,10 @@
             tbody.innerHTML = "";
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 [...window.appData.pointsLog].reverse().forEach((l,i) => {
-                    // CHANGED: Use parseFloat to respect decimals in log calculation
                     const val = parseFloat(l.value) || 0;
                     const earn = (val * rate) + (l.externalRevenue||0);
                     const idx = window.appData.pointsLog.length - 1 - i;
                     const safeNote = escapeHtml(l.note||'-');
-                    // CHANGED: Display exact 'val' (no rounding) and earn with 4 decimals
                     tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${val}</td><td>${safeNote}</td><td>$${earn.toFixed(4)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
             }
@@ -440,18 +434,73 @@
             const container = document.getElementById('groupsDisplay');
             if(!container) return;
             container.innerHTML = "";
+            
+            // FEATURE: Calculate Total Download Growth & Find Top Group
+            let totalDlSum = 0;
+            let totalDiffSum = 0;
+            let groupGrowth = { A:0, B:0, C:0, D:0 };
+
             ['A','B','C','D'].forEach(g => {
                 const projects = window.appData.groups[g] || [];
-                let totalDL = 0; let rows = "";
+                let groupDiff = 0;
+                projects.forEach(p => {
+                    totalDlSum += parseInt(p.downloads) || 0;
+                    const diff = parseInt(p.lastDiff) || 0;
+                    totalDiffSum += diff;
+                    groupDiff += diff;
+                });
+                groupGrowth[g] = groupDiff;
+            });
+
+            // Find Top Group
+            let topGroup = 'A';
+            let maxGrowth = -1;
+            ['A','B','C','D'].forEach(g => {
+                if (groupGrowth[g] > maxGrowth) {
+                    maxGrowth = groupGrowth[g];
+                    topGroup = g;
+                }
+            });
+
+            // Update Global Download Growth UI
+            const dlGrowthEl = document.getElementById('globalDownloadGrowth');
+            if (dlGrowthEl) {
+                if (totalDlSum > 0 && totalDiffSum > 0) {
+                    const pct = ((totalDiffSum / (totalDlSum - totalDiffSum)) * 100).toFixed(2);
+                    dlGrowthEl.innerHTML = `Growth: <span style="color:#55ff55">+${totalDiffSum.toLocaleString()} (${pct}%)</span>`;
+                } else {
+                    dlGrowthEl.innerText = "";
+                }
+            }
+
+            // Render Groups
+            ['A','B','C','D'].forEach(g => {
+                const projects = window.appData.groups[g] || [];
+                let totalDL = 0; 
+                let rows = "";
                 projects.forEach(p => {
                     const dl = parseInt(p.downloads) || 0;
                     totalDL += dl;
+                    const diff = parseInt(p.lastDiff) || 0;
                     const safeName = escapeHtml(p.name);
-                    let diffHtml = (p.lastDiff && p.lastDiff > 0) ? `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>` : "";
-                    rows += `<div class="project-row-display"><span>${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    
+                    let diffHtml = "";
+                    let fireHtml = "";
+                    
+                    // FEATURE: Hot Project Highlighting (Grow > 100)
+                    if (diff > 0) {
+                        diffHtml = `<span class="growth-indicator">(+${diff.toLocaleString()})</span>`;
+                        if (diff > 100) fireHtml = " 🔥";
+                    }
+                    
+                    rows += `<div class="project-row-display"><span>${safeName}${fireHtml}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
+                
+                // FEATURE: Top Group Badge
+                let badge = (g === topGroup && maxGrowth > 0) ? " 👑" : "";
+                
                 const color = g === 'A' ? "var(--mc-yellow)" : "#aaa";
-                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
+                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g}${badge} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
             });
         }
 
@@ -471,6 +520,7 @@
             });
         }
 
+        // --- UPDATED GRAPH: MONTHLY ONLY (1st to End of Month) ---
         window.drawChart = function() {
             const canvas = document.getElementById('growthChart');
             if(!canvas || !canvas.parentElement) return; 
@@ -478,96 +528,147 @@
             const w = canvas.width = canvas.parentElement.offsetWidth;
             const h = canvas.height = 320;
 
+            // Clear background
             ctx.fillStyle = "#222"; 
             ctx.fillRect(0, 0, w, h);
+
+            // --- DATE LOGIC ---
+            const now = new Date();
+            const currentMonth = now.getMonth(); // 0-11
+            const currentYear = now.getFullYear();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 28, 29, 30, or 31
+
+            // Initialize data arrays for the entire month (index 0 = Day 1)
+            const monthCF = new Array(daysInMonth).fill(0);
+            const monthExt = new Array(daysInMonth).fill(0);
             
-            const logs = (window.appData.pointsLog && window.appData.pointsLog.length > 0) ? window.appData.pointsLog : [];
-            if (logs.length === 0) {
-                ctx.fillStyle = "#555"; 
-                ctx.textAlign="center"; 
-                ctx.font = "12px monospace";
-                ctx.fillText("NO DATA TO DISPLAY", w/2, h/2);
-                return;
-            }
-
             const rate = getRate();
-            // CHANGED: Use parseFloat for graph data
-            const cfData = logs.map(l => (parseFloat(l.value || 0) * rate));
-            const extData = logs.map(l => parseFloat(l.externalRevenue) || 0);
+            const logs = window.appData.pointsLog || [];
 
-            const maxVal = Math.max(...cfData, ...extData, 1);
+            // --- DATA AGGREGATION ---
+            logs.forEach(l => {
+                const d = new Date(l.date);
+                // Filter: Only include logs from the current month/year
+                if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+                    const dayIndex = d.getDate() - 1; // 0-indexed day
+                    if (dayIndex >= 0 && dayIndex < daysInMonth) {
+                        const val = parseFloat(l.value) || 0;
+                        const ext = parseFloat(l.externalRevenue) || 0;
+                        // Accumulate values (supports multiple logs per day)
+                        monthCF[dayIndex] += (val * rate);
+                        monthExt[dayIndex] += ext;
+                    }
+                }
+            });
+
+            // Find max value for scaling (min 10)
+            let maxVal = 0;
+            for(let i=0; i<daysInMonth; i++) {
+                if (monthCF[i] > maxVal) maxVal = monthCF[i];
+                if (monthExt[i] > maxVal) maxVal = monthExt[i];
+            }
+            if (maxVal === 0) maxVal = 10; 
+
             const padY = 60;
-            const padX = 50; 
+            const padX = 40; 
             const drawH = h - (padY * 2);
             const drawW = w - (padX * 2);
             
-            const stepX = logs.length > 1 ? drawW / (logs.length - 1) : 0;
+            // X-Axis Step (Fixed for full month width)
+            const stepX = drawW / (daysInMonth - 1);
 
-            function getX(i) { return logs.length > 1 ? padX + (i * stepX) : w/2; }
+            function getX(dayIndex) { return padX + (dayIndex * stepX); }
             function getY(val) { return h - padY - ((val / maxVal) * drawH); }
 
             function drawCurve(data, color, fillStyle, labelDir) {
-                if(data.length === 0) return;
                 ctx.beginPath();
                 ctx.strokeStyle = color; 
-                ctx.lineWidth = 4;
-                if (data.length === 1) {
-                    const x = getX(0); 
-                    const y = getY(data[0]);
-                    ctx.fillStyle = color; 
-                    ctx.beginPath(); 
-                    ctx.arc(x, y, 6, 0, Math.PI*2); 
-                    ctx.fill();
-                } else {
-                    ctx.moveTo(getX(0), getY(data[0]));
-                    for (let i = 0; i < data.length - 1; i++) {
-                        const x1 = getX(i);
-                        const y1 = getY(data[i]);
-                        const x2 = getX(i+1);
-                        const y2 = getY(data[i+1]);
-                        const cp1x = x1 + (x2 - x1) / 2;
-                        ctx.bezierCurveTo(cp1x, y1, cp1x, y2, x2, y2);
-                    }
-                    ctx.stroke();
-                    ctx.lineTo(getX(data.length - 1), h - padY);
-                    ctx.lineTo(getX(0), h - padY);
-                    ctx.closePath();
-                    const grad = ctx.createLinearGradient(0, padY, 0, h - padY);
-                    grad.addColorStop(0, fillStyle);
-                    grad.addColorStop(1, "rgba(0,0,0,0)");
-                    ctx.fillStyle = grad;
-                    ctx.fill();
+                ctx.lineWidth = 3;
+                
+                // Start at Day 1
+                ctx.moveTo(getX(0), getY(data[0]));
+
+                // Draw curve
+                for (let i = 0; i < daysInMonth - 1; i++) {
+                    const x1 = getX(i); 
+                    const y1 = getY(data[i]);
+                    const x2 = getX(i+1); 
+                    const y2 = getY(data[i+1]);
+                    const cp1x = x1 + (x2 - x1) / 2;
+                    ctx.bezierCurveTo(cp1x, y1, cp1x, y2, x2, y2);
                 }
+                ctx.stroke();
+
+                // Fill area
+                ctx.lineTo(getX(daysInMonth - 1), h - padY);
+                ctx.lineTo(getX(0), h - padY);
+                ctx.closePath();
+                const grad = ctx.createLinearGradient(0, padY, 0, h - padY);
+                grad.addColorStop(0, fillStyle);
+                grad.addColorStop(1, "rgba(0,0,0,0)");
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                // Draw Dots & Labels (Clean Look)
+                const todayDayIndex = now.getDate() - 1;
+
                 data.forEach((val, i) => {
-                    const x = getX(i);
-                    const y = getY(val);
-                    ctx.fillStyle = color;
-                    ctx.beginPath(); 
-                    ctx.arc(x, y, 5, 0, Math.PI*2); 
-                    ctx.fill();
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.font = "8px 'Press Start 2P'";
-                    const offset = labelDir === 1 ? -15 : 25;
-                    // CHANGED: Display revenue value with 4 decimals for exact precision
-                    ctx.fillText("$" + val.toFixed(4), x, y + offset);
-                    if (labelDir === 1) {
-                        ctx.fillStyle = "#666";
-                        ctx.fillText(logs[i].date, x, h - 15);
+                    // Always show dot for TODAY or if value > 0
+                    if (val > 0 || i === todayDayIndex) {
+                        const x = getX(i);
+                        const y = getY(val);
+                        
+                        ctx.fillStyle = color;
+                        ctx.beginPath(); 
+                        ctx.arc(x, y, 4, 0, Math.PI*2); 
+                        ctx.fill();
+                        
+                        // Value Label
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.font = "8px 'Press Start 2P'";
+                        const offset = labelDir === 1 ? -15 : 25;
+                        
+                        if (val > 0) ctx.fillText("$" + val.toFixed(2), x, y + offset);
+                    }
+                    
+                    // X-Axis Date Labels (Every 5 days + Day 1 + Last Day)
+                    if (i === 0 || i === daysInMonth - 1 || (i+1) % 5 === 0) {
+                         const x = getX(i);
+                         ctx.fillStyle = "#666";
+                         ctx.font = "8px 'Press Start 2P'";
+                         ctx.fillText((i+1), x, h - 15);
                     }
                 });
             }
+
+            // Grid Lines
             ctx.strokeStyle = "#333";
+            ctx.lineWidth = 1;
             ctx.setLineDash([5, 5]);
-            for(let i=0; i<logs.length; i++) {
-                ctx.beginPath(); 
-                ctx.moveTo(getX(i), padY); 
-                ctx.lineTo(getX(i), h-padY); 
+            
+            // Vertical lines every 5 days
+            for(let i=0; i<daysInMonth; i+=5) {
+                ctx.beginPath();
+                ctx.moveTo(getX(i), padY);
+                ctx.lineTo(getX(i), h - padY);
                 ctx.stroke();
             }
+            // Horizontal lines (Top & Middle)
+            ctx.beginPath(); ctx.moveTo(padX, getY(maxVal)); ctx.lineTo(w-padX, getY(maxVal)); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padX, getY(maxVal/2)); ctx.lineTo(w-padX, getY(maxVal/2)); ctx.stroke();
             ctx.setLineDash([]);
-            drawCurve(cfData, "#42b74f", "rgba(66, 183, 79, 0.3)", 1);
-            drawCurve(extData, "#e67e22", "rgba(230, 126, 34, 0.3)", -1);
+
+            // Draw Data
+            drawCurve(monthCF, "#42b74f", "rgba(66, 183, 79, 0.3)", 1);
+            drawCurve(monthExt, "#e67e22", "rgba(230, 126, 34, 0.3)", -1);
+            
+            // Header: Show Month Name
+            ctx.fillStyle = "#aaa";
+            ctx.textAlign = "left";
+            ctx.font = "10px 'Press Start 2P'";
+            const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            ctx.fillText(monthNames[currentMonth] + " " + currentYear, padX, 30);
         }
 
         // --- 3. CALCULATIONS ---
@@ -575,50 +676,67 @@
             const rate = getRate();
             const now = new Date(); 
             now.setHours(0,0,0,0);
-            let sum7 = 0; let prev7 = 0; let sum30 = 0;
+            
+            let sum7 = 0;   // 0-6 days ago
+            let prev7 = 0;  // 7-13 days ago
+            let sum30 = 0;
+
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 window.appData.pointsLog.forEach(log => {
                     const d = new Date(log.date); 
                     d.setHours(0,0,0,0);
                     const diff = Math.round((now - d) / (1000*60*60*24));
-                    // CHANGED: Use parseFloat for history calculations
                     const val = (parseFloat(log.value)*rate) + (log.externalRevenue||0);
+                    
                     if(diff >= 0 && diff < 7) sum7 += val;
                     if(diff >= 7 && diff < 14) prev7 += val;
                     if(diff >= 0 && diff < 30) sum30 += val;
                 });
             }
+
             const el7 = document.getElementById('last7TotalDisplay');
             if (el7) el7.innerText = sum7.toFixed(2);
-            const el30 = document.getElementById('last30TotalDisplay');
-            if (el30) el30.innerText = sum30.toFixed(2);
-            const momEl = document.getElementById('mom7');
-            if (momEl) {
-                momEl.innerText = sum7 >= prev7 ? "⬆️" : "⬇️";
-                momEl.style.color = sum7 >= prev7 ? "#55ff55" : "#ff5555";
+            
+            // FEATURE: Revenue Growth Percentage Calculation
+            const pctEl = document.getElementById('weekGrowthPct');
+            if (pctEl) {
+                if (prev7 > 0) {
+                    const diffPct = ((sum7 - prev7) / prev7) * 100;
+                    const sign = diffPct > 0 ? "+" : "";
+                    pctEl.innerText = `${sign}${diffPct.toFixed(1)}% vs last wk`;
+                    pctEl.className = diffPct >= 0 ? "pct-up" : "pct-down";
+                } else if (sum7 > 0) {
+                    pctEl.innerText = "+100% (New)";
+                    pctEl.className = "pct-up";
+                } else {
+                    pctEl.innerText = "--";
+                    pctEl.className = "pct-neutral";
+                }
             }
+
             let lifetime = 0;
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
-                // CHANGED: Use parseFloat for lifetime calculations
                 lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseFloat(b.value)*rate) + (b.externalRevenue||0), 0);
             }
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
+
+            // FEATURE: Monthly Projection
             if(window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                  const recent = window.appData.pointsLog.slice(-7);
                  let recentSum = 0;
-                 // CHANGED: Use parseFloat for average calculations
                  recent.forEach(l => recentSum += (parseFloat(l.value)*rate)+(l.externalRevenue||0));
-                 const elAvg = document.getElementById('avg7DayDisplay');
-                 if (elAvg) elAvg.innerText = (recentSum/recent.length).toFixed(2);
+                 const avg = recentSum/recent.length;
+                 
+                 const projMonth = avg * 30;
+                 const projEl = document.getElementById('projMonthDisplay');
+                 if(projEl) projEl.innerText = projMonth.toFixed(2);
             }
         }
 
         window.updateRevenue = function() {
             const ptsInput = document.getElementById('currentPoints');
-            // CHANGED: Replace comma with dot for international support (e.g. 18,96 -> 18.96)
             const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '.') : "0";
-            // CHANGED: Use parseFloat so live revenue update respects decimals
             const pts = parseFloat(ptsVal) || 0;
             const rate = getRate();
             let extTotal = 0;
@@ -627,7 +745,6 @@
             }
             const gross = (pts * rate) + extTotal;
             const revDisp = document.getElementById('revenueDisplay');
-            // CHANGED: Higher precision for live check
             if (revDisp) revDisp.innerText = gross.toFixed(4);
             const revHubCF = document.getElementById('revHubCF');
             if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(4);
@@ -647,7 +764,6 @@
             const streakVal = document.getElementById('streakValue');
             if (streakVal) streakVal.innerText = window.appData.streak || 0;
             
-            // UI Sync: Points
             const elP = document.getElementById('currentPoints');
             if (elP) elP.value = window.appData.points || 18;
             const elG = document.getElementById('goalPoints');
@@ -660,9 +776,6 @@
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
-            
-            // CHANGED: Robust parsing. Replace commas with dots, parse as float.
-            // If user typed "18,96", this becomes "18.96" instead of "1896" or "18".
             let currentValString = elPts ? elPts.value : "0";
             currentValString = currentValString.replace(/,/g, '.');
             const current = parseFloat(currentValString) || 0;
@@ -717,10 +830,6 @@
             const el=document.getElementById('logTableContainer'); 
             if(el) el.style.display = el.style.display==='none'?'block':'none'; 
         }
-        window.toggleUtility = () => { 
-            const el=document.getElementById('utilityTool'); 
-            if(el) el.style.display=el.style.display==='none'?'grid':'none'; 
-        }
         window.openRevenueHub = () => {
              const c = document.getElementById('revSourcesContainer'); 
              if(!c) return;
@@ -746,11 +855,6 @@
                 window.appData.revenueSources.push({name:n, val:0}); 
                 window.openRevenueHub(); 
             } 
-        };
-        window.resetInactivityTimer = () => { 
-            window.appData.lastCFLogin = getTodayString(); 
-            saveData(); 
-            alert("Reset!"); 
         };
         window.openEditGroups = () => { 
             document.getElementById('editGroupsModal').style.display='flex'; 
@@ -923,6 +1027,18 @@
             a.click(); 
             URL.revokeObjectURL(u);
         }
+
+        // FEATURE: Copy Data
+        window.copyDataToClipboard = () => {
+            const dataStr = JSON.stringify(window.appData, null, 2);
+            const ta = document.createElement('textarea');
+            ta.value = dataStr;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            alert("✅ ALL DATA COPIED TO CLIPBOARD!");
+        }
         
         window.importData = function() {
             const f = document.getElementById('importFile').files[0];
@@ -967,9 +1083,8 @@
              document.getElementById('weeklyAuditModal').style.display='none';
         }
 
-        // --- 5. APP INITIALIZATION (FIREBASE + LOCAL FALLBACK) ---
+        // --- 5. APP INITIALIZATION ---
         function initApp() {
-            // Setup Clock
             setInterval(() => { 
                 const clock = document.getElementById('clockDisplay');
                 if (clock) {
@@ -980,7 +1095,6 @@
                 }
             }, 1000);
 
-            // Audit Check
             const lastAudit = window.appData.lastAuditDate ? new Date(window.appData.lastAuditDate) : new Date(0);
             const diff = (new Date() - lastAudit)/(1000*60*60*24);
             if(diff > 7) {
@@ -1015,7 +1129,6 @@
                 db = getFirestore(app);
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-                // AUTH + SNAPSHOT
                 const initAuth = async () => {
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         await signInWithCustomToken(auth, __initial_auth_token);
@@ -1029,26 +1142,19 @@
                     if (currentUser) {
                         user = currentUser;
                         firestoreDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'tracker_core');
-                        
-                        // Listen for Realtime Updates
                         onSnapshot(firestoreDocRef, (snapshot) => {
                             if (snapshot.exists()) {
-                                // Cloud has data -> Load it
                                 window.appData = { ...window.appData, ...snapshot.data() };
                                 refreshAll();
                             } else {
-                                // Cloud is empty -> Check LocalStorage for migration
                                 const savedLocal = localStorage.getItem('bedrockTracker_v36_core');
                                 if (savedLocal) {
                                     try {
                                         const parsed = JSON.parse(savedLocal);
                                         window.appData = { ...window.appData, ...parsed };
-                                        console.log("Migrating LocalStorage to Firestore...");
-                                        // Save immediately to Cloud
                                         setDoc(firestoreDocRef, window.appData);
                                     } catch(e) { console.error(e); }
                                 } else {
-                                    // New User -> Initialize Cloud
                                     setDoc(firestoreDocRef, window.appData);
                                 }
                                 refreshAll();
@@ -1072,7 +1178,7 @@
             refreshAll();
         }
 
-        initApp(); // Run UI helpers
+        initApp(); 
 
     </script>
 </body>
