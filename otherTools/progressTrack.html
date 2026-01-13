@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bedrock Addon Tracker (Core)</title>
+    <title>Bedrock Addon Tracker (Pro)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -19,6 +19,17 @@
             --mc-purple: #b266ff;
             --mc-text: #ffffff;
             --mc-orange: #e67e22;
+        }
+
+        /* FEATURE 1: Nether Theme */
+        body.nether-theme {
+            --mc-bg: #2a0505;
+            --mc-panel: #4a1010;
+            --mc-border-light: #852d2d;
+            --mc-border-dark: #1a0000;
+            --mc-green: #ffaa00; /* Gold replaces Green */
+            --mc-text: #ffdddd;
+            background-image: linear-gradient(rgba(40,0,0,0.8), rgba(40,0,0,0.8)), url('https://assets.codepen.io/13471/netherrack-bg.jpg');
         }
 
         body {
@@ -51,7 +62,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             border-bottom: 3px solid var(--mc-border-dark);
             padding-bottom: 20px;
             flex-wrap: wrap;
@@ -66,9 +77,84 @@
             text-transform: uppercase;
         }
 
+        /* FEATURE 1 (New): Splash Text */
+        .splash-text {
+            color: var(--mc-yellow);
+            font-size: 0.6rem;
+            text-align: right;
+            transform: rotate(-5deg);
+            animation: bounce 1s infinite alternate;
+            margin-top: 5px;
+            text-shadow: 2px 2px #000;
+            max-width: 200px;
+        }
+        @keyframes bounce { from { transform: scale(1) rotate(-5deg); } to { transform: scale(1.1) rotate(-5deg); } }
+
         .header-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
         .date-display { font-size: 0.7rem; color: #aaa; }
         .streak-display { color: var(--mc-orange); font-size: 0.7rem; text-shadow: 2px 2px #000; }
+        /* FEATURE 2: Global Download Counter */
+        .total-dl-display { color: var(--mc-blue); font-size: 0.65rem; text-shadow: 1px 1px #000; margin-top: 3px; }
+
+        /* FEATURE 2 (New): Boss Bar Milestone */
+        .boss-bar-container {
+            position: relative;
+            width: 100%;
+            height: 15px;
+            background: #220022;
+            border: 2px solid #000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .boss-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #b266ff;
+            width: 0%;
+            transition: width 0.5s;
+            opacity: 0.8;
+        }
+        .boss-bar-text {
+            position: relative;
+            z-index: 2;
+            font-size: 0.55rem;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            letter-spacing: 1px;
+        }
+
+        /* Daily Goal Meter */
+        .goal-meter-container {
+            background: #222;
+            border: 2px solid var(--mc-border-dark);
+            height: 10px;
+            width: 100%;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .goal-meter-fill {
+            background: linear-gradient(90deg, var(--mc-green), var(--mc-yellow));
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        body.nether-theme .goal-meter-fill {
+            background: linear-gradient(90deg, #ff5555, #fcfc00);
+        }
+        .goal-meter-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.5rem;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            z-index: 2;
+        }
 
         h2 {
             font-size: 1rem;
@@ -76,12 +162,15 @@
             margin: 30px 0 15px 0;
             border-bottom: 2px solid #555;
             padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         /* Stats Grid */
         .stats-bar {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px;
-            background: #262626; padding: 20px;
+            background: rgba(0,0,0,0.2); padding: 20px;
             border: 3px solid var(--mc-border-dark); border-bottom: 3px solid var(--mc-border-light);
             margin-bottom: 25px; align-items: start;
         }
@@ -103,11 +192,12 @@
             width: 100%; text-align: center;
         }
 
-        .val-green { color: #55ff55; font-size: 0.8rem; }
-        .val-yellow { color: #ffff55; font-size: 0.8rem; }
-        .val-blue { color: #5555ff; font-size: 0.8rem; }
-        .val-purple { color: #ff55ff; font-size: 0.8rem; }
-        .val-red { color: #ff5555; font-size: 0.8rem; }
+        .val-green { color: var(--mc-green); font-size: 0.8rem; }
+        .val-yellow { color: var(--mc-yellow); font-size: 0.8rem; }
+        .val-blue { color: var(--mc-blue); font-size: 0.8rem; }
+        .val-purple { color: var(--mc-purple); font-size: 0.8rem; }
+        .val-red { color: var(--mc-red); font-size: 0.8rem; }
+        .val-gold { color: #ffd700; font-size: 0.8rem; text-shadow: 1px 1px #000; }
 
         .action-btn {
             background: #555; border: 2px solid #000; color: white;
@@ -116,6 +206,16 @@
         }
         .action-btn:hover { background: #777; }
         
+        /* FEATURE 3 (New): Quick Add Buttons */
+        .quick-add-row {
+            display: flex; gap: 3px; margin-bottom: 5px; justify-content: center;
+        }
+        .quick-btn {
+            background: #333; color: var(--mc-green); border: 1px solid #555; 
+            font-size: 0.5rem; padding: 2px 4px; cursor: pointer; font-family: 'Press Start 2P';
+        }
+        .quick-btn:hover { background: #444; color: #fff; }
+
         .log-input-group {
             display: flex;
             flex-direction: column; gap: 5px; align-items: center;
@@ -163,16 +263,24 @@
             color: #ddd; border-bottom: 1px solid #333; padding: 2px 0;
         }
         .growth-indicator { color: var(--mc-green); font-size: 0.5rem; margin-left: 5px; }
+        .top-performer { color: #ffd700 !important; font-weight: bold; text-shadow: 1px 1px 0 rgba(0,0,0,0.5); }
 
         /* Weekly Grid */
         .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .day-card { background-color: var(--mc-panel); border: 3px solid var(--mc-border-dark); padding: 15px; }
+        .day-card { background-color: var(--mc-panel); border: 3px solid var(--mc-border-dark); padding: 15px; position: relative; padding-bottom: 25px; }
         .day-title { color: #d1d1d1; border-bottom: 3px solid #555; padding-bottom: 8px; margin-bottom: 15px; font-size: 0.8rem; text-align: center; }
         .task-item { display: flex; align-items: flex-start; margin-bottom: 12px; cursor: pointer; font-size: 0.65rem; }
         .task-item.completed { opacity: 0.5; text-decoration: line-through; }
         .mc-checkbox { min-width: 16px; min-height: 16px; background: #000; border: 2px solid #666; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .task-item.completed .mc-checkbox::after { content: ''; width: 8px; height: 8px; background-color: var(--mc-green); display: block; }
         .btn { background-color: #7d7d7d; border: 3px solid #000; color: #fff; font-family: 'Press Start 2P'; font-size: 0.9rem; padding: 15px 20px; cursor: pointer; width: 100%; margin-top: 30px; }
+        
+        .task-progress-track {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #222;
+        }
+        .task-progress-fill {
+            height: 100%; background: var(--mc-green); width: 0%; transition: width 0.3s;
+        }
 
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 999; }
@@ -252,18 +360,35 @@
         <div class="header-section">
             <div style="display:flex; flex-direction:column;">
                 <h1>Road To $200</h1>
+                <div class="total-dl-display">Total DLs: <span id="totalDownloadsDisplay">0</span></div>
+                <!-- FEATURE 1: Splash Text -->
+                <div id="splashText" class="splash-text">Loading...</div>
             </div>
             <div class="header-right">
-                <div class="date-display" id="clockDisplay">Loading...</div>
+                <div style="display:flex; gap:5px; align-items:center;">
+                    <button class="action-btn" style="background:var(--mc-red); color:#fff;" onclick="toggleTheme()">THEME</button>
+                    <div class="date-display" id="clockDisplay">Loading...</div>
+                </div>
                 <div class="streak-display">🔥 STREAK: <span id="streakValue">0</span> DAYS</div>
             </div>
+        </div>
+        
+        <!-- FEATURE 2: Boss Bar Milestone -->
+        <div class="boss-bar-container">
+            <div id="bossBarFill" class="boss-bar-fill"></div>
+            <div id="bossBarText" class="boss-bar-text">NEXT MILESTONE: $100</div>
+        </div>
+
+        <!-- Daily Goal Meter -->
+        <div class="goal-meter-container">
+            <div id="goalMeterFill" class="goal-meter-fill"></div>
+            <div id="goalMeterText" class="goal-meter-text">Loading Goal...</div>
         </div>
 
         <!-- Stats Bar -->
         <div class="stats-bar">
             <div class="stat-box">
                 <div>$/Pt Rate</div>
-                <!-- CHANGED: step="any" allows any decimal precision -->
                 <input type="number" id="pointRate" value="0.05" class="rate-input" step="any" onchange="updateRevenue()">
             </div>
             <div class="stat-box">
@@ -273,8 +398,13 @@
             <div class="stat-box" style="flex-grow:2;">
                 <div>Log Pts</div>
                 <div class="log-input-group">
-                    <!-- CHANGED: step="any" allows any decimal precision -->
                     <input type="number" id="currentPoints" value="18" step="any" onchange="updateRevenue()">
+                    <!-- FEATURE 3: Quick Add Buttons -->
+                    <div class="quick-add-row">
+                        <button class="quick-btn" onclick="addPoints(1)">+1</button>
+                        <button class="quick-btn" onclick="addPoints(5)">+5</button>
+                        <button class="quick-btn" onclick="addPoints(10)">+10</button>
+                    </div>
                     <input type="text" id="logNote" class="note-input" placeholder="Note">
                     <button class="action-btn" onclick="logPoints()">LOG</button>
                 </div>
@@ -284,22 +414,26 @@
                 <div class="val-green">$<span id="revenueDisplay">0.00</span></div>
             </div>
             <div class="stat-box">
-                <div>Last 7 Days</div>
-                <div class="val-blue">$<span id="last7TotalDisplay">0.00</span> <span id="mom7"></span></div>
+                <div>Best Day</div>
+                <div class="val-gold">$<span id="bestDayDisplay">0.00</span></div>
             </div>
             <div class="stat-box">
                 <div>Lifetime $</div>
                 <div class="val-purple">$<span id="lifetimeDisplay">0.00</span></div>
             </div>
             <div class="stat-box">
-                <div>7-Day Avg</div>
-                <div class="val-yellow">$<span id="avg7DayDisplay">0.00</span></div>
+                <div>Days to $200</div>
+                <div class="val-red" id="daysToGoalDisplay">--</div>
             </div>
         </div>
 
         <!-- Graph -->
-        <h2>Earnings Graph</h2>
-        <div class="chart-container">
+        <h2 style="display:flex; justify-content:space-between; align-items:center;">
+            Earnings Graph
+            <!-- FEATURE 4: Focus Mode Toggle -->
+            <button class="action-btn" style="font-size:0.5rem;" onclick="toggleFocus()">[TOGGLE GRAPH]</button>
+        </h2>
+        <div id="chartSection" class="chart-container">
             <canvas id="growthChart"></canvas>
             <div class="chart-legend">
                 <div class="legend-item"><span style="background:var(--mc-green);"></span>CurseForge</div>
@@ -312,10 +446,12 @@
                 [Click to Toggle Data Table]
             </div>
             <div style="display:flex; gap:5px;">
+                 <button class="action-btn" style="background:#b266ff;" onclick="copyDailyReport()">COPY REPORT</button>
+                 <button class="action-btn" style="background:#e67e22;" onclick="exportCSV()">EXPORT CSV</button>
                  <label class="action-btn" style="background:#42b74f; cursor:pointer;">
                     IMPORT <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData()">
                  </label>
-                 <button class="action-btn" style="background:#5555ff;" onclick="exportData()">EXPORT</button>
+                 <button class="action-btn" style="background:#5555ff;" onclick="exportData()">EXPORT JSON</button>
             </div>
         </div>
 
@@ -352,6 +488,7 @@
             goal: 120, 
             streak: 0, 
             rate: 0.05, 
+            theme: "normal", 
             lastLoginDate: "", 
             lastCFLogin: "", 
             lastAuditDate: "",
@@ -361,17 +498,18 @@
                 { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
                 { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
                 { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-                { day: "FRI", tasks: ["RELEASE DAY"] },
-                { day: "SAT", tasks: ["Update Group A", "Reply Comments"] },
-                { day: "SUN", tasks: ["Rest / Analytics"] }
+                { day: "FRI", tasks: ["RELEASE DAY", "Update Session"] },
+                { day: "SAT", tasks: ["Update Group E", "Reply Comments"] },
+                { day: "SUN", tasks: ["Rest / Analytics", "Update Group F"] }
             ],
-            groups: { A: [], B: [], C: [], D: [] }, 
+            groups: { A: [], B: [], C: [], D: [], E: [], F: [] }, 
             history: [], 
             pointsLog: [] 
         };
 
         // Temporary data for edits (FIX: Attached to window)
         window.tempGroups = {};
+        const GROUP_KEYS = ['A','B','C','D','E','F'];
 
         let db, auth, user;
         let firestoreDocRef = null;
@@ -399,7 +537,6 @@
 
         // UPGRADED SAVE FUNCTION
         function saveData() {
-            // Update appData from DOM elements first
             const elPoints = document.getElementById('currentPoints');
             if(elPoints) window.appData.points = elPoints.value;
             const elGoal = document.getElementById('goalPoints');
@@ -408,11 +545,9 @@
             if(elRate) window.appData.rate = elRate.value;
 
             if (useFirestore && firestoreDocRef) {
-                // Save to Cloud
                 setDoc(firestoreDocRef, window.appData)
                     .catch(e => console.error("Error saving to cloud:", e));
             } else {
-                // Save to Local (Fallback)
                 localStorage.setItem('bedrockTracker_v36_core', JSON.stringify(window.appData));
             }
         }
@@ -425,12 +560,10 @@
             tbody.innerHTML = "";
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 [...window.appData.pointsLog].reverse().forEach((l,i) => {
-                    // CHANGED: Use parseFloat to respect decimals in log calculation
                     const val = parseFloat(l.value) || 0;
                     const earn = (val * rate) + (l.externalRevenue||0);
                     const idx = window.appData.pointsLog.length - 1 - i;
                     const safeNote = escapeHtml(l.note||'-');
-                    // CHANGED: Display exact 'val' (no rounding) and earn with 4 decimals
                     tbody.innerHTML += `<tr><td>${l.date}</td><td style="color:#42b74f">${val}</td><td>${safeNote}</td><td>$${earn.toFixed(4)}</td><td><span class='delete-btn' onclick='deleteLogEntry(${idx})'>[DEL]</span></td></tr>`;
                 });
             }
@@ -440,18 +573,52 @@
             const container = document.getElementById('groupsDisplay');
             if(!container) return;
             container.innerHTML = "";
-            ['A','B','C','D'].forEach(g => {
+            
+            // FEATURE 2 + 5: Calculate Global Total for percentages
+            let globalDownloads = 0;
+            let maxDiff = -1;
+            let bestProjId = "";
+
+            // First pass: Calculate Total and find Best
+            GROUP_KEYS.forEach(g => {
+                const ps = window.appData.groups[g] || [];
+                ps.forEach((p, idx) => {
+                    const dl = parseInt(p.downloads) || 0;
+                    globalDownloads += dl;
+                    if (p.lastDiff > maxDiff) {
+                        maxDiff = p.lastDiff;
+                        bestProjId = `${g}-${idx}`;
+                    }
+                });
+            });
+            
+            const totalDlDisp = document.getElementById('totalDownloadsDisplay');
+            if (totalDlDisp) totalDlDisp.innerText = globalDownloads.toLocaleString();
+
+            // Second pass: Render
+            GROUP_KEYS.forEach(g => {
                 const projects = window.appData.groups[g] || [];
                 let totalDL = 0; let rows = "";
-                projects.forEach(p => {
+                
+                projects.forEach((p, idx) => {
                     const dl = parseInt(p.downloads) || 0;
                     totalDL += dl;
                     const safeName = escapeHtml(p.name);
                     let diffHtml = (p.lastDiff && p.lastDiff > 0) ? `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>` : "";
-                    rows += `<div class="project-row-display"><span>${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    
+                    const isBest = `${g}-${idx}` === bestProjId && p.lastDiff > 0;
+                    const nameClass = isBest ? "top-performer" : "";
+                    const badge = isBest ? "🏆 " : "";
+
+                    rows += `<div class="project-row-display"><span class="${nameClass}">${badge}${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
+
+                // FEATURE 5: Group Market Share
+                let sharePct = 0;
+                if (globalDownloads > 0) sharePct = ((totalDL / globalDownloads) * 100).toFixed(1);
+
                 const color = g === 'A' ? "var(--mc-yellow)" : "#aaa";
-                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
+                container.innerHTML += `<div class="group-block" style="border-color:${color}"><div style="color:${color}; margin-bottom:5px;">GROUP ${g} <span style="font-size:0.6rem; margin-left:5px;">(${sharePct}%)</span> <span style="float:right; font-size:0.6rem;">${totalDL.toLocaleString()}</span></div>${rows}</div>`;
             });
         }
 
@@ -461,13 +628,20 @@
             grid.innerHTML = '';
             window.appData.currentWeekData.forEach((day, di) => {
                 let tasks = "";
+                let completedCount = 0;
                 day.tasks.forEach((t, ti) => {
                     const done = typeof t === 'object' ? t.done : false;
+                    if(done) completedCount++;
                     const text = typeof t === 'object' ? t.text : t;
                     const safeText = escapeHtml(text);
                     tasks += `<div class="task-item ${done?'completed':''}" onclick="toggleTask(${di},${ti})"><div class="mc-checkbox"></div><span>${safeText}</span></div>`;
                 });
-                grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day}</div>${tasks}</div>`;
+                
+                const totalTasks = day.tasks.length;
+                const percent = totalTasks > 0 ? (completedCount / totalTasks) * 100 : 0;
+                const barHtml = `<div class="task-progress-track"><div class="task-progress-fill" style="width:${percent}%"></div></div>`;
+
+                grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day}</div>${tasks}${barHtml}</div>`;
             });
         }
 
@@ -491,7 +665,6 @@
             }
 
             const rate = getRate();
-            // CHANGED: Use parseFloat for graph data
             const cfData = logs.map(l => (parseFloat(l.value || 0) * rate));
             const extData = logs.map(l => parseFloat(l.externalRevenue) || 0);
 
@@ -549,7 +722,6 @@
                     ctx.textAlign = "center";
                     ctx.font = "8px 'Press Start 2P'";
                     const offset = labelDir === 1 ? -15 : 25;
-                    // CHANGED: Display revenue value with 4 decimals for exact precision
                     ctx.fillText("$" + val.toFixed(4), x, y + offset);
                     if (labelDir === 1) {
                         ctx.fillStyle = "#666";
@@ -576,13 +748,15 @@
             const now = new Date(); 
             now.setHours(0,0,0,0);
             let sum7 = 0; let prev7 = 0; let sum30 = 0;
+            let maxDaily = 0; 
+
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 window.appData.pointsLog.forEach(log => {
                     const d = new Date(log.date); 
                     d.setHours(0,0,0,0);
                     const diff = Math.round((now - d) / (1000*60*60*24));
-                    // CHANGED: Use parseFloat for history calculations
                     const val = (parseFloat(log.value)*rate) + (log.externalRevenue||0);
+                    if (val > maxDaily) maxDaily = val; 
                     if(diff >= 0 && diff < 7) sum7 += val;
                     if(diff >= 7 && diff < 14) prev7 += val;
                     if(diff >= 0 && diff < 30) sum30 += val;
@@ -590,8 +764,10 @@
             }
             const el7 = document.getElementById('last7TotalDisplay');
             if (el7) el7.innerText = sum7.toFixed(2);
-            const el30 = document.getElementById('last30TotalDisplay');
-            if (el30) el30.innerText = sum30.toFixed(2);
+            
+            const elBest = document.getElementById('bestDayDisplay');
+            if (elBest) elBest.innerText = maxDaily.toFixed(2);
+            
             const momEl = document.getElementById('mom7');
             if (momEl) {
                 momEl.innerText = sum7 >= prev7 ? "⬆️" : "⬇️";
@@ -599,26 +775,50 @@
             }
             let lifetime = 0;
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
-                // CHANGED: Use parseFloat for lifetime calculations
                 lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseFloat(b.value)*rate) + (b.externalRevenue||0), 0);
             }
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
+
+            // FEATURE 2: Update Boss Bar (Next $100 Milestone)
+            const nextMilestone = Math.ceil((lifetime + 0.01) / 100) * 100;
+            const prevMilestone = nextMilestone - 100;
+            const progress = lifetime - prevMilestone;
+            const pct = Math.min((progress / 100) * 100, 100);
+            
+            const bossFill = document.getElementById('bossBarFill');
+            const bossText = document.getElementById('bossBarText');
+            if (bossFill) bossFill.style.width = pct + "%";
+            if (bossText) bossText.innerText = `NEXT MILESTONE: $${nextMilestone} (${pct.toFixed(1)}%)`;
+            
             if(window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                  const recent = window.appData.pointsLog.slice(-7);
                  let recentSum = 0;
-                 // CHANGED: Use parseFloat for average calculations
                  recent.forEach(l => recentSum += (parseFloat(l.value)*rate)+(l.externalRevenue||0));
-                 const elAvg = document.getElementById('avg7DayDisplay');
-                 if (elAvg) elAvg.innerText = (recentSum/recent.length).toFixed(2);
+                 const avg = recentSum/recent.length;
+                 
+                 const elDays = document.getElementById('daysToGoalDisplay');
+                 if (elDays) {
+                    if (avg > 0) {
+                        const remaining = 200 - lifetime;
+                        if (remaining <= 0) {
+                             elDays.innerText = "DONE!";
+                             elDays.style.color = "var(--mc-green)";
+                        } else {
+                             const days = Math.ceil(remaining / avg);
+                             elDays.innerText = days + " Days";
+                             elDays.style.color = "var(--mc-red)";
+                        }
+                    } else {
+                        elDays.innerText = "N/A";
+                    }
+                 }
             }
         }
 
         window.updateRevenue = function() {
             const ptsInput = document.getElementById('currentPoints');
-            // CHANGED: Replace comma with dot for international support (e.g. 18,96 -> 18.96)
             const ptsVal = ptsInput ? ptsInput.value.replace(/,/g, '.') : "0";
-            // CHANGED: Use parseFloat so live revenue update respects decimals
             const pts = parseFloat(ptsVal) || 0;
             const rate = getRate();
             let extTotal = 0;
@@ -627,13 +827,20 @@
             }
             const gross = (pts * rate) + extTotal;
             const revDisp = document.getElementById('revenueDisplay');
-            // CHANGED: Higher precision for live check
             if (revDisp) revDisp.innerText = gross.toFixed(4);
             const revHubCF = document.getElementById('revHubCF');
             if (revHubCF) revHubCF.innerText = "$" + (pts * rate).toFixed(4);
             const revHubTotal = document.getElementById('revHubTotal');
             if (revHubTotal) revHubTotal.innerText = gross.toFixed(4);
             
+            const goalVal = parseFloat(window.appData.goal) || 120;
+            const currentPointsTotal = pts + (extTotal / rate);
+            const pct = Math.min((currentPointsTotal / goalVal) * 100, 100);
+            const meterFill = document.getElementById('goalMeterFill');
+            const meterText = document.getElementById('goalMeterText');
+            if(meterFill) meterFill.style.width = pct + "%";
+            if(meterText) meterText.innerText = `${Math.floor(pct)}% of Daily Goal`;
+
             saveData();
             calculateHistoricalTotals();
             renderLogTable(); 
@@ -641,12 +848,29 @@
         }
 
         window.refreshAll = function() {
+            // Apply Theme
+            if (window.appData.theme === "nether") {
+                document.body.classList.add('nether-theme');
+            } else {
+                document.body.classList.remove('nether-theme');
+            }
+
             updateRevenue(); 
             renderGroups(); 
             renderWeek();
             const streakVal = document.getElementById('streakValue');
             if (streakVal) streakVal.innerText = window.appData.streak || 0;
             
+            // FEATURE 1: Init Splash Text
+            const splashes = [
+                "Also try Terraria!", "Track those stats!", "Don't dig down!",
+                "Creeper? Aww man!", "Bedrock Edition!", "Road to $200!",
+                "Update your addons!", "Check your comments!", "Fix that bug!",
+                "Behavior Packs Rule!", "Resource Packs too!", "Stay Blocky!"
+            ];
+            const splashEl = document.getElementById('splashText');
+            if(splashEl) splashEl.innerText = splashes[Math.floor(Math.random() * splashes.length)];
+
             // UI Sync: Points
             const elP = document.getElementById('currentPoints');
             if (elP) elP.value = window.appData.points || 18;
@@ -657,12 +881,58 @@
         }
 
         // --- 4. HANDLERS ---
+        window.toggleTheme = function() {
+            if (window.appData.theme === "nether") {
+                window.appData.theme = "normal";
+            } else {
+                window.appData.theme = "nether";
+            }
+            saveData();
+            refreshAll();
+        };
+
+        // FEATURE 4: Toggle Focus Mode
+        window.toggleFocus = function() {
+            const chart = document.getElementById('chartSection');
+            if (chart) {
+                chart.style.display = chart.style.display === 'none' ? 'block' : 'none';
+            }
+        };
+
+        // FEATURE 3: Quick Add
+        window.addPoints = function(amount) {
+            const el = document.getElementById('currentPoints');
+            if (el) {
+                let val = parseFloat(el.value) || 0;
+                val += amount;
+                el.value = val;
+                updateRevenue(); // Triggers save and UI update
+            }
+        };
+
+        window.copyDailyReport = function() {
+            const date = getTodayString();
+            const pts = document.getElementById('currentPoints').value;
+            const earn = document.getElementById('revenueDisplay').innerText;
+            const streak = window.appData.streak || 0;
+            const goal = window.appData.goal || 120;
+            const pct = Math.floor((parseFloat(pts)/parseFloat(goal))*100);
+            
+            const report = `📊 **Daily Report: ${date}**\n💰 Earnings: $${earn}\n🎯 Goal: ${pct}%\n🔥 Streak: ${streak} Days\n🛠️ #BedrockDev`;
+            
+            const el = document.createElement('textarea');
+            el.value = report;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("COPIED TO CLIPBOARD:\n" + report);
+        };
+
         window.logPoints = function() {
             const elPts = document.getElementById('currentPoints');
             const elNote = document.getElementById('logNote');
             
-            // CHANGED: Robust parsing. Replace commas with dots, parse as float.
-            // If user typed "18,96", this becomes "18.96" instead of "1896" or "18".
             let currentValString = elPts ? elPts.value : "0";
             currentValString = currentValString.replace(/,/g, '.');
             const current = parseFloat(currentValString) || 0;
@@ -712,7 +982,7 @@
             } 
         }
         
-        window.saveGoal = function() { saveData(); drawChart(); }
+        window.saveGoal = function() { saveData(); drawChart(); updateRevenue(); } 
         window.toggleLogTable = () => { 
             const el=document.getElementById('logTableContainer'); 
             if(el) el.style.display = el.style.display==='none'?'block':'none'; 
@@ -762,12 +1032,14 @@
                 A: window.appData.groups.A ? JSON.parse(JSON.stringify(window.appData.groups.A)) : [],
                 B: window.appData.groups.B ? JSON.parse(JSON.stringify(window.appData.groups.B)) : [],
                 C: window.appData.groups.C ? JSON.parse(JSON.stringify(window.appData.groups.C)) : [],
-                D: window.appData.groups.D ? JSON.parse(JSON.stringify(window.appData.groups.D)) : []
+                D: window.appData.groups.D ? JSON.parse(JSON.stringify(window.appData.groups.D)) : [],
+                E: window.appData.groups.E ? JSON.parse(JSON.stringify(window.appData.groups.E)) : [],
+                F: window.appData.groups.F ? JSON.parse(JSON.stringify(window.appData.groups.F)) : []
             };
             const c = document.getElementById('groupEditContainer'); 
             if(!c) return;
             c.innerHTML="";
-            ['A','B','C','D'].forEach(g => {
+            GROUP_KEYS.forEach(g => {
                  const d = document.createElement('div');
                  d.innerHTML = `<div style="margin-bottom:5px; color:#aaa;">GROUP ${g}</div>`;
                  if (window.tempGroups[g] && window.tempGroups[g].length > 0) {
@@ -781,7 +1053,7 @@
             });
         }
         window.saveGroups = () => {
-             ['A','B','C','D'].forEach(g => {
+             GROUP_KEYS.forEach(g => {
                  if (!window.appData.groups[g]) window.appData.groups[g] = [];
                  if (!window.tempGroups[g]) window.tempGroups[g] = [];
                  window.tempGroups[g].forEach(np => {
@@ -875,15 +1147,19 @@
                  if (!Array.isArray(arr)) throw new Error("Invalid data format");
                  
                  arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+                 
+                 // UPDATED: Distribution logic for 6 groups (A-F)
                  window.appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  window.appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.D = arr.slice(12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.D = arr.slice(12,16).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.E = arr.slice(16,20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.F = arr.slice(20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  
                  saveData(); 
                  refreshAll(); 
                  document.getElementById('cfPasteModal').style.display='none';
-                 alert("Projects imported successfully!");
+                 alert("Projects imported successfully into Groups A-F!");
              } catch(e) { 
                  alert("Invalid JSON format. Please paste valid data."); 
                  console.error(e);
@@ -923,6 +1199,29 @@
             a.click(); 
             URL.revokeObjectURL(u);
         }
+
+        // FEATURE 5: CSV Export
+        window.exportCSV = () => {
+            let csvContent = "data:text/csv;charset=utf-8,Date,Points,Note,External Revenue,Total Earnings\n";
+            const rate = getRate();
+            if (window.appData.pointsLog) {
+                window.appData.pointsLog.forEach(row => {
+                    const p = parseFloat(row.value) || 0;
+                    const ext = parseFloat(row.externalRevenue) || 0;
+                    const total = (p * rate) + ext;
+                    // Escape note to prevent CSV breakage
+                    const safeNote = (row.note || "").replace(/,/g, " ");
+                    csvContent += `${row.date},${p},${safeNote},${ext},${total.toFixed(4)}\n`;
+                });
+            }
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "tracker_data_" + new Date().toISOString().split('T')[0] + ".csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
         
         window.importData = function() {
             const f = document.getElementById('importFile').files[0];
@@ -935,7 +1234,7 @@
                         window.appData = { ...window.appData, ...imported };
                         if (!window.appData.pointsLog) window.appData.pointsLog = [];
                         if (!window.appData.revenueSources) window.appData.revenueSources = [];
-                        if (!window.appData.groups) window.appData.groups = { A: [], B: [], C: [], D: [] };
+                        if (!window.appData.groups) window.appData.groups = { A: [], B: [], C: [], D: [], E: [], F: [] };
                         saveData(); 
                         location.reload();
                     } else {
@@ -949,7 +1248,7 @@
         }
 
         window.confirmAudit = function() {
-             ['A','B','C','D'].forEach(g => {
+             GROUP_KEYS.forEach(g => {
                  if (!window.appData.groups[g]) window.appData.groups[g] = [];
                  window.appData.groups[g].forEach((p,i) => {
                      const el = document.getElementById(`audit-${g}-${i}`);
@@ -988,7 +1287,7 @@
                 if (c) {
                     c.innerHTML="";
                     let hasProjects = false;
-                    ['A','B','C','D'].forEach(g => {
+                    GROUP_KEYS.forEach(g => {
                         if(window.appData.groups[g] && window.appData.groups[g].length > 0) {
                             hasProjects = true;
                             c.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px;">GROUP ${g}</div>`;
