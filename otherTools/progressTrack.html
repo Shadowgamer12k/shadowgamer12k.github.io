@@ -77,7 +77,7 @@
             text-transform: uppercase;
         }
 
-        /* FEATURE 1 (New): Splash Text */
+        /* FEATURE 1: Splash Text */
         .splash-text {
             color: var(--mc-yellow);
             font-size: 0.6rem;
@@ -96,7 +96,7 @@
         /* FEATURE 2: Global Download Counter */
         .total-dl-display { color: var(--mc-blue); font-size: 0.65rem; text-shadow: 1px 1px #000; margin-top: 3px; }
 
-        /* FEATURE 2 (New): Boss Bar Milestone */
+        /* FEATURE 2: Boss Bar Milestone */
         .boss-bar-container {
             position: relative;
             width: 100%;
@@ -206,7 +206,7 @@
         }
         .action-btn:hover { background: #777; }
         
-        /* FEATURE 3 (New): Quick Add Buttons */
+        /* FEATURE 3: Quick Add Buttons */
         .quick-add-row {
             display: flex; gap: 3px; margin-bottom: 5px; justify-content: center;
         }
@@ -516,6 +516,19 @@
         let useFirestore = false;
 
         // --- 1. CORE HELPERS ---
+        // NEW: Fix for missing groups in old save data
+        window.hydrateData = function() {
+            if (!window.appData.groups) window.appData.groups = {};
+            GROUP_KEYS.forEach(g => {
+                // If specific group missing, init empty array
+                if (!Array.isArray(window.appData.groups[g])) {
+                    window.appData.groups[g] = [];
+                }
+            });
+            // Also ensure revenueSources exists
+            if (!window.appData.revenueSources) window.appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
+        }
+
         function escapeHtml(text) {
             if (!text) return "";
             return String(text)
@@ -854,6 +867,9 @@
             } else {
                 document.body.classList.remove('nether-theme');
             }
+            
+            // ENSURE DATA INTEGRITY
+            window.hydrateData();
 
             updateRevenue(); 
             renderGroups(); 
@@ -1232,9 +1248,8 @@
                     const imported = JSON.parse(e.target.result);
                     if (imported && typeof imported === 'object') {
                         window.appData = { ...window.appData, ...imported };
-                        if (!window.appData.pointsLog) window.appData.pointsLog = [];
-                        if (!window.appData.revenueSources) window.appData.revenueSources = [];
-                        if (!window.appData.groups) window.appData.groups = { A: [], B: [], C: [], D: [], E: [], F: [] };
+                        // NEW: HYDRATE IMMEDIATELY AFTER IMPORT
+                        window.hydrateData();
                         saveData(); 
                         location.reload();
                     } else {
@@ -1334,6 +1349,8 @@
                             if (snapshot.exists()) {
                                 // Cloud has data -> Load it
                                 window.appData = { ...window.appData, ...snapshot.data() };
+                                // NEW: HYDRATE OLD DATA ON LOAD
+                                window.hydrateData();
                                 refreshAll();
                             } else {
                                 // Cloud is empty -> Check LocalStorage for migration
@@ -1343,6 +1360,8 @@
                                         const parsed = JSON.parse(savedLocal);
                                         window.appData = { ...window.appData, ...parsed };
                                         console.log("Migrating LocalStorage to Firestore...");
+                                        // NEW: HYDRATE BEFORE MIGRATION
+                                        window.hydrateData();
                                         // Save immediately to Cloud
                                         setDoc(firestoreDocRef, window.appData);
                                     } catch(e) { console.error(e); }
@@ -1366,6 +1385,8 @@
                 try {
                     const parsed = JSON.parse(saved);
                     window.appData = { ...window.appData, ...parsed };
+                    // NEW: HYDRATE OLD DATA ON LOAD
+                    window.hydrateData();
                 } catch(e) {}
             }
             refreshAll();
