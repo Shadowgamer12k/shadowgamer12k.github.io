@@ -387,6 +387,12 @@
                 body: JSON.stringify(payload)
             });
 
+            // Handle 401 specifically
+            if (response.status === 401) {
+                document.getElementById('settings-area').style.display = 'block';
+                throw new Error("Unauthorized: Invalid API Token. Please check your token in Settings.");
+            }
+
             const data = await response.json();
 
             if (data && data.message && data.message.loot_url) {
@@ -397,7 +403,8 @@
                 showToast("Link Created!");
             } else {
                 // API Error
-                throw new Error(data.message || "Unknown error from API");
+                const errorMsg = data.message || "Unknown error from API";
+                throw new Error(errorMsg);
             }
 
         } catch (error) {
