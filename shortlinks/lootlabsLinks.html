@@ -347,7 +347,7 @@
         const url = document.getElementById('targetUrl').value.trim();
         let title = document.getElementById('linkTitle').value.trim();
         
-        // Ensure numbers are numbers
+        // Ensure numbers are strictly integers
         const tasks = parseInt(document.getElementById('tasksSetting').value, 10);
         const tier = parseInt(document.getElementById('tierSetting').value, 10);
         const thumbnail = document.getElementById('thumbnailSetting').value.trim();
@@ -378,10 +378,8 @@
         if (!title) {
             title = "Link to " + getDomain(url);
         }
-        if (title.length > 30) {
-            title = title.substring(0, 30);
-        }
-        // Update input to show user what is actually being sent
+        // Ensure title is string and safe length
+        title = String(title).substring(0, 30);
         document.getElementById('linkTitle').value = title;
 
         // 5. Save Settings to LocalStorage
@@ -395,7 +393,7 @@
         btn.innerText = "Generating...";
 
         try {
-            // Construct Payload (Only include thumbnail if it has a value)
+            // Construct Payload
             const payload = {
                 title: title,
                 url: url,
@@ -404,27 +402,26 @@
                 theme: 3 // Minecraft Theme
             };
 
-            if (thumbnail) {
+            // Only add thumbnail if it's a valid non-empty string
+            if (thumbnail && thumbnail.length > 0) {
                 payload.thumbnail = thumbnail;
             }
+
+            console.log("Sending Payload:", payload); // Debug for user
 
             const response = await fetch('https://creators.lootlabs.gg/api/public/content_locker', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(payload)
             });
 
-            // Handle specific HTTP errors before parsing JSON
-            if (response.status === 401) {
-                document.getElementById('settings-area').style.display = 'block';
-                throw new Error("Unauthorized: Invalid API Token.");
-            }
-
             const data = await response.json();
 
+            // Handle success based on HTTP status and body content
             if (response.ok && data && data.message && data.message.loot_url) {
                 // Success
                 document.getElementById('finalLink').innerText = data.message.loot_url;
@@ -432,8 +429,13 @@
                 resultBox.style.display = 'block';
                 showToast("Link Created!");
             } else {
-                // API Error
-                // Try to extract exact message from JSON
+                // Handle 401 Unauthorized specifically
+                if (response.status === 401) {
+                    document.getElementById('settings-area').style.display = 'block';
+                    throw new Error("Unauthorized: Invalid API Token.");
+                }
+
+                // Handle API Error Message
                 let serverMsg = "Unknown error";
                 if (data.message) {
                     serverMsg = typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
@@ -445,7 +447,7 @@
             console.error(error);
             errorDiv.style.display = 'block';
             if (error.message.includes("Failed to fetch")) {
-                errorDiv.innerHTML = "Network Error: CORS or Connection.<br>Check your API Token and Internet.";
+                errorDiv.innerHTML = "Network Error: <br>1. Check Internet Connection<br>2. Check API Token<br>3. LootLabs API might not allow browser requests (CORS).";
             } else {
                 errorDiv.innerText = "API Error: " + error.message;
             }
