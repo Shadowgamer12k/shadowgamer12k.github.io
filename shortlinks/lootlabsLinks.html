@@ -99,6 +99,12 @@
             outline: none;
         }
 
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--mc-button-green);
+        }
+
         input:focus {
             background-color: #2a2a2b;
             border-color: white;
@@ -226,6 +232,15 @@
         .badge-gold { background: #FFAA00; color: #000; }
         .badge-blue { background: #5555FF; color: #FFF; }
 
+        .proxy-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #ccc;
+        }
+
     </style>
 </head>
 <body>
@@ -267,6 +282,11 @@
             <label>Thumbnail URL <span style="font-size:0.7em; color:#888;">(Optional)</span></label>
             <input type="url" id="thumbnailSetting" placeholder="https://image.png (Optional)">
         </div>
+
+        <div class="proxy-toggle">
+            <input type="checkbox" id="proxySetting" checked>
+            <label for="proxySetting" style="margin:0; font-size:18px;">Use CORS Proxy (Fixes Errors)</label>
+        </div>
     </div>
 
     <!-- Main Input Area -->
@@ -301,11 +321,20 @@
         const savedTasks = localStorage.getItem('lootlabs_tasks');
         const savedTier = localStorage.getItem('lootlabs_tier');
         const savedThumb = localStorage.getItem('lootlabs_thumbnail');
+        // Proxy defaults to true if not set
+        const savedProxy = localStorage.getItem('lootlabs_proxy');
 
         if (savedToken) document.getElementById('apiToken').value = savedToken;
         if (savedTasks) document.getElementById('tasksSetting').value = savedTasks;
         if (savedTier) document.getElementById('tierSetting').value = savedTier;
         if (savedThumb) document.getElementById('thumbnailSetting').value = savedThumb;
+        
+        // Default Proxy to TRUE if it's the first time
+        if (savedProxy === 'false') {
+            document.getElementById('proxySetting').checked = false;
+        } else {
+            document.getElementById('proxySetting').checked = true;
+        }
 
         if (!savedToken) {
             // Open settings if no token found
@@ -351,6 +380,7 @@
         const tasks = parseInt(document.getElementById('tasksSetting').value, 10);
         const tier = parseInt(document.getElementById('tierSetting').value, 10);
         const thumbnail = document.getElementById('thumbnailSetting').value.trim();
+        const useProxy = document.getElementById('proxySetting').checked;
         
         const btn = document.getElementById('createBtn');
         const errorDiv = document.getElementById('errorDisplay');
@@ -387,6 +417,7 @@
         localStorage.setItem('lootlabs_tasks', tasks);
         localStorage.setItem('lootlabs_tier', tier);
         localStorage.setItem('lootlabs_thumbnail', thumbnail);
+        localStorage.setItem('lootlabs_proxy', useProxy);
 
         // 6. UI Loading State
         btn.disabled = true;
@@ -407,9 +438,15 @@
                 payload.thumbnail = thumbnail;
             }
 
-            console.log("Sending Payload:", payload); // Debug for user
+            console.log("Sending Payload:", payload); 
 
-            const response = await fetch('https://creators.lootlabs.gg/api/public/content_locker', {
+            // Handle Proxy
+            const apiEndpoint = 'https://creators.lootlabs.gg/api/public/content_locker';
+            const fetchUrl = useProxy 
+                ? 'https://corsproxy.io/?' + encodeURIComponent(apiEndpoint) 
+                : apiEndpoint;
+
+            const response = await fetch(fetchUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -419,22 +456,25 @@
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
+            console.log("Response Status:", response.status);
 
-            // Handle success based on HTTP status and body content
-            if (response.ok && data && data.message && data.message.loot_url) {
+            // Handle specific HTTP errors
+            if (response.status === 401) {
+                document.getElementById('settings-area').style.display = 'block';
+                throw new Error("Unauthorized: Invalid API Token.");
+            }
+
+            const data = await response.json();
+            console.log("Response Data:", data);
+
+            // Success Check
+            if (data && data.message && data.message.loot_url) {
                 // Success
                 document.getElementById('finalLink').innerText = data.message.loot_url;
                 document.getElementById('finalLink').href = data.message.loot_url;
                 resultBox.style.display = 'block';
                 showToast("Link Created!");
             } else {
-                // Handle 401 Unauthorized specifically
-                if (response.status === 401) {
-                    document.getElementById('settings-area').style.display = 'block';
-                    throw new Error("Unauthorized: Invalid API Token.");
-                }
-
                 // Handle API Error Message
                 let serverMsg = "Unknown error";
                 if (data.message) {
@@ -447,7 +487,7 @@
             console.error(error);
             errorDiv.style.display = 'block';
             if (error.message.includes("Failed to fetch")) {
-                errorDiv.innerHTML = "Network Error: <br>1. Check Internet Connection<br>2. Check API Token<br>3. LootLabs API might not allow browser requests (CORS).";
+                errorDiv.innerHTML = "Network Error: <br>Try enabling 'Use CORS Proxy' in Settings.<br>Make sure you have internet.";
             } else {
                 errorDiv.innerText = "API Error: " + error.message;
             }
