@@ -44,7 +44,6 @@
             padding: 4px;
             position: relative;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            /* Bedrock UI Border Style */
             outline: 2px solid var(--mc-panel-highlight);
             outline-offset: -4px;
         }
@@ -60,7 +59,6 @@
             position: relative;
         }
 
-        /* Settings Toggle */
         .settings-toggle {
             position: absolute;
             right: 0;
@@ -103,11 +101,7 @@
             width: 20px;
             height: 20px;
             accent-color: var(--mc-button-green);
-        }
-
-        input:focus {
-            background-color: #2a2a2b;
-            border-color: white;
+            vertical-align: middle;
         }
 
         .btn {
@@ -118,19 +112,15 @@
             font-family: 'VT323', monospace;
             font-size: 28px;
             border: 2px solid #1e1e1f;
-            border-top-color: #5bb344; /* Light highlight */
+            border-top-color: #5bb344;
             border-left-color: #5bb344;
             cursor: pointer;
             text-shadow: var(--mc-text-shadow);
-            position: relative;
+            margin-top: 10px;
         }
 
         .btn:active {
             background-color: var(--mc-button-green-hover);
-            border-top-color: #1e4a12;
-            border-left-color: #1e4a12;
-            border-bottom-color: #5bb344;
-            border-right-color: #5bb344;
             transform: translateY(2px);
         }
 
@@ -159,16 +149,10 @@
             user-select: all;
             text-decoration: none;
         }
-        
-        .result-link:hover {
-            text-decoration: underline;
-        }
 
         .copy-btn {
             background-color: #4a4a4a;
             border: 2px solid #222;
-            border-top-color: #666;
-            border-left-color: #666;
             color: white;
             font-family: 'VT323', monospace;
             font-size: 20px;
@@ -177,15 +161,6 @@
             margin-top: 5px;
         }
 
-        .copy-btn:active {
-            background-color: #333;
-            border-top-color: #222;
-            border-left-color: #222;
-            border-bottom-color: #666;
-            border-right-color: #666;
-        }
-
-        /* Settings Area (Hidden by default) */
         #settings-area {
             display: none;
             background: rgba(0,0,0,0.2);
@@ -214,9 +189,10 @@
             margin-top: 5px;
             display: none;
             word-wrap: break-word;
+            background: rgba(0,0,0,0.5);
+            padding: 5px;
         }
         
-        /* Minecraft Toggle Switch (Simplified) */
         .switch-container {
             display: flex;
             justify-content: space-between;
@@ -229,7 +205,6 @@
             padding: 2px 6px;
             border-radius: 2px;
         }
-        .badge-gold { background: #FFAA00; color: #000; }
         .badge-blue { background: #5555FF; color: #FFF; }
 
         .proxy-toggle {
@@ -239,8 +214,33 @@
             margin-bottom: 10px;
             font-size: 18px;
             color: #ccc;
+            background: #222;
+            padding: 5px;
         }
 
+        .debug-payload {
+            font-family: monospace;
+            font-size: 14px;
+            color: #aaa;
+            background: #000;
+            padding: 5px;
+            margin-top: 10px;
+            display: none;
+            text-align: left;
+            white-space: pre-wrap;
+            border: 1px solid #444;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .info-box {
+            background: rgba(85, 85, 255, 0.1);
+            border: 1px solid #5555FF;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
@@ -251,10 +251,14 @@
         <button class="settings-toggle" onclick="toggleSettings()" title="Settings">⚙️</button>
     </div>
 
+    <div class="info-box">
+        ℹ️ Uses GET method by default (recommended by LootLabs API)
+    </div>
+
     <!-- Hidden Settings Area -->
     <div id="settings-area">
         <div class="form-group">
-            <label>API Token <span style="font-size:0.7em; color:#888;">(Auto-Saved)</span></label>
+            <label>API Token <span style="font-size:0.7em; color:#888;">(Session Only)</span></label>
             <input type="password" id="apiToken" placeholder="Paste your LootLabs API Token here...">
         </div>
         
@@ -264,44 +268,65 @@
                 <option value="1">1</option>
                 <option value="2" selected>2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
-            <span class="badge badge-blue">Default: 2</span>
+            <span class="badge badge-blue">1-5</span>
         </div>
 
         <div class="switch-container">
             <label>Tier: </label>
-            <select id="tierSetting" style="width: 150px;">
+            <select id="tierSetting" style="width: 200px;">
                 <option value="1">1 - Trending</option>
                 <option value="2">2 - Gaming</option>
                 <option value="3" selected>3 - Max Profit</option>
                 <option value="4">4 - Max + Software</option>
             </select>
         </div>
+
+        <div class="switch-container">
+            <label>Theme: </label>
+            <select id="themeSetting" style="width: 150px;">
+                <option value="1">1 - Classic</option>
+                <option value="2">2 - Sims</option>
+                <option value="3" selected>3 - Minecraft</option>
+                <option value="4">4 - GTA</option>
+                <option value="5">5 - Space</option>
+            </select>
+        </div>
         
-        <div class="form-group">
-            <label>Thumbnail URL <span style="font-size:0.7em; color:#888;">(Optional)</span></label>
-            <input type="url" id="thumbnailSetting" placeholder="https://image.png (Optional)">
+        <label style="margin-top: 15px; border-bottom: 1px solid #555;">Advanced Settings</label>
+        
+        <div class="proxy-toggle">
+            <input type="checkbox" id="methodSetting">
+            <label for="methodSetting" style="margin:0; font-size:18px;">Use POST instead of GET</label>
         </div>
 
         <div class="proxy-toggle">
-            <input type="checkbox" id="proxySetting" checked>
-            <label for="proxySetting" style="margin:0; font-size:18px;">Use CORS Proxy (Fixes Errors)</label>
+            <input type="checkbox" id="debugSetting">
+            <label for="debugSetting" style="margin:0; font-size:18px;">Show Debug Info</label>
         </div>
     </div>
 
     <!-- Main Input Area -->
     <div class="form-group">
         <label>Target URL</label>
-        <input type="url" id="targetUrl" placeholder="https://..." onkeydown="if(event.key === 'Enter') createLink()">
+        <input type="url" id="targetUrl" placeholder="https://example.com" onkeydown="if(event.key === 'Enter') createLink()">
     </div>
 
     <div class="form-group">
         <label>Title <span style="font-size:0.7em; color:#888;">(Max 30 chars)</span></label>
-        <input type="text" id="linkTitle" placeholder="Auto-generated if empty">
+        <input type="text" id="linkTitle" placeholder="Auto-generated if empty" maxlength="30">
+    </div>
+
+    <div class="form-group">
+        <label>Thumbnail URL <span style="font-size:0.7em; color:#888;">(Optional - Image or YouTube)</span></label>
+        <input type="url" id="thumbnailSetting" placeholder="https://image.png or YouTube link">
     </div>
 
     <button class="btn" id="createBtn" onclick="createLink()">Create Link</button>
     <div id="errorDisplay" class="error-msg"></div>
+    <div id="debugPayload" class="debug-payload"></div>
 
     <!-- Result Area -->
     <div class="result-box" id="resultBox">
@@ -315,31 +340,19 @@
 <div class="toast" id="toast">Copied to clipboard!</div>
 
 <script>
-    // Load settings on start
+    // In-memory state
+    const appState = {
+        token: '',
+        tasks: 2,
+        tier: 3,
+        theme: 3,
+        thumbnail: '',
+        usePostMethod: false,
+        useDebug: false
+    };
+
     window.onload = function() {
-        const savedToken = localStorage.getItem('lootlabs_token');
-        const savedTasks = localStorage.getItem('lootlabs_tasks');
-        const savedTier = localStorage.getItem('lootlabs_tier');
-        const savedThumb = localStorage.getItem('lootlabs_thumbnail');
-        // Proxy defaults to true if not set
-        const savedProxy = localStorage.getItem('lootlabs_proxy');
-
-        if (savedToken) document.getElementById('apiToken').value = savedToken;
-        if (savedTasks) document.getElementById('tasksSetting').value = savedTasks;
-        if (savedTier) document.getElementById('tierSetting').value = savedTier;
-        if (savedThumb) document.getElementById('thumbnailSetting').value = savedThumb;
-        
-        // Default Proxy to TRUE if it's the first time
-        if (savedProxy === 'false') {
-            document.getElementById('proxySetting').checked = false;
-        } else {
-            document.getElementById('proxySetting').checked = true;
-        }
-
-        if (!savedToken) {
-            // Open settings if no token found
-            document.getElementById('settings-area').style.display = 'block';
-        }
+        document.getElementById('settings-area').style.display = 'block';
     };
 
     function toggleSettings() {
@@ -358,6 +371,8 @@
         const link = document.getElementById('finalLink').innerText;
         navigator.clipboard.writeText(link).then(() => {
             showToast("Copied to clipboard!");
+        }).catch(() => {
+            showToast("Failed to copy!");
         });
     }
 
@@ -370,132 +385,195 @@
         }
     }
 
+    function isValidUrl(string) {
+        try {
+            const url = new URL(string);
+            return url.protocol === 'http:' || url.protocol === 'https:';
+        } catch (_) {
+            return false;
+        }
+    }
+
     async function createLink() {
-        // 1. Get Values
+        // Get values
         const token = document.getElementById('apiToken').value.trim();
         const url = document.getElementById('targetUrl').value.trim();
         let title = document.getElementById('linkTitle').value.trim();
         
-        // Ensure numbers are strictly integers
         const tasks = parseInt(document.getElementById('tasksSetting').value, 10);
         const tier = parseInt(document.getElementById('tierSetting').value, 10);
+        const theme = parseInt(document.getElementById('themeSetting').value, 10);
         const thumbnail = document.getElementById('thumbnailSetting').value.trim();
-        const useProxy = document.getElementById('proxySetting').checked;
+        
+        const usePostMethod = document.getElementById('methodSetting').checked;
+        const useDebug = document.getElementById('debugSetting').checked;
         
         const btn = document.getElementById('createBtn');
         const errorDiv = document.getElementById('errorDisplay');
         const resultBox = document.getElementById('resultBox');
+        const debugBox = document.getElementById('debugPayload');
 
-        // 2. Reset UI
+        // Reset UI
         errorDiv.style.display = 'none';
         resultBox.style.display = 'none';
-        errorDiv.innerText = "";
+        debugBox.style.display = 'none';
+        errorDiv.innerHTML = "";
 
-        // 3. Validation
+        // Validation
         if (!token) {
-            errorDiv.innerText = "Error: API Token is missing. Check Settings.";
+            errorDiv.innerHTML = "❌ API Token is required. Enter it in Settings above.";
             errorDiv.style.display = 'block';
-            toggleSettings();
+            document.getElementById('settings-area').style.display = 'block';
             return;
         }
+        
         if (!url) {
-            errorDiv.innerText = "Error: Please enter a URL.";
+            errorDiv.innerHTML = "❌ Please enter a Target URL.";
             errorDiv.style.display = 'block';
             return;
         }
 
-        // 4. Auto-generate & Truncate Title (Strict Max 30 chars)
+        if (!isValidUrl(url)) {
+            errorDiv.innerHTML = "❌ Invalid URL. Must start with http:// or https://";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (thumbnail && !isValidUrl(thumbnail)) {
+            errorDiv.innerHTML = "❌ Thumbnail must be a valid URL or left empty.";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Auto-generate title if empty
         if (!title) {
             title = "Link to " + getDomain(url);
         }
-        // Ensure title is string and safe length
         title = String(title).substring(0, 30);
         document.getElementById('linkTitle').value = title;
 
-        // 5. Save Settings to LocalStorage
-        localStorage.setItem('lootlabs_token', token);
-        localStorage.setItem('lootlabs_tasks', tasks);
-        localStorage.setItem('lootlabs_tier', tier);
-        localStorage.setItem('lootlabs_thumbnail', thumbnail);
-        localStorage.setItem('lootlabs_proxy', useProxy);
+        // Save state
+        appState.token = token;
+        appState.tasks = tasks;
+        appState.tier = tier;
+        appState.theme = theme;
+        appState.thumbnail = thumbnail;
+        appState.usePostMethod = usePostMethod;
+        appState.useDebug = useDebug;
 
-        // 6. UI Loading State
-        btn.disabled = true;
-        btn.innerText = "Generating...";
+        // Build request
+        const apiEndpoint = 'https://creators.lootlabs.gg/api/public/content_locker';
+        let fetchUrl, fetchOptions;
 
-        try {
-            // Construct Payload
+        if (usePostMethod) {
+            // POST Method (as per documentation)
             const payload = {
                 title: title,
                 url: url,
                 tier_id: tier,
                 number_of_tasks: tasks,
-                theme: 3 // Minecraft Theme
+                theme: theme
             };
-
-            // Only add thumbnail if it's a valid non-empty string
-            if (thumbnail && thumbnail.length > 0) {
+            
+            if (thumbnail) {
                 payload.thumbnail = thumbnail;
             }
 
-            console.log("Sending Payload:", payload); 
-
-            // Handle Proxy & Auth Fallback
-            // IMPORTANT: Proxies often strip headers. We append api_token to URL as a fallback.
-            let apiEndpoint = 'https://creators.lootlabs.gg/api/public/content_locker';
-            
-            // Append API Token to query params just in case headers are stripped
-            apiEndpoint += `?api_token=${token}`;
-
-            const fetchUrl = useProxy 
-                ? 'https://corsproxy.io/?' + encodeURIComponent(apiEndpoint) 
-                : apiEndpoint;
-
-            const response = await fetch(fetchUrl, {
+            fetchUrl = apiEndpoint;
+            fetchOptions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}` // Keep header for standard compliance
+                    'Authorization': `Bearer ${token}`
                 },
-                mode: 'cors',
                 body: JSON.stringify(payload)
+            };
+
+            if (useDebug) {
+                debugBox.innerText = `Method: POST\nEndpoint: ${apiEndpoint}\nHeaders:\n  Authorization: Bearer ${token.substring(0, 20)}...\n  Content-Type: application/json\n\nBody:\n${JSON.stringify(payload, null, 2)}`;
+                debugBox.style.display = 'block';
+            }
+        } else {
+            // GET Method (recommended, as per documentation)
+            const params = new URLSearchParams({
+                api_token: token,
+                title: title,
+                url: url,
+                tier_id: tier.toString(),
+                number_of_tasks: tasks.toString(),
+                theme: theme.toString()
             });
-
-            console.log("Response Status:", response.status);
-
-            // Handle specific HTTP errors
-            if (response.status === 401) {
-                document.getElementById('settings-area').style.display = 'block';
-                throw new Error("Unauthorized: Invalid API Token.");
+            
+            if (thumbnail) {
+                params.append('thumbnail', thumbnail);
             }
 
-            const data = await response.json();
-            console.log("Response Data:", data);
+            fetchUrl = `${apiEndpoint}?${params.toString()}`;
+            fetchOptions = {
+                method: 'GET'
+            };
 
-            // Success Check
-            if (data && data.message && data.message.loot_url) {
-                // Success
-                document.getElementById('finalLink').innerText = data.message.loot_url;
-                document.getElementById('finalLink').href = data.message.loot_url;
+            if (useDebug) {
+                debugBox.innerText = `Method: GET\nFull URL:\n${fetchUrl.substring(0, 150)}...`;
+                debugBox.style.display = 'block';
+            }
+        }
+
+        // Make request
+        btn.disabled = true;
+        btn.innerText = "Generating...";
+
+        try {
+            console.log('Making request to:', fetchUrl.substring(0, 100) + '...');
+            
+            const response = await fetch(fetchUrl, fetchOptions);
+            
+            // Get response text first
+            const responseText = await response.text();
+            console.log('Response status:', response.status);
+            console.log('Response text:', responseText);
+            
+            // Parse JSON
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                throw new Error('Invalid JSON response from API');
+            }
+
+            // Check for errors
+            if (data.type === 'error') {
+                throw new Error(data.message || 'API returned an error');
+            }
+
+            // Extract loot_url from response
+            if (data.message && data.message.loot_url) {
+                const lootUrl = data.message.loot_url;
+                document.getElementById('finalLink').innerText = lootUrl;
+                document.getElementById('finalLink').href = lootUrl;
                 resultBox.style.display = 'block';
-                showToast("Link Created!");
-            } else {
-                // Handle API Error Message
-                let serverMsg = "Unknown error";
-                if (data.message) {
-                    serverMsg = typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
+                showToast("✓ Link Created Successfully!");
+                
+                if (useDebug) {
+                    debugBox.innerText += '\n\n✓ Success Response:\n' + JSON.stringify(data, null, 2);
                 }
-                throw new Error(serverMsg);
+            } else {
+                throw new Error('Unexpected response format: ' + JSON.stringify(data));
             }
 
         } catch (error) {
-            console.error(error);
+            console.error('Error:', error);
             errorDiv.style.display = 'block';
+            
             if (error.message.includes("Failed to fetch")) {
-                errorDiv.innerHTML = "Network Error: <br>Try enabling 'Use CORS Proxy' in Settings.<br>Make sure you have internet.";
+                errorDiv.innerHTML = "❌ Network Error<br><br>The API request was blocked by CORS policy.<br><br><strong>Solutions:</strong><br>1. Use this tool from a browser extension<br>2. Use a backend/server to make API calls<br>3. Contact LootLabs support about CORS";
             } else {
-                errorDiv.innerText = "API Error: " + error.message;
+                errorDiv.innerHTML = "❌ Error: " + error.message;
+            }
+            
+            if (useDebug) {
+                debugBox.innerText += '\n\n❌ Error:\n' + error.message;
+                debugBox.style.display = 'block';
             }
         } finally {
             btn.disabled = false;
