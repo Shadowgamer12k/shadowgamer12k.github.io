@@ -440,8 +440,13 @@
 
             console.log("Sending Payload:", payload); 
 
-            // Handle Proxy
-            const apiEndpoint = 'https://creators.lootlabs.gg/api/public/content_locker';
+            // Handle Proxy & Auth Fallback
+            // IMPORTANT: Proxies often strip headers. We append api_token to URL as a fallback.
+            let apiEndpoint = 'https://creators.lootlabs.gg/api/public/content_locker';
+            
+            // Append API Token to query params just in case headers are stripped
+            apiEndpoint += `?api_token=${token}`;
+
             const fetchUrl = useProxy 
                 ? 'https://corsproxy.io/?' + encodeURIComponent(apiEndpoint) 
                 : apiEndpoint;
@@ -451,8 +456,9 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` // Keep header for standard compliance
                 },
+                mode: 'cors',
                 body: JSON.stringify(payload)
             });
 
