@@ -430,26 +430,34 @@
         if (!url) {
             errorDiv.innerHTML = "❌ Please enter a Target URL.";
             errorDiv.style.display = 'block';
+            document.getElementById('targetUrl').focus();
             return;
         }
 
         if (!isValidUrl(url)) {
             errorDiv.innerHTML = "❌ Invalid URL. Must start with http:// or https://";
             errorDiv.style.display = 'block';
+            document.getElementById('targetUrl').focus();
             return;
         }
 
-        if (thumbnail && !isValidUrl(thumbnail)) {
+        if (thumbnail && thumbnail.length > 0 && !isValidUrl(thumbnail)) {
             errorDiv.innerHTML = "❌ Thumbnail must be a valid URL or left empty.";
             errorDiv.style.display = 'block';
             return;
         }
 
         // Auto-generate title if empty
-        if (!title) {
+        if (!title || title.trim().length === 0) {
             title = "Link to " + getDomain(url);
         }
-        title = String(title).substring(0, 30);
+        title = String(title).trim().substring(0, 30);
+        
+        // Ensure title is not empty after trimming
+        if (title.length === 0) {
+            title = "LootLabs Link";
+        }
+        
         document.getElementById('linkTitle').value = title;
 
         // Save state
@@ -495,16 +503,15 @@
             }
         } else {
             // GET Method (recommended, as per documentation)
-            const params = new URLSearchParams({
-                api_token: token,
-                title: title,
-                url: url,
-                tier_id: tier.toString(),
-                number_of_tasks: tasks.toString(),
-                theme: theme.toString()
-            });
+            const params = new URLSearchParams();
+            params.append('api_token', token);
+            params.append('title', title);
+            params.append('url', url);
+            params.append('tier_id', tier.toString());
+            params.append('number_of_tasks', tasks.toString());
+            params.append('theme', theme.toString());
             
-            if (thumbnail) {
+            if (thumbnail && thumbnail.length > 0) {
                 params.append('thumbnail', thumbnail);
             }
 
@@ -514,7 +521,17 @@
             };
 
             if (useDebug) {
-                debugBox.innerText = `Method: GET\nFull URL:\n${fetchUrl.substring(0, 150)}...`;
+                const debugParams = {
+                    api_token: token.substring(0, 20) + '...',
+                    title: title,
+                    url: url,
+                    tier_id: tier,
+                    number_of_tasks: tasks,
+                    theme: theme
+                };
+                if (thumbnail) debugParams.thumbnail = thumbnail;
+                
+                debugBox.innerText = `Method: GET\nEndpoint: ${apiEndpoint}\n\nParameters:\n${JSON.stringify(debugParams, null, 2)}\n\nFull URL (truncated):\n${fetchUrl.substring(0, 150)}...`;
                 debugBox.style.display = 'block';
             }
         }
