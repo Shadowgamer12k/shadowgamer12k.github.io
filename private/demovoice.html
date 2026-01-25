@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello Kitty Voice Recorder</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MP3 Encoder Library -->
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         /* Retro Pixel Art Styling */
@@ -152,7 +154,7 @@
         </button>
 
         <button id="stopBtn" class="pixel-btn stop" disabled>
-            END & SAVE
+            END & SAVE (MP3)
         </button>
     </div>
 
@@ -165,14 +167,27 @@
         const canvasCtx = canvas.getContext('2d');
 
         // Audio Context & Variables
-        let mediaRecorder;
-        let audioChunks = [];
         let audioContext;
         let analyser;
         let dataArray;
         let source;
         let animationId;
         let stream;
+        
+        // MP3 Recording Variables
+        let processor;
+        let mp3Encoder;
+        let mp3Data = [];
+
+        // Helper: Convert Float32 audio to Int16 PCM (Required for MP3 encoder)
+        function convertFloat32ToInt16(buffer) {
+            let l = buffer.length;
+            let buf = new Int16Array(l);
+            while (l--) {
+                buf[l] = Math.min(1, buffer[l]) * 0x7FFF;
+            }
+            return buf;
+        }
 
         // Setup Canvas resolution
         function resizeCanvas() {
@@ -209,7 +224,12 @@
 
         // Start Recording
         recordBtn.addEventListener('click', async () => {
-            // Check for Audio Context support
+            // Check if LameJS is loaded
+            if (typeof lamejs === 'undefined') {
+                statusDisplay.textContent = "Error: Encoder not loaded.";
+                return;
+            }
+
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 statusDisplay.textContent = "Error: Mic not supported!";
                 return;
@@ -218,49 +238,49 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 
-                // Initialize Audio Context for Visualizer
+                // Initialize Audio Context
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
+                
+                // --- MP3 SETUP ---
+                // Create Encoder: Mono (1 channel), Sample Rate, 128kbps
+                mp3Encoder = new lamejs.Mp3Encoder(1, audioContext.sampleRate, 128);
+                mp3Data = [];
+
+                // Create Source
                 source = audioContext.createMediaStreamSource(stream);
-                source.connect(analyser);
-                analyser.fftSize = 64; // Low resolution for pixel look
+                
+                // Visualizer Node
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 64;
                 const bufferLength = analyser.frequencyBinCount;
                 dataArray = new Uint8Array(bufferLength);
 
-                // Initialize Recorder
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
+                // Processor Node (for recording)
+                // Buffer size 4096 is a good balance for latency/performance
+                processor = audioContext.createScriptProcessor(4096, 1, 1);
 
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
+                // --- CONNECTIONS ---
+                source.connect(analyser); // For visuals
+                source.connect(processor); // For recording
+                processor.connect(audioContext.destination); // Required for Chrome to fire events
+
+                // --- PROCESS AUDIO ---
+                processor.onaudioprocess = function(event) {
+                    // Get left channel data
+                    const arrayBuffer = event.inputBuffer.getChannelData(0);
+                    // Convert to 16-bit PCM
+                    const pcmData = convertFloat32ToInt16(arrayBuffer);
+                    // Encode to MP3
+                    const mp3Chunk = mp3Encoder.encodeBuffer(pcmData);
+                    if (mp3Chunk.length > 0) {
+                        mp3Data.push(mp3Chunk);
+                    }
                 };
 
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    
-                    // Auto Download
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = audioUrl;
-                    const timestamp = new Date().toLocaleTimeString().replace(/:/g, "-");
-                    a.download = `kitty-memo-${timestamp}.webm`; // Saves as webm
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(audioUrl);
-                    }, 100);
-
-                    statusDisplay.textContent = "SAVED TO DEVICE! ❤";
-                };
-
-                mediaRecorder.start();
                 drawVisualizer();
 
                 // UI Updates
-                statusDisplay.textContent = "RECORDING NOW...";
+                statusDisplay.textContent = "RECORDING (MP3)...";
                 recordBtn.disabled = true;
                 stopBtn.disabled = false;
 
@@ -272,12 +292,41 @@
 
         // Stop Recording
         stopBtn.addEventListener('click', () => {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
+            if (audioContext && audioContext.state !== 'closed') {
                 
-                // Stop streams and visualizer
+                // Cleanup streams
                 stream.getTracks().forEach(track => track.stop());
+                source.disconnect();
+                processor.disconnect();
+                analyser.disconnect();
                 cancelAnimationFrame(animationId);
+
+                // --- FINALIZE MP3 ---
+                // Flush remaining data in encoder
+                const mp3Chunk = mp3Encoder.flush();
+                if (mp3Chunk.length > 0) {
+                    mp3Data.push(mp3Chunk);
+                }
+
+                // Create Blob
+                const audioBlob = new Blob(mp3Data, { type: 'audio/mp3' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                // Auto Download
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = audioUrl;
+                const timestamp = new Date().toLocaleTimeString().replace(/:/g, "-");
+                a.download = `kitty-memo-${timestamp}.mp3`; // Saves as .mp3
+                document.body.appendChild(a);
+                a.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(audioUrl);
+                }, 100);
+
+                statusDisplay.textContent = "SAVED MP3! ❤";
                 
                 // Reset Visualizer
                 canvasCtx.fillStyle = '#000';
