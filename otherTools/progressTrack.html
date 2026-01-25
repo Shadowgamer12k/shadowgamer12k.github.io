@@ -29,31 +29,31 @@
             --mc-border-dark: #1a0000;
             --mc-green: #ffaa00; /* Gold replaces Green */
             --mc-text: #ffdddd;
-            background-image: linear-gradient(rgba(40,0,0,0.8), rgba(40,0,0,0.8)), url('https://assets.codepen.io/13471/netherrack-bg.jpg');
+            background-image: linear-gradient(rgba(40,0,0,0.9), rgba(40,0,0,0.9)), url('https://assets.codepen.io/13471/netherrack-bg.jpg');
         }
 
         body {
             background-color: #1a1a1a;
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://assets.codepen.io/13471/dirt-bg.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://assets.codepen.io/13471/dirt-bg.jpg');
+            background-attachment: fixed;
+            background-size: cover;
             color: var(--mc-text);
             font-family: 'Press Start 2P', cursive;
             font-size: 12px;
             line-height: 1.5;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            padding: 0; /* REMOVED PADDING FOR FULL WIDTH */
             min-height: 100vh;
         }
 
+        /* UPDATED CONTAINER FOR FULL WIDTH */
         .container {
             width: 100%;
-            max-width: 1100px;
-            background-color: var(--mc-bg);
-            border: 4px solid #000;
-            outline: 4px solid var(--mc-border-light);
+            max-width: none; /* REMOVED MAX WIDTH */
+            min-height: 100vh;
+            background-color: transparent; /* Allow body bg to show through slightly or keep solid if preferred */
             padding: 20px;
-            box-shadow: 10px 10px 0 #000;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
             position: relative;
         }
 
@@ -64,7 +64,8 @@
             align-items: center;
             margin-bottom: 20px;
             border-bottom: 3px solid var(--mc-border-dark);
-            padding-bottom: 20px;
+            background: rgba(0,0,0,0.3); /* Added bg for readability on full width */
+            padding: 20px;
             flex-wrap: wrap;
             gap: 10px;
         }
@@ -169,17 +170,19 @@
 
         /* Stats Grid */
         .stats-bar {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px;
-            background: rgba(0,0,0,0.2); padding: 20px;
-            border: 3px solid var(--mc-border-dark); border-bottom: 3px solid var(--mc-border-light);
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;
+            background: rgba(0,0,0,0.4); padding: 20px;
+            border-top: 3px solid var(--mc-border-dark); border-bottom: 3px solid var(--mc-border-light);
             margin-bottom: 25px; align-items: start;
         }
 
         .stat-box {
             text-align: center;
-            background: rgba(0,0,0,0.2);
-            padding: 10px 5px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px 5px;
             border: 1px solid #444;
+            height: 100%;
+            display: flex; flex-direction: column; justify-content: center;
         }
         
         .stat-box div:first-child {
@@ -228,7 +231,7 @@
 
         /* Graph */
         .chart-container {
-            background: #222; border: 3px solid var(--mc-border-dark);
+            background: rgba(0,0,0,0.5); border: 3px solid var(--mc-border-dark);
             border-bottom: 3px solid var(--mc-border-light);
             padding: 10px; margin-bottom: 10px; position: relative;
         }
@@ -414,6 +417,11 @@
                 <div class="val-green">$<span id="revenueDisplay">0.00</span></div>
             </div>
             <div class="stat-box">
+                <!-- NEW FEATURE: Last 30 Days Profit -->
+                <div>Last 30 Days</div>
+                <div class="val-blue">$<span id="last30Display">0.00</span></div>
+            </div>
+            <div class="stat-box">
                 <div>Best Day</div>
                 <div class="val-gold">$<span id="bestDayDisplay">0.00</span></div>
             </div>
@@ -429,7 +437,7 @@
 
         <!-- Graph -->
         <h2 style="display:flex; justify-content:space-between; align-items:center;">
-            Earnings Graph
+            Earnings Graph (Last 30 Days)
             <!-- FEATURE 4: Focus Mode Toggle -->
             <button class="action-btn" style="font-size:0.5rem;" onclick="toggleFocus()">[TOGGLE GRAPH]</button>
         </h2>
@@ -665,10 +673,15 @@
             const w = canvas.width = canvas.parentElement.offsetWidth;
             const h = canvas.height = 320;
 
-            ctx.fillStyle = "#222"; 
+            ctx.fillStyle = "rgba(20,20,20,0.8)"; 
             ctx.fillRect(0, 0, w, h);
             
-            const logs = (window.appData.pointsLog && window.appData.pointsLog.length > 0) ? window.appData.pointsLog : [];
+            // UPDATED CHART LOGIC: SLICE TO LAST 30 ENTRIES ONLY
+            let logs = (window.appData.pointsLog && window.appData.pointsLog.length > 0) ? window.appData.pointsLog : [];
+            if (logs.length > 30) {
+                logs = logs.slice(-30); // KEEP ONLY LAST 30 DAYS
+            }
+
             if (logs.length === 0) {
                 ctx.fillStyle = "#555"; 
                 ctx.textAlign="center"; 
@@ -735,10 +748,13 @@
                     ctx.textAlign = "center";
                     ctx.font = "8px 'Press Start 2P'";
                     const offset = labelDir === 1 ? -15 : 25;
-                    ctx.fillText("$" + val.toFixed(4), x, y + offset);
+                    ctx.fillText("$" + val.toFixed(2), x, y + offset);
                     if (labelDir === 1) {
                         ctx.fillStyle = "#666";
-                        ctx.fillText(logs[i].date, x, h - 15);
+                        // Show Date (Shortened)
+                        const d = logs[i].date.split('/');
+                        const shortDate = d.length >= 2 ? `${d[0]}/${d[1]}` : logs[i].date;
+                        ctx.fillText(shortDate, x, h - 15);
                     }
                 });
             }
@@ -760,32 +776,28 @@
             const rate = getRate();
             const now = new Date(); 
             now.setHours(0,0,0,0);
-            let sum7 = 0; let prev7 = 0; let sum30 = 0;
+            let sum30 = 0; // NEW: Last 30 Days Profit
             let maxDaily = 0; 
 
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                // Calculate Last 30 Days Profit (Rolling window)
+                const rollingLogs = window.appData.pointsLog.slice(-30);
+                rollingLogs.forEach(l => {
+                    sum30 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
+                });
+
                 window.appData.pointsLog.forEach(log => {
-                    const d = new Date(log.date); 
-                    d.setHours(0,0,0,0);
-                    const diff = Math.round((now - d) / (1000*60*60*24));
                     const val = (parseFloat(log.value)*rate) + (log.externalRevenue||0);
                     if (val > maxDaily) maxDaily = val; 
-                    if(diff >= 0 && diff < 7) sum7 += val;
-                    if(diff >= 7 && diff < 14) prev7 += val;
-                    if(diff >= 0 && diff < 30) sum30 += val;
                 });
             }
-            const el7 = document.getElementById('last7TotalDisplay');
-            if (el7) el7.innerText = sum7.toFixed(2);
+            
+            const el30 = document.getElementById('last30Display');
+            if (el30) el30.innerText = sum30.toFixed(2);
             
             const elBest = document.getElementById('bestDayDisplay');
             if (elBest) elBest.innerText = maxDaily.toFixed(2);
             
-            const momEl = document.getElementById('mom7');
-            if (momEl) {
-                momEl.innerText = sum7 >= prev7 ? "⬆️" : "⬇️";
-                momEl.style.color = sum7 >= prev7 ? "#55ff55" : "#ff5555";
-            }
             let lifetime = 0;
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                 lifetime = window.appData.pointsLog.reduce((a,b) => a + (parseFloat(b.value)*rate) + (b.externalRevenue||0), 0);
@@ -980,7 +992,8 @@
             
             if (!window.appData.pointsLog) window.appData.pointsLog = [];
             window.appData.pointsLog.push({date: todayStr, value:current, note, externalRevenue:ext});
-            if(window.appData.pointsLog.length > 30) window.appData.pointsLog.shift();
+            // REMOVED 30 DAY LIMIT ON ARRAY STORAGE, LIMIT IS NOW ONLY ON GRAPH DISPLAY
+            // This allows lifetime stats to remain accurate while graph stays clean
             if (elNote) elNote.value = "";
             
             updateRevenue(); 
