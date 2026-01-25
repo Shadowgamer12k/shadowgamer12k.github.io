@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Kitty Voice Recorder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* Retro Pixel Art Styling */
+        :root {
+            --kitty-pink: #ffc2d1;
+            --kitty-hot-pink: #ff5c8d;
+            --kitty-red: #ff0033;
+            --kitty-white: #ffffff;
+            --pixel-border: 4px solid #000;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--kitty-pink);
+            background-image: 
+                radial-gradient(var(--kitty-white) 15%, transparent 16%),
+                radial-gradient(var(--kitty-white) 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Pixel container box */
+        .pixel-card {
+            background: var(--kitty-white);
+            border: 4px solid black;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
+            position: relative;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            padding: 2rem;
+            image-rendering: pixelated;
+        }
+
+        /* Decorative Bow */
+        .bow {
+            position: absolute;
+            top: -30px;
+            right: -20px;
+            width: 80px;
+            height: 60px;
+            filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Pixel Buttons */
+        .pixel-btn {
+            background-color: var(--kitty-hot-pink);
+            color: white;
+            border: 4px solid black;
+            padding: 15px 20px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px black;
+            transition: transform 0.1s, box-shadow 0.1s;
+            text-transform: uppercase;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .pixel-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px black;
+        }
+
+        .pixel-btn.stop {
+            background-color: var(--kitty-red);
+        }
+
+        .pixel-btn:disabled {
+            background-color: #ccc;
+            border-color: #666;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: translate(4px, 4px);
+        }
+
+        /* Visualizer Canvas */
+        #visualizer {
+            width: 100%;
+            height: 100px;
+            background: #000;
+            border: 4px solid black;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .status-text {
+            font-size: 10px;
+            color: var(--kitty-hot-pink);
+            margin-bottom: 1rem;
+            min-height: 20px;
+        }
+
+        /* Cute decorative ears */
+        .ear-left, .ear-right {
+            position: absolute;
+            top: -20px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-top: 4px solid black;
+            border-left: 4px solid black;
+            border-right: 4px solid black;
+            z-index: -1;
+        }
+        .ear-left { left: 20px; border-radius: 10px 20px 0 0; }
+        .ear-right { right: 20px; border-radius: 20px 10px 0 0; }
+
+    </style>
+</head>
+<body>
+
+    <div class="pixel-card">
+        <!-- Decoration -->
+        <div class="ear-left"></div>
+        <div class="ear-right"></div>
+        
+        <!-- SVG Bow -->
+        <svg class="bow" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 40 C 60 20, 90 10, 95 40 C 90 70, 60 60, 50 40" fill="#ff0033" stroke="black" stroke-width="4"/>
+            <path d="M50 40 C 40 20, 10 10, 5 40 C 10 70, 40 60, 50 40" fill="#ff0033" stroke="black" stroke-width="4"/>
+            <circle cx="50" cy="40" r="10" fill="#ff0033" stroke="black" stroke-width="4"/>
+        </svg>
+
+        <h1 class="text-xl mb-4" style="color: #000;">VOCAL MEMO</h1>
+        
+        <div class="status-text" id="status">READY TO RECORD...</div>
+
+        <canvas id="visualizer"></canvas>
+
+        <button id="recordBtn" class="pixel-btn">
+            RECORD ❤
+        </button>
+
+        <button id="stopBtn" class="pixel-btn stop" disabled>
+            END & SAVE
+        </button>
+    </div>
+
+    <script>
+        // DOM Elements
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const statusDisplay = document.getElementById('status');
+        const canvas = document.getElementById('visualizer');
+        const canvasCtx = canvas.getContext('2d');
+
+        // Audio Context & Variables
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioContext;
+        let analyser;
+        let dataArray;
+        let source;
+        let animationId;
+        let stream;
+
+        // Setup Canvas resolution
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Draw the visualizer (Cute Pink Bars)
+        function drawVisualizer() {
+            if (!analyser) return;
+
+            animationId = requestAnimationFrame(drawVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+
+            canvasCtx.fillStyle = '#ffe4e9'; // Light pink background
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = (canvas.width / dataArray.length) * 2.5;
+            let barHeight;
+            let x = 0;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                barHeight = dataArray[i] / 2;
+
+                // Pixel art style bars
+                canvasCtx.fillStyle = '#ff5c8d'; // Hot pink bars
+                canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                x += barWidth + 2; // Spacing
+            }
+        }
+
+        // Start Recording
+        recordBtn.addEventListener('click', async () => {
+            // Check for Audio Context support
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                statusDisplay.textContent = "Error: Mic not supported!";
+                return;
+            }
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Initialize Audio Context for Visualizer
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+                analyser.fftSize = 64; // Low resolution for pixel look
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+
+                // Initialize Recorder
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Auto Download
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = audioUrl;
+                    const timestamp = new Date().toLocaleTimeString().replace(/:/g, "-");
+                    a.download = `kitty-memo-${timestamp}.webm`; // Saves as webm
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(audioUrl);
+                    }, 100);
+
+                    statusDisplay.textContent = "SAVED TO DEVICE! ❤";
+                };
+
+                mediaRecorder.start();
+                drawVisualizer();
+
+                // UI Updates
+                statusDisplay.textContent = "RECORDING NOW...";
+                recordBtn.disabled = true;
+                stopBtn.disabled = false;
+
+            } catch (err) {
+                console.error("Error accessing mic:", err);
+                statusDisplay.textContent = "NEED MIC PERMISSION!";
+            }
+        });
+
+        // Stop Recording
+        stopBtn.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                
+                // Stop streams and visualizer
+                stream.getTracks().forEach(track => track.stop());
+                cancelAnimationFrame(animationId);
+                
+                // Reset Visualizer
+                canvasCtx.fillStyle = '#000';
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // UI Updates
+                recordBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+
+        // Initial blank canvas state
+        canvasCtx.fillStyle = '#ffe4e9';
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+        canvasCtx.font = "10px 'Press Start 2P'";
+        canvasCtx.fillStyle = "#ff5c8d";
+        canvasCtx.fillText("Waiting...", 10, 55);
+
+    </script>
+</body>
+</html>
