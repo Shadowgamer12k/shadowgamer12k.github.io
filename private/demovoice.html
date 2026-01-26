@@ -14,6 +14,7 @@
             --kitty-pink: #ffc2d1;
             --kitty-hot-pink: #ff5c8d;
             --kitty-red: #ff0033;
+            --kitty-blue: #4facfe;
             --kitty-white: #ffffff;
             --pixel-border: 4px solid #000;
         }
@@ -80,6 +81,10 @@
         .pixel-btn:active {
             transform: translate(4px, 4px);
             box-shadow: 0px 0px 0px black;
+        }
+
+        .pixel-btn.pause {
+            background-color: var(--kitty-blue);
         }
 
         .pixel-btn.stop {
@@ -153,6 +158,10 @@
             RECORD ❤
         </button>
 
+        <button id="pauseBtn" class="pixel-btn pause" disabled>
+            PAUSE ||
+        </button>
+
         <button id="stopBtn" class="pixel-btn stop" disabled>
             END & SAVE (MP3)
         </button>
@@ -161,6 +170,7 @@
     <script>
         // DOM Elements
         const recordBtn = document.getElementById('recordBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
         const stopBtn = document.getElementById('stopBtn');
         const statusDisplay = document.getElementById('status');
         const canvas = document.getElementById('visualizer');
@@ -178,6 +188,7 @@
         let processor;
         let mp3Encoder;
         let mp3Data = [];
+        let isPaused = false;
 
         // Helper: Convert Float32 audio to Int16 PCM (Required for MP3 encoder)
         function convertFloat32ToInt16(buffer) {
@@ -200,6 +211,11 @@
         // Draw the visualizer (Cute Pink Bars)
         function drawVisualizer() {
             if (!analyser) return;
+
+            // Stop drawing if paused to save resources and indicate pause
+            if (isPaused) {
+                return;
+            }
 
             animationId = requestAnimationFrame(drawVisualizer);
             analyser.getByteFrequencyData(dataArray);
@@ -245,6 +261,7 @@
                 // Create Encoder: Mono (1 channel), Sample Rate, 128kbps
                 mp3Encoder = new lamejs.Mp3Encoder(1, audioContext.sampleRate, 128);
                 mp3Data = [];
+                isPaused = false;
 
                 // Create Source
                 source = audioContext.createMediaStreamSource(stream);
@@ -266,6 +283,8 @@
 
                 // --- PROCESS AUDIO ---
                 processor.onaudioprocess = function(event) {
+                    if (isPaused) return; // Skip encoding if paused
+
                     // Get left channel data
                     const arrayBuffer = event.inputBuffer.getChannelData(0);
                     // Convert to 16-bit PCM
@@ -282,11 +301,38 @@
                 // UI Updates
                 statusDisplay.textContent = "RECORDING (MP3)...";
                 recordBtn.disabled = true;
+                pauseBtn.disabled = false;
                 stopBtn.disabled = false;
+                pauseBtn.innerHTML = "PAUSE ||"; // Reset text
 
             } catch (err) {
                 console.error("Error accessing mic:", err);
                 statusDisplay.textContent = "NEED MIC PERMISSION!";
+            }
+        });
+
+        // Pause / Resume Logic
+        pauseBtn.addEventListener('click', () => {
+            if (!isPaused) {
+                // ACTION: PAUSE
+                isPaused = true;
+                statusDisplay.textContent = "PAUSED...";
+                pauseBtn.innerHTML = "CONTINUE >";
+                
+                // Visual indication of pause (frozen bars or text)
+                canvasCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+                canvasCtx.fillStyle = '#ff0033';
+                canvasCtx.font = "10px 'Press Start 2P'";
+                canvasCtx.fillText("PAUSED", canvas.width/2 - 30, canvas.height/2);
+            } else {
+                // ACTION: RESUME
+                isPaused = false;
+                statusDisplay.textContent = "RECORDING (MP3)...";
+                pauseBtn.innerHTML = "PAUSE ||";
+                
+                // Resume visualizer loop
+                drawVisualizer();
             }
         });
 
@@ -334,7 +380,10 @@
 
                 // UI Updates
                 recordBtn.disabled = false;
+                pauseBtn.disabled = true;
+                pauseBtn.innerHTML = "PAUSE ||"; // Reset text
                 stopBtn.disabled = true;
+                isPaused = false;
             }
         });
 
