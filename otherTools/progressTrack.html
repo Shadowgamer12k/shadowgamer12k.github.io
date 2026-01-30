@@ -42,18 +42,17 @@
             font-size: 12px;
             line-height: 1.5;
             margin: 0;
-            padding: 0; /* REMOVED PADDING FOR FULL WIDTH */
+            padding: 0; 
             min-height: 100vh;
         }
 
-        /* UPDATED CONTAINER FOR FULL WIDTH */
         .container {
             width: 100%;
-            max-width: none; /* REMOVED MAX WIDTH */
+            max-width: none; 
             min-height: 100vh;
-            background-color: transparent; /* Allow body bg to show through slightly or keep solid if preferred */
+            background-color: transparent; 
             padding: 20px;
-            box-sizing: border-box; /* Ensures padding doesn't break width */
+            box-sizing: border-box; 
             position: relative;
         }
 
@@ -64,7 +63,7 @@
             align-items: center;
             margin-bottom: 20px;
             border-bottom: 3px solid var(--mc-border-dark);
-            background: rgba(0,0,0,0.3); /* Added bg for readability on full width */
+            background: rgba(0,0,0,0.3); 
             padding: 20px;
             flex-wrap: wrap;
             gap: 10px;
@@ -94,7 +93,6 @@
         .header-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
         .date-display { font-size: 0.7rem; color: #aaa; }
         .streak-display { color: var(--mc-orange); font-size: 0.7rem; text-shadow: 2px 2px #000; }
-        /* FEATURE 2: Global Download Counter */
         .total-dl-display { color: var(--mc-blue); font-size: 0.65rem; text-shadow: 1px 1px #000; margin-top: 3px; }
 
         /* FEATURE 2: Boss Bar Milestone */
@@ -506,18 +504,18 @@
                 { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
                 { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
                 { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-                { day: "FRI", tasks: ["RELEASE DAY", "Update Session"] },
+                { day: "FRI", tasks: ["RELEASE DAY", "Update Group F"] },
                 { day: "SAT", tasks: ["Update Group E", "Reply Comments"] },
-                { day: "SUN", tasks: ["Rest / Analytics", "Update Group F"] }
+                { day: "SUN", tasks: ["Rest / Analytics", "Update Group G"] }
             ],
-            groups: { A: [], B: [], C: [], D: [], E: [], F: [] }, 
+            groups: { A: [], B: [], C: [], D: [], E: [], F: [], G: [] }, 
             history: [], 
             pointsLog: [] 
         };
 
         // Temporary data for edits (FIX: Attached to window)
         window.tempGroups = {};
-        const GROUP_KEYS = ['A','B','C','D','E','F'];
+        const GROUP_KEYS = ['A','B','C','D','E','F','G'];
 
         let db, auth, user;
         let firestoreDocRef = null;
@@ -527,6 +525,14 @@
         // NEW: Fix for missing groups in old save data
         window.hydrateData = function() {
             if (!window.appData.groups) window.appData.groups = {};
+            
+            // Check if Group G was missing (Migration Logic)
+            let missingG = false;
+            if (!window.appData.groups.G) {
+                missingG = true;
+                window.appData.groups.G = [];
+            }
+
             GROUP_KEYS.forEach(g => {
                 // If specific group missing, init empty array
                 if (!Array.isArray(window.appData.groups[g])) {
@@ -535,6 +541,19 @@
             });
             // Also ensure revenueSources exists
             if (!window.appData.revenueSources) window.appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
+            
+            // If G was missing, force update the schedule to new default
+            if (missingG) {
+                 window.appData.currentWeekData = [
+                    { day: "MON", tasks: ["Update Group A", "Check Comments"] },
+                    { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
+                    { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
+                    { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
+                    { day: "FRI", tasks: ["RELEASE DAY", "Update Group F"] },
+                    { day: "SAT", tasks: ["Update Group E", "Reply Comments"] },
+                    { day: "SUN", tasks: ["Rest / Analytics", "Update Group G"] }
+                ];
+            }
         }
 
         function escapeHtml(text) {
@@ -1063,7 +1082,8 @@
                 C: window.appData.groups.C ? JSON.parse(JSON.stringify(window.appData.groups.C)) : [],
                 D: window.appData.groups.D ? JSON.parse(JSON.stringify(window.appData.groups.D)) : [],
                 E: window.appData.groups.E ? JSON.parse(JSON.stringify(window.appData.groups.E)) : [],
-                F: window.appData.groups.F ? JSON.parse(JSON.stringify(window.appData.groups.F)) : []
+                F: window.appData.groups.F ? JSON.parse(JSON.stringify(window.appData.groups.F)) : [],
+                G: window.appData.groups.G ? JSON.parse(JSON.stringify(window.appData.groups.G)) : []
             };
             const c = document.getElementById('groupEditContainer'); 
             if(!c) return;
@@ -1183,12 +1203,13 @@
                  window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  window.appData.groups.D = arr.slice(12,16).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  window.appData.groups.E = arr.slice(16,20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.F = arr.slice(20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.F = arr.slice(20,24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.G = arr.slice(24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
                  
                  saveData(); 
                  refreshAll(); 
                  document.getElementById('cfPasteModal').style.display='none';
-                 alert("Projects imported successfully into Groups A-F!");
+                 alert("Projects imported successfully into Groups A-G!");
              } catch(e) { 
                  alert("Invalid JSON format. Please paste valid data."); 
                  console.error(e);
