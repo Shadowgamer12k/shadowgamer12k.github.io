@@ -429,8 +429,8 @@
                 <div class="val-blue">$<span id="last30Display">0.00</span></div>
             </div>
             <div class="stat-box">
-                <div>Best Day</div>
-                <div class="val-gold">$<span id="bestDayDisplay">0.00</span></div>
+                <div>Est. Monthly</div>
+                <div class="val-gold">$<span id="projectedMonthly">0.00</span></div>
             </div>
             <div class="stat-box">
                 <div>Lifetime $</div>
@@ -819,6 +819,23 @@
             const el30 = document.getElementById('last30Display');
             if (el30) el30.innerText = sum30.toFixed(2);
             
+            // NEW FEATURE: Est. Monthly
+            const elProj = document.getElementById('projectedMonthly');
+            if (elProj) {
+                if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                    const recent7 = window.appData.pointsLog.slice(-7);
+                    let sum7 = 0;
+                    recent7.forEach(l => {
+                        sum7 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
+                    });
+                    const avg7 = sum7 / recent7.length;
+                    const proj = avg7 * 30;
+                    elProj.innerText = proj.toFixed(2);
+                } else {
+                    elProj.innerText = "0.00";
+                }
+            }
+
             const elBest = document.getElementById('bestDayDisplay');
             if (elBest) elBest.innerText = maxDaily.toFixed(2);
             
@@ -1151,6 +1168,17 @@
             const maxPerDay = parseInt(document.getElementById('maxDailyUpdates').value) || 3;
             window.appData.maxDailyUpdates = maxPerDay;
             
+            // 0. Identify TOP GROWTH Addons (Momentum Strategy)
+            let allProjs = [];
+            GROUP_KEYS.forEach(g => {
+                (window.appData.groups[g]||[]).forEach(p => {
+                    allProjs.push({name:p.name, diff: p.lastDiff || 0});
+                });
+            });
+            allProjs.sort((a,b) => b.diff - a.diff);
+            // Get top 3 names
+            const topGrowers = allProjs.slice(0,3).map(x => x.name);
+
             // 1. Gather all tasks
             let pool = [];
             GROUP_KEYS.forEach(g => {
@@ -1209,10 +1237,14 @@
                 let day1 = slot % 3; // 0, 1, 2 (Mon, Tue, Wed)
                 let day2 = day1 + 3; // 3, 4, 5 (Thu, Fri, Sat)
                 
-                if (schedule[day1].length < maxPerDay) schedule[day1].push("⚡ Update: " + name);
+                let label = "⚡ Update: " + name;
+                // Add Momentum Tag
+                if (topGrowers.includes(name)) label = "🔥 HOT: " + name;
+
+                if (schedule[day1].length < maxPerDay) schedule[day1].push(label);
                 else normalProjs.push(name); // Fallback if full
 
-                if (schedule[day2].length < maxPerDay) schedule[day2].push("⚡ Update: " + name);
+                if (schedule[day2].length < maxPerDay) schedule[day2].push(label);
                 else normalProjs.push(name); // Fallback
                 
                 slot++;
@@ -1227,7 +1259,11 @@
                     dayIndex = (dayIndex + 1) % 6;
                     attempts++;
                 }
-                schedule[dayIndex].push("Update: " + name);
+                
+                let label = "Update: " + name;
+                if (topGrowers.includes(name)) label = "🔥 HOT: " + name;
+                
+                schedule[dayIndex].push(label);
                 dayIndex = (dayIndex + 1) % 6;
             });
 
@@ -1247,7 +1283,7 @@
             
             saveData();
             renderWeek();
-            alert("✅ SMART SCHEDULE GENERATED!\nHigh Frequency projects are set to update twice this week.");
+            alert("✅ SMART SCHEDULE GENERATED!\n🔥 Top growing projects are marked 'HOT'.\n⚡ High Freq projects set to 2x/week.");
         }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
