@@ -1076,11 +1076,7 @@
             alert("Reset!"); 
         };
         window.openEditGroups = () => { 
-            document.getElementById('editGroupsModal').style.display='flex'; 
-            window.renderEditModalContent(); 
-        };
-        
-        window.renderEditModalContent = function() {
+            // FIXED: Initialize tempGroups here, NOT inside render
             window.tempGroups = {
                 A: window.appData.groups.A ? JSON.parse(JSON.stringify(window.appData.groups.A)) : [],
                 B: window.appData.groups.B ? JSON.parse(JSON.stringify(window.appData.groups.B)) : [],
@@ -1090,6 +1086,12 @@
                 F: window.appData.groups.F ? JSON.parse(JSON.stringify(window.appData.groups.F)) : [],
                 G: window.appData.groups.G ? JSON.parse(JSON.stringify(window.appData.groups.G)) : []
             };
+            document.getElementById('editGroupsModal').style.display='flex'; 
+            window.renderEditModalContent(); 
+        };
+        
+        window.renderEditModalContent = function() {
+            // FIXED: Do not re-initialize tempGroups here. It causes state reset on every click.
             const c = document.getElementById('groupEditContainer'); 
             if(!c) return;
             c.innerHTML="";
