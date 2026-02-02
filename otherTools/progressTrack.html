@@ -265,6 +265,7 @@
         }
         .growth-indicator { color: var(--mc-green); font-size: 0.5rem; margin-left: 5px; }
         .top-performer { color: #ffd700 !important; font-weight: bold; text-shadow: 1px 1px 0 rgba(0,0,0,0.5); }
+        .high-freq-tag { color: var(--mc-purple); font-size: 0.5rem; margin-right: 5px; vertical-align: middle; }
 
         /* Weekly Grid */
         .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
@@ -275,6 +276,10 @@
         .mc-checkbox { min-width: 16px; min-height: 16px; background: #000; border: 2px solid #666; margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .task-item.completed .mc-checkbox::after { content: ''; width: 8px; height: 8px; background-color: var(--mc-green); display: block; }
         .btn { background-color: #7d7d7d; border: 3px solid #000; color: #fff; font-family: 'Press Start 2P'; font-size: 0.9rem; padding: 15px 20px; cursor: pointer; width: 100%; margin-top: 30px; }
+        .scheduler-controls {
+            background: #2a2a2a; border: 2px solid var(--mc-purple); padding: 15px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
+        }
         
         .task-progress-track {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: #222;
@@ -295,6 +300,9 @@
         .proj-name-input { background: #111; border: 1px solid #555; color: white; font-family: 'Press Start 2P'; font-size: 0.6rem; padding: 5px; flex-grow: 1; }
         .proj-dl-input { background: #111; border: 1px solid #555; color: var(--mc-green); font-family: 'Press Start 2P'; font-size: 0.6rem; padding: 5px; width: 60px; text-align: right; }
         .proj-del-btn { background: var(--mc-red); color: white; border: 1px solid #000; cursor: pointer; padding: 5px; font-size: 0.6rem; }
+        .freq-btn { background: #333; color: #555; border: 1px solid #444; cursor: pointer; padding: 5px; font-size: 0.5rem; width: 40px; }
+        .freq-btn.active { background: var(--mc-purple); color: #fff; border-color: #fff; }
+        
         .stat-input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; color: #ddd; }
         .stat-input-row input { width: 100px; padding: 5px; background: #111; border: 1px solid #555; color: white; font-family: 'Press Start 2P'; text-align: right; }
         
@@ -346,8 +354,9 @@
     </div>
 
     <div id="editGroupsModal" class="modal-overlay">
-        <div class="modal-box">
+        <div class="modal-box" style="max-width:700px;">
             <div class="modal-title">MANAGE PROJECTS</div>
+            <p style="color:var(--mc-purple); font-size:0.6rem; margin-bottom:15px;">Click [2x] to update that addon twice a week.</p>
             <div id="groupEditContainer"></div>
             <button class="modal-btn" onclick="saveGroups()">SAVE CHANGES</button>
             <div style="display:flex; justify-content:space-between; margin-top:10px;">
@@ -478,6 +487,16 @@
         </div>
 
         <!-- Weekly Grid -->
+        <div class="scheduler-controls">
+            <div style="color:var(--mc-purple); font-size:0.7rem; display:flex; align-items:center; gap:10px;">
+                ⚡ SMART SCHEDULER:
+                <div style="display:flex; align-items:center;">
+                    <span style="font-size:0.6rem; margin-right:5px; color:#aaa;">Max Updates/Day:</span>
+                    <input type="number" id="maxDailyUpdates" value="3" style="width:40px; background:#111; color:white; border:1px solid #555; font-family:'Press Start 2P'; padding:5px; text-align:center;">
+                </div>
+            </div>
+            <button class="action-btn" style="background:var(--mc-purple);" onclick="generateSmartSchedule()">GENERATE NEW WEEK</button>
+        </div>
         <div class="week-grid" id="weekGrid"></div>
         <button class="btn" onclick="archiveAndReset()">>> FINISH WEEK & ARCHIVE <<</button>
     </div>
@@ -498,15 +517,16 @@
             lastLoginDate: "", 
             lastCFLogin: "", 
             lastAuditDate: "",
+            maxDailyUpdates: 3, // NEW FEATURE
             revenueSources: [ {name:"Adsterra", val:0}, {name:"YouTube", val:0} ], 
             currentWeekData: [
-                { day: "MON", tasks: ["Update Group A", "Check Comments"] },
-                { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
-                { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
-                { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-                { day: "FRI", tasks: ["RELEASE DAY", "Update Group F"] },
-                { day: "SAT", tasks: ["Update Group E", "Reply Comments"] },
-                { day: "SUN", tasks: ["Rest / Analytics", "Update Group G"] }
+                { day: "MON", tasks: ["Setup Week"] },
+                { day: "TUE", tasks: [] },
+                { day: "WED", tasks: [] },
+                { day: "THU", tasks: [] },
+                { day: "FRI", tasks: [] },
+                { day: "SAT", tasks: [] },
+                { day: "SUN", tasks: ["Rest / Analytics"] }
             ],
             groups: { A: [], B: [], C: [], D: [], E: [], F: [], G: [] }, 
             history: [], 
@@ -527,33 +547,22 @@
             if (!window.appData.groups) window.appData.groups = {};
             
             // Check if Group G was missing (Migration Logic)
-            let missingG = false;
-            if (!window.appData.groups.G) {
-                missingG = true;
-                window.appData.groups.G = [];
-            }
+            if (!window.appData.groups.G) window.appData.groups.G = [];
 
             GROUP_KEYS.forEach(g => {
-                // If specific group missing, init empty array
                 if (!Array.isArray(window.appData.groups[g])) {
                     window.appData.groups[g] = [];
                 }
+                // Migration for High Frequency flag
+                window.appData.groups[g].forEach(p => {
+                    if (typeof p.highFreq === 'undefined') p.highFreq = false;
+                });
             });
             // Also ensure revenueSources exists
             if (!window.appData.revenueSources) window.appData.revenueSources = [{name:"Adsterra", val:0}, {name:"YouTube", val:0}];
             
-            // If G was missing, force update the schedule to new default
-            if (missingG) {
-                 window.appData.currentWeekData = [
-                    { day: "MON", tasks: ["Update Group A", "Check Comments"] },
-                    { day: "TUE", tasks: ["Code: New Project (2hrs)", "Update Group B"] },
-                    { day: "WED", tasks: ["Polish New Project", "Update Group C"] },
-                    { day: "THU", tasks: ["Create Thumbnail", "Update Group D"] },
-                    { day: "FRI", tasks: ["RELEASE DAY", "Update Group F"] },
-                    { day: "SAT", tasks: ["Update Group E", "Reply Comments"] },
-                    { day: "SUN", tasks: ["Rest / Analytics", "Update Group G"] }
-                ];
-            }
+            // Init default max daily if missing
+            if (!window.appData.maxDailyUpdates) window.appData.maxDailyUpdates = 3;
         }
 
         function escapeHtml(text) {
@@ -583,6 +592,8 @@
             if(elGoal) window.appData.goal = elGoal.value;
             const elRate = document.getElementById('pointRate');
             if(elRate) window.appData.rate = elRate.value;
+            const elMax = document.getElementById('maxDailyUpdates');
+            if(elMax) window.appData.maxDailyUpdates = parseInt(elMax.value) || 3;
 
             if (useFirestore && firestoreDocRef) {
                 setDoc(firestoreDocRef, window.appData)
@@ -614,12 +625,10 @@
             if(!container) return;
             container.innerHTML = "";
             
-            // FEATURE 2 + 5: Calculate Global Total for percentages
             let globalDownloads = 0;
             let maxDiff = -1;
             let bestProjId = "";
 
-            // First pass: Calculate Total and find Best
             GROUP_KEYS.forEach(g => {
                 const ps = window.appData.groups[g] || [];
                 ps.forEach((p, idx) => {
@@ -635,7 +644,6 @@
             const totalDlDisp = document.getElementById('totalDownloadsDisplay');
             if (totalDlDisp) totalDlDisp.innerText = globalDownloads.toLocaleString();
 
-            // Second pass: Render
             GROUP_KEYS.forEach(g => {
                 const projects = window.appData.groups[g] || [];
                 let totalDL = 0; let rows = "";
@@ -649,11 +657,11 @@
                     const isBest = `${g}-${idx}` === bestProjId && p.lastDiff > 0;
                     const nameClass = isBest ? "top-performer" : "";
                     const badge = isBest ? "🏆 " : "";
+                    const freqBadge = p.highFreq ? `<span title="High Frequency" class="high-freq-tag">⚡</span>` : "";
 
-                    rows += `<div class="project-row-display"><span class="${nameClass}">${badge}${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    rows += `<div class="project-row-display"><span class="${nameClass}">${freqBadge}${badge}${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
 
-                // FEATURE 5: Group Market Share
                 let sharePct = 0;
                 if (globalDownloads > 0) sharePct = ((totalDL / globalDownloads) * 100).toFixed(1);
 
@@ -681,7 +689,7 @@
                 const percent = totalTasks > 0 ? (completedCount / totalTasks) * 100 : 0;
                 const barHtml = `<div class="task-progress-track"><div class="task-progress-fill" style="width:${percent}%"></div></div>`;
 
-                grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day}</div>${tasks}${barHtml}</div>`;
+                grid.innerHTML += `<div class="day-card"><div class="day-title">${day.day} <span style="font-size:0.5rem; color:#666;">(${totalTasks})</span></div>${tasks}${barHtml}</div>`;
             });
         }
 
@@ -695,10 +703,9 @@
             ctx.fillStyle = "rgba(20,20,20,0.8)"; 
             ctx.fillRect(0, 0, w, h);
             
-            // UPDATED CHART LOGIC: SLICE TO LAST 30 ENTRIES ONLY
             let logs = (window.appData.pointsLog && window.appData.pointsLog.length > 0) ? window.appData.pointsLog : [];
             if (logs.length > 30) {
-                logs = logs.slice(-30); // KEEP ONLY LAST 30 DAYS
+                logs = logs.slice(-30);
             }
 
             if (logs.length === 0) {
@@ -770,7 +777,6 @@
                     ctx.fillText("$" + val.toFixed(2), x, y + offset);
                     if (labelDir === 1) {
                         ctx.fillStyle = "#666";
-                        // Show Date (Shortened)
                         const d = logs[i].date.split('/');
                         const shortDate = d.length >= 2 ? `${d[0]}/${d[1]}` : logs[i].date;
                         ctx.fillText(shortDate, x, h - 15);
@@ -795,11 +801,10 @@
             const rate = getRate();
             const now = new Date(); 
             now.setHours(0,0,0,0);
-            let sum30 = 0; // NEW: Last 30 Days Profit
+            let sum30 = 0; 
             let maxDaily = 0; 
 
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
-                // Calculate Last 30 Days Profit (Rolling window)
                 const rollingLogs = window.appData.pointsLog.slice(-30);
                 rollingLogs.forEach(l => {
                     sum30 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
@@ -824,7 +829,6 @@
             const elLife = document.getElementById('lifetimeDisplay');
             if (elLife) elLife.innerText = lifetime.toFixed(2);
 
-            // FEATURE 2: Update Boss Bar (Next $100 Milestone)
             const nextMilestone = Math.ceil((lifetime + 0.01) / 100) * 100;
             const prevMilestone = nextMilestone - 100;
             const progress = lifetime - prevMilestone;
@@ -925,6 +929,8 @@
             if (elG) elG.value = window.appData.goal || 120;
             const elR = document.getElementById('pointRate');
             if (elR) elR.value = window.appData.rate || 0.05;
+            const elMax = document.getElementById('maxDailyUpdates');
+            if(elMax) elMax.value = window.appData.maxDailyUpdates || 3;
         }
 
         // --- 4. HANDLERS ---
@@ -1011,8 +1017,7 @@
             
             if (!window.appData.pointsLog) window.appData.pointsLog = [];
             window.appData.pointsLog.push({date: todayStr, value:current, note, externalRevenue:ext});
-            // REMOVED 30 DAY LIMIT ON ARRAY STORAGE, LIMIT IS NOW ONLY ON GRAPH DISPLAY
-            // This allows lifetime stats to remain accurate while graph stays clean
+            
             if (elNote) elNote.value = "";
             
             updateRevenue(); 
@@ -1094,13 +1099,30 @@
                  if (window.tempGroups[g] && window.tempGroups[g].length > 0) {
                      window.tempGroups[g].forEach((p,i) => {
                          const safeName = escapeHtml(p.name);
-                         d.innerHTML += `<div class='project-edit-row'><input class='proj-name-input' value="${safeName}" onchange="window.tempGroups['${g}'][${i}].name=this.value"><input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="window.tempGroups['${g}'][${i}].downloads=this.value"><div class='proj-del-btn' onclick="window.tempGroups['${g}'].splice(${i},1);window.renderEditModalContent();">X</div></div>`;
+                         const isHighFreq = p.highFreq === true;
+                         const btnClass = isHighFreq ? 'freq-btn active' : 'freq-btn';
+                         const btnText = isHighFreq ? '2x' : '1x';
+                         
+                         d.innerHTML += `
+                         <div class='project-edit-row'>
+                            <button class="${btnClass}" onclick="window.toggleHighFreq('${g}', ${i}, this)">${btnText}</button>
+                            <input class='proj-name-input' value="${safeName}" onchange="window.tempGroups['${g}'][${i}].name=this.value">
+                            <input type='number' class='proj-dl-input' value="${p.downloads || 0}" onchange="window.tempGroups['${g}'][${i}].downloads=this.value">
+                            <div class='proj-del-btn' onclick="window.tempGroups['${g}'].splice(${i},1);window.renderEditModalContent();">X</div>
+                         </div>`;
                      });
                  }
-                 d.innerHTML += `<div class='add-proj-btn' onclick="window.tempGroups['${g}'].push({name:'New',downloads:0,lastDiff:0});window.renderEditModalContent();">+ ADD</div>`;
+                 d.innerHTML += `<div class='add-proj-btn' onclick="window.tempGroups['${g}'].push({name:'New',downloads:0,lastDiff:0,highFreq:false});window.renderEditModalContent();">+ ADD</div>`;
                  c.appendChild(d);
             });
         }
+        
+        window.toggleHighFreq = function(g, i, btn) {
+            const current = window.tempGroups[g][i].highFreq;
+            window.tempGroups[g][i].highFreq = !current;
+            window.renderEditModalContent();
+        }
+
         window.saveGroups = () => {
              GROUP_KEYS.forEach(g => {
                  if (!window.appData.groups[g]) window.appData.groups[g] = [];
@@ -1119,6 +1141,112 @@
              renderGroups(); 
              document.getElementById('editGroupsModal').style.display='none';
         };
+
+        // NEW FEATURE: SMART SCHEDULER
+        window.generateSmartSchedule = function() {
+            if(!confirm("⚠️ Replace current week with a SMART SCHEDULE?\nThis will clear current progress.")) return;
+
+            const maxPerDay = parseInt(document.getElementById('maxDailyUpdates').value) || 3;
+            window.appData.maxDailyUpdates = maxPerDay;
+            
+            // 1. Gather all tasks
+            let pool = [];
+            GROUP_KEYS.forEach(g => {
+                const projs = window.appData.groups[g] || [];
+                projs.forEach(p => {
+                    // Add first instance
+                    pool.push({ name: p.name, type: 'normal' });
+                    // Add second instance if high freq
+                    if (p.highFreq) {
+                        pool.push({ name: p.name, type: 'high_freq' });
+                    }
+                });
+            });
+
+            // 2. Shuffle Pool (Fisher-Yates) to vary content
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+
+            // 3. Create Week Structure
+            // Priority: High Freq must be spaced out (e.g. Mon + Thu)
+            // Strategy: Fill Mon-Sat (6 days). Sunday is rest.
+            const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
+            let schedule = [[], [], [], [], [], []]; // 0-5
+            
+            // 4. Place High Freq items first to ensure spacing
+            // We find pairs in the pool with same name and place them index i and i+3
+            let placedNames = new Set();
+            
+            // Separate High Freq and Normal
+            let highFreqs = [];
+            let normals = [];
+            
+            pool.forEach(item => {
+                if (item.type === 'high_freq') {
+                     // We need to find the pair. 
+                     // Actually pool has 2 entries for high freq.
+                     // Let's filter unique high freq NAMES.
+                }
+            });
+            
+            // Better approach: Iterate over groups again for cleaner logic
+            let highFreqProjs = [];
+            let normalProjs = [];
+            GROUP_KEYS.forEach(g => {
+                (window.appData.groups[g]||[]).forEach(p => {
+                    if(p.highFreq) highFreqProjs.push(p.name);
+                    else normalProjs.push(p.name);
+                });
+            });
+
+            // Distribute High Freqs (Mon/Thu, Tue/Fri, Wed/Sat)
+            let slot = 0; 
+            highFreqProjs.forEach(name => {
+                let day1 = slot % 3; // 0, 1, 2 (Mon, Tue, Wed)
+                let day2 = day1 + 3; // 3, 4, 5 (Thu, Fri, Sat)
+                
+                if (schedule[day1].length < maxPerDay) schedule[day1].push("⚡ Update: " + name);
+                else normalProjs.push(name); // Fallback if full
+
+                if (schedule[day2].length < maxPerDay) schedule[day2].push("⚡ Update: " + name);
+                else normalProjs.push(name); // Fallback
+                
+                slot++;
+            });
+
+            // Distribute Normals to fill gaps
+            let dayIndex = 0;
+            normalProjs.forEach(name => {
+                // Find next day with space
+                let attempts = 0;
+                while(schedule[dayIndex].length >= maxPerDay && attempts < 6) {
+                    dayIndex = (dayIndex + 1) % 6;
+                    attempts++;
+                }
+                schedule[dayIndex].push("Update: " + name);
+                dayIndex = (dayIndex + 1) % 6;
+            });
+
+            // 5. Apply to State
+            window.appData.currentWeekData = [
+                { day: "MON", tasks: schedule[0] },
+                { day: "TUE", tasks: schedule[1] },
+                { day: "WED", tasks: schedule[2] },
+                { day: "THU", tasks: schedule[3] },
+                { day: "FRI", tasks: schedule[4] },
+                { day: "SAT", tasks: schedule[5] },
+                { day: "SUN", tasks: ["Rest / Analytics", "Check Comments"] }
+            ];
+
+            // Add standard tasks
+            window.appData.currentWeekData[0].tasks.unshift("Check Comments");
+            
+            saveData();
+            renderWeek();
+            alert("✅ SMART SCHEDULE GENERATED!\nHigh Frequency projects are set to update twice this week.");
+        }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
         window.copyScraperScript = () => {
@@ -1198,13 +1326,13 @@
                  arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
                  
                  // UPDATED: Distribution logic for 6 groups (A-F)
-                 window.appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.D = arr.slice(12,16).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.E = arr.slice(16,20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.F = arr.slice(20,24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
-                 window.appData.groups.G = arr.slice(24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0}));
+                 window.appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.D = arr.slice(12,16).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.E = arr.slice(16,20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.F = arr.slice(20,24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.G = arr.slice(24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
                  
                  saveData(); 
                  refreshAll(); 
