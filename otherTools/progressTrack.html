@@ -310,9 +310,193 @@
         .rev-input { background: #111; border: 1px solid #555; color: var(--mc-green); font-family: 'Press Start 2P'; font-size: 0.7rem; width: 80px; text-align: right; }
         .paste-textarea { width: 100%; height: 200px; background: #000; color: #0f0; border: 2px solid #555; font-family: monospace; font-size: 0.6rem; padding: 10px; box-sizing: border-box; resize: vertical; }
         .add-proj-btn { background: #333; color: #aaa; border: 1px dashed #666; width: 100%; font-size: 0.6rem; padding: 5px; cursor: pointer; margin-top: 5px; }
+
+        /* PREVIOUS FEATURES CSS */
+        .idea-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #444; text-align: left; }
+        .timer-display { font-size: 0.8rem; color: var(--mc-green); font-family: monospace; text-shadow: 1px 1px #000; margin-right:10px; border:2px solid #333; padding:5px; background:#000; display:inline-block; min-width:80px; text-align:center; }
+        .golden-badge { background: #ffd700; color: #000; padding: 3px 6px; font-size: 0.5rem; display: none; margin-left:5px; font-weight:bold; box-shadow:0 0 5px gold; animation: pulse 2s infinite; }
+        .checklist-item { text-align: left; margin-bottom: 10px; font-size: 0.7rem; color: #ddd; display: flex; align-items: center; background:#222; padding:5px; border:1px solid #444; }
+        .checklist-item input { margin-right: 10px; width:15px; height:15px; }
+        .utility-row { display:flex; gap:5px; margin-bottom:10px; justify-content:center; flex-wrap:wrap; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* PROFIT FEATURES CSS */
+        .zen-mode .header-section, .zen-mode .stats-bar, .zen-mode .chart-container, .zen-mode .reference-box, .zen-mode h2, .zen-mode .boss-bar-container, .zen-mode .goal-meter-container { display: none !important; }
+        .zen-mode { background-image: none; background-color: #111; }
+        .zen-mode .week-grid { margin-top: 50px; }
+        .tag-btn { background: #333; border: 1px solid #555; color: #aaa; padding: 5px; cursor: pointer; font-size: 0.6rem; margin: 2px; }
+        .tag-btn.selected { background: var(--mc-blue); color: #fff; border-color: #fff; }
+        .cash-cow-text { color: #55ff55 !important; text-shadow: 0 0 5px #005500; }
+
+        /* FUN & RELAXING FEATURES CSS */
+        body.deep-dark {
+            --mc-bg: #030508;
+            --mc-panel: #0d1217;
+            --mc-border-light: #243b4a;
+            --mc-border-dark: #000000;
+            --mc-green: #009292; 
+            --mc-text: #b6e2e8;
+            background-image: none;
+            background-color: #030508;
+        }
+        .stat-box { transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-box:hover { transform: translateY(-3px) scale(1.02) rotateX(2deg); box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 10; background: rgba(50,50,50,0.8); }
+        
+        .xp-orb {
+            position: fixed; width: 8px; height: 8px; border-radius: 50%;
+            background: radial-gradient(circle, #fcfc00, #42b74f);
+            pointer-events: none; z-index: 0; opacity: 0.6;
+            animation: floatUp linear forwards;
+        }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity:0; } 20% { opacity: 0.8;} 100% { transform: translateY(-100px) rotate(360deg); opacity:0; } }
+        .confetti-piece { position: fixed; width: 10px; height: 10px; z-index: 9999; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+        /* NEW FEATURES CSS (v5) */
+        /* 1. Privacy Blur */
+        body.privacy-active .val-green, body.privacy-active .val-gold, 
+        body.privacy-active .val-purple, body.privacy-active .val-blue,
+        body.privacy-active .val-red, body.privacy-active #revenueDisplay,
+        body.privacy-active #revHubTotal, body.privacy-active #last30Display,
+        body.privacy-active #projectedMonthly, body.privacy-active #lifetimeDisplay,
+        body.privacy-active #periodResult { filter: blur(6px); cursor: not-allowed; }
+
+        /* 2. Clean Screenshot Mode */
+        body.clean-ui .action-btn, body.clean-ui .edit-groups-btn, 
+        body.clean-ui input, body.clean-ui .scheduler-controls,
+        body.clean-ui .utility-row, body.clean-ui .quick-add-row,
+        body.clean-ui #logTableContainer { display: none !important; }
+        body.clean-ui .stat-box input { display: block !important; border: none; background: transparent; color: white; }
+
+        /* 3. Badges */
+        .badge-rack { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .badge { padding: 3px 6px; border: 1px solid #555; background: #222; font-size: 0.5rem; color: #aaa; opacity: 0.5; }
+        .badge.unlocked { opacity: 1; border-color: var(--mc-yellow); color: var(--mc-yellow); box-shadow: 0 0 5px rgba(252, 252, 0, 0.2); }
+
+        /* 4. Health Dots */
+        .health-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; }
+        .health-good { background: var(--mc-green); box-shadow: 0 0 4px var(--mc-green); }
+        .health-stale { background: var(--mc-red); opacity: 0.5; }
     </style>
 </head>
 <body>
+
+    <!-- FEATURE 1: IDEA BANK MODAL -->
+    <div id="ideaVaultModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-blue);">💡 IDEA VAULT</div>
+            <p style="font-size:0.6rem; color:#aaa;">Never lose a million dollar addon idea.</p>
+            <div style="display:flex; margin-bottom:15px;">
+                <input type="text" id="newIdeaInput" class="proj-name-input" placeholder="Enter Addon Idea..." style="font-size:0.8rem;">
+                <button class="action-btn" style="background:var(--mc-green);" onclick="addIdea()">ADD</button>
+            </div>
+            <div id="ideaListContainer" style="max-height:300px; overflow-y:auto; border:2px solid #333; background:rgba(0,0,0,0.5);"></div>
+            <button class="action-btn" style="background:#444; margin-top:15px;" onclick="document.getElementById('ideaVaultModal').style.display='none'">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- FEATURE 3: UPLOAD CHECKLIST MODAL -->
+    <div id="checklistModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-orange);">🚀 UPLOAD CHECKLIST</div>
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:15px;">Pre-flight check for maximum downloads.</p>
+            <div id="checklistContainer">
+                <div class="checklist-item"><input type="checkbox"> SEO Keywords in Title?</div>
+                <div class="checklist-item"><input type="checkbox"> Thumbnail has stroke/contrast?</div>
+                <div class="checklist-item"><input type="checkbox"> Description > 200 words?</div>
+                <div class="checklist-item"><input type="checkbox"> Credits link works?</div>
+                <div class="checklist-item"><input type="checkbox"> UUIDs unique in manifest?</div>
+            </div>
+            <button class="action-btn" style="background:#444; margin-top:15px;" onclick="document.getElementById('checklistModal').style.display='none'">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- FEATURE 5: RESOURCE HUB MODAL -->
+    <div id="resourceHubModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-purple);">📚 RESOURCE HUB</div>
+            <div style="display:grid; gap:10px; grid-template-columns:1fr 1fr;">
+                <button class="action-btn" onclick="window.open('https://learn.microsoft.com/en-us/minecraft/creator/')">MS Creator Docs</button>
+                <button class="action-btn" onclick="window.open('https://bedrock.dev/')">Bedrock.dev</button>
+                <button class="action-btn" onclick="window.open('https://jaylydev.github.io/scriptapi-docs/')">Script API Docs</button>
+                <button class="action-btn" onclick="window.open('https://github.com/bridge-core/editor')">Bridge. </button>
+                <button class="action-btn" onclick="window.open('https://wiki.bedrock.dev/')">Bedrock Wiki</button>
+                <button class="action-btn" onclick="window.open('https://www.blockbench.net/')">Blockbench</button>
+            </div>
+            <button class="action-btn" style="background:#444; margin-top:15px;" onclick="document.getElementById('resourceHubModal').style.display='none'">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- PROFIT FEATURE 1: SEO GENERATOR MODAL -->
+    <div id="seoModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-yellow);">🏷️ SEO TAG GENERATOR</div>
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:15px;">Select categories to generate viral tags.</p>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:15px;">
+                <button class="tag-btn" onclick="toggleTag(this, 'minecraft bedrock')">Bedrock</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'mcpe')">MCPE</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'addon')">Addon</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'survival')">Survival</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'tech')">Tech</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'magic')">Magic</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'horror')">Horror</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'furniture')">Furniture</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'shaders')">Shaders</button>
+                <button class="tag-btn" onclick="toggleTag(this, 'rtx')">RTX</button>
+            </div>
+            <textarea id="tagOutput" class="paste-textarea" style="height:80px;"></textarea>
+            <div style="margin-top:10px;">
+                <button class="modal-btn" onclick="generateTags()">GENERATE & COPY</button>
+                <button class="action-btn" style="background:#444;" onclick="document.getElementById('seoModal').style.display='none'">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFIT FEATURE 2: ROI CALCULATOR MODAL -->
+    <div id="roiModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-green);">💰 PROFIT CALCULATOR</div>
+            <div style="margin-bottom:10px;">
+                <span style="color:#aaa;">Projected Downloads:</span><br>
+                <input type="number" id="calcDL" value="5000" class="modal-input" style="width:150px;">
+            </div>
+            <div style="margin-bottom:10px;">
+                <span style="color:#aaa;">Est. RPM (Revenue Per 1k):</span><br>
+                <input type="number" id="calcRPM" value="2.50" class="modal-input" style="width:150px;">
+            </div>
+            <div style="font-size:1.2rem; color:var(--mc-green); margin:20px 0; border:2px dashed #555; padding:10px;">
+                Est. Earnings: $<span id="calcResult">0.00</span>
+            </div>
+            <button class="modal-btn" onclick="calculateROI()">CALCULATE</button>
+            <button class="action-btn" style="background:#444;" onclick="document.getElementById('roiModal').style.display='none'">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- NEW FEATURE: PERIOD CALCULATOR MODAL -->
+    <div id="periodModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title" style="color:var(--mc-blue);">📅 INCOME HISTORY</div>
+            <p style="font-size:0.6rem; color:#aaa; margin-bottom:15px;">Calculate earnings for specific timeframe.</p>
+            <div style="display:flex; justify-content:center; gap:5px; margin-bottom:15px;">
+                <button class="action-btn" onclick="calcPeriodPreset(4)">Last 4 Days</button>
+                <button class="action-btn" onclick="calcPeriodPreset(7)">Last 7 Days</button>
+                <button class="action-btn" onclick="calcPeriodPreset(30)">Last 30 Days</button>
+            </div>
+            <div style="background:#222; padding:10px; border:1px solid #444; margin-bottom:15px;">
+                <div style="font-size:0.6rem; color:#aaa; margin-bottom:5px;">CUSTOM RANGE</div>
+                <div style="display:flex; gap:5px; justify-content:center; align-items:center;">
+                    <input type="date" id="periodStart" class="modal-input" style="font-size:0.7rem; width:120px;">
+                    <span style="color:#aaa;">TO</span>
+                    <input type="date" id="periodEnd" class="modal-input" style="font-size:0.7rem; width:120px;">
+                </div>
+                <button class="action-btn" style="margin-top:10px; background:var(--mc-purple);" onclick="calcCustomPeriod()">CALCULATE RANGE</button>
+            </div>
+            <div style="font-size:1.2rem; color:var(--mc-green); margin-bottom:15px; border:2px dashed #555; padding:10px;">
+                Total: $<span id="periodResult">0.00</span>
+            </div>
+            <button class="action-btn" style="background:#444;" onclick="document.getElementById('periodModal').style.display='none'">CLOSE</button>
+        </div>
+    </div>
 
     <div id="weeklyAuditModal" class="modal-overlay">
         <div class="modal-box" style="border-color: var(--mc-red);">
@@ -366,7 +550,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" onclick="playClick()">
         <div class="header-section">
             <div style="display:flex; flex-direction:column;">
                 <h1>Road To $200</h1>
@@ -376,8 +560,12 @@
             </div>
             <div class="header-right">
                 <div style="display:flex; gap:5px; align-items:center;">
+                    <!-- FEATURE 2: SESSION TIMER -->
+                    <div id="sessionTimer" class="timer-display" onclick="toggleSessionTimer()">00:00:00</div>
                     <button class="action-btn" style="background:var(--mc-red); color:#fff;" onclick="toggleTheme()">THEME</button>
                     <div class="date-display" id="clockDisplay">Loading...</div>
+                    <!-- FEATURE 4: GOLDEN HOUR INDICATOR -->
+                    <span id="goldenHourBadge" class="golden-badge">🔥 PEAK TIME</span>
                 </div>
                 <div class="streak-display">🔥 STREAK: <span id="streakValue">0</span> DAYS</div>
             </div>
@@ -387,6 +575,15 @@
         <div class="boss-bar-container">
             <div id="bossBarFill" class="boss-bar-fill"></div>
             <div id="bossBarText" class="boss-bar-text">NEXT MILESTONE: $100</div>
+        </div>
+        
+        <!-- NEW FEATURE: GAMIFICATION BADGES -->
+        <div id="badgeRack" class="badge-rack">
+            <span class="badge">IRON AGE (1k)</span>
+            <span class="badge">GOLD AGE (5k)</span>
+            <span class="badge">DIAMOND (10k)</span>
+            <span class="badge">NETHERITE (50k)</span>
+            <span class="badge">BEACON (100k)</span>
         </div>
 
         <!-- Daily Goal Meter -->
@@ -456,6 +653,28 @@
             </div>
         </div>
 
+        <!-- NEW FEATURE UTILITY BAR WITH 5 NEW BUTTONS -->
+        <div class="utility-row">
+            <button class="action-btn" style="background:#b266ff;" onclick="document.getElementById('ideaVaultModal').style.display='flex'; renderIdeas();">💡 IDEA BANK</button>
+            <button class="action-btn" style="background:#e67e22;" onclick="document.getElementById('checklistModal').style.display='flex'">📝 UPLOAD CHECKLIST</button>
+            <button class="action-btn" style="background:#444;" onclick="document.getElementById('resourceHubModal').style.display='flex'">📚 RESOURCES</button>
+            <button class="action-btn" style="background:#fcfc00; color:black;" onclick="document.getElementById('seoModal').style.display='flex'">🏷️ SEO TAGS</button>
+            <button class="action-btn" style="background:var(--mc-green);" onclick="document.getElementById('roiModal').style.display='flex'">💰 ROI CALC</button>
+        </div>
+        <div class="utility-row">
+            <!-- PREVIOUS BUTTONS -->
+            <button class="action-btn" style="background:#5555ff;" onclick="document.getElementById('periodModal').style.display='flex'">📅 HISTORY</button>
+            <button class="action-btn" style="background:var(--mc-blue);" onclick="toggleZenMode()">🧘 ZEN MODE</button>
+            <button class="action-btn" style="background:var(--mc-red);" onclick="strategyRoulette()">🎲 STRATEGY</button>
+            <button class="action-btn" style="background:#009292; color:white;" onclick="toggleDeepDark()">🌑 DEEP DARK</button>
+            <button class="action-btn" style="background:#aaa; color:black;" onclick="toggleSFX()">🔊 SFX</button>
+            
+            <!-- NEW 5 BUTTONS -->
+            <button class="action-btn" style="background:var(--mc-red); color:white; border-color:white;" onclick="togglePrivacy()">🕵️ BOSS MODE</button>
+            <button class="action-btn" style="background:var(--mc-blue); color:white;" onclick="toggleCleanMode()">📷 CLEAN SCREEN</button>
+            <button class="action-btn" style="background:#fcfc00; color:black;" onclick="toggleMetronome()">⏱️ FOCUS BEAT</button>
+        </div>
+
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div style="cursor:pointer; color:#aaa; font-size:0.6rem;" onclick="toggleLogTable()">
                 [Click to Toggle Data Table]
@@ -518,6 +737,7 @@
             lastCFLogin: "", 
             lastAuditDate: "",
             maxDailyUpdates: 3, // NEW FEATURE
+            ideas: [], // NEW FEATURE 1
             revenueSources: [ {name:"Adsterra", val:0}, {name:"YouTube", val:0} ], 
             currentWeekData: [
                 { day: "MON", tasks: ["Setup Week"] },
@@ -540,6 +760,11 @@
         let db, auth, user;
         let firestoreDocRef = null;
         let useFirestore = false;
+        
+        // NEW FEATURE 2: Timer Variables
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let metronomeInterval = null;
 
         // --- 1. CORE HELPERS ---
         // NEW: Fix for missing groups in old save data
@@ -563,6 +788,8 @@
             
             // Init default max daily if missing
             if (!window.appData.maxDailyUpdates) window.appData.maxDailyUpdates = 3;
+            // Init Ideas if missing
+            if (!window.appData.ideas) window.appData.ideas = [];
         }
 
         function escapeHtml(text) {
@@ -619,7 +846,22 @@
                 });
             }
         }
+        
+        // NEW FEATURE 1: IDEA BANK RENDER
+        window.renderIdeas = function() {
+            const c = document.getElementById('ideaListContainer');
+            if(!c) return;
+            c.innerHTML = "";
+            if(window.appData.ideas && window.appData.ideas.length > 0) {
+                window.appData.ideas.forEach((idea, i) => {
+                    c.innerHTML += `<div class="idea-row"><span>${escapeHtml(idea)}</span><button class="action-btn" style="background:var(--mc-red);" onclick="deleteIdea(${i})">X</button></div>`;
+                });
+            } else {
+                c.innerHTML = "<div style='padding:10px; color:#666;'>No ideas logged yet.</div>";
+            }
+        }
 
+        // UPDATED RENDER GROUPS WITH CASH COW AND HEALTH DOT LOGIC
         window.renderGroups = function() {
             const container = document.getElementById('groupsDisplay');
             if(!container) return;
@@ -644,6 +886,9 @@
             const totalDlDisp = document.getElementById('totalDownloadsDisplay');
             if (totalDlDisp) totalDlDisp.innerText = globalDownloads.toLocaleString();
 
+            // Check total DLs for badge unlocking
+            window.updateBadges(globalDownloads);
+
             GROUP_KEYS.forEach(g => {
                 const projects = window.appData.groups[g] || [];
                 let totalDL = 0; let rows = "";
@@ -655,11 +900,16 @@
                     let diffHtml = (p.lastDiff && p.lastDiff > 0) ? `<span class="growth-indicator">(+${p.lastDiff.toLocaleString()})</span>` : "";
                     
                     const isBest = `${g}-${idx}` === bestProjId && p.lastDiff > 0;
-                    const nameClass = isBest ? "top-performer" : "";
-                    const badge = isBest ? "🏆 " : "";
+                    const isCow = dl >= 10000;
+                    const nameClass = isBest ? "top-performer" : (isCow ? "cash-cow-text" : "");
+                    const badge = (isBest ? "🏆 " : "") + (isCow ? "🐄 " : "");
                     const freqBadge = p.highFreq ? `<span title="High Frequency" class="high-freq-tag">⚡</span>` : "";
+                    
+                    // NEW: HEALTH DOT
+                    const healthClass = (p.lastDiff > 0) ? 'health-good' : 'health-stale';
+                    const healthDot = `<span class="health-dot ${healthClass}"></span>`;
 
-                    rows += `<div class="project-row-display"><span class="${nameClass}">${freqBadge}${badge}${safeName}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    rows += `<div class="project-row-display"><span>${healthDot}<span class="${nameClass}">${freqBadge}${badge}${safeName}</span></span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
 
                 let sharePct = 0;
@@ -905,6 +1155,9 @@
             const meterText = document.getElementById('goalMeterText');
             if(meterFill) meterFill.style.width = pct + "%";
             if(meterText) meterText.innerText = `${Math.floor(pct)}% of Daily Goal`;
+            
+            // 4. FUN FEATURE: CELEBRATION
+            if (pct >= 100) window.spawnConfetti();
 
             saveData();
             calculateHistoricalTotals();
@@ -916,8 +1169,13 @@
             // Apply Theme
             if (window.appData.theme === "nether") {
                 document.body.classList.add('nether-theme');
+                document.body.classList.remove('deep-dark');
+            } else if (window.appData.theme === "deep-dark") {
+                document.body.classList.add('deep-dark');
+                document.body.classList.remove('nether-theme');
             } else {
                 document.body.classList.remove('nether-theme');
+                document.body.classList.remove('deep-dark');
             }
             
             // ENSURE DATA INTEGRITY
@@ -926,6 +1184,8 @@
             updateRevenue(); 
             renderGroups(); 
             renderWeek();
+            renderIdeas(); // NEW FEATURE 1
+
             const streakVal = document.getElementById('streakValue');
             if (streakVal) streakVal.innerText = window.appData.streak || 0;
             
@@ -941,7 +1201,10 @@
 
             // UI Sync: Points
             const elP = document.getElementById('currentPoints');
-            if (elP) elP.value = window.appData.points || 18;
+            if (elP) {
+                // If user is actively typing, don't overwrite logic can be added, but here we just set it
+                if(document.activeElement !== elP) elP.value = window.appData.points || 18;
+            }
             const elG = document.getElementById('goalPoints');
             if (elG) elG.value = window.appData.goal || 120;
             const elR = document.getElementById('pointRate');
@@ -957,6 +1220,8 @@
             } else {
                 window.appData.theme = "nether";
             }
+            // Remove deep dark if toggling standard themes
+            document.body.classList.remove('deep-dark');
             saveData();
             refreshAll();
         };
@@ -1037,6 +1302,7 @@
             
             if (elNote) elNote.value = "";
             
+            window.playSuccess(); // 3. FUN FEATURE: SOUND
             updateRevenue(); 
             refreshAll(); 
             alert("Logged: " + current);
@@ -1281,9 +1547,14 @@
             // Add standard tasks
             window.appData.currentWeekData[0].tasks.unshift("Check Comments");
             
+            // NEW: Inject Pre-Flight Checklist on Friday if space exists
+            if (window.appData.currentWeekData[4].tasks.length < maxPerDay + 1) {
+                window.appData.currentWeekData[4].tasks.push("🚀 Pre-Flight Checklist");
+            }
+            
             saveData();
             renderWeek();
-            alert("✅ SMART SCHEDULE GENERATED!\n🔥 Top growing projects are marked 'HOT'.\n⚡ High Freq projects set to 2x/week.");
+            alert("✅ SMART SCHEDULE GENERATED!\n🔥 Top growing projects are marked 'HOT'.\n⚡ High Freq projects set to 2x/week.\n🚀 Added Checklist to Friday & Ideas to Sunday.");
         }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
@@ -1390,6 +1661,7 @@
             } else {
                 t.done = !t.done;
             }
+            window.playClick(); // 3. FUN FEATURE: SOUND
             saveData(); 
             renderWeek();
         };
@@ -1481,6 +1753,243 @@
              document.getElementById('weeklyAuditModal').style.display='none';
         }
 
+        // NEW FEATURE FUNCTIONS (IDEA BANK)
+        window.addIdea = function() {
+            const input = document.getElementById('newIdeaInput');
+            if(input && input.value.trim() !== "") {
+                if(!window.appData.ideas) window.appData.ideas = [];
+                window.appData.ideas.push(input.value.trim());
+                input.value = "";
+                saveData();
+                renderIdeas();
+            }
+        }
+        window.deleteIdea = function(i) {
+            if(confirm("Discard idea?")) {
+                window.appData.ideas.splice(i, 1);
+                saveData();
+                renderIdeas();
+            }
+        }
+
+        // NEW FEATURE FUNCTIONS (TIMER)
+        window.toggleSessionTimer = function() {
+            const el = document.getElementById('sessionTimer');
+            if(timerInterval) {
+                // Stop
+                clearInterval(timerInterval);
+                timerInterval = null;
+                el.style.color = "var(--mc-green)";
+                el.style.borderColor = "#333";
+            } else {
+                // Start
+                el.style.color = "var(--mc-red)";
+                el.style.borderColor = "var(--mc-red)";
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    const h = Math.floor(timerSeconds / 3600).toString().padStart(2,'0');
+                    const m = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2,'0');
+                    const s = (timerSeconds % 60).toString().padStart(2,'0');
+                    el.innerText = `${h}:${m}:${s}`;
+                }, 1000);
+            }
+        }
+        
+        // PROFIT FEATURE FUNCTIONS
+        window.toggleZenMode = function() {
+            document.body.classList.toggle('zen-mode');
+        }
+        
+        window.toggleTag = function(btn, tag) {
+            btn.classList.toggle('selected');
+        }
+        
+        window.generateTags = function() {
+            const selected = document.querySelectorAll('.tag-btn.selected');
+            const tags = Array.from(selected).map(b => b.innerText).join(', ');
+            // Basic preset logic based on selection
+            let text = "Minecraft Bedrock, MCPE, Addon, Mod, " + tags;
+            if(text.includes("Horror")) text += ", Scary, Creepypasta";
+            if(text.includes("Tech")) text += ", Redstone, Industrial";
+            
+            const area = document.getElementById('tagOutput');
+            area.value = text;
+            area.select();
+            document.execCommand('copy');
+            alert("Tags copied!");
+        }
+        
+        window.calculateROI = function() {
+            const dl = parseFloat(document.getElementById('calcDL').value) || 0;
+            const rpm = parseFloat(document.getElementById('calcRPM').value) || 0;
+            const res = (dl / 1000) * rpm;
+            document.getElementById('calcResult').innerText = res.toFixed(2);
+        }
+        
+        window.strategyRoulette = function() {
+            const tips = [
+                "Reskin an existing model to a new theme.",
+                "Create a 'One Block' variant of your mod.",
+                "Translate your description to Spanish & Portuguese.",
+                "Update your thumbnail with brighter colors.",
+                "Fix the #1 reported bug in comments.",
+                "Post a Short on YouTube/TikTok showing one feature.",
+                "Collab with another creator in your niche."
+            ];
+            alert("🎲 STRATEGY: " + tips[Math.floor(Math.random() * tips.length)]);
+        }
+
+        // NEW FUN FUNCTIONS FOR v4
+        // 1. Deep Dark Toggle
+        window.toggleDeepDark = function() {
+            document.body.classList.toggle('deep-dark');
+            document.body.classList.remove('nether-theme');
+            window.appData.theme = document.body.classList.contains('deep-dark') ? 'deep-dark' : 'normal';
+            saveData();
+        }
+
+        // 3. Audio System (Self-contained, no external files)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        window.playClick = function() {
+            if(!window.sfxEnabled) return;
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'square'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+        window.playSuccess = function() {
+            if(!window.sfxEnabled) return;
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        }
+        window.toggleSFX = function() {
+            window.sfxEnabled = !window.sfxEnabled;
+            alert("SFX: " + (window.sfxEnabled ? "ON" : "OFF"));
+        }
+
+        // 2. XP Particles Loop
+        setInterval(() => {
+            if(document.hidden) return;
+            const orb = document.createElement('div');
+            orb.className = 'xp-orb';
+            orb.style.left = Math.random() * 100 + 'vw';
+            orb.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            document.body.appendChild(orb);
+            setTimeout(() => orb.remove(), 10000);
+        }, 2000); // Spawn every 2s
+
+        // 4. Confetti Logic
+        window.spawnConfetti = function() {
+            for(let i=0; i<50; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+                c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                c.style.top = '-10px';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        // NEW: PERIOD CALCULATOR LOGIC
+        window.calcPeriodPreset = function(days) {
+            const eDate = new Date(); // Today
+            const sDate = new Date();
+            sDate.setDate(eDate.getDate() - (days - 1)); // e.g. 1 day = today. 4 days = today - 3.
+            window.doPeriodCalc(sDate, eDate);
+        }
+
+        window.calcCustomPeriod = function() {
+            const sVal = document.getElementById('periodStart').value; // YYYY-MM-DD
+            const eVal = document.getElementById('periodEnd').value;
+            if(!sVal || !eVal) { alert("Please pick dates."); return; }
+            
+            // Create dates in local time to match pointsLog
+            const sParts = sVal.split('-');
+            const sDate = new Date(sParts[0], sParts[1]-1, sParts[2]);
+            
+            const eParts = eVal.split('-');
+            const eDate = new Date(eParts[0], eParts[1]-1, eParts[2]);
+            
+            window.doPeriodCalc(sDate, eDate);
+        }
+
+        window.doPeriodCalc = function(s, e) {
+            s.setHours(0,0,0,0);
+            e.setHours(23,59,59,999);
+            
+            let total = 0;
+            const rate = getRate();
+            if(window.appData.pointsLog) {
+                window.appData.pointsLog.forEach(entry => {
+                    const entryDate = new Date(entry.date); // assumes M/D/YYYY from getTodayString
+                    if (entryDate >= s && entryDate <= e) {
+                        const pts = parseFloat(entry.value) || 0;
+                        const ext = parseFloat(entry.externalRevenue) || 0;
+                        total += (pts * rate) + ext;
+                    }
+                });
+            }
+            document.getElementById('periodResult').innerText = total.toFixed(2);
+        }
+
+        // --- NEW FEATURES V5 (PROFIT & ENGAGEMENT) ---
+        
+        // 1. Privacy "Boss" Mode
+        window.togglePrivacy = function() {
+            document.body.classList.toggle('privacy-active');
+        }
+
+        // 2. Clean Screenshot Mode
+        window.toggleCleanMode = function() {
+            document.body.classList.toggle('clean-ui');
+            if(document.body.classList.contains('clean-ui')) {
+                alert("Clean Mode ON! Click 'Clean Screen' again to exit.");
+            }
+        }
+
+        // 3. Focus Metronome
+        window.toggleMetronome = function() {
+            if(metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            } else {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                metronomeInterval = setInterval(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+                }, 1000); // 60 BPM
+            }
+        }
+
+        // 4. Update Badges
+        window.updateBadges = function(totalDL) {
+            const badges = document.querySelectorAll('.badge');
+            if(!badges || badges.length === 0) return;
+            // Clear
+            badges.forEach(b => b.classList.remove('unlocked'));
+            
+            if(totalDL >= 1000) badges[0].classList.add('unlocked');
+            if(totalDL >= 5000) badges[1].classList.add('unlocked');
+            if(totalDL >= 10000) badges[2].classList.add('unlocked');
+            if(totalDL >= 50000) badges[3].classList.add('unlocked');
+            if(totalDL >= 100000) badges[4].classList.add('unlocked');
+        }
+
         // --- 5. APP INITIALIZATION (FIREBASE + LOCAL FALLBACK) ---
         function initApp() {
             // Setup Clock
@@ -1491,6 +2000,19 @@
                     clock.innerText = now.toLocaleString('en-US', {
                         month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
                     }); 
+                    
+                    // NEW FEATURE 4: GOLDEN HOUR LOGIC (Peak Bedrock times: Fri-Sun)
+                    const day = now.getDay(); // 0=Sun, 6=Sat
+                    const hr = now.getHours();
+                    const badge = document.getElementById('goldenHourBadge');
+                    // Show on Weekends OR Evenings (3pm-9pm)
+                    if (badge) {
+                        if (day === 0 || day === 6 || day === 5 || (hr >= 15 && hr <= 21)) {
+                            badge.style.display = "inline-block";
+                        } else {
+                            badge.style.display = "none";
+                        }
+                    }
                 }
             }, 1000);
 
