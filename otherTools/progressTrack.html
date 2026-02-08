@@ -1434,54 +1434,106 @@
             const maxPerDay = parseInt(document.getElementById('maxDailyUpdates').value) || 3;
             window.appData.maxDailyUpdates = maxPerDay;
             
-            // 1. Gather all UNIQUE projects (No Duplicates = No Spam)
+            // 0. Identify TOP GROWTH Addons (Momentum Strategy)
             let allProjs = [];
             GROUP_KEYS.forEach(g => {
                 (window.appData.groups[g]||[]).forEach(p => {
-                    allProjs.push({
-                        name: p.name, 
-                        group: g, 
-                        diff: p.lastDiff || 0
-                    });
+                    allProjs.push({name:p.name, diff: p.lastDiff || 0});
+                });
+            });
+            allProjs.sort((a,b) => b.diff - a.diff);
+            // Get top 3 names
+            const topGrowers = allProjs.slice(0,3).map(x => x.name);
+
+            // 1. Gather all tasks
+            let pool = [];
+            GROUP_KEYS.forEach(g => {
+                const projs = window.appData.groups[g] || [];
+                projs.forEach(p => {
+                    // Add first instance
+                    pool.push({ name: p.name, type: 'normal' });
+                    // Add second instance if high freq
+                    if (p.highFreq) {
+                        pool.push({ name: p.name, type: 'high_freq' });
+                    }
                 });
             });
 
-            // 2. Shuffle first to ensure rotation of lower-tier addons
-            for (let i = allProjs.length - 1; i > 0; i--) {
+            // 2. Shuffle Pool (Fisher-Yates) to vary content
+            for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [allProjs[i], allProjs[j]] = [allProjs[j], allProjs[i]];
+                [pool[i], pool[j]] = [pool[j], pool[i]];
             }
 
-            // 3. Sort by Priority: Group A (High Earners) must go first to ensure they get spots
-            allProjs.sort((a,b) => {
-                if(a.group === 'A' && b.group !== 'A') return -1;
-                if(a.group !== 'A' && b.group === 'A') return 1;
-                return 0;
-            });
-
-            // 4. Create Week Structure
-            let schedule = [[], [], [], [], [], []]; // 0=Mon ... 5=Sat
-
-            // 5. Distribute Tasks
-            allProjs.forEach(p => {
-                // Profit Rule: Group A prefers Weekend (Fri=4, Sat=5)
-                // Others prefer Mon-Thu (0-3) to leave space for releases, but can fill anywhere
-                let preferredDays = (p.group === 'A') ? [4, 5, 3, 2, 1, 0] : [0, 1, 2, 3, 4, 5];
-                
-                // Try to find an open slot
-                for (let dayIdx of preferredDays) {
-                    if (schedule[dayIdx].length < maxPerDay) {
-                        let label = "Update: " + p.name;
-                        // Add Momentum Tag if growing
-                        if (p.diff > 0) label = "🔥 HOT: " + p.name;
-                        
-                        schedule[dayIdx].push(label);
-                        break; // STOP: Schedule only once per week (Anti-Spam Rule)
-                    }
+            // 3. Create Week Structure
+            // Priority: High Freq must be spaced out (e.g. Mon + Thu)
+            // Strategy: Fill Mon-Sat (6 days). Sunday is rest.
+            const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
+            let schedule = [[], [], [], [], [], []]; // 0-5
+            
+            // 4. Place High Freq items first to ensure spacing
+            // We find pairs in the pool with same name and place them index i and i+3
+            let placedNames = new Set();
+            
+            // Separate High Freq and Normal
+            let highFreqs = [];
+            let normals = [];
+            
+            pool.forEach(item => {
+                if (item.type === 'high_freq') {
+                     // We need to find the pair. 
+                     // Actually pool has 2 entries for high freq.
+                     // Let's filter unique high freq NAMES.
                 }
             });
+            
+            // Better approach: Iterate over groups again for cleaner logic
+            let highFreqProjs = [];
+            let normalProjs = [];
+            GROUP_KEYS.forEach(g => {
+                (window.appData.groups[g]||[]).forEach(p => {
+                    if(p.highFreq) highFreqProjs.push(p.name);
+                    else normalProjs.push(p.name);
+                });
+            });
 
-            // 6. Apply to State
+            // Distribute High Freqs (Mon/Thu, Tue/Fri, Wed/Sat)
+            let slot = 0; 
+            highFreqProjs.forEach(name => {
+                let day1 = slot % 3; // 0, 1, 2 (Mon, Tue, Wed)
+                let day2 = day1 + 3; // 3, 4, 5 (Thu, Fri, Sat)
+                
+                let label = "⚡ Update: " + name;
+                // Add Momentum Tag
+                if (topGrowers.includes(name)) label = "🔥 HOT: " + name;
+
+                if (schedule[day1].length < maxPerDay) schedule[day1].push(label);
+                else normalProjs.push(name); // Fallback if full
+
+                if (schedule[day2].length < maxPerDay) schedule[day2].push(label);
+                else normalProjs.push(name); // Fallback
+                
+                slot++;
+            });
+
+            // Distribute Normals to fill gaps
+            let dayIndex = 0;
+            normalProjs.forEach(name => {
+                // Find next day with space
+                let attempts = 0;
+                while(schedule[dayIndex].length >= maxPerDay && attempts < 6) {
+                    dayIndex = (dayIndex + 1) % 6;
+                    attempts++;
+                }
+                
+                let label = "Update: " + name;
+                if (topGrowers.includes(name)) label = "🔥 HOT: " + name;
+                
+                schedule[dayIndex].push(label);
+                dayIndex = (dayIndex + 1) % 6;
+            });
+
+            // 5. Apply to State
             window.appData.currentWeekData = [
                 { day: "MON", tasks: schedule[0] },
                 { day: "TUE", tasks: schedule[1] },
@@ -1495,14 +1547,14 @@
             // Add standard tasks
             window.appData.currentWeekData[0].tasks.unshift("Check Comments");
             
-            // Inject Pre-Flight Checklist on Friday if space exists
+            // NEW: Inject Pre-Flight Checklist on Friday if space exists
             if (window.appData.currentWeekData[4].tasks.length < maxPerDay + 1) {
                 window.appData.currentWeekData[4].tasks.push("🚀 Pre-Flight Checklist");
             }
             
             saveData();
             renderWeek();
-            alert("✅ SMART SCHEDULE GENERATED!\n🛡️ Anti-Spam: 1 update/week max.\n💰 Profit: Group A locked to Weekends.\n🔄 Coverage: Filling all available slots.");
+            alert("✅ SMART SCHEDULE GENERATED!\n🔥 Top growing projects are marked 'HOT'.\n⚡ High Freq projects set to 2x/week.\n🚀 Added Checklist to Friday & Ideas to Sunday.");
         }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
