@@ -199,8 +199,11 @@
         .val-purple { color: var(--mc-purple); font-size: 0.8rem; }
         .val-red { color: var(--mc-red); font-size: 0.8rem; }
         .val-gold { color: #ffd700; font-size: 0.8rem; text-shadow: 1px 1px #000; }
+        /* NEW: Colors for 7/14 days */
+        .val-orange { color: var(--mc-orange); font-size: 0.8rem; }
+        .val-cyan { color: #00ffff; font-size: 0.8rem; }
 
-        .action-btn {
+        .action-btn, .modal-btn, .btn {
             background: #555; border: 2px solid #000; color: white;
             font-family: 'Press Start 2P'; font-size: 0.6rem;
             padding: 5px 10px; cursor: pointer; margin-left: 5px;
@@ -377,6 +380,26 @@
         .health-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; }
         .health-good { background: var(--mc-green); box-shadow: 0 0 4px var(--mc-green); }
         .health-stale { background: var(--mc-red); opacity: 0.5; }
+        
+        /* NEW: Update Badges */
+        .update-tag { font-size: 0.5rem; margin-left: 5px; vertical-align: middle; cursor: help; }
+
+        /* NEW: Chart Tooltip */
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(10, 10, 10, 0.95); /* Darker, more opaque */
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 5px; /* Reduced padding */
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.45rem; /* Smaller font */
+            pointer-events: none; /* Allows mouse to pass through to canvas */
+            display: none;
+            z-index: 100;
+            white-space: nowrap; /* Prevent wrapping */
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5); /* Retro hard shadow */
+            line-height: 1.4; /* Tighter lines */
+        }
     </style>
 </head>
 <body>
@@ -550,6 +573,34 @@
         </div>
     </div>
 
+    <!-- NEW FEATURE: MANUAL SCHEDULER MODAL -->
+    <div id="manualScheduleModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:900px; width:95%; max-height:90vh;">
+            <div class="modal-title" style="color:var(--mc-blue);">🛠️ MANUAL WEEK BUILDER</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                 <button class="action-btn" style="background:var(--mc-red);" onclick="clearWeekData()">🗑️ WIPE WEEK</button>
+                 <span style="font-size:0.6rem; color:#aaa; align-self:center;">Add tasks manually below. Auto-saves.</span>
+                 <button class="action-btn" style="background:var(--mc-green);" onclick="closeManualSchedule()">DONE & REFRESH</button>
+            </div>
+            <div id="manualScheduleGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:10px; max-height:60vh; overflow-y:auto; text-align:left;"></div>
+        </div>
+    </div>
+
+    <!-- NEW FEATURE: MULTI-SELECT UPDATE MODAL -->
+    <div id="multiUpdateModal" class="modal-overlay" style="z-index:3000;">
+        <div class="modal-box" style="max-width:500px;">
+            <div class="modal-title" style="color:var(--mc-green);">SELECT UPDATES</div>
+            <p id="multiUpdateDayLabel" style="font-size:0.7rem; color:#aaa; margin-bottom:15px;"></p>
+            <div id="multiUpdateList" style="max-height:400px; overflow-y:auto; text-align:left; border:1px solid #333; padding:10px; background:rgba(0,0,0,0.3);">
+                <!-- Checkboxes injected here -->
+            </div>
+            <div style="margin-top:15px; display:flex; justify-content:space-between;">
+                 <button class="action-btn" style="background:#444;" onclick="closeMultiUpdate()">CANCEL</button>
+                 <button class="modal-btn" onclick="confirmMultiUpdate()">ADD SELECTED</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container" onclick="playClick()">
         <div class="header-section">
             <div style="display:flex; flex-direction:column;">
@@ -620,10 +671,46 @@
                 <div>Daily $</div>
                 <div class="val-green">$<span id="revenueDisplay">0.00</span></div>
             </div>
+            <!-- NEW: Last 7 Days -->
+            <div class="stat-box">
+                <div>Last 7 Days</div>
+                <div class="val-orange">$<span id="last7Display">0.00</span></div>
+            </div>
+            <!-- NEW: Last 14 Days -->
+            <div class="stat-box">
+                <div>Last 14 Days</div>
+                <div class="val-cyan">$<span id="last14Display">0.00</span></div>
+            </div>
             <div class="stat-box">
                 <!-- NEW FEATURE: Last 30 Days Profit -->
                 <div>Last 30 Days</div>
                 <div class="val-blue">$<span id="last30Display">0.00</span></div>
+            </div>
+            <!-- NEW: CF Only Profit Stats -->
+            <div class="stat-box">
+                <div>CF $ (7d)</div>
+                <div class="val-orange">$<span id="cf7Display">0.00</span></div>
+            </div>
+            <div class="stat-box">
+                <div>CF $ (14d)</div>
+                <div class="val-cyan">$<span id="cf14Display">0.00</span></div>
+            </div>
+            <div class="stat-box">
+                <div>CF $ (30d)</div>
+                <div class="val-blue">$<span id="cf30Display">0.00</span></div>
+            </div>
+            <!-- NEW: Download Stats (7, 14, 30 Days) -->
+            <div class="stat-box">
+                <div>DLs (7d)</div>
+                <div class="val-orange" id="dl7Display">0</div>
+            </div>
+            <div class="stat-box">
+                <div>DLs (14d)</div>
+                <div class="val-cyan" id="dl14Display">0</div>
+            </div>
+            <div class="stat-box">
+                <div>DLs (30d)</div>
+                <div class="val-blue" id="dl30Display">0</div>
             </div>
             <div class="stat-box">
                 <div>Est. Monthly</div>
@@ -646,6 +733,8 @@
             <button class="action-btn" style="font-size:0.5rem;" onclick="toggleFocus()">[TOGGLE GRAPH]</button>
         </h2>
         <div id="chartSection" class="chart-container">
+            <!-- NEW: Tooltip Element -->
+            <div id="chartTooltip" class="chart-tooltip"></div>
             <canvas id="growthChart"></canvas>
             <div class="chart-legend">
                 <div class="legend-item"><span style="background:var(--mc-green);"></span>CurseForge</div>
@@ -714,7 +803,10 @@
                     <input type="number" id="maxDailyUpdates" value="3" style="width:40px; background:#111; color:white; border:1px solid #555; font-family:'Press Start 2P'; padding:5px; text-align:center;">
                 </div>
             </div>
-            <button class="action-btn" style="background:var(--mc-purple);" onclick="generateSmartSchedule()">GENERATE NEW WEEK</button>
+            <div style="display:flex; gap:5px;">
+                <button class="action-btn" style="background:var(--mc-blue);" onclick="openManualSchedule()">🛠️ MANUAL BUILDER</button>
+                <button class="action-btn" style="background:var(--mc-purple);" onclick="generateSmartSchedule()">GENERATE NEW WEEK</button>
+            </div>
         </div>
         <div class="week-grid" id="weekGrid"></div>
         <button class="btn" onclick="archiveAndReset()">>> FINISH WEEK & ARCHIVE <<</button>
@@ -760,11 +852,19 @@
         let db, auth, user;
         let firestoreDocRef = null;
         let useFirestore = false;
-        
-        // NEW FEATURE 2: Timer Variables
+        // NEW Feature 2: Timer Variables
         let timerInterval = null;
         let timerSeconds = 0;
         let metronomeInterval = null;
+        let currentMultiDayIdx = -1; // NEW variable for multi-select
+
+        // NEW: Chart Selection State
+        window.chartSelection = {
+            active: false,
+            start: null,
+            end: null,
+            isDragging: false
+        };
 
         // --- 1. CORE HELPERS ---
         // NEW: Fix for missing groups in old save data
@@ -892,6 +992,8 @@
             // Check total DLs for badge unlocking
             window.updateBadges(globalDownloads);
 
+            const now = new Date();
+
             GROUP_KEYS.forEach(g => {
                 const projects = window.appData.groups[g] || [];
                 let totalDL = 0; let rows = "";
@@ -912,7 +1014,21 @@
                     const healthClass = (p.lastDiff > 0) ? 'health-good' : 'health-stale';
                     const healthDot = `<span class="health-dot ${healthClass}"></span>`;
 
-                    rows += `<div class="project-row-display"><span>${healthDot}<span class="${nameClass}">${freqBadge}${badge}${safeName}</span></span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
+                    // NEW: UPDATE TIMELINE INDICATOR
+                    let updateTag = "";
+                    if (p.lastUpdated) {
+                        const lastDate = new Date(p.lastUpdated);
+                        const diffTime = Math.abs(now - lastDate);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        
+                        if (diffDays <= 7) {
+                            updateTag = `<span class="update-tag" title="Updated ${diffDays} days ago">✅</span>`;
+                        } else if (diffDays <= 14) {
+                            updateTag = `<span class="update-tag" title="Updated last week (${diffDays} days ago)">☑️</span>`;
+                        }
+                    }
+
+                    rows += `<div class="project-row-display"><span>${healthDot}<span class="${nameClass}">${freqBadge}${badge}${safeName}</span>${updateTag}</span><span>${dl.toLocaleString()} ${diffHtml}</span></div>`;
                 });
 
                 let sharePct = 0;
@@ -983,6 +1099,39 @@
 
             function getX(i) { return logs.length > 1 ? padX + (i * stepX) : w/2; }
             function getY(val) { return h - padY - ((val / maxVal) * drawH); }
+
+            // DRAW SELECTION & TOTAL
+            if (window.chartSelection && window.chartSelection.start !== null && window.chartSelection.end !== null) {
+                 const i1 = Math.min(window.chartSelection.start, window.chartSelection.end);
+                 const i2 = Math.max(window.chartSelection.start, window.chartSelection.end);
+                 
+                 const x1 = getX(i1);
+                 const x2 = getX(i2);
+                 
+                 // Draw Highlight
+                 ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+                 ctx.fillRect(x1, padY, x2 - x1, h - (padY * 2));
+                 
+                 ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+                 ctx.lineWidth = 1;
+                 ctx.strokeRect(x1, padY, x2 - x1, h - (padY * 2));
+                 
+                 // Calculate Period Total
+                 let sum = 0;
+                 for(let k=i1; k<=i2; k++) {
+                     const l = logs[k];
+                     sum += (parseFloat(l.value||0)*rate) + (l.externalRevenue||0);
+                 }
+                 
+                 // Draw Total as HUD
+                 ctx.fillStyle = "#fff";
+                 ctx.font = "10px 'Press Start 2P'";
+                 ctx.textAlign = "center";
+                 ctx.shadowColor = "#000";
+                 ctx.shadowBlur = 4;
+                 ctx.fillText(`PERIOD TOTAL: $${sum.toFixed(2)}`, w/2, 40);
+                 ctx.shadowBlur = 0;
+            }
 
             function drawCurve(data, color, fillStyle, labelDir) {
                 if(data.length === 0) return;
@@ -1055,12 +1204,45 @@
             const now = new Date(); 
             now.setHours(0,0,0,0);
             let sum30 = 0; 
+            let sum14 = 0; // New
+            let sum7 = 0;  // New
+            let cfSum30 = 0; // New CF Only
+            let cfSum14 = 0; // New CF Only
+            let cfSum7 = 0;  // New CF Only
+            let dl30 = 0;  // New DL
+            let dl14 = 0;  // New DL
+            let dl7 = 0;   // New DL
             let maxDaily = 0; 
 
             if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
+                // Last 30
                 const rollingLogs = window.appData.pointsLog.slice(-30);
                 rollingLogs.forEach(l => {
-                    sum30 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
+                    const val = parseFloat(l.value) || 0;
+                    const cfVal = val * rate;
+                    sum30 += cfVal + (l.externalRevenue||0);
+                    cfSum30 += cfVal;
+                    dl30 += val;
+                });
+
+                // Last 14
+                const logs14 = window.appData.pointsLog.slice(-14);
+                logs14.forEach(l => {
+                    const val = parseFloat(l.value) || 0;
+                    const cfVal = val * rate;
+                    sum14 += cfVal + (l.externalRevenue||0);
+                    cfSum14 += cfVal;
+                    dl14 += val;
+                });
+
+                // Last 7
+                const logs7 = window.appData.pointsLog.slice(-7);
+                logs7.forEach(l => {
+                    const val = parseFloat(l.value) || 0;
+                    const cfVal = val * rate;
+                    sum7 += cfVal + (l.externalRevenue||0);
+                    cfSum7 += cfVal;
+                    dl7 += val;
                 });
 
                 window.appData.pointsLog.forEach(log => {
@@ -1071,17 +1253,43 @@
             
             const el30 = document.getElementById('last30Display');
             if (el30) el30.innerText = sum30.toFixed(2);
+
+            const el14 = document.getElementById('last14Display');
+            if (el14) el14.innerText = sum14.toFixed(2);
+
+            const el7 = document.getElementById('last7Display');
+            if (el7) el7.innerText = sum7.toFixed(2);
+
+            // NEW: Update CF Only displays
+            const elCf7 = document.getElementById('cf7Display');
+            if (elCf7) elCf7.innerText = cfSum7.toFixed(2);
+
+            const elCf14 = document.getElementById('cf14Display');
+            if (elCf14) elCf14.innerText = cfSum14.toFixed(2);
+
+            const elCf30 = document.getElementById('cf30Display');
+            if (elCf30) elCf30.innerText = cfSum30.toFixed(2);
+
+            // NEW: Update DL displays
+            const elDl7 = document.getElementById('dl7Display');
+            if (elDl7) elDl7.innerText = dl7.toLocaleString();
+
+            const elDl14 = document.getElementById('dl14Display');
+            if (elDl14) elDl14.innerText = dl14.toLocaleString();
+
+            const elDl30 = document.getElementById('dl30Display');
+            if (elDl30) elDl30.innerText = dl30.toLocaleString();
             
             // NEW FEATURE: Est. Monthly
             const elProj = document.getElementById('projectedMonthly');
             if (elProj) {
                 if (window.appData.pointsLog && window.appData.pointsLog.length > 0) {
                     const recent7 = window.appData.pointsLog.slice(-7);
-                    let sum7 = 0;
+                    let avgSum7 = 0;
                     recent7.forEach(l => {
-                        sum7 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
+                        avgSum7 += (parseFloat(l.value)*rate) + (l.externalRevenue||0);
                     });
-                    const avg7 = sum7 / recent7.length;
+                    const avg7 = avgSum7 / recent7.length;
                     const proj = avg7 * 30;
                     elProj.innerText = proj.toFixed(2);
                 } else {
@@ -1679,14 +1887,16 @@
                      const newDl = item.downloads;
                      const diff = old ? (newDl - oldDl) : 0;
                      
-                     // Preserve High Frequency Flag
+                     // Preserve High Frequency Flag & Last Updated Date
                      const hf = old ? (old.highFreq===true) : false;
+                     const lu = old ? (old.lastUpdated||null) : null;
                      
                      return { 
                          name: item.name, 
                          downloads: newDl, 
                          lastDiff: diff, 
-                         highFreq: hf 
+                         highFreq: hf,
+                         lastUpdated: lu // Preserved
                      };
                  };
                  
@@ -1719,17 +1929,178 @@
              }
         };
 
+        // NEW: MANUAL SCHEDULER LOGIC
+        window.openManualSchedule = function() {
+            document.getElementById('manualScheduleModal').style.display = 'flex';
+            window.renderManualEditor();
+        };
+
+        window.closeManualSchedule = function() {
+            document.getElementById('manualScheduleModal').style.display = 'none';
+            renderWeek();
+        };
+
+        // NEW: Check for update trigger when completing tasks
+        function checkUpdateTrigger(taskText) {
+            if (!taskText) return;
+            // Iterate all projects to find a name match
+            GROUP_KEYS.forEach(g => {
+                if(window.appData.groups[g]) {
+                    window.appData.groups[g].forEach(p => {
+                        // If the task text contains the project name (e.g. "Update: Project A")
+                        if (taskText.includes(p.name)) {
+                            p.lastUpdated = new Date().toISOString();
+                            // Optional: Could add a small console log or sound here
+                        }
+                    });
+                }
+            });
+        }
+
+        // NEW: MULTI-UPDATE LOGIC
+        window.openMultiUpdate = function(dayIdx) {
+            currentMultiDayIdx = dayIdx;
+            const dayName = window.appData.currentWeekData[dayIdx].day;
+            document.getElementById('multiUpdateDayLabel').innerText = "Adding tasks to: " + dayName;
+            
+            const list = document.getElementById('multiUpdateList');
+            list.innerHTML = "";
+            
+            GROUP_KEYS.forEach(g => {
+                const group = window.appData.groups[g];
+                if(group && group.length > 0) {
+                    list.innerHTML += `<div style="color:var(--mc-yellow); margin-top:10px; margin-bottom:5px; font-size:0.6rem; border-bottom:1px solid #444;">GROUP ${g}</div>`;
+                    group.forEach(p => {
+                        const safeName = escapeHtml(p.name);
+                        list.innerHTML += `
+                            <div style="display:flex; align-items:center; margin-bottom:5px; padding:5px; background:#222; cursor:pointer;" onclick="this.querySelector('input').click()">
+                                <input type="checkbox" class="multi-update-check" value="${safeName}" style="margin-right:10px; cursor:pointer;" onclick="event.stopPropagation()">
+                                <span style="font-size:0.6rem; color:#eee;">${safeName}</span>
+                            </div>
+                        `;
+                    });
+                }
+            });
+            
+            document.getElementById('multiUpdateModal').style.display = 'flex';
+        };
+
+        window.closeMultiUpdate = function() {
+            document.getElementById('multiUpdateModal').style.display = 'none';
+        };
+
+        window.confirmMultiUpdate = function() {
+            if(currentMultiDayIdx === -1) return;
+            
+            const checks = document.querySelectorAll('.multi-update-check:checked');
+            checks.forEach(c => {
+                const txt = "Update: " + c.value;
+                // Add to schedule
+                window.appData.currentWeekData[currentMultiDayIdx].tasks.push(txt);
+            });
+            
+            saveData();
+            renderManualEditor();
+            closeMultiUpdate();
+        };
+
+        window.renderManualEditor = function() {
+            const grid = document.getElementById('manualScheduleGrid');
+            if(!grid) return;
+            grid.innerHTML = "";
+            
+            // Build Dropdown Options
+            let optionsHtml = `<option value="" disabled selected>Select Single Task...</option>`;
+            optionsHtml += `<optgroup label="General">
+                <option value="Check Comments">Check Comments</option>
+                <option value="Rest / Analytics">Rest / Analytics</option>
+                <option value="Research Ideas">Research Ideas</option>
+                <option value="Fix Bugs">Fix Bugs</option>
+                <option value="Update Manifest">Update Manifest</option>
+            </optgroup>`;
+
+            GROUP_KEYS.forEach(g => {
+                if(window.appData.groups[g] && window.appData.groups[g].length > 0) {
+                    optionsHtml += `<optgroup label="Group ${g}">`;
+                    window.appData.groups[g].forEach(p => {
+                        const safeName = escapeHtml(p.name);
+                        // Clean name for value, display formatted
+                        optionsHtml += `<option value="Update: ${safeName}">Update: ${safeName}</option>`;
+                    });
+                    optionsHtml += `</optgroup>`;
+                }
+            });
+
+            window.appData.currentWeekData.forEach((day, dayIdx) => {
+                let tasksHtml = "";
+                day.tasks.forEach((t, tIdx) => {
+                    // Handle both string and object tasks
+                    const txt = (typeof t === 'object') ? t.text : t;
+                    const safeTxt = escapeHtml(txt);
+                    tasksHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#111; padding:5px; margin-bottom:2px; border:1px solid #333; font-size:0.6rem;">
+                            <span>${safeTxt}</span>
+                            <button onclick="deleteManualTask(${dayIdx}, ${tIdx})" style="background:var(--mc-red); color:white; border:none; cursor:pointer; font-size:0.5rem; padding:2px 5px;">X</button>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML += `
+                    <div style="background:rgba(0,0,0,0.3); padding:10px; border:1px solid #555;">
+                        <div style="color:var(--mc-yellow); margin-bottom:5px; text-align:center; border-bottom:1px solid #444;">${day.day}</div>
+                        <div style="margin-bottom:10px;">${tasksHtml}</div>
+                        <div style="display:flex; gap:2px; margin-bottom:5px;">
+                            <select id="manualSelect-${dayIdx}" style="width:100%; background:#000; color:white; border:1px solid #555; padding:5px; font-family:'Press Start 2P'; font-size:0.5rem;">
+                                ${optionsHtml}
+                            </select>
+                            <button onclick="addManualTask(${dayIdx})" style="background:var(--mc-green); color:black; border:1px solid #000; cursor:pointer;">+</button>
+                        </div>
+                        <button onclick="openMultiUpdate(${dayIdx})" style="width:100%; background:#b266ff; color:white; border:1px solid #000; cursor:pointer; font-size:0.5rem; padding:8px;">+ SELECT UPDATES</button>
+                    </div>
+                `;
+            });
+        };
+
+        window.addManualTask = function(dayIdx) {
+            const select = document.getElementById(`manualSelect-${dayIdx}`);
+            if(select && select.value) {
+                window.appData.currentWeekData[dayIdx].tasks.push(select.value);
+                saveData();
+                renderManualEditor();
+            }
+        };
+
+        window.deleteManualTask = function(dayIdx, taskIdx) {
+            window.appData.currentWeekData[dayIdx].tasks.splice(taskIdx, 1);
+            saveData();
+            renderManualEditor();
+        };
+
+        window.clearWeekData = function() {
+            if(confirm("Are you sure you want to WIPE the entire schedule?")) {
+                window.appData.currentWeekData.forEach(d => d.tasks = []);
+                saveData();
+                renderManualEditor();
+            }
+        };
+
         window.toggleTask = (di, ti) => {
             if (!window.appData.currentWeekData[di] || !window.appData.currentWeekData[di].tasks[ti]) return;
             let t = window.appData.currentWeekData[di].tasks[ti];
             if(typeof t === 'string') {
                 window.appData.currentWeekData[di].tasks[ti] = {text: t, done: true};
+                // Trigger update check on first click
+                checkUpdateTrigger(t);
             } else {
                 t.done = !t.done;
+                // Trigger update check only when marking AS DONE
+                if(t.done) checkUpdateTrigger(t.text);
             }
             window.playClick(); // 3. FUN FEATURE: SOUND
             saveData(); 
             renderWeek();
+            // Refresh groups to show new checkmark immediately if visible
+            renderGroups();
         };
 
         window.archiveAndReset = () => {
@@ -2104,6 +2475,116 @@
                         if (auditModal) setTimeout(() => { auditModal.style.display='flex'; }, 1000);
                     }
                 }
+            }
+
+            // NEW: CHART INTERACTION (Tooltip + Selection)
+            const canvas = document.getElementById('growthChart');
+            const tooltip = document.getElementById('chartTooltip');
+            
+            if (canvas && tooltip) {
+                
+                // MOUSE DOWN: Start Selection
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const scaleX = canvas.width / rect.width;
+                    const mouseX = e.offsetX * scaleX;
+                    
+                    let logs = (window.appData.pointsLog || []);
+                    if (logs.length > 30) logs = logs.slice(-30);
+                    if (logs.length < 2) return;
+
+                    const w = canvas.width;
+                    const padX = 50;
+                    const availW = w - (padX * 2);
+                    const stepX = availW / (logs.length - 1);
+
+                    let idx = Math.round((mouseX - padX) / stepX);
+                    if (idx < 0) idx = 0;
+                    if (idx >= logs.length) idx = logs.length - 1;
+
+                    // Init Drag
+                    window.chartSelection.active = true;
+                    window.chartSelection.isDragging = true;
+                    window.chartSelection.start = idx;
+                    window.chartSelection.end = idx;
+                    
+                    // Force redraw
+                    window.drawChart();
+                    
+                    // Hide individual tooltip while selecting
+                    tooltip.style.display = 'none';
+                });
+
+                // MOUSE MOVE
+                canvas.addEventListener('mousemove', (e) => {
+                    let logs = (window.appData.pointsLog || []);
+                    if (logs.length > 30) logs = logs.slice(-30);
+                    if (logs.length < 2) { 
+                        tooltip.style.display = 'none'; 
+                        return; 
+                    }
+
+                    const rect = canvas.getBoundingClientRect();
+                    const scaleX = canvas.width / rect.width;
+                    const mouseX = e.offsetX * scaleX;
+                    const w = canvas.width; 
+                    const padX = 50;
+                    const availW = w - (padX * 2);
+                    const stepX = availW / (logs.length - 1);
+                    
+                    let idx = Math.round((mouseX - padX) / stepX);
+                    if (idx < 0) idx = 0;
+                    if (idx >= logs.length) idx = logs.length - 1;
+
+                    if (window.chartSelection.isDragging) {
+                        // Update Selection Range
+                        window.chartSelection.end = idx;
+                        window.drawChart();
+                        tooltip.style.display = 'none'; // Keep hidden, HUD shows total
+                    } else {
+                        // Standard Tooltip Behavior (Only if not dragging)
+                        const entry = logs[idx];
+                        const rate = getRate();
+                        const cf = (parseFloat(entry.value) || 0) * rate;
+                        const ext = parseFloat(entry.externalRevenue) || 0;
+                        const total = cf + ext;
+                        
+                        tooltip.style.display = 'block';
+                        let leftPos = e.offsetX + 15;
+                        if (leftPos + 100 > rect.width) leftPos = e.offsetX - 110; 
+
+                        tooltip.style.left = leftPos + 'px';
+                        tooltip.style.top = (e.offsetY - 20) + 'px';
+                        
+                        tooltip.innerHTML = `
+                            <div style="color:#aaa; border-bottom:1px solid #555; margin-bottom:2px; padding-bottom:2px;">${entry.date}</div>
+                            <div style="color:var(--mc-green)">CF: $${cf.toFixed(2)}</div>
+                            <div style="color:var(--mc-orange)">Ext: $${ext.toFixed(2)}</div>
+                            <div style="color:var(--mc-yellow); margin-top:2px; border-top:1px dashed #555; padding-top:2px;">TOTAL: $${total.toFixed(2)}</div>
+                        `;
+                    }
+                });
+
+                // MOUSE UP: Stop Dragging
+                canvas.addEventListener('mouseup', () => {
+                    if (window.chartSelection.isDragging) {
+                        window.chartSelection.isDragging = false;
+                        // Keep selection active for viewing
+                    } else {
+                        // Click without drag clears selection
+                        window.chartSelection.start = null;
+                        window.chartSelection.end = null;
+                        window.drawChart();
+                    }
+                });
+                
+                // MOUSE LEAVE
+                canvas.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                    if (window.chartSelection.isDragging) {
+                        window.chartSelection.isDragging = false;
+                    }
+                });
             }
         }
 
