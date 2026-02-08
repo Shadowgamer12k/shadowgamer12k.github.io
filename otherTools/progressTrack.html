@@ -1614,14 +1614,26 @@
                  
                  arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
                  
+                 // NEW: Helper to preserve diffs and flags from existing data
+                 const mapWithState = (item) => {
+                     let old = null;
+                     for(const k of GROUP_KEYS) {
+                         const found = (window.appData.groups[k]||[]).find(p => p.name === item.name);
+                         if(found) { old = found; break; }
+                     }
+                     const diff = old ? (parseInt(item.downloads||0) - parseInt(old.downloads||0)) : 0;
+                     const hf = old ? (old.highFreq||false) : false;
+                     return { name: item.name, downloads: item.downloads, lastDiff: diff, highFreq: hf };
+                 };
+                 
                  // UPDATED: Distribution logic for 6 groups (A-F)
-                 window.appData.groups.A = arr.slice(0,4).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.B = arr.slice(4,8).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.C = arr.slice(8,12).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.D = arr.slice(12,16).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.E = arr.slice(16,20).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.F = arr.slice(20,24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
-                 window.appData.groups.G = arr.slice(24).map(x=>({name: x.name, downloads: x.downloads, lastDiff:0, highFreq:false}));
+                 window.appData.groups.A = arr.slice(0,4).map(mapWithState);
+                 window.appData.groups.B = arr.slice(4,8).map(mapWithState);
+                 window.appData.groups.C = arr.slice(8,12).map(mapWithState);
+                 window.appData.groups.D = arr.slice(12,16).map(mapWithState);
+                 window.appData.groups.E = arr.slice(16,20).map(mapWithState);
+                 window.appData.groups.F = arr.slice(20,24).map(mapWithState);
+                 window.appData.groups.G = arr.slice(24).map(mapWithState);
                  
                  saveData(); 
                  refreshAll(); 
