@@ -1622,39 +1622,58 @@
                      if (raw.length < 5) throw new Error("Input too short or missing brackets [...]");
                  }
 
-                 // 3. Parse
-                 const arr = JSON.parse(raw);
+                 // 3. Parse with strict error handling
+                 let arr;
+                 try {
+                    arr = JSON.parse(raw);
+                 } catch(e) {
+                    throw new Error("JSON Parse Error: " + e.message);
+                 }
+                 
                  if (!Array.isArray(arr)) throw new Error("Parsed data is not an array");
                  if (arr.length === 0) throw new Error("Array is empty");
                  
                  // 4. Sanitize and Sort
                  arr.forEach(p => {
-                     // Ensure downloads are true numbers
+                     // Robust Number Parsing (Handle 1.5k, 1m, or plain numbers)
                      let d = p.downloads;
-                     if (typeof d === 'string') d = parseFloat(d.replace(/,/g, '').replace(/k/i, '000'));
+                     if (typeof d === 'string') {
+                         d = d.toLowerCase().replace(/,/g, '');
+                         if (d.includes('k')) {
+                             d = parseFloat(d.replace('k', '')) * 1000;
+                         } else if (d.includes('m')) {
+                             d = parseFloat(d.replace('m', '')) * 1000000;
+                         } else {
+                             d = parseFloat(d);
+                         }
+                     }
                      p.downloads = parseInt(d) || 0;
+                     if (p.name) p.name = p.name.trim(); // Clean name
                  });
                  
+                 // Sort descending
                  arr.sort((a,b) => b.downloads - a.downloads);
                  
-                 // 5. Map with State Preservation
+                 // 5. Map with State Preservation (Diffs & Flags)
+                 const oldMap = new Map();
+                 if(window.appData.groups) {
+                    for(const k of GROUP_KEYS) {
+                        const grp = window.appData.groups[k] || [];
+                        grp.forEach(p => {
+                            if(p.name) oldMap.set(p.name, p);
+                        });
+                    }
+                 }
+                 
                  const mapWithState = (item) => {
-                     let old = null;
-                     // Search all groups for existing project to preserve history/flags
-                     if(window.appData.groups) {
-                        for(const k of GROUP_KEYS) {
-                            const grp = window.appData.groups[k] || [];
-                            const found = grp.find(p => p.name === item.name);
-                            if(found) { old = found; break; }
-                        }
-                     }
+                     const old = oldMap.get(item.name);
                      
                      // Calculate Diff
                      const oldDl = old ? (parseInt(old.downloads)||0) : 0;
                      const newDl = item.downloads;
                      const diff = old ? (newDl - oldDl) : 0;
                      
-                     // Preserve Flag
+                     // Preserve High Frequency Flag
                      const hf = old ? (old.highFreq===true) : false;
                      
                      return { 
@@ -1683,10 +1702,11 @@
                  // 8. Feedback
                  document.getElementById('cfPasteModal').style.display='none';
                  document.getElementById('cfPasteArea').value = ''; 
-                 alert(`✅ IMPORT SUCCESS!\n\nLoaded ${arr.length} projects.\nGroup G contains ${window.appData.groups.G.length} items.`);
+                 alert(`✅ IMPORT SUCCESS!\n\nLoaded ${arr.length} projects.\nSorted by downloads.\n\nTop Project: ${arr[0].name} (${arr[0].downloads})`);
+                 
              } catch(e) { 
                  console.error(e);
-                 alert("❌ IMPORT FAILED: " + e.message + "\n\nCheck that you copied the [...] array correctly."); 
+                 alert("❌ IMPORT FAILED: " + e.message + "\n\nCheck console for details."); 
              }
         };
 
