@@ -748,14 +748,14 @@
                 { day: "SAT", tasks: [] },
                 { day: "SUN", tasks: ["Rest / Analytics"] }
             ],
-            groups: { A: [], B: [], C: [], D: [], E: [], F: [], G: [] }, 
+            groups: { A: [], B: [], C: [], D: [], E: [], F: [], G: [], H: [], I: [], J: [] }, 
             history: [], 
             pointsLog: [] 
         };
 
         // Temporary data for edits (FIX: Attached to window)
         window.tempGroups = {};
-        const GROUP_KEYS = ['A','B','C','D','E','F','G'];
+        const GROUP_KEYS = ['A','B','C','D','E','F','G','H','I','J'];
 
         let db, auth, user;
         let firestoreDocRef = null;
@@ -771,8 +771,11 @@
         window.hydrateData = function() {
             if (!window.appData.groups) window.appData.groups = {};
             
-            // Check if Group G was missing (Migration Logic)
+            // Check if Group G-J was missing (Migration Logic)
             if (!window.appData.groups.G) window.appData.groups.G = [];
+            if (!window.appData.groups.H) window.appData.groups.H = [];
+            if (!window.appData.groups.I) window.appData.groups.I = [];
+            if (!window.appData.groups.J) window.appData.groups.J = [];
 
             GROUP_KEYS.forEach(g => {
                 if (!Array.isArray(window.appData.groups[g])) {
@@ -1367,7 +1370,10 @@
                 D: window.appData.groups.D ? JSON.parse(JSON.stringify(window.appData.groups.D)) : [],
                 E: window.appData.groups.E ? JSON.parse(JSON.stringify(window.appData.groups.E)) : [],
                 F: window.appData.groups.F ? JSON.parse(JSON.stringify(window.appData.groups.F)) : [],
-                G: window.appData.groups.G ? JSON.parse(JSON.stringify(window.appData.groups.G)) : []
+                G: window.appData.groups.G ? JSON.parse(JSON.stringify(window.appData.groups.G)) : [],
+                H: window.appData.groups.H ? JSON.parse(JSON.stringify(window.appData.groups.H)) : [],
+                I: window.appData.groups.I ? JSON.parse(JSON.stringify(window.appData.groups.I)) : [],
+                J: window.appData.groups.J ? JSON.parse(JSON.stringify(window.appData.groups.J)) : []
             };
             document.getElementById('editGroupsModal').style.display='flex'; 
             window.renderEditModalContent(); 
@@ -1465,7 +1471,7 @@
             // 3. STRICT PRIORITY SORT (The Fix for 40+ Projects)
             // Logic: Group A > B > C... > G
             // This ensures if you only have 18 slots (3/day), Groups A & B get them, and G is skipped.
-            const groupRank = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7 };
+            const groupRank = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9, 'J': 10 };
             
             allProjs.sort((a,b) => {
                 // 2x items get priority to ensure they fit
@@ -1684,16 +1690,19 @@
                      };
                  };
                  
-                 // 6. Assign to Groups (A-G)
+                 // 6. Assign to Groups (A-J) with 6 items per group
                  if(!window.appData.groups) window.appData.groups = {};
                  
-                 window.appData.groups.A = arr.slice(0,4).map(mapWithState);
-                 window.appData.groups.B = arr.slice(4,8).map(mapWithState);
-                 window.appData.groups.C = arr.slice(8,12).map(mapWithState);
-                 window.appData.groups.D = arr.slice(12,16).map(mapWithState);
-                 window.appData.groups.E = arr.slice(16,20).map(mapWithState);
-                 window.appData.groups.F = arr.slice(20,24).map(mapWithState);
-                 window.appData.groups.G = arr.slice(24).map(mapWithState);
+                 window.appData.groups.A = arr.slice(0,6).map(mapWithState);
+                 window.appData.groups.B = arr.slice(6,12).map(mapWithState);
+                 window.appData.groups.C = arr.slice(12,18).map(mapWithState);
+                 window.appData.groups.D = arr.slice(18,24).map(mapWithState);
+                 window.appData.groups.E = arr.slice(24,30).map(mapWithState);
+                 window.appData.groups.F = arr.slice(30,36).map(mapWithState);
+                 window.appData.groups.G = arr.slice(36,42).map(mapWithState);
+                 window.appData.groups.H = arr.slice(42,48).map(mapWithState);
+                 window.appData.groups.I = arr.slice(48,54).map(mapWithState);
+                 window.appData.groups.J = arr.slice(54).map(mapWithState);
                  
                  // 7. Save and Refresh
                  saveData(); 
