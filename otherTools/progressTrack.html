@@ -1609,24 +1609,65 @@
 
         window.processCFPaste = () => {
              try {
-                 const arr = JSON.parse(document.getElementById('cfPasteArea').value);
-                 if (!Array.isArray(arr)) throw new Error("Invalid data format");
+                 // 1. Get raw value and clean it
+                 let raw = document.getElementById('cfPasteArea').value.trim();
                  
-                 arr.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+                 // 2. Sanitation: Find the array brackets in case user copied extra text
+                 const firstBracket = raw.indexOf('[');
+                 const lastBracket = raw.lastIndexOf(']');
                  
-                 // NEW: Helper to preserve diffs and flags from existing data
+                 if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+                     raw = raw.substring(firstBracket, lastBracket + 1);
+                 } else {
+                     if (raw.length < 5) throw new Error("Input too short or missing brackets [...]");
+                 }
+
+                 // 3. Parse
+                 const arr = JSON.parse(raw);
+                 if (!Array.isArray(arr)) throw new Error("Parsed data is not an array");
+                 if (arr.length === 0) throw new Error("Array is empty");
+                 
+                 // 4. Sanitize and Sort
+                 arr.forEach(p => {
+                     // Ensure downloads are true numbers
+                     let d = p.downloads;
+                     if (typeof d === 'string') d = parseFloat(d.replace(/,/g, '').replace(/k/i, '000'));
+                     p.downloads = parseInt(d) || 0;
+                 });
+                 
+                 arr.sort((a,b) => b.downloads - a.downloads);
+                 
+                 // 5. Map with State Preservation
                  const mapWithState = (item) => {
                      let old = null;
-                     for(const k of GROUP_KEYS) {
-                         const found = (window.appData.groups[k]||[]).find(p => p.name === item.name);
-                         if(found) { old = found; break; }
+                     // Search all groups for existing project to preserve history/flags
+                     if(window.appData.groups) {
+                        for(const k of GROUP_KEYS) {
+                            const grp = window.appData.groups[k] || [];
+                            const found = grp.find(p => p.name === item.name);
+                            if(found) { old = found; break; }
+                        }
                      }
-                     const diff = old ? (parseInt(item.downloads||0) - parseInt(old.downloads||0)) : 0;
-                     const hf = old ? (old.highFreq||false) : false;
-                     return { name: item.name, downloads: item.downloads, lastDiff: diff, highFreq: hf };
+                     
+                     // Calculate Diff
+                     const oldDl = old ? (parseInt(old.downloads)||0) : 0;
+                     const newDl = item.downloads;
+                     const diff = old ? (newDl - oldDl) : 0;
+                     
+                     // Preserve Flag
+                     const hf = old ? (old.highFreq===true) : false;
+                     
+                     return { 
+                         name: item.name, 
+                         downloads: newDl, 
+                         lastDiff: diff, 
+                         highFreq: hf 
+                     };
                  };
                  
-                 // UPDATED: Distribution logic for 6 groups (A-F)
+                 // 6. Assign to Groups (A-G)
+                 if(!window.appData.groups) window.appData.groups = {};
+                 
                  window.appData.groups.A = arr.slice(0,4).map(mapWithState);
                  window.appData.groups.B = arr.slice(4,8).map(mapWithState);
                  window.appData.groups.C = arr.slice(8,12).map(mapWithState);
@@ -1635,13 +1676,17 @@
                  window.appData.groups.F = arr.slice(20,24).map(mapWithState);
                  window.appData.groups.G = arr.slice(24).map(mapWithState);
                  
+                 // 7. Save and Refresh
                  saveData(); 
                  refreshAll(); 
+                 
+                 // 8. Feedback
                  document.getElementById('cfPasteModal').style.display='none';
-                 alert("Projects imported successfully into Groups A-G!");
+                 document.getElementById('cfPasteArea').value = ''; 
+                 alert(`✅ IMPORT SUCCESS!\n\nLoaded ${arr.length} projects.\nGroup G contains ${window.appData.groups.G.length} items.`);
              } catch(e) { 
-                 alert("Invalid JSON format. Please paste valid data."); 
                  console.error(e);
+                 alert("❌ IMPORT FAILED: " + e.message + "\n\nCheck that you copied the [...] array correctly."); 
              }
         };
 
