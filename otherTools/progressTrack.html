@@ -1641,44 +1641,71 @@
              document.getElementById('editGroupsModal').style.display='none';
         };
 
-      // NEW FEATURE: SMART SCHEDULER
+     // NEW FEATURE: SMART SCHEDULER (WITH FAIR ROTATION)
         window.generateSmartSchedule = function() {
             // 1. GET THE LIMIT YOU SET
             const maxPerDay = parseInt(document.getElementById('maxDailyUpdates').value) || 3;
             
-            // Safety Warning if you try to do too much
-            // Now calculating for 7 days
-            if (maxPerDay > 4) {
-                if(!confirm(`⚠️ HIGH WORKLOAD WARNING:\n\nYou set ${maxPerDay} updates per day.\nThat is ${maxPerDay * 7} updates this week (Mon-Sun).\n\nThis is risky for spam detection. Recommended is 3.\n\nContinue anyway?`)) return;
-            } else {
-                if(!confirm(`⚠️ Generate PROFIT STRATEGY schedule (7 DAYS)?\n\nLimit: ${maxPerDay} updates/day.\nFocus: Weekend Traffic (Fri-Sun).`)) return;
+            // Safety Warning
+            if (maxPerDay > 5) {
+                if(!confirm(`⚠️ HIGH WORKLOAD WARNING:\n\nYou set ${maxPerDay} updates per day.\nThat is ${maxPerDay * 7} tasks this week.\n\nRecommended is 3-4 for sustainability.\n\nContinue anyway?`)) return;
             }
+
+            // 2. STRATEGY SELECTION MENU
+            let strategyMode = "standard";
+            const inputMode = prompt(
+                "SELECT STRATEGY FOR THIS WEEK (1-3):\n\n" +
+                "1. 💰 Standard Profit (Fair Rotation)\n" +
+                "2. 🚀 Aggressive Growth (Create 10 New Addons)\n" +
+                "3. 🏆 ACHIEVEMENT OVERHAUL (Unlock Realms Market)", 
+                "1"
+            );
+
+            if (inputMode === "2") strategyMode = "growth";
+            if (inputMode === "3") {
+                strategyMode = "overhaul";
+                alert("⚠️ READ BEFORE PROCEEDING:\n\nTo make an addon 'Achievement Friendly', you cannot just change the version number.\n\nYOU MUST:\n1. Remove 'player.json' from behavior packs.\n2. Move logic to Script API (stable).\n3. Then bump 'min_engine_version'.\n\nThis is a QUALITY update that unlocks Realm players. Do not skip the code work!");
+            }
+            if (!inputMode) return; // Cancelled
 
             window.appData.maxDailyUpdates = maxPerDay;
             
-            // 2. Gather all projects
+            // 3. GATHER & PREPARE DATA (Initialize Neglect Score)
             let allProjs = [];
             GROUP_KEYS.forEach(g => {
                 (window.appData.groups[g]||[]).forEach(p => {
+                    // Initialize neglect count if missing (Tracks how many weeks it was skipped)
+                    if (typeof p.neglectCount === 'undefined') p.neglectCount = 0;
+
                     allProjs.push({
+                        originalRef: p, // Keep reference to update score later
                         name: p.name, 
                         group: g, 
-                        diff: p.lastDiff || 0
+                        diff: p.lastDiff || 0,
+                        neglect: p.neglectCount
                     });
                 });
             });
 
-            // 3. Sort by PROFIT IMPORTANCE (Group A first, then B, etc.)
-            const groupRank = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7 };
+            // 4. FAIR ROTATION SORTING
+            // Logic: Group A (VIPs) > High Neglect (Skipped last week) > Group Rank
+            const groupRank = { 'A': 100, 'B': 90, 'C': 80, 'D': 70, 'E': 60, 'F': 50, 'G': 40 };
+            
             allProjs.sort((a,b) => {
-                const rA = groupRank[a.group] || 99;
-                const rB = groupRank[b.group] || 99;
-                if(rA !== rB) return rA - rB;
-                return b.diff - a.diff; 
+                // RULE 1: Group A is "Cash Cow". NEVER ROTATE OUT.
+                if(a.group === 'A' && b.group !== 'A') return -1;
+                if(b.group === 'A' && a.group !== 'A') return 1;
+
+                // RULE 2: Priority to "Neglected" items (Skipped items float to top)
+                if(a.neglect !== b.neglect) return b.neglect - a.neglect; // Higher neglect score = Higher priority
+
+                // RULE 3: Standard Group Ranking
+                const rA = groupRank[a.group] || 0;
+                const rB = groupRank[b.group] || 0;
+                return rB - rA; 
             });
 
-            // 4. Define the "Money Days" Logic (NOW INCLUDES SUNDAY=6)
-            // Group A gets Sat/Sun. Group F/G gets Mon/Tue.
+            // 5. Define "Money Days" Logic
             const preferredDays = {
                 'A': [5, 6],       // SATURDAY / SUNDAY
                 'B': [4, 5],       // FRIDAY / SATURDAY
@@ -1686,13 +1713,26 @@
                 'D': [2, 3],       // WEDNESDAY / THURSDAY
                 'E': [1, 2],       // TUESDAY / WEDNESDAY
                 'F': [0, 1],       // MONDAY / TUESDAY
-                'G': [0, 6]        // MONDAY / SUNDAY (Fill gaps)
+                'G': [0, 6]        // MONDAY / SUNDAY
             };
 
-            // 5. Create Week Structure (7 Days: 0=Mon ... 6=Sun)
+            // 6. Create Week Structure (7 Days)
             let schedule = [[], [], [], [], [], [], []]; 
             let scheduledCount = 0;
             let skippedCount = 0;
+            let newAddonCount = 0;
+
+            // --- PHASE 1: INJECT CREATION TASKS (Growth Mode Only) ---
+            if (strategyMode === "growth") {
+                for (let d = 0; d < 5; d++) { // Mon-Fri
+                    if (schedule[d].length < maxPerDay) {
+                        schedule[d].push("🆕 CREATE: New Idea " + (++newAddonCount));
+                    }
+                    if (schedule[d].length < maxPerDay) { 
+                        schedule[d].push("🆕 CREATE: New Idea " + (++newAddonCount));
+                    }
+                }
+            }
 
             const isScheduledNearby = (name, dayIdx) => {
                 let existingDays = [];
@@ -1703,40 +1743,51 @@
                 return existingDays.some(d => Math.abs(d - dayIdx) < 3);
             };
 
-            // 6. Fill the Schedule (Top Tiers First)
+            // --- PHASE 2: FILL REMAINING SLOTS WITH UPDATES ---
             allProjs.forEach(p => {
-                // Get preferred days, but if they are full, look for ANY open slot
-                // Prioritizing Sat (5) & Sun (6) down to Mon (0) for high tiers
                 let daysToTry = preferredDays[p.group] || [0];
-                
-                if (p.group === 'A' || p.group === 'B') {
-                    daysToTry = [5, 6, 4, 3, 2, 1, 0]; 
+                // VIPs and High Neglect items try weekends/late week first
+                if (p.group === 'A' || p.group === 'B' || p.neglect > 0) {
+                     daysToTry = [5, 6, 4, 3, 2, 1, 0]; 
                 }
 
                 let placed = false;
 
                 for (let dayIdx of daysToTry) {
-                    // CRITICAL: THIS CHECK ENFORCES YOUR LIMIT
                     if (schedule[dayIdx].length < maxPerDay) {
                         if (!isScheduledNearby(p.name, dayIdx)) {
                             let label = "";
                             
-                            if (p.group === 'A') label = "💰 CASH COW: " + p.name;
-                            else if (p.group === 'B') label = "🔥 HOT: " + p.name;
-                            else if (p.diff > 100) label = "📈 Growing: " + p.name;
-                            else label = "Update: " + p.name;
+                            // LABELS
+                            if (strategyMode === "overhaul") {
+                                if (p.group === 'A' || p.group === 'B') label = "🛠️ REMOVE PLAYER.JSON: " + p.name;
+                                else label = "🏆 ACHV FIX: " + p.name;
+                            } else {
+                                if (p.group === 'A') label = "💰 CASH COW: " + p.name;
+                                else if (p.neglect > 0) label = "⏳ OVERDUE: " + p.name; // Visually marks rotated items
+                                else if (p.group === 'B') label = "🔥 HOT: " + p.name;
+                                else label = "Update: " + p.name;
+                            }
 
                             schedule[dayIdx].push(label);
                             placed = true;
                             scheduledCount++;
+                            
+                            // RESET NEGLECT SCORE (It is being worked on this week)
+                            p.originalRef.neglectCount = 0;
                             break; 
                         }
                     }
                 }
-                if (!placed) skippedCount++;
+                
+                if (!placed) {
+                    skippedCount++;
+                    // INCREASE NEGLECT SCORE (Priority goes UP for next week)
+                    p.originalRef.neglectCount = (p.originalRef.neglectCount || 0) + 1;
+                }
             });
 
-            // 7. Apply to State (Now includes Sunday tasks)
+            // 7. Apply to State
             window.appData.currentWeekData = [
                 { day: "MON", tasks: schedule[0] },
                 { day: "TUE", tasks: schedule[1] },
@@ -1747,21 +1798,23 @@
                 { day: "SUN", tasks: schedule[6] }
             ];
 
-            // Add standard check to Monday and Sunday
+            // Standard Tasks
             window.appData.currentWeekData[0].tasks.unshift("Check Comments");
-            // Optional: Add analytics check to Sunday
+            if (strategyMode === "overhaul") {
+                 window.appData.currentWeekData[0].tasks.unshift("📢 Post: 'Achievement Update Coming!'");
+            }
+
             if (window.appData.currentWeekData[6].tasks.length < maxPerDay + 1) {
                 window.appData.currentWeekData[6].tasks.push("📊 Weekly Analytics");
             }
-            
-            // Add Pre-Flight on Friday if space
             if (window.appData.currentWeekData[4].tasks.length < maxPerDay + 1) {
                 window.appData.currentWeekData[4].tasks.push("🚀 Pre-Flight Checklist");
             }
             
             saveData();
             renderWeek();
-            alert(`✅ 7-DAY SCHEDULE GENERATED\n\n🎯 Limit: ${maxPerDay} per day\n📅 Total Scheduled: ${scheduledCount}\n⏭️ Skipped (Low Priority): ${skippedCount}\n\nSunday is now enabled for work!`);
+            
+            alert(`✅ SCHEDULE GENERATED (FAIR ROTATION)\n\n📅 Scheduled: ${scheduledCount}\n⏭️ Skipped (Priority +1): ${skippedCount}\n\nThe ${skippedCount} items skipped this week are now marked as 'High Priority' for NEXT week.`);
         }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
