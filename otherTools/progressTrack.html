@@ -1647,10 +1647,11 @@
             const maxPerDay = parseInt(document.getElementById('maxDailyUpdates').value) || 3;
             
             // Safety Warning if you try to do too much
+            // Now calculating for 7 days
             if (maxPerDay > 4) {
-                if(!confirm(`⚠️ HIGH WORKLOAD WARNING:\n\nYou set ${maxPerDay} updates per day.\nThat is ${maxPerDay * 6} updates this week.\n\nThis is risky for spam detection. Recommended is 3.\n\nContinue anyway?`)) return;
+                if(!confirm(`⚠️ HIGH WORKLOAD WARNING:\n\nYou set ${maxPerDay} updates per day.\nThat is ${maxPerDay * 7} updates this week (Mon-Sun).\n\nThis is risky for spam detection. Recommended is 3.\n\nContinue anyway?`)) return;
             } else {
-                if(!confirm(`⚠️ Generate PROFIT STRATEGY schedule?\n\nLimit: ${maxPerDay} updates/day.\nFocus: Weekend Traffic (Fri/Sat).`)) return;
+                if(!confirm(`⚠️ Generate PROFIT STRATEGY schedule (7 DAYS)?\n\nLimit: ${maxPerDay} updates/day.\nFocus: Weekend Traffic (Fri-Sun).`)) return;
             }
 
             window.appData.maxDailyUpdates = maxPerDay;
@@ -1676,20 +1677,20 @@
                 return b.diff - a.diff; 
             });
 
-            // 4. Define the "Money Days" Logic
-            // Group A gets Friday/Saturday. Group F/G gets Monday.
+            // 4. Define the "Money Days" Logic (NOW INCLUDES SUNDAY=6)
+            // Group A gets Sat/Sun. Group F/G gets Mon/Tue.
             const preferredDays = {
-                'A': [5, 4],       // SATURDAY / FRIDAY
-                'B': [4, 3],       // FRIDAY / THURSDAY
-                'C': [3, 2],       // THURSDAY / WEDNESDAY
-                'D': [2, 1],       // WEDNESDAY / TUESDAY
-                'E': [1, 0],       // TUESDAY / MONDAY
-                'F': [0],          // MONDAY
-                'G': [0]           // MONDAY
+                'A': [5, 6],       // SATURDAY / SUNDAY
+                'B': [4, 5],       // FRIDAY / SATURDAY
+                'C': [3, 4],       // THURSDAY / FRIDAY
+                'D': [2, 3],       // WEDNESDAY / THURSDAY
+                'E': [1, 2],       // TUESDAY / WEDNESDAY
+                'F': [0, 1],       // MONDAY / TUESDAY
+                'G': [0, 6]        // MONDAY / SUNDAY (Fill gaps)
             };
 
-            // 5. Create Week Structure
-            let schedule = [[], [], [], [], [], []]; // 0=Mon ... 5=Sat
+            // 5. Create Week Structure (7 Days: 0=Mon ... 6=Sun)
+            let schedule = [[], [], [], [], [], [], []]; 
             let scheduledCount = 0;
             let skippedCount = 0;
 
@@ -1705,11 +1706,11 @@
             // 6. Fill the Schedule (Top Tiers First)
             allProjs.forEach(p => {
                 // Get preferred days, but if they are full, look for ANY open slot
-                // Prioritizing Sat (5) down to Mon (0) for high tiers
+                // Prioritizing Sat (5) & Sun (6) down to Mon (0) for high tiers
                 let daysToTry = preferredDays[p.group] || [0];
                 
                 if (p.group === 'A' || p.group === 'B') {
-                    daysToTry = [5, 4, 3, 2, 1, 0]; 
+                    daysToTry = [5, 6, 4, 3, 2, 1, 0]; 
                 }
 
                 let placed = false;
@@ -1735,7 +1736,7 @@
                 if (!placed) skippedCount++;
             });
 
-            // 7. Apply to State
+            // 7. Apply to State (Now includes Sunday tasks)
             window.appData.currentWeekData = [
                 { day: "MON", tasks: schedule[0] },
                 { day: "TUE", tasks: schedule[1] },
@@ -1743,10 +1744,15 @@
                 { day: "THU", tasks: schedule[3] },
                 { day: "FRI", tasks: schedule[4] },
                 { day: "SAT", tasks: schedule[5] },
-                { day: "SUN", tasks: ["Rest / Analytics", "Check Comments"] }
+                { day: "SUN", tasks: schedule[6] }
             ];
 
+            // Add standard check to Monday and Sunday
             window.appData.currentWeekData[0].tasks.unshift("Check Comments");
+            // Optional: Add analytics check to Sunday
+            if (window.appData.currentWeekData[6].tasks.length < maxPerDay + 1) {
+                window.appData.currentWeekData[6].tasks.push("📊 Weekly Analytics");
+            }
             
             // Add Pre-Flight on Friday if space
             if (window.appData.currentWeekData[4].tasks.length < maxPerDay + 1) {
@@ -1755,7 +1761,7 @@
             
             saveData();
             renderWeek();
-            alert(`✅ SCHEDULE GENERATED\n\n🎯 Limit: ${maxPerDay} per day\n📅 Total Scheduled: ${scheduledCount}\n⏭️ Skipped (Low Priority): ${skippedCount}\n\nYour top earners are safe. Your low-tier mods are skipped.`);
+            alert(`✅ 7-DAY SCHEDULE GENERATED\n\n🎯 Limit: ${maxPerDay} per day\n📅 Total Scheduled: ${scheduledCount}\n⏭️ Skipped (Low Priority): ${skippedCount}\n\nSunday is now enabled for work!`);
         }
 
         window.openCFPasteModal = () => document.getElementById('cfPasteModal').style.display='flex';
