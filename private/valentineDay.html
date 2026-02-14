@@ -17,6 +17,7 @@
             background-position: 0 0, 10px 10px;
             overflow-x: hidden;
             touch-action: manipulation;
+            user-select: none;
         }
 
         .pixel-card {
@@ -38,25 +39,63 @@
             box-shadow: inset -2px -2px 0px 0px rgba(0,0,0,0.2);
         }
 
-        /* Pixel Icon Utility */
         .pixel-icon {
             display: inline-block;
             vertical-align: middle;
-            shape-rendering: crispEdges; /* Important for pixel look */
+            shape-rendering: crispEdges;
+        }
+
+        /* Speech Bubble for the Cat */
+        .speech-bubble {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 4px solid #000;
+            padding: 10px;
+            width: 200px;
+            font-size: 10px;
+            line-height: 1.4;
+            color: #000;
+            z-index: 20;
+            display: none; /* Hidden by default */
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #000 transparent;
+            display: block;
+            width: 0;
+        }
+
+        /* Background Floating Hearts */
+        .floating-heart {
+            position: fixed;
+            color: #ff69b4;
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+            z-index: 1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         /* Animations */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
             50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
@@ -105,26 +144,49 @@
             font-family: 'Press Start 2P', cursive;
             line-height: 1.5;
         }
-        
         textarea::placeholder {
             color: #9ca3af;
             font-size: 10px;
         }
+
+        /* Checkbox styling */
+        .pixel-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 4px solid #000;
+            background: #fff;
+            cursor: pointer;
+            position: relative;
+        }
+        .pixel-checkbox:checked {
+            background: #22c55e;
+        }
+        .pixel-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -4px;
+            left: 1px;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Cursor */
+        .cursor-pointer { cursor: pointer; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
     <div class="scanlines"></div>
+    <div id="particle-container"></div>
     
     <audio id="bg-music" loop>
         <source src="https://ia801504.us.archive.org/27/items/Rolemusic_-_pl4y1ng/Rolemusic_-_pl4y1ng.mp3" type="audio/mp3">
     </audio>
 
-    <!-- Music Toggle Button -->
-    <button id="music-btn" class="fixed top-4 right-4 z-50 btn-pixel bg-white text-pink-500 border-2 border-black p-2 text-xs flex items-center gap-2">
+    <button id="music-btn" class="fixed top-4 right-4 z-50 btn-pixel bg-white text-pink-500 border-2 border-black p-2 text-xs flex items-center gap-2 hover:bg-pink-50 transition-colors">
         Music: 
         <span id="music-icon">
-            <!-- Mute Icon -->
             <svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10">
                 <path d="M1 3h2l3-3v10l-3-3h-2z" fill="#ec4899"/>
                 <path d="M8 3l2 4m-2 0l2-4" stroke="#ec4899" stroke-width="1"/>
@@ -132,46 +194,30 @@
         </span>
     </button>
 
-    <!-- SVG Definitions for easy reuse in JS -->
-    <div style="display: none;">
-        <!-- Heart -->
-        <svg id="icon-heart" viewBox="0 0 10 10">
-            <path d="M2 2h2v2h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M1 5h2v1h-2z M7 5h2v1h-2z M2 6h6v1h-6z M3 7h4v1h-4z M4 8h2v1h-2z" fill="currentColor"/>
-        </svg>
-        <!-- Broken Heart -->
-        <svg id="icon-broken" viewBox="0 0 10 10">
-            <path d="M2 2h2v1h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M2 6h2v1h-2z M5 5h1v1h-1z M6 6h2v1h-2z M3 7h1v1h-1z M5 7h1v1h-1z M4 8h2v1h-2z" fill="currentColor"/>
-            <path d="M5 2v3h-1v2h2v1" fill="white"/> <!-- crack -->
-        </svg>
-    </div>
-
     <!-- Main Game Container -->
     <div id="game-container" class="pixel-card p-8 max-w-lg w-full text-center relative z-10 animate-float border-4 border-black">
         
-        <!-- DECORATIVE FLOWERS (Same as before) -->
+        <!-- DECORATIVE FLOWERS -->
         <div class="absolute -top-6 -left-6 md:-left-8 animate-sway origin-bottom" style="animation-delay: 0s;">
             <svg width="60" height="60" viewBox="0 0 10 10"><rect x="4" y="5" width="2" height="5" fill="#22c55e" /><rect x="2" y="5" width="2" height="2" fill="#22c55e" /><rect x="3" y="1" width="4" height="4" fill="#ec4899" /><rect x="4" y="2" width="2" height="2" fill="#fbbf24" /><rect x="2" y="2" width="1" height="1" fill="#be185d" /><rect x="7" y="2" width="1" height="1" fill="#be185d" /><rect x="2" y="4" width="1" height="1" fill="#be185d" /><rect x="7" y="4" width="1" height="1" fill="#be185d" /></svg>
         </div>
         <div class="absolute -top-6 -right-6 md:-right-8 animate-sway origin-bottom" style="animation-delay: 1s;">
             <svg width="60" height="60" viewBox="0 0 10 10"><rect x="4" y="5" width="2" height="5" fill="#22c55e" /><rect x="6" y="6" width="2" height="2" fill="#22c55e" /><rect x="3" y="1" width="4" height="4" fill="#a855f7" /><rect x="4" y="2" width="2" height="2" fill="#fbbf24" /><rect x="2" y="2" width="1" height="1" fill="#7e22ce" /><rect x="7" y="2" width="1" height="1" fill="#7e22ce" /><rect x="2" y="4" width="1" height="1" fill="#7e22ce" /><rect x="7" y="4" width="1" height="1" fill="#7e22ce" /></svg>
         </div>
-        <div class="absolute -bottom-4 -left-4 md:-bottom-6 animate-sway origin-bottom" style="animation-delay: 0.5s;">
-            <svg width="50" height="50" viewBox="0 0 10 10"><rect x="4" y="5" width="2" height="5" fill="#22c55e" /><rect x="3" y="1" width="4" height="4" fill="#ef4444" /><rect x="4" y="2" width="2" height="2" fill="#fbbf24" /></svg>
-        </div>
-        <div class="absolute -bottom-4 -right-4 md:-bottom-6 animate-sway origin-bottom" style="animation-delay: 1.5s;">
-            <svg width="50" height="50" viewBox="0 0 10 10"><rect x="4" y="5" width="2" height="5" fill="#22c55e" /><rect x="3" y="1" width="4" height="4" fill="#3b82f6" /><rect x="4" y="2" width="2" height="2" fill="#fbbf24" /></svg>
-        </div>
 
-        <!-- Header Image -->
-        <div class="mb-6 flex justify-center">
-            <svg id="cat-icon" width="120" height="100" viewBox="0 0 120 100" class="drop-shadow-md">
+        <!-- Header Image & Talking Cat -->
+        <div class="mb-6 flex justify-center relative">
+            <div id="cat-speech" class="speech-bubble">I love you!</div>
+            <svg id="cat-icon" width="120" height="100" viewBox="0 0 120 100" class="drop-shadow-md cursor-pointer transition-transform active:scale-90">
                 <rect x="20" y="30" width="80" height="60" rx="0" fill="white" stroke="black" stroke-width="4"/>
                 <polygon points="20,30 30,10 50,30" fill="white" stroke="black" stroke-width="4"/>
                 <polygon points="70,30 90,10 100,30" fill="white" stroke="black" stroke-width="4"/>
                 <path d="M80 30 L90 20 L100 30 L90 40 Z" fill="#ff0000" stroke="black" stroke-width="2"/>
                 <circle cx="90" cy="30" r="5" fill="#ff0000" stroke="black" stroke-width="2"/>
-                <rect x="35" y="55" width="8" height="12" fill="black"/>
-                <rect x="75" y="55" width="8" height="12" fill="black"/>
+                <g id="cat-eyes">
+                    <rect id="eye-l" x="35" y="55" width="8" height="12" fill="black"/>
+                    <rect id="eye-r" x="75" y="55" width="8" height="12" fill="black"/>
+                </g>
                 <ellipse cx="60" cy="65" rx="6" ry="4" fill="#ffcc00" stroke="black" stroke-width="2"/>
                 <line x1="10" y1="55" x2="30" y2="58" stroke="black" stroke-width="3"/>
                 <line x1="10" y1="65" x2="30" y2="65" stroke="black" stroke-width="3"/>
@@ -180,19 +226,14 @@
             </svg>
         </div>
 
-        <!-- Question -->
-        <h1 class="text-xl md:text-2xl leading-relaxed mb-8 text-pink-600 drop-shadow-sm flex items-center justify-center gap-2 flex-wrap">
-            Salma, will you be my Valentine? 
-            <!-- Pixel Heart Inline -->
-            <svg class="pixel-icon text-red-500" width="24" height="24" viewBox="0 0 10 10">
-                <path d="M2 2h2v2h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M1 5h2v1h-2z M7 5h2v1h-2z M2 6h6v1h-6z M3 7h4v1h-4z M4 8h2v1h-2z" fill="currentColor"/>
-            </svg>
+        <!-- Question with Typewriter Effect -->
+        <h1 id="main-question" class="text-xl md:text-2xl leading-relaxed mb-8 text-pink-600 drop-shadow-sm flex items-center justify-center gap-2 flex-wrap min-h-[60px]">
+            <!-- Text injected via JS -->
         </h1>
 
         <!-- Interaction Area -->
         <div class="relative h-32 flex flex-col items-center justify-center gap-4">
             <div id="buttons-wrapper" class="flex flex-wrap justify-center gap-6 w-full items-center">
-                
                 <!-- YES BUTTON -->
                 <button id="yes-btn" class="btn-pixel bg-green-500 hover:bg-green-400 text-white py-4 px-8 border-4 border-black text-sm md:text-base cursor-pointer flex items-center gap-2">
                     YES 
@@ -204,7 +245,6 @@
                     NO 
                     <svg class="pixel-icon" width="14" height="14" viewBox="0 0 10 10"><path d="M2 2h2v1h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M2 6h2v1h-2z M5 5h1v1h-1z M6 6h2v1h-2z M3 7h1v1h-1z M5 7h1v1h-1z M4 8h2v1h-2z" fill="white"/><path d="M5 2v3h-1v2h2v1" fill="rgba(0,0,0,0.2)"/></svg>
                 </button>
-            
             </div>
             
             <p id="feedback-text" class="text-xs text-red-600 mt-4 h-6 font-bold"></p>
@@ -215,69 +255,52 @@
     <!-- Success Container -->
     <div id="success-container" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-pink-200 overflow-y-auto p-4">
         
-        <div class="text-center p-6 border-8 border-white bg-pink-500 text-white pixel-card animate-float w-full max-w-md relative z-10">
+        <div class="text-center p-6 border-8 border-white bg-pink-500 text-white pixel-card animate-float w-full max-w-md relative z-10 my-8">
             <h1 class="text-2xl md:text-3xl mb-4 flex items-center justify-center gap-2">
                 YAYYY! 
-                <!-- Pixel Confetti -->
-                <svg class="pixel-icon" width="30" height="30" viewBox="0 0 10 10">
-                    <path d="M4 8l2 2l-2-2z" fill="yellow"/>
-                    <rect x="2" y="2" width="1" height="1" fill="#fff" />
-                    <rect x="8" y="3" width="1" height="1" fill="#fff" />
-                    <rect x="5" y="1" width="1" height="1" fill="#fff" />
-                    <path d="M4 5l2 5l2-5z" fill="white"/>
-                </svg>
+                <svg class="pixel-icon" width="30" height="30" viewBox="0 0 10 10"><path d="M4 8l2 2l-2-2z" fill="yellow"/><rect x="2" y="2" width="1" height="1" fill="#fff" /><rect x="8" y="3" width="1" height="1" fill="#fff" /><rect x="5" y="1" width="1" height="1" fill="#fff" /><path d="M4 5l2 5l2-5z" fill="white"/></svg>
             </h1>
-            <p class="text-sm md:text-base mb-6 flex items-center justify-center gap-2 flex-wrap">
-                I knew you couldn't refuse, Salma! 
-                <svg class="pixel-icon text-red-200" width="16" height="16" viewBox="0 0 10 10">
-                    <path d="M2 2h2v2h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M1 5h2v1h-2z M7 5h2v1h-2z M2 6h6v1h-6z M3 7h4v1h-4z M4 8h2v1h-2z" fill="currentColor"/>
-                </svg>
-            </p>
+            <p class="text-sm md:text-base mb-6">I knew you couldn't refuse! ❤️</p>
             
-            <!-- Large decorative pixel art for success -->
+            <!-- Big Pixel Art -->
             <div class="flex justify-center gap-4 mb-6">
-                <!-- Cat Face -->
-                <svg width="60" height="50" viewBox="0 0 120 100">
-                    <rect x="20" y="30" width="80" height="60" fill="white" stroke="black" stroke-width="4"/>
-                    <polygon points="20,30 30,10 50,30" fill="white" stroke="black" stroke-width="4"/>
-                    <polygon points="70,30 90,10 100,30" fill="white" stroke="black" stroke-width="4"/>
-                    <path d="M80 30 L90 20 L100 30 L90 40 Z" fill="#ff0000" stroke="black" stroke-width="2"/>
-                    <!-- Heart Eyes -->
-                    <path d="M35 55 h10 v10 h-10 z" fill="#ef4444"/>
-                    <path d="M75 55 h10 v10 h-10 z" fill="#ef4444"/>
-                    <ellipse cx="60" cy="65" rx="6" ry="4" fill="#ffcc00" stroke="black" stroke-width="2"/>
-                    <line x1="10" y1="55" x2="30" y2="58" stroke="black" stroke-width="3"/>
-                    <line x1="90" y1="58" x2="110" y2="55" stroke="black" stroke-width="3"/>
-                </svg>
-                <!-- Rose -->
-                <svg width="40" height="50" viewBox="0 0 10 12">
-                    <rect x="4" y="6" width="2" height="6" fill="#166534"/> <!-- Stem -->
-                    <rect x="2" y="8" width="2" height="2" fill="#22c55e"/> <!-- Leaf -->
-                    <rect x="3" y="1" width="4" height="4" fill="#ef4444"/> <!-- Bloom -->
-                    <rect x="4" y="2" width="2" height="2" fill="#991b1b"/>
-                </svg>
+                <svg width="60" height="50" viewBox="0 0 120 100"><rect x="20" y="30" width="80" height="60" fill="white" stroke="black" stroke-width="4"/><polygon points="20,30 30,10 50,30" fill="white" stroke="black" stroke-width="4"/><polygon points="70,30 90,10 100,30" fill="white" stroke="black" stroke-width="4"/><path d="M80 30 L90 20 L100 30 L90 40 Z" fill="#ff0000" stroke="black" stroke-width="2"/><path d="M35 55 h10 v10 h-10 z" fill="#ef4444"/><path d="M75 55 h10 v10 h-10 z" fill="#ef4444"/><ellipse cx="60" cy="65" rx="6" ry="4" fill="#ffcc00" stroke="black" stroke-width="2"/><line x1="10" y1="55" x2="30" y2="58" stroke="black" stroke-width="3"/><line x1="90" y1="58" x2="110" y2="55" stroke="black" stroke-width="3"/></svg>
+                <svg width="40" height="50" viewBox="0 0 10 12"><rect x="4" y="6" width="2" height="6" fill="#166534"/><rect x="2" y="8" width="2" height="2" fill="#22c55e"/><rect x="3" y="1" width="4" height="4" fill="#ef4444"/><rect x="4" y="2" width="2" height="2" fill="#991b1b"/></svg>
             </div>
             
-            <!-- Memory Input Section -->
+            <!-- Date Planner (New Content) -->
+            <div class="bg-white/20 p-4 rounded-lg border-2 border-white/50 backdrop-blur-sm text-left mb-4">
+                <p class="text-xs mb-3 font-bold uppercase text-center tracking-wider text-white drop-shadow-md">Choose our Date:</p>
+                <div class="space-y-2 text-xs md:text-sm">
+                    <label class="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-1 rounded">
+                        <input type="checkbox" class="pixel-checkbox" value="Movie Night 🍿"> <span>Movie Night 🍿</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-1 rounded">
+                        <input type="checkbox" class="pixel-checkbox" value="Dinner Date 🍝"> <span>Dinner Date 🍝</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-1 rounded">
+                        <input type="checkbox" class="pixel-checkbox" value="Arcade Fun 🕹️"> <span>Arcade Fun 🕹️</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-1 rounded">
+                        <input type="checkbox" class="pixel-checkbox" value="Late Drive 🚗"> <span>Late Drive 🚗</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Memory Input -->
             <div class="bg-white/10 p-4 rounded-lg border-2 border-white/50 backdrop-blur-sm">
-                <p class="text-xs mb-2 font-bold uppercase tracking-wider">Type a memory to keep forever:</p>
+                <p class="text-xs mb-2 font-bold uppercase tracking-wider">Our Memory:</p>
                 <textarea id="memory-input" 
-                    class="w-full h-24 p-3 text-black text-xs md:text-sm border-4 border-black focus:outline-none focus:border-pink-300 placeholder-gray-500" 
+                    class="w-full h-20 p-3 text-black text-xs md:text-sm border-4 border-black focus:outline-none focus:border-pink-300 placeholder-gray-500" 
                     placeholder="Remember that time when we..."></textarea>
                 
                 <button onclick="downloadCard()" class="w-full mt-4 btn-pixel bg-blue-500 hover:bg-blue-400 text-white border-4 border-black py-3 text-xs md:text-sm uppercase font-bold tracking-wide flex items-center justify-center gap-2">
-                    <!-- Floppy Disk Icon -->
-                    <svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10">
-                        <path d="M1 1h8v8h-8z" fill="white"/>
-                        <rect x="2" y="1" width="6" height="3" fill="#3b82f6"/>
-                        <rect x="3" y="1" width="2" height="2" fill="white"/>
-                        <rect x="2" y="6" width="6" height="3" fill="#e5e7eb"/>
-                    </svg>
+                    <svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10"><path d="M1 1h8v8h-8z" fill="white"/><rect x="2" y="1" width="6" height="3" fill="#3b82f6"/><rect x="3" y="1" width="2" height="2" fill="white"/><rect x="2" y="6" width="6" height="3" fill="#e5e7eb"/></svg>
                     Save & Download
                 </button>
             </div>
 
-            <button onclick="location.reload()" class="mt-6 text-xs underline opacity-80 hover:opacity-100">
+            <button onclick="location.reload()" class="mt-6 text-xs underline opacity-80 hover:opacity-100 pb-8">
                 Play Again?
             </button>
         </div>
@@ -286,63 +309,165 @@
     </div>
 
     <script>
-        // State
+        // --- Feature 2: Audio Synthesizer (Retro SFX) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'hover') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'click') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'success') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+                osc.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.6);
+            }
+        }
+
+        // --- Feature 1: Background Floating Hearts ---
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 7000);
+            }, 800);
+        }
+        createParticles();
+
+        // --- Feature 4: Typewriter Effect ---
+        const questionText = "Salma, will you be my Valentine?";
+        const questionEl = document.getElementById('main-question');
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < questionText.length) {
+                questionEl.innerHTML += questionText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 100); // typing speed
+            } else {
+                // Add heart icon at end
+                questionEl.innerHTML += ` <svg class="pixel-icon text-red-500 animate-bounce ml-2" width="24" height="24" viewBox="0 0 10 10"><path d="M2 2h2v2h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M1 5h2v1h-2z M7 5h2v1h-2z M2 6h6v1h-6z M3 7h4v1h-4z M4 8h2v1h-2z" fill="currentColor"/></svg>`;
+            }
+        }
+        // Start typing after a short delay
+        setTimeout(typeWriter, 500);
+
+        // --- Main Logic ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         const feedback = document.getElementById('feedback-text');
         const catIcon = document.getElementById('cat-icon');
+        const catSpeech = document.getElementById('cat-speech');
         const musicBtn = document.getElementById('music-btn');
-        const musicIcon = document.getElementById('music-icon');
         const audio = document.getElementById('bg-music');
         
-        // Reusable SVG strings
+        // Cat Reasons (Feature 3)
+        const catReasons = [
+            "Your smile is pixel perfect!",
+            "You're my Player 2!",
+            "Because you're beautiful!",
+            "You make my heart go 8-bit!",
+            "Don't make the kitty sad!",
+            "I'll give you cookies!",
+            "We are meant to be!",
+            "Just say Yes already! Meow!",
+            "Level up our love!",
+            "Game Over if you say No!"
+        ];
+
+        // SVGs
         const heartSvg = `<svg class="pixel-icon" width="14" height="14" viewBox="0 0 10 10"><path d="M2 2h2v2h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M1 5h2v1h-2z M7 5h2v1h-2z M2 6h6v1h-6z M3 7h4v1h-4z M4 8h2v1h-2z" fill="white"/></svg>`;
         const brokenHeartSvg = `<svg class="pixel-icon" width="14" height="14" viewBox="0 0 10 10"><path d="M2 2h2v1h-2z M6 2h2v2h-2z M1 3h1v2h-1z M8 3h1v2h-1z M2 6h2v1h-2z M5 5h1v1h-1z M6 6h2v1h-2z M3 7h1v1h-1z M5 7h1v1h-1z M4 8h2v1h-2z" fill="white"/><path d="M5 2v3h-1v2h2v1" fill="rgba(0,0,0,0.2)"/></svg>`;
-        const noteSvg = `<svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10"><path d="M2 8h2v-5h3v1h-2v4h2v-6h-5z" fill="#ec4899"/></svg>`;
-        const muteSvg = `<svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10"><path d="M1 3h2l3-3v10l-3-3h-2z" fill="#ec4899"/><path d="M8 3l2 4m-2 0l2-4" stroke="#ec4899" stroke-width="1"/></svg>`;
 
         let noCount = 0;
         let yesScale = 1;
         let musicPlaying = false;
 
-        function toggleMusic() {
+        // Music Toggle
+        musicBtn.addEventListener('click', () => {
             if (musicPlaying) {
                 audio.pause();
                 musicBtn.childNodes[0].nodeValue = "Music: ";
-                musicIcon.innerHTML = muteSvg;
+                document.getElementById('music-icon').innerHTML = `<svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10"><path d="M1 3h2l3-3v10l-3-3h-2z" fill="#ec4899"/><path d="M8 3l2 4m-2 0l2-4" stroke="#ec4899" stroke-width="1"/></svg>`;
             } else {
-                audio.play().then(() => {
-                    musicBtn.childNodes[0].nodeValue = "Music: ";
-                    musicIcon.innerHTML = noteSvg;
-                }).catch(e => console.log("Audio autoplay blocked"));
+                audio.play();
+                musicBtn.childNodes[0].nodeValue = "Music: ";
+                document.getElementById('music-icon').innerHTML = `<svg class="pixel-icon" width="16" height="16" viewBox="0 0 10 10"><path d="M2 8h2v-5h3v1h-2v4h2v-6h-5z" fill="#ec4899"/></svg>`;
             }
             musicPlaying = !musicPlaying;
-        }
+        });
 
-        musicBtn.addEventListener('click', toggleMusic);
+        // Cat Interaction
+        catIcon.addEventListener('click', () => {
+            playSound('click');
+            // Blink Eyes
+            document.getElementById('eye-l').setAttribute('height', '2');
+            document.getElementById('eye-r').setAttribute('height', '2');
+            
+            // Show Heart Bubble
+            catSpeech.style.display = 'block';
+            catSpeech.innerHTML = "Meow! ❤️";
+            
+            setTimeout(() => {
+                document.getElementById('eye-l').setAttribute('height', '12');
+                document.getElementById('eye-r').setAttribute('height', '12');
+                catSpeech.style.display = 'none';
+            }, 1000);
+        });
 
-        function tryStartMusic() {
-            if (!musicPlaying) {
-                audio.volume = 0.5;
-                audio.play().then(() => {
-                    musicPlaying = true;
-                    musicBtn.childNodes[0].nodeValue = "Music: ";
-                    musicIcon.innerHTML = noteSvg;
-                }).catch(() => {});
+        // Button Interactions
+        function handleInteraction(e) {
+            playSound('hover'); // Play SFX
+            
+            // Show Random Reason
+            catSpeech.style.display = 'block';
+            catSpeech.innerText = catReasons[Math.floor(Math.random() * catReasons.length)];
+            
+            // Events Logic
+            if (noCount < events.length) events[noCount]();
+            else {
+                teleportRandom();
+                growYes(1.1);
             }
-            document.removeEventListener('click', tryStartMusic);
+            noCount++;
         }
-        document.addEventListener('click', tryStartMusic);
 
-
-        // 20 Possibilities - Updated with innerHTML for Icons
         const events = [
             () => { setText("Are you sure?"); },
             () => { setText("Really sure?"); scaleNo(0.9); },
             () => { setText("Salma please..."); moveButton(50, 0); },
             () => { setText("Look at the other button!"); growYes(); },
             () => { 
-                // Swap text and icons
                 noBtn.innerHTML = "Yes " + heartSvg; 
                 yesBtn.innerHTML = "NO (jk) " + brokenHeartSvg; 
                 setTimeout(() => {
@@ -363,20 +488,9 @@
             () => { setText("Bye bye!"); noBtn.style.transition = "top 1s ease-in"; noBtn.style.top = "150%"; setTimeout(() => { noBtn.style.transition = "none"; teleportRandom(); noBtn.innerHTML = "NO " + brokenHeartSvg; noBtn.style.backgroundColor = "#ef4444"; }, 1200); },
             () => { setText("JUST CLICK YES!"); growYes(2.0); },
             () => { setText("The button exploded due to sadness."); noBtn.classList.add('hidden'); setTimeout(() => { noBtn.classList.remove('hidden'); setText("I pulled it back together."); teleportRandom(); }, 2000); },
-            () => { const eyes = document.querySelectorAll('rect[fill="black"]'); eyes.forEach(e => e.setAttribute('height', '2')); setText("Salma, look at the cat crying!"); },
+            () => { const eyes = document.querySelectorAll('#cat-eyes rect'); eyes.forEach(e => e.setAttribute('height', '2')); setText("Salma, look at the cat crying!"); },
             () => { setText("Okay, I removed the button."); noBtn.style.display = 'none'; yesBtn.style.transform = 'scale(1)'; yesBtn.style.width = '100%'; yesBtn.style.height = '100px'; yesBtn.style.fontSize = '2rem'; yesBtn.innerHTML = "YES " + heartSvg; }
         ];
-
-        function handleInteraction(e) {
-            tryStartMusic();
-            if (noCount < events.length) {
-                events[noCount]();
-            } else {
-                teleportRandom();
-                growYes(1.1);
-            }
-            noCount++;
-        }
 
         function setText(msg) {
             feedback.innerText = msg;
@@ -405,26 +519,42 @@
             makeAbsolute();
             const w = window.innerWidth - 100;
             const h = window.innerHeight - 50;
-            const randomX = Math.max(20, Math.random() * w);
-            const randomY = Math.max(20, Math.random() * h);
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            noBtn.style.left = Math.max(20, Math.random() * w) + 'px';
+            noBtn.style.top = Math.max(20, Math.random() * h) + 'px';
         }
 
+        // Event Listeners
         noBtn.addEventListener('click', handleInteraction);
         yesBtn.addEventListener('click', () => {
+            playSound('success');
             document.getElementById('success-container').classList.remove('hidden');
             startConfetti();
+            // Try to start music if not started
+            if (!musicPlaying) {
+                audio.play().catch(()=>{}); 
+                musicPlaying = true;
+            }
         });
 
-        // --- Card Generation Logic (Replaced Emoji Text with Drawn Pixels) ---
+        // Add sounds to buttons
+        yesBtn.addEventListener('mouseenter', () => playSound('hover'));
+        noBtn.addEventListener('mouseenter', () => playSound('hover'));
+
+
+        // --- Download Card (Feature 5: Date Stamping) ---
         function downloadCard() {
             const memoryText = document.getElementById('memory-input').value.trim() || "Forever & Always";
             
+            // Get selected dates
+            const checkboxes = document.querySelectorAll('.pixel-checkbox:checked');
+            let selectedDates = [];
+            checkboxes.forEach((cb) => selectedDates.push(cb.value));
+            const dateText = selectedDates.length > 0 ? "Date Plan: " + selectedDates.join(", ") : "Date Plan: Surprise Me!";
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const width = 600;
-            const height = 400;
+            const height = 500; // Taller for date info
             
             canvas.width = width;
             canvas.height = height;
@@ -466,11 +596,10 @@
             ctx.fillStyle = "#000";
             ctx.fillText("Jamal & Salma", width/2, 120);
 
-            // Draw a big Pixel Heart on Canvas instead of emojis
+            // Draw Heart
             function drawPixelHeart(cx, cy, scale) {
                 ctx.fillStyle = "#ef4444";
-                const p = scale; // pixel size
-                // Simple heart map
+                const p = scale;
                 const map = [
                     "01100110",
                     "11111111",
@@ -488,16 +617,16 @@
                     }
                 }
             }
-            drawPixelHeart(width/2, 160, 6);
+            drawPixelHeart(width/2, 170, 6);
 
-            // The Memory
-            ctx.font = '16px "Press Start 2P", cursive'; 
+            // Memory Text
+            ctx.font = '14px "Press Start 2P", cursive'; 
             ctx.fillStyle = "#374151"; 
             
             const maxLineWidth = 500;
-            const lineHeight = 30;
+            const lineHeight = 25;
             let x = width / 2;
-            let y = 220;
+            let y = 240;
             
             const words = memoryText.split(' ');
             let line = '';
@@ -505,8 +634,7 @@
             for(let n = 0; n < words.length; n++) {
                 const testLine = line + words[n] + ' ';
                 const metrics = ctx.measureText(testLine);
-                const testWidth = metrics.width;
-                if (testWidth > maxLineWidth && n > 0) {
+                if (metrics.width > maxLineWidth && n > 0) {
                     ctx.fillText(line, x, y);
                     line = words[n] + ' ';
                     y += lineHeight;
@@ -516,8 +644,14 @@
             }
             ctx.fillText(line, x, y);
 
+            // Draw Date Plan
+            y += 40;
+            ctx.fillStyle = "#166534"; // Dark green
+            ctx.font = '12px "Press Start 2P", cursive';
+            ctx.fillText(dateText, width/2, y);
+
             // Date Stamp
-            ctx.font = '12px "Press Start 2P"';
+            ctx.font = '10px "Press Start 2P"';
             ctx.fillStyle = "#9ca3af";
             ctx.fillText("Official Love Contract • 2026", width/2, height - 30);
 
@@ -527,7 +661,6 @@
             link.click();
         }
 
-        // Confetti
         function startConfetti() {
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
@@ -563,9 +696,6 @@
             }
             animate();
         }
-
     </script>
 </body>
 </html>
-
-
