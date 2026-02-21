@@ -737,8 +737,8 @@
             <div id="chartTooltip" class="chart-tooltip"></div>
             <canvas id="growthChart"></canvas>
             <div class="chart-legend">
-                <div class="legend-item"><span style="background:var(--mc-green);"></span>CurseForge</div>
-                <div class="legend-item"><span style="background:var(--mc-orange);"></span>External Sources</div>
+                <div class="legend-item" id="legend-cf" onclick="toggleChartLine('cf')" style="cursor:pointer; transition: opacity 0.3s;" title="Toggle CurseForge Data"><span style="background:var(--mc-green);"></span>CurseForge</div>
+                <div class="legend-item" id="legend-ext" onclick="toggleChartLine('ext')" style="cursor:pointer; transition: opacity 0.3s;" title="Toggle External Data"><span style="background:var(--mc-orange);"></span>External Sources</div>
             </div>
         </div>
 
@@ -1194,8 +1194,12 @@
                 ctx.stroke();
             }
             ctx.setLineDash([]);
+            if (!window.chartVisibility || window.chartVisibility.cf !== false) {
             drawCurve(cfData, "#42b74f", "rgba(66, 183, 79, 0.3)", 1);
+            }
+            if (!window.chartVisibility || window.chartVisibility.ext !== false) {
             drawCurve(extData, "#e67e22", "rgba(230, 126, 34, 0.3)", -1);
+            }
         }
 
         // --- 3. CALCULATIONS ---
@@ -1425,6 +1429,18 @@
         }
 
         // --- 4. HANDLERS ---
+        // NEW FEATURE: Chart Data Toggle
+        window.chartVisibility = { cf: true, ext: true };
+        window.toggleChartLine = function(line) {
+            window.chartVisibility[line] = !window.chartVisibility[line];
+            const el = document.getElementById('legend-' + line);
+            if (el) {
+                el.style.opacity = window.chartVisibility[line] ? "1" : "0.4";
+                el.style.textDecoration = window.chartVisibility[line] ? "none" : "line-through";
+            }
+            window.drawChart();
+        };
+
         window.toggleTheme = function() {
             if (window.appData.theme === "nether") {
                 window.appData.theme = "normal";
