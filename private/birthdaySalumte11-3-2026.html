@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Surprise L Salma 🎀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.5;
+            background-color: #ffb6c1;
+            margin: 0;
+            overflow-x: hidden;
+            /* Prevent pull-to-refresh on mobile */
+            overscroll-behavior-y: contain; 
+        }
+        
+        .font-pixel {
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        /* 8-bit UI elements */
+        .pixel-box {
+            background-color: white;
+            border: 4px solid black;
+            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+            padding: 24px;
+        }
+        
+        .pixel-btn {
+            background-color: #ff69b4;
+            color: white;
+            border: 4px solid black;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            transition: all 0.1s;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .pixel-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
+        }
+
+        .pixel-btn:disabled {
+            opacity: 0.5;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce-spin {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .animate-bow {
+            animation: bounce-spin 1s infinite;
+        }
+        
+        @keyframes peek {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+
+        /* Decorative Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            opacity: 0.15;
+            background-image: radial-gradient(#000 2px, transparent 2px);
+            background-size: 32px 32px;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* Pixel Art CSS Bow */
+        .pixel-art-bow {
+            display: inline-block;
+            width: 40px;
+            height: 30px;
+            position: relative;
+        }
+        .pixel-art-bow::before, .pixel-art-bow::after {
+            content: "";
+            position: absolute;
+            background: #ff0000;
+            border: 3px solid black;
+        }
+        .pixel-art-bow::before { left: 0; top: 0; width: 20px; height: 30px; border-radius: 50% 10% 10% 50%; }
+        .pixel-art-bow::after { right: 0; top: 0; width: 20px; height: 30px; border-radius: 10% 50% 50% 10%; }
+        .pixel-art-bow-center {
+            position: absolute;
+            left: 12px; top: 6px;
+            width: 16px; height: 18px;
+            background: #ff0000;
+            border: 3px solid black;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* Screens */
+        .screen { display: none; min-height: 100vh; position: relative; z-index: 10; }
+        .active-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* Canvas touch fix */
+        canvas { touch-action: none; }
+    </style>
+</head>
+<body class="text-black selection:bg-pink-300">
+
+    <div class="bg-pattern"></div>
+
+    <!-- Background Music -->
+    <audio id="bgm" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=8-bit-mentality-111166.mp3"></audio>
+
+    <!-- Mute Button -->
+    <button id="muteBtn" class="fixed top-4 right-4 z-50 text-xl md:text-2xl hover:scale-110 transition-transform bg-white border-4 border-black p-2 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center w-10 h-10 md:w-12 md:h-12" title="Toggle Sound">
+        🔊
+    </button>
+
+    <!-- SCREEN 0: DRAWING MINI-GAME -->
+    <div id="screen-drawing" class="screen active-screen mt-4 pb-8">
+        
+        <!-- Modal inside Drawing Screen -->
+        <div id="drawing-modal" class="fixed inset-0 z-50 items-center justify-center bg-black/60 rounded-xl hidden flex">
+            <div class="pixel-box max-w-[90%] w-80 text-center animate-float">
+                <div class="text-4xl mb-2">🎀</div>
+                <h2 id="modal-score" class="text-[#ff0000] text-lg mb-4">0% Nadii!</h2>
+                <p class="text-xs text-gray-700 mb-6 leading-loose">
+                    wa db mzyan wa5a 7wla chweya ahbeba dyale 😂💖<br/><br/>
+                    brki lt7t bach tl3be
+                </p>
+                <button onclick="goToStart()" class="pixel-btn px-6 py-4 w-full text-[10px] md:text-xs">
+                    Bday l'le3b! 🎮
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center w-[90%] max-w-lg mt-8">
+            <h2 class="text-lg md:text-xl text-[#ff0000] mb-2">Rsemi 9eliyeb!</h2>
+            <p class="text-[9px] md:text-[10px] mb-4 text-gray-700 leading-relaxed">Teb3i 3la lkhtout bach ne3erfek nti.<br/>Jibi 70% lfo9 bach tbday l'le3b!</p>
+            
+            <div class="relative w-[260px] h-[260px] md:w-[300px] md:h-[300px] mx-auto bg-white border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <canvas id="bgCanvas" width="300" height="300" class="absolute inset-0 pointer-events-none opacity-40 w-full h-full"></canvas>
+                <canvas id="drawCanvas" width="300" height="300" class="absolute inset-0 cursor-crosshair w-full h-full"></canvas>
+            </div>
+            
+            <div class="flex gap-4 mt-8 w-[260px] md:w-[300px] mx-auto">
+                <button onclick="clearCanvas()" class="pixel-btn flex-1 py-3 text-[9px] md:text-[10px] !bg-gray-300 !text-black border-4 border-black">
+                    Mse7 🧹
+                </button>
+                <button onclick="checkDrawing()" class="pixel-btn flex-1 py-3 text-[9px] md:text-[10px]">
+                    Choufi ✔️
+                </button>
+            </div>
+            
+            <p id="drawing-error" class="text-[#ff0000] text-[9px] md:text-[10px] mt-6 font-bold bg-white p-2 border-2 border-black animate-bounce hidden mx-auto w-fit"></p>
+        </div>
+    </div>
+
+    <!-- SCREEN 1: START SCREEN -->
+    <div id="screen-start" class="screen">
+        <div class="relative z-10 flex flex-col items-center max-w-lg w-[90%] mx-auto text-center animate-float mt-8">
+            <div class="text-6xl mb-6">🎀🐱🎀</div>
+            <div class="pixel-box mb-8">
+                <h1 class="text-base md:text-xl text-[#ff0000] mb-4">Ahlan a zin dyali!</h1>
+                <p class="text-[10px] md:text-xs text-gray-700 mb-6 leading-loose">
+                    Mwejjed lik wa7ed surprise sghira!<br/><br/>
+                    Walakin be3da, Kitty twedrou liha l'bows dyalha. 3awniha tched 5 bach t7elli l'cadeau!
+                </p>
+                <button onclick="startCave()" class="pixel-btn px-6 py-4 text-[10px] md:text-xs w-full">
+                    Bday l'le3b
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 1.5: THE DARK CAVE -->
+    <div id="screen-cave" class="screen fixed inset-0 z-30 transition-colors duration-[2000ms] bg-gray-900" style="min-height: 100vh;">
+        <div id="flower-container" class="absolute inset-0 pointer-events-none overflow-hidden z-20"></div>
+        <div class="pixel-box text-center max-w-[90%] w-80 md:max-w-md animate-float z-40 relative mx-auto my-auto" id="cave-box">
+             <!-- Dark State -->
+             <div id="cave-dark" class="animate-pulse">
+                 <div class="text-5xl mb-6" style="text-shadow: 0px 0px 10px rgba(255,255,255,0.2);">🌑🦇</div>
+                 <p class="text-gray-600 mb-8 text-[10px] md:text-xs leading-loose">
+                     Mdlma denya hna...
+                 </p>
+                 <button onclick="lightCave()" class="pixel-btn px-6 py-4 text-[10px] md:text-xs !bg-gray-800 !text-gray-300 border-gray-600 shadow-[4px_4px_0px_0px_#111]">
+                     Dkhli 👣
+                 </button>
+             </div>
+             <!-- Lit State -->
+             <div id="cave-lit" class="hidden animate-[float_2s_ease-in-out_infinite]">
+                 <div class="text-5xl mb-6">✨💖🐱</div>
+                 <p class="text-[#ff0000] mb-4 text-xs md:text-sm leading-loose font-bold">
+                     haka wlat 7yate fach dkhkte leha azen
+                 </p>
+                 <p class="text-gray-600 text-[8px] md:text-[10px] mb-8 italic animate-pulse leading-relaxed">
+                     (Berki f ay blasa f l'khalfia bach tezre3i lwred 🌸)
+                 </p>
+                 <button onclick="startGameplay()" class="pixel-btn px-6 py-4 text-[10px] md:text-xs w-full">
+                     Kemli l'le3b 🎀
+                 </button>
+             </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: GAMEPLAY SCREEN -->
+    <div id="screen-playing" class="screen fixed inset-0 z-10" style="display:none; min-height: 100vh;">
+        <div class="absolute top-6 left-4 md:left-6 pixel-box !p-2 md:!p-3 flex items-center gap-2">
+            <span class="text-[10px] md:text-xs">Bows:</span>
+            <span id="score-display" class="text-[#ff0000] text-xs md:text-sm">0/5</span>
+        </div>
+
+        <div class="absolute top-20 right-4 md:right-6 text-2xl md:text-3xl animate-float pointer-events-none">
+            🐱
+        </div>
+        
+        <!-- The Target Bow -->
+        <div id="target-bow" class="absolute cursor-pointer animate-bow z-20 flex items-center justify-center" style="left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px;">
+            <div class="pixel-art-bow scale-125 md:scale-150">
+                <div class="pixel-art-bow-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2.5: MEMORY POPUP -->
+    <div id="screen-memory" class="screen">
+        <div class="relative z-10 flex flex-col items-center max-w-md w-[90%] mx-auto text-center mt-12">
+            <div class="text-4xl mb-4 animate-float">💭🐱</div>
+            <div class="pixel-box mb-8 animate-float">
+                <h2 id="memory-title" class="text-base md:text-lg text-[#ff69b4] mb-4">Dikra #1</h2>
+                <p id="memory-text" class="text-[10px] md:text-xs text-gray-700 mb-8 leading-loose border-t-2 border-dashed border-gray-300 pt-4">
+                    ...
+                </p>
+                <button onclick="continueAfterMemory()" id="memory-btn" class="pixel-btn px-6 py-4 text-[10px] md:text-xs w-full">
+                    Chedi li moraha 🎀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: OPENING TRANSITION -->
+    <div id="screen-opening" class="screen">
+        <div class="relative z-10 flex flex-col items-center max-w-md w-[90%] mx-auto text-center mt-12">
+            <div class="pixel-box mb-8 animate-float">
+                <h2 class="text-base md:text-lg text-[#ff0000] mb-6">Nadii tbarekllah! 🎉</h2>
+                <p class="text-[10px] md:text-xs text-gray-700 mb-6 leading-relaxed">
+                    Kitty fer7at bzaf! 💖<br/><br/>
+                    w jabet lik wa7ed rrisala...
+                </p>
+                
+                <button id="open-letter-btn" onclick="openLetter()" class="pixel-btn px-6 py-4 text-[10px] md:text-xs w-full transition-all">
+                    7elli rrisala ✉️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: THE SURPRISE / REWARD -->
+    <div id="screen-won" class="screen pb-12">
+        <div class="relative z-10 flex flex-col items-center max-w-2xl w-[90%] mx-auto mt-8 mb-8">
+            
+            <div class="flex gap-4 mb-6 text-3xl md:text-4xl animate-float">
+                <span>✨</span><span>💖</span><span>✨</span>
+            </div>
+
+            <!-- The Love Letter -->
+            <div id="letter-container" class="pixel-box relative w-full transform transition-all duration-1000 animate-float">
+                
+                <!-- Hello Kitty holding the corner -->
+                <div class="absolute -top-[45px] md:-top-[65px] -left-[5px] md:-left-[15px] z-20 flex flex-col items-center animate-[peek_3s_ease-in-out_infinite] origin-bottom">
+                    <div class="relative">
+                        <div class="text-[40px] md:text-[60px]" style="text-shadow: 2px 2px 0px #000;">🐱</div>
+                        <div class="absolute -top-1 -right-2 text-[25px] md:text-[40px]" style="text-shadow: 2px 2px 0px #000;">🎀</div>
+                    </div>
+                    <div class="flex gap-3 md:gap-4 -mt-2 md:-mt-3 z-30">
+                        <div class="w-2.5 h-4 md:w-4 md:h-6 bg-white border-[3px] border-black rounded-b-full"></div>
+                        <div class="w-2.5 h-4 md:w-4 md:h-6 bg-white border-[3px] border-black rounded-b-full"></div>
+                    </div>
+                </div>
+
+                <div class="border-b-4 border-black pb-4 mb-6 flex justify-between items-center relative z-10">
+                    <div class="flex gap-2">
+                        <div class="w-2 h-2 md:w-3 md:h-3 bg-[#ff0000] border-2 border-black"></div>
+                        <div class="w-2 h-2 md:w-3 md:h-3 bg-[#ff69b4] border-2 border-black"></div>
+                        <div class="w-2 h-2 md:w-3 md:h-3 bg-white border-2 border-black"></div>
+                    </div>
+                    <span class="text-[8px] md:text-[10px] text-gray-400">RISALA.TXT</span>
+                </div>
+
+                <div class="text-[9px] md:text-xs leading-loose md:leading-8 text-left">
+                    <p class="mb-4 text-[#ff0000]">L'ghzala Salma,</p>
+                    
+                    <p class="mb-4">
+                        happy birthday ahbeba dyale bghet gher ngulk nte hya ajmal w a7san bnt 3rftha l7d l an f7yate wkantmna tkune akher whda w9fte m3aya wst bzaf dyal l7wyaj zwenin wkhayben
+                    </p>
+                    
+                    <p class="mb-4">
+                        muheem bghet gher ngulk kanbghek bzaf wkantma taaal les annes jayeen nkunu m3a b3deyatna ehm ehm knt mwjdd leeek z3ma nderu mini birthday fzn9a wla nglso fchi blasa
+                    </p>
+
+                    <p class="mb-4">
+                        mis gha sm7ele bzaf hit majawbtinich mchit m3a bali bli safe maghadi tji tal lil wdani n3as ama rah mn lbar7 wana kanblani bach nfr7k fhad nharr
+                    </p>
+                    
+                    <p class="mb-6">
+                        miss muheeem glti at2jleh 3la 9ble safe dwzeeh lena bnharrr ehm wbass kanbgheeeek bzaaaaaaaaaaaaaaaaf ya ajmaaal salmaaaaa fee dunyaaaa wfee 9albee wana maghruuum feeeek awe aweeeee 💖
+                    </p>
+
+                    <div class="flex items-center justify-between border-t-4 border-dashed border-gray-300 pt-6 mt-6">
+                        <div class="text-[#ff0000]">Kanbghik,<br/>Jamal</div>
+                        <div class="text-3xl md:text-5xl">🐱🎀</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4 mt-8 w-full md:w-auto">
+                <button id="download-btn" onclick="downloadLetter()" class="pixel-btn px-6 py-4 text-[9px] md:text-[10px]">
+                    Téléchargi rrisala 📥
+                </button>
+
+                <button onclick="resetApp()" class="pixel-btn px-6 py-4 text-[9px] md:text-[10px] !bg-white !text-black">
+                    3awdi L3bi 🔄
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- STATE VARIABLES ---
+        let isMuted = false;
+        let score = 0;
+        const WIN_SCORE = 5;
+        let bowInterval;
+        let isCaveLitState = false;
+
+        const memories = [
+            "39lte dak nhar fen kna dkhlna m3tlen 3nd francai wglsatnee lor bsbabk wst lfrd",
+            "39lte 3la awal mra hdrna feha 3ndk svt fach ylh bda l3am wglt lek salma s9tii",
+            "hadak nhar fen w9fu 3lenaa lbusa khlas wta fach jawbatni mk wfach dkhlteha f appel hadu trauma makaytnsawch",
+            "wahd nhar kna kharjen wtla9ena bak hda dak lmoswer wkan ay7slk",
+            "fwahd l7esa dyal lmath fl3cheya fen b9ena kandrbu dwera wn3awdu ntla9aw ngulk wach nmchiw wtgule leya li bgheti flkher dkhlna 3ndo wkant dek lmra wa9ela awal mra nglso hda b3deyatna"
+        ];
+        const flowerTypes = ['🌸', '🌺', '🌻', '🌷', '🌼', '🌹'];
+
+        // --- AUDIO SYSTEM ---
+        const bgm = document.getElementById('bgm');
+        const muteBtn = document.getElementById('muteBtn');
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgm.muted = isMuted;
+            muteBtn.innerText = isMuted ? '🔇' : '🔊';
+        });
+
+        function playSFX(type) {
+            if (isMuted) return;
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                if (type === 'catch') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.15);
+                } else if (type === 'win') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime); 
+                    osc.frequency.setValueAtTime(554.37, ctx.currentTime + 0.1); 
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.2); 
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.3); 
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.6);
+                }
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function playBGM() {
+            if (!isMuted) {
+                bgm.play().catch(e => console.log("Autoplay prevented:", e));
+            }
+        }
+
+        // --- SCREEN NAVIGATION ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active-screen');
+                s.style.display = 'none';
+            });
+            const target = document.getElementById('screen-' + screenId);
+            if(target) {
+                if(screenId === 'playing') {
+                    target.style.display = 'block';
+                } else {
+                    target.style.display = 'flex';
+                    target.classList.add('active-screen');
+                }
+            }
+        }
+
+        // --- DRAWING LOGIC ---
+        const drawCanvas = document.getElementById('drawCanvas');
+        const bgCanvas = document.getElementById('bgCanvas');
+        const drawCtx = drawCanvas.getContext('2d');
+        const bgCtx = bgCanvas.getContext('2d');
+        let isDrawing = false;
+
+        function initCanvases() {
+            // Draw background heart outline
+            bgCtx.clearRect(0, 0, 300, 300);
+            bgCtx.strokeStyle = '#ffb6c1';
+            bgCtx.lineWidth = 6;
+            bgCtx.setLineDash([10, 10]);
+            bgCtx.beginPath();
+            bgCtx.moveTo(150, 90);
+            bgCtx.bezierCurveTo(150, 30, 40, 30, 40, 120);
+            bgCtx.bezierCurveTo(40, 190, 150, 240, 150, 270);
+            bgCtx.bezierCurveTo(150, 240, 260, 190, 260, 120);
+            bgCtx.bezierCurveTo(260, 30, 150, 30, 150, 90);
+            bgCtx.stroke();
+            bgCtx.setLineDash([]);
+
+            // Setup drawing brush
+            drawCtx.strokeStyle = '#ff0000';
+            drawCtx.lineWidth = 10;
+            drawCtx.lineCap = 'round';
+            drawCtx.lineJoin = 'round';
+        }
+
+        function getCoordinates(e) {
+            const rect = drawCanvas.getBoundingClientRect();
+            let clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+            let clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+            const scaleX = drawCanvas.width / rect.width;
+            const scaleY = drawCanvas.height / rect.height;
+            return {
+                offsetX: (clientX - rect.left) * scaleX,
+                offsetY: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleStartDrawing(e) {
+            if(e.type.includes('touch')) e.preventDefault(); // crucial for mobile to stop scroll
+            isDrawing = true;
+            const coords = getCoordinates(e);
+            drawCtx.beginPath();
+            drawCtx.moveTo(coords.offsetX, coords.offsetY);
+        }
+
+        function handleDrawing(e) {
+            if (!isDrawing) return;
+            if(e.type.includes('touch')) e.preventDefault();
+            const coords = getCoordinates(e);
+            drawCtx.lineTo(coords.offsetX, coords.offsetY);
+            drawCtx.stroke();
+        }
+
+        function handleStopDrawing() {
+            isDrawing = false;
+            drawCtx.closePath();
+        }
+
+        // Mouse Events
+        drawCanvas.addEventListener('mousedown', handleStartDrawing);
+        drawCanvas.addEventListener('mousemove', handleDrawing);
+        drawCanvas.addEventListener('mouseup', handleStopDrawing);
+        drawCanvas.addEventListener('mouseout', handleStopDrawing);
+        
+        // Touch Events (mobile XR)
+        drawCanvas.addEventListener('touchstart', handleStartDrawing, {passive: false});
+        drawCanvas.addEventListener('touchmove', handleDrawing, {passive: false});
+        drawCanvas.addEventListener('touchend', handleStopDrawing);
+
+        function clearCanvas() {
+            drawCtx.clearRect(0, 0, 300, 300);
+            document.getElementById('drawing-error').classList.add('hidden');
+        }
+
+        function checkDrawing() {
+            const targetCanvas = document.createElement('canvas');
+            targetCanvas.width = 300;
+            targetCanvas.height = 300;
+            const tCtx = targetCanvas.getContext('2d');
+            
+            tCtx.strokeStyle = '#000';
+            tCtx.lineWidth = 40; 
+            tCtx.lineCap = 'round';
+            tCtx.lineJoin = 'round';
+            tCtx.beginPath();
+            tCtx.moveTo(150, 90);
+            tCtx.bezierCurveTo(150, 30, 40, 30, 40, 120);
+            tCtx.bezierCurveTo(40, 190, 150, 240, 150, 270);
+            tCtx.bezierCurveTo(150, 240, 260, 190, 260, 120);
+            tCtx.bezierCurveTo(260, 30, 150, 30, 150, 90);
+            tCtx.stroke();
+
+            const targetData = tCtx.getImageData(0, 0, 300, 300).data;
+            const userData = drawCtx.getImageData(0, 0, 300, 300).data;
+
+            let goodPixels = 0, badPixels = 0, targetArea = 0;
+
+            for (let i = 0; i < targetData.length; i += 4) {
+                const isTarget = targetData[i + 3] > 0;
+                const isUser = userData[i + 3] > 0;
+                if (isTarget) targetArea++;
+                if (isUser) {
+                    if (isTarget) goodPixels++;
+                    else badPixels++;
+                }
+            }
+
+            const errorEl = document.getElementById('drawing-error');
+
+            if (goodPixels === 0 && badPixels === 0) {
+                errorEl.innerText = "Maremsti walo! 🥺";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            const accuracy = goodPixels / (goodPixels + badPixels); 
+            const coverage = goodPixels / targetArea; 
+            let calcScore = Math.floor((accuracy * 60) + (Math.min(1, coverage * 5) * 40));
+            
+            calcScore += 15; // generosity boost
+            if (calcScore > 98) calcScore = 98 + Math.floor(Math.random() * 2);
+
+            if (calcScore >= 70) {
+                document.getElementById('modal-score').innerText = calcScore + "% Nadii!";
+                errorEl.classList.add('hidden');
+                document.getElementById('drawing-modal').classList.remove('hidden');
+                playSFX('win');
+            } else {
+                errorEl.innerText = `Jebti: ${calcScore}%. 7awli tani a zin dyali! 💖`;
+                errorEl.classList.remove('hidden');
+                playSFX('catch'); 
+            }
+        }
+
+        function goToStart() {
+            document.getElementById('drawing-modal').classList.add('hidden');
+            showScreen('start');
+        }
+
+        // --- CAVE LOGIC ---
+        function startCave() {
+            playBGM();
+            score = 0;
+            isCaveLitState = false;
+            document.getElementById('flower-container').innerHTML = ''; // clear flowers
+            document.getElementById('screen-cave').className = "screen fixed inset-0 z-30 transition-colors duration-[2000ms] bg-gray-900 active-screen";
+            document.getElementById('cave-dark').classList.remove('hidden');
+            document.getElementById('cave-lit').classList.add('hidden');
+            showScreen('cave');
+        }
+
+        function lightCave() {
+            isCaveLitState = true;
+            playSFX('win');
+            const caveScreen = document.getElementById('screen-cave');
+            caveScreen.classList.remove('bg-gray-900');
+            caveScreen.classList.add('bg-[#ffb6c1]', 'cursor-crosshair');
+            
+            document.getElementById('cave-dark').classList.add('hidden');
+            document.getElementById('cave-lit').classList.remove('hidden');
+        }
+
+        // Flower planting logic
+        document.getElementById('screen-cave').addEventListener('click', function(e) {
+            if (!isCaveLitState) return;
+            // dont plant if clicking on the box itself
+            if(e.target.closest('#cave-box')) return;
+
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const type = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+
+            const flower = document.createElement('div');
+            flower.className = "absolute text-2xl md:text-3xl animate-[bounce-spin_1s_ease-out] pointer-events-none z-30";
+            flower.style.left = x + 'px';
+            flower.style.top = y + 'px';
+            flower.style.transform = 'translate(-50%, -50%)';
+            flower.innerText = type;
+
+            document.getElementById('flower-container').appendChild(flower);
+            playSFX('catch');
+        });
+
+
+        // --- GAMEPLAY LOGIC ---
+        function moveBow() {
+            const bow = document.getElementById('target-bow');
+            // Random pos between 10% and 90%
+            const x = Math.floor(Math.random() * 80) + 10; 
+            const y = Math.floor(Math.random() * 80) + 10;
+            bow.style.left = x + '%';
+            bow.style.top = y + '%';
+        }
+
+        function startGameplay() {
+            showScreen('playing');
+            updateScoreDisplay();
+            moveBow();
+            
+            clearInterval(bowInterval);
+            bowInterval = setInterval(moveBow, 1200);
+        }
+
+        document.getElementById('target-bow').addEventListener('click', function(e) {
+            e.stopPropagation();
+            playSFX('catch');
+            score++;
+            updateScoreDisplay();
+            
+            clearInterval(bowInterval); // Stop moving while in memory
+
+            showScreen('memory');
+            document.getElementById('memory-title').innerText = "Dikra #" + score;
+            document.getElementById('memory-text').innerText = memories[score - 1];
+            
+            const btn = document.getElementById('memory-btn');
+            if (score >= WIN_SCORE) {
+                btn.innerText = "7elli l'cadeau! 🎁";
+            } else {
+                btn.innerText = "Chedi li moraha 🎀";
+            }
+        });
+
+        function updateScoreDisplay() {
+            document.getElementById('score-display').innerText = score + "/" + WIN_SCORE;
+        }
+
+        function continueAfterMemory() {
+            if (score >= WIN_SCORE) {
+                showScreen('opening');
+            } else {
+                startGameplay(); // resumes interval and shows playing screen
+            }
+        }
+
+        // --- FINAL REWARD LOGIC ---
+        function openLetter() {
+            playSFX('win');
+            const btn = document.getElementById('open-letter-btn');
+            btn.innerText = "Kat7el...";
+            btn.classList.add('opacity-50');
+            btn.disabled = true;
+
+            setTimeout(() => {
+                showScreen('won');
+            }, 1000);
+        }
+
+        function downloadLetter() {
+            const btn = document.getElementById('download-btn');
+            btn.innerText = "Kaitéléchargé... ⏳";
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+
+            const capture = () => {
+                const element = document.getElementById('letter-container');
+                const originalAnimation = element.style.animation;
+                element.style.animation = 'none'; // pause animation for clean screenshot
+                
+                window.html2canvas(element, { 
+                    backgroundColor: '#ffb6c1',
+                    scale: window.innerWidth < 768 ? 2 : 1.5, // Crisp on mobile
+                    useCORS: true 
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'Risala_L_Salma.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    element.style.animation = originalAnimation;
+                    
+                    btn.innerText = "Téléchargi rrisala 📥";
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50');
+                });
+            };
+
+            if (!window.html2canvas) {
+                console.log("Waiting for html2canvas to load...");
+            } else {
+                capture();
+            }
+        }
+
+        function resetApp() {
+            score = 0;
+            clearInterval(bowInterval);
+            
+            // Reset Letter Button
+            const btn = document.getElementById('open-letter-btn');
+            btn.innerText = "7elli rrisala ✉️";
+            btn.disabled = false;
+            btn.classList.remove('opacity-50');
+
+            clearCanvas();
+            showScreen('drawing');
+            initCanvases();
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            initCanvases();
+        };
+
+    </script>
+</body>
+</html>
