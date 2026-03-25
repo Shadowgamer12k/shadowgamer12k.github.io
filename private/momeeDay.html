@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mommy's 8-Bit Recipe Jar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Library for generating the screenshot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #ff85a1;
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .pixel-border {
+            box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000;
+        }
+
+        .pixel-text {
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes popOut {
+            0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -60px) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -100px) scale(0.8); opacity: 0; }
+        }
+
+        .animate-note {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            animation: popOut 1s steps(8) forwards;
+            z-index: 50;
+        }
+
+        @keyframes particleUp {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) scale(0); opacity: 0; }
+        }
+
+        .particle {
+            position: absolute;
+            animation: particleUp 0.8s steps(8) forwards;
+            color: #ef4444;
+        }
+
+        .rpg-dialogue {
+            background: #fff;
+            border: 4px solid #000;
+            position: relative;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+            padding: 20px;
+            min-height: 140px;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .rpg-nameplate {
+            position: absolute;
+            top: -16px;
+            left: 12px;
+            background: #000;
+            color: #fff;
+            padding: 2px 12px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 20;
+            border: 2px solid #fff;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .pixel-input {
+            background: #f3f4f6;
+            border: 2px solid #000;
+            padding: 8px;
+            width: 100%;
+            font-size: 10px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .pixel-input:focus {
+            background: #fff;
+            border-color: #ff4d6d;
+        }
+
+        .floating-cloud {
+            position: absolute;
+            animation: floatCloud 25s linear infinite;
+        }
+
+        @keyframes floatCloud {
+            from { transform: translateX(-150%); }
+            to { transform: translateX(450%); }
+        }
+
+        #jar-liquid {
+            transition: height 0.5s steps(5);
+        }
+
+        .hidden { display: none !important; }
+        
+        #recipe-capture-area {
+            background-color: #fff;
+            padding: 30px;
+            width: 400px;
+            border: 8px solid #000;
+            position: fixed;
+            left: -9999px;
+            top: 0;
+        }
+
+        .recipe-header {
+            border-bottom: 4px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .recipe-line {
+            background: repeating-linear-gradient(#fff, #fff 24px, #ffb3c1 25px);
+            padding: 5px 10px;
+            line-height: 25px;
+            min-height: 200px;
+            border: 4px solid #000;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+    <div class="scanlines"></div>
+
+    <!-- Background Clouds -->
+    <div class="fixed inset-0 pointer-events-none opacity-20">
+        <svg class="floating-cloud top-10" width="60" height="30" viewBox="0 0 60 30" fill="white">
+            <rect x="10" y="10" width="40" height="10" />
+            <rect x="20" y="5" width="20" height="5" />
+            <rect x="0" y="15" width="60" height="10" />
+        </svg>
+        <svg class="floating-cloud top-40" style="animation-delay: -12s;" width="60" height="30" viewBox="0 0 60 30" fill="white">
+            <rect x="10" y="10" width="40" height="10" />
+            <rect x="20" y="5" width="20" height="5" />
+            <rect x="0" y="15" width="60" height="10" />
+        </svg>
+    </div>
+
+    <!-- HIDDEN CAPTURE AREA -->
+    <div id="recipe-capture-area">
+        <div class="recipe-header">
+            <div style="font-size: 14px; margin-bottom: 10px; color: #ff4d6d;">🍳 SECRET RECIPE 🍳</div>
+            <div style="font-size: 8px; color: #000;">BY MOMEY FOR DADDY</div>
+        </div>
+        <div class="recipe-line" id="capture-list"></div>
+        <div style="margin-top: 20px; font-size: 7px; line-height: 1.5; color: #666; text-align: center;">
+            INSTRUCTIONS: UNLIMITED SATISFACTION REQUIRED.<br>
+            VALID FOR: 24 HOURS 🔥
+        </div>
+    </div>
+
+    <div class="max-w-md w-full flex flex-col items-center z-10 p-4">
+        <!-- Interaction Stage -->
+        <div id="stage" class="relative mb-8 cursor-pointer transition-transform duration-100">
+            <div id="particles" class="absolute inset-0 flex items-center justify-center pointer-events-none"></div>
+
+            <div class="flex items-end justify-center gap-2">
+                <div id="kitty-sprite" class="transition-transform duration-100">
+                    <svg viewBox="0 0 24 22" class="w-24 h-22 md:w-32 md:h-30 drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                        <rect x="4" y="2" width="5" height="5" fill="white" stroke="black" strokeWidth="1" />
+                        <rect x="15" y="2" width="5" height="5" fill="white" stroke="black" strokeWidth="1" />
+                        <rect x="17" y="2" width="4" height="4" fill="#ff0000" stroke="black" strokeWidth="1" />
+                        <rect x="2" y="6" width="20" height="14" fill="white" stroke="black" strokeWidth="1" />
+                        <rect x="7" y="11" width="2" height="2" fill="black" />
+                        <rect x="15" y="11" width="2" height="2" fill="black" />
+                        <rect x="11" y="13" width="2" height="1" fill="#ffd700" stroke="black" strokeWidth="0.5" />
+                        <rect id="kitty-blush-l" x="4" y="13" width="3" height="1" fill="#ffb3c1" opacity="0" />
+                        <rect id="kitty-blush-r" x="17" y="13" width="3" height="1" fill="#ffb3c1" opacity="0" />
+                        <rect x="0" y="11" width="3" height="0.5" fill="black" />
+                        <rect x="0" y="13" width="3" height="0.5" fill="black" />
+                        <rect x="21" y="11" width="3" height="0.5" fill="black" />
+                        <rect x="21" y="13" width="3" height="0.5" fill="black" />
+                    </svg>
+                </div>
+
+                <div class="relative">
+                    <svg viewBox="0 0 24 32" class="w-28 h-36 md:w-32 md:h-40 drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                        <rect x="4" y="6" width="16" height="22" fill="rgba(255,255,255,0.4)" stroke="black" strokeWidth="1" />
+                        <rect x="6" y="4" width="12" height="2" fill="rgba(255,255,255,0.6)" stroke="black" strokeWidth="1" />
+                        <rect x="5" y="2" width="14" height="3" fill="#8b4513" stroke="black" strokeWidth="1" />
+                        <clipPath id="jarClip"><rect x="4" y="6" width="16" height="22" /></clipPath>
+                        <g clip-path="url(#jarClip)">
+                            <rect id="jar-liquid" x="4" y="28" width="16" height="0" fill="#ff4d6d" opacity="0.8" />
+                        </g>
+                        <rect x="6" y="8" width="1" height="10" fill="white" opacity="0.3" />
+                    </svg>
+                    <div id="counter" class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white pixel-text">0/5</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dialogue Box -->
+        <div class="rpg-dialogue mx-2">
+            <div class="rpg-nameplate">MOMMY SAYS:</div>
+            <div class="flex flex-col h-full justify-between">
+                <p id="typewriter" class="text-[10px] font-bold leading-tight uppercase text-slate-900 mb-4 h-12"></p>
+                
+                <form id="desire-form" class="flex gap-2">
+                    <input id="desire-input" type="text" class="pixel-input font-bold" placeholder="Type desire..." maxlength="60" autocomplete="off">
+                    <button type="submit" class="bg-black text-white p-2 border-2 border-white shadow-[2px_2px_0_0_#000] active:translate-y-1">
+                        <i data-lucide="cooking-pot" size="14"></i>
+                    </button>
+                </form>
+                <p id="locked-msg" class="text-[10px] text-red-600 font-black animate-pulse text-center hidden">RECIPE COMPLETE. TIME TO COOK. 🔥</p>
+            </div>
+        </div>
+
+        <!-- Recipe Modal -->
+        <div id="modal" class="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 hidden">
+            <div class="bg-[#c0c0c0] pixel-border p-1 w-full max-w-sm">
+                <div class="bg-[#000080] text-white px-3 py-1 flex justify-between items-center text-[9px] font-bold">
+                    <span class="flex items-center gap-1"><i data-lucide="book-open" size="10"></i> RECIPE_BOOK</span>
+                    <button onclick="closeModal()" class="bg-[#c0c0c0] border border-white text-black px-1 leading-none">X</button>
+                </div>
+                <div class="bg-white m-1 p-6 text-center space-y-4 border-2 border-black">
+                    <h2 class="text-xl font-black text-red-600 italic uppercase pixel-text">MOMMY'S RECIPE</h2>
+                    <div class="h-0.5 bg-black w-full"></div>
+                    <p style="font-size: 8px; color: #888;">Review your choices before Daddy gets to work.</p>
+                    <div id="desire-list" class="text-[10px] font-bold text-left p-3 border-2 border-black bg-pink-50 max-h-[150px] overflow-y-auto uppercase space-y-2"></div>
+                    
+                    <button onclick="finalizeAndSend()" id="final-btn" class="w-full bg-black text-white py-3 border-2 border-white font-black text-[9px] uppercase active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="camera" size="14"></i> <span id="btn-text">PHOTO & SEND TO DADDY</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message Modal -->
+        <div id="success-modal" class="fixed inset-0 z-[300] bg-black/80 flex items-center justify-center p-4 hidden">
+            <div class="bg-[#c0c0c0] pixel-border p-1 w-full max-w-xs">
+                <div class="bg-[#000080] text-white px-3 py-1 flex justify-between items-center text-[9px] font-bold">
+                    <span class="flex items-center gap-1"><i data-lucide="check-circle" size="10"></i> NOTIFICATION</span>
+                </div>
+                <div class="bg-white m-1 p-6 text-center space-y-4 border-2 border-black">
+                    <p class="text-[10px] font-bold uppercase leading-relaxed text-slate-900">
+                        your boy ayder khdmto db n3si 3la jnb ra7a
+                    </p>
+                    <button onclick="document.getElementById('success-modal').classList.add('hidden')" class="w-full bg-black text-white py-2 pixel-border border-white border-2 font-black text-[9px] uppercase active:scale-95">
+                        OK MOMEY
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 w-full flex justify-between opacity-40 px-4 text-white text-[7px] font-bold uppercase">
+            <div class="flex gap-2"><i data-lucide="utensils-crossed" size="14" class="text-yellow-400"></i> CHEF_DADDY_READY</div>
+            <div class="flex gap-2 text-red-600"><i data-lucide="flame" size="14"></i> KITCHEN_TEMP: HOT</div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1486397045119127785/3LiO7j9ODWQ2rIXKNT6SNXZe1U87vPKfCnrsKQtFtobVhAFfWcPX_7qmS0NZb_BGhaUB";
+        const PROMPT_TEXT = "ewa momey ktbee chnu bghete nderu fach nkunu bu7dna 🔥";
+        
+        let desires = [];
+        let isTyping = false;
+
+        function typeWriter() {
+            const el = document.getElementById('typewriter');
+            el.innerHTML = "";
+            let i = 0;
+            isTyping = true;
+            const interval = setInterval(() => {
+                el.innerHTML += PROMPT_TEXT.charAt(i);
+                i++;
+                if (i >= PROMPT_TEXT.length) {
+                    clearInterval(interval);
+                    isTyping = false;
+                }
+            }, 40);
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i = 0; i < 6; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const x = (Math.random() - 0.5) * 120;
+                const y = (Math.random() - 0.5) * 120;
+                p.style.setProperty('--tw-translate-x', `${x}px`);
+                p.style.setProperty('--tw-translate-y', `${y}px`);
+                p.innerHTML = '<i data-lucide="flame" fill="currentColor"></i>';
+                container.appendChild(p);
+                lucide.createIcons();
+                setTimeout(() => p.remove(), 800);
+            }
+        }
+
+        function spawnNote() {
+            const stage = document.getElementById('stage');
+            const note = document.createElement('div');
+            note.className = 'animate-note bg-white border-2 border-black p-1 pixel-border flex items-center justify-center';
+            note.innerHTML = '<i data-lucide="utensils" fill="#ef4444" class="text-red-500"></i>';
+            stage.appendChild(note);
+            lucide.createIcons();
+            setTimeout(() => note.remove(), 1000);
+        }
+
+        document.getElementById('desire-form').onsubmit = (e) => {
+            e.preventDefault();
+            const input = document.getElementById('desire-input');
+            const val = input.value.trim();
+            
+            if (!val || desires.length >= 5) return;
+
+            desires.push(val);
+            input.value = "";
+            
+            updateUI();
+            createParticles();
+            spawnNote();
+            
+            const kitty = document.getElementById('kitty-sprite');
+            kitty.classList.add('-translate-y-4');
+            setTimeout(() => kitty.classList.remove('-translate-y-4'), 150);
+
+            if (desires.length === 5) {
+                setTimeout(showModal, 1000);
+            }
+        };
+
+        function updateUI() {
+            const count = desires.length;
+            document.getElementById('counter').innerText = `${count}/5`;
+            document.getElementById('jar-liquid').style.height = `${(count / 5) * 22}px`;
+            document.getElementById('jar-liquid').style.y = `${28 - (count / 5 * 22)}px`;
+            
+            document.getElementById('kitty-blush-l').setAttribute('opacity', count / 5);
+            document.getElementById('kitty-blush-r').setAttribute('opacity', count / 5);
+
+            if (count >= 5) {
+                document.getElementById('desire-form').classList.add('hidden');
+                document.getElementById('locked-msg').classList.remove('hidden');
+            }
+        }
+
+        function showModal() {
+            const list = document.getElementById('desire-list');
+            const captureList = document.getElementById('capture-list');
+            
+            const htmlList = desires.map((d, i) => `
+                <div class="flex gap-2">
+                    <span class="text-red-500">🔥</span>
+                    <span>${d}</span>
+                </div>
+            `).join('');
+
+            list.innerHTML = htmlList;
+            captureList.innerHTML = htmlList;
+            
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        async function finalizeAndSend() {
+            const btn = document.getElementById('final-btn');
+            const btnText = document.getElementById('btn-text');
+            const captureArea = document.getElementById('recipe-capture-area');
+            
+            btnText.innerText = "CAPTURING...";
+            btn.disabled = true;
+
+            try {
+                const canvas = await html2canvas(captureArea, {
+                    backgroundColor: "#ffffff",
+                    scale: 2
+                });
+                
+                const imageData = canvas.toDataURL("image/png");
+
+                const blob = await (await fetch(imageData)).blob();
+                const formData = new FormData();
+                
+                const payload = {
+                    embeds: [{
+                        title: "🍳 NEW RECIPE FROM MOMMY CAPTURED!",
+                        description: "Daddy, the order is in. Open the attached photo for the full list.",
+                        color: 0xff4d6d,
+                        footer: { text: "Mommy's 8-Bit Kitchen | System Active" },
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+
+                formData.append('payload_json', JSON.stringify(payload));
+                formData.append('file', blob, 'recipe.png');
+
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                btnText.innerText = "SENT SUCCESSFULLY!";
+                closeModal();
+                // Show the success pop-up message
+                document.getElementById('success-modal').classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+                btnText.innerText = "ERROR - TRY AGAIN";
+                btn.disabled = false;
+            }
+        }
+
+        window.onload = typeWriter;
+    </script>
+</body>
+</html>
