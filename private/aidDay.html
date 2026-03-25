@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salma's 1st Eid Memory 🎮</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pixel-pink: #ff85a2;
+            --pixel-dark-pink: #f73363;
+            --pixel-red: #ff0044;
+            --pixel-white: #ffffff;
+            --pixel-black: #000000;
+            --pixel-gold: #ffd700;
+        }
+
+        body {
+            background-color: #ffdeeb;
+            font-family: 'Press Start 2P', cursive;
+            image-rendering: pixelated;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            transition: background-color 0.5s steps(4);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating { animation: float 3s infinite ease-in-out; }
+
+        .stage {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            z-index: 10;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* ENVELOPE LOGIC */
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 180px;
+            cursor: pointer;
+        }
+
+        .env-back {
+            position: absolute;
+            inset: 0;
+            background: #d46a84;
+            border: 6px solid var(--pixel-black);
+            z-index: 1;
+        }
+
+        .money-card {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            width: 250px;
+            height: 140px;
+            background: white;
+            border: 4px solid var(--pixel-black);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s steps(4), opacity 0.3s;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .money-card-2 { transform: rotate(2deg); }
+
+        .opened .money-card-1 { transform: translateY(-160px) rotate(-5deg); }
+        .opened .money-card-2 { transform: translateY(-175px) rotate(5deg); }
+
+        .stolen {
+            transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
+            transform: translateY(-500px) rotate(-20deg) !important;
+            opacity: 0;
+        }
+
+        .env-front {
+            position: absolute;
+            inset: 0;
+            background: var(--pixel-pink);
+            border: 6px solid var(--pixel-black);
+            z-index: 3;
+        }
+
+        .env-front::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 80px;
+            background: #e57793;
+            clip-path: polygon(0 0, 50% 100%, 100% 0, 100% 10%, 50% 110%, 0 10%);
+            opacity: 0.4;
+        }
+
+        .flap {
+            position: absolute;
+            top: -6px; left: -6px;
+            width: 300px; height: 120px;
+            background: var(--pixel-dark-pink);
+            border: 6px solid var(--pixel-black);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.4s steps(4);
+        }
+
+        .opened .flap { transform: rotateX(180deg); z-index: 1; }
+
+        /* Hello Kitty Hand */
+        #kitty-hand {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            z-index: 100;
+            pointer-events: none;
+            transition: all 0.5s steps(5);
+            transform: translateY(100vh);
+        }
+
+        /* Letter Styling */
+        .letter-box {
+            background: white;
+            border: 6px solid var(--pixel-black);
+            padding: 30px 20px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 10px 10px 0 var(--pixel-dark-pink);
+            display: none;
+            z-index: 30;
+            animation: slideIn 0.8s steps(8);
+        }
+
+        .letter-text {
+            font-size: 9px;
+            line-height: 1.8;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        /* Counter UI */
+        .eid-counter {
+            background: #fff0f3;
+            border: 4px solid var(--pixel-black);
+            padding: 10px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .counter-label {
+            font-size: 8px;
+            color: var(--pixel-dark-pink);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .counter-value {
+            font-size: 16px;
+            color: var(--pixel-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-pixel {
+            background: var(--pixel-red);
+            color: white;
+            padding: 12px 20px;
+            border: 4px solid var(--pixel-black);
+            font-size: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.1s;
+        }
+
+        .btn-pixel:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        #fx-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
+
+        @keyframes blink { 50% { opacity: 0; } }
+        .blink { animation: blink 1s infinite steps(1); }
+
+        /* Hidden canvas for generating the download image */
+        #download-canvas { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Hello Kitty 8-bit Hand SVG -->
+    <div id="kitty-hand">
+        <svg viewBox="0 0 40 50">
+            <rect x="10" y="20" width="20" height="30" fill="white" stroke="black" stroke-width="2"/>
+            <rect x="5" y="5" width="30" height="20" rx="10" fill="white" stroke="black" stroke-width="2"/>
+            <rect x="12" y="8" width="2" height="6" fill="black" opacity="0.2"/>
+            <rect x="20" y="8" width="2" height="6" fill="black" opacity="0.2"/>
+            <rect x="28" y="8" width="2" height="6" fill="black" opacity="0.2"/>
+            <rect x="13" y="25" width="14" height="8" fill="#ff85a2" stroke="black" stroke-width="1"/>
+            <circle cx="20" cy="29" r="2" fill="#ff0044"/>
+        </svg>
+    </div>
+
+    <canvas id="fx-canvas"></canvas>
+    <canvas id="download-canvas"></canvas>
+
+    <div class="stage" id="main-stage">
+        <div id="header-area" class="text-center mb-12 floating transition-opacity duration-500">
+            <h1 class="text-[8px] md:text-xs mb-4 opacity-50 uppercase tracking-widest">Stage 1: The Surprise</h1>
+            <h2 class="text-pink-600 text-lg md:text-2xl mb-4">AID MUBARAK! 🎀</h2>
+            <p id="instruction" class="text-[8px] blink text-gray-500 uppercase">Tap to Open Gift</p>
+        </div>
+
+        <div id="envelope-scaler" class="relative">
+            <div class="envelope-container" id="env" onclick="handleInteraction()">
+                <div class="env-back"></div>
+                
+                <div class="money-card money-card-2" id="card2">
+                    <div class="border-2 border-dashed border-pink-200 m-1 h-full w-full flex flex-col items-center justify-center">
+                        <svg width="40" height="34" viewBox="0 0 16 13">
+                            <rect x="3" y="1" width="3" height="2" fill="white" />
+                            <rect x="10" y="1" width="3" height="2" fill="white" />
+                            <rect x="2" y="3" width="12" height="8" fill="white" />
+                            <rect x="1" y="5" width="14" height="4" fill="white" />
+                            <rect x="10" y="1" width="5" height="5" fill="#ffd700" />
+                            <circle cx="8" cy="7" r="2" fill="gold" />
+                        </svg>
+                        <p class="text-[10px] text-yellow-600 font-bold mt-2">100</p>
+                        <p class="text-[5px] text-black uppercase">Kitty Coins</p>
+                    </div>
+                </div>
+
+                <div class="money-card money-card-1" id="card1">
+                    <div class="border-2 border-dashed border-pink-200 m-1 h-full w-full flex flex-col items-center justify-center">
+                        <svg width="40" height="34" viewBox="0 0 16 13">
+                            <rect x="3" y="1" width="3" height="2" fill="white" />
+                            <rect x="10" y="1" width="3" height="2" fill="white" />
+                            <rect x="2" y="3" width="12" height="8" fill="white" />
+                            <rect x="1" y="5" width="14" height="4" fill="white" />
+                            <rect x="10" y="1" width="5" height="5" fill="#ffd700" />
+                            <circle cx="8" cy="7" r="2" fill="gold" />
+                        </svg>
+                        <p class="text-[10px] text-yellow-600 font-bold mt-2">100</p>
+                        <p class="text-[5px] text-black uppercase">Kitty Coins</p>
+                    </div>
+                </div>
+
+                <div class="env-front"></div>
+                <div class="flap"></div>
+
+                <div class="absolute top-[-10px] left-1/2 -translate-x-1/2 z-50 bg-white border-4 border-black p-1 text-[10px]" id="seal">
+                    🎀
+                </div>
+            </div>
+        </div>
+
+        <div class="letter-box" id="letter">
+            <div class="eid-counter">
+                <span class="counter-label uppercase">Our Eids Together</span>
+                <div class="counter-value">
+                    <span class="text-pink-300">🎀</span>
+                    <span>01</span>
+                    <span class="text-pink-300">🎀</span>
+                </div>
+                <p class="text-[6px] mt-2 opacity-50 uppercase">This is our first one!</p>
+            </div>
+            
+            <p class="letter-text" id="raw-message">
+                "3id mobarak sa3id alhbeba dyale t3ydi wt3awde nchaelah wlayjm3na fdar whda nsb7o 3la b3deyatna wnaklo dek l7lwa anwa3 w achkal li atgadi lena"
+            </p>
+
+            <button class="btn-pixel uppercase" onclick="downloadLetter()">💾 Save Memory</button>
+            <p class="text-[6px] text-pink-400 mt-4 uppercase">Always together, Salma!</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fx-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let state = 'closed';
+
+        function handleInteraction() {
+            if (state === 'closed') {
+                openEnvelope();
+            } else if (state === 'open') {
+                stealSequence();
+            }
+        }
+
+        function openEnvelope() {
+            state = 'open';
+            const env = document.getElementById('env');
+            env.classList.add('opened');
+            document.getElementById('seal').style.display = 'none';
+            document.getElementById('instruction').innerText = "KITTIES ARE HUNGRY!";
+            
+            spawnParticles(true);
+            animate();
+        }
+
+        async function stealSequence() {
+            state = 'stealing';
+            document.getElementById('instruction').style.opacity = '0';
+            const hand = document.getElementById('kitty-hand');
+            const card1 = document.getElementById('card1');
+            const card2 = document.getElementById('card2');
+
+            // --- Steal Card 1 ---
+            hand.style.transform = 'translateY(150px) translateX(-40px) rotate(-10deg)';
+            await sleep(600);
+            card1.classList.add('stolen');
+            hand.style.transform = 'translateY(-600px) translateX(-60px) rotate(-20deg)';
+            await sleep(800);
+
+            // Reset hand
+            hand.style.transition = 'none';
+            hand.style.transform = 'translateY(500px)';
+            await sleep(50);
+            hand.style.transition = 'all 0.5s steps(5)';
+            
+            // --- Steal Card 2 ---
+            hand.style.transform = 'translateY(150px) translateX(40px) rotate(10deg)';
+            await sleep(600);
+            card2.classList.add('stolen');
+            hand.style.transform = 'translateY(-600px) translateX(60px) rotate(20deg)';
+            await sleep(1000);
+
+            showLetter();
+        }
+
+        function showLetter() {
+            state = 'letter';
+            document.getElementById('envelope-scaler').style.display = 'none';
+            document.getElementById('header-area').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('header-area').style.display = 'none';
+                document.getElementById('letter').style.display = 'block';
+            }, 500);
+            spawnParticles(false);
+        }
+
+        function downloadLetter() {
+            const dlCanvas = document.getElementById('download-canvas');
+            const dlCtx = dlCanvas.getContext('2d');
+            const message = document.getElementById('raw-message').innerText;
+
+            // Set high res for download
+            dlCanvas.width = 800;
+            dlCanvas.height = 1000;
+
+            // Background
+            dlCtx.fillStyle = '#ffdeeb';
+            dlCtx.fillRect(0, 0, 800, 1000);
+
+            // Border
+            dlCtx.strokeStyle = '#000000';
+            dlCtx.lineWidth = 10;
+            dlCtx.strokeRect(40, 40, 720, 920);
+
+            // Title
+            dlCtx.fillStyle = '#ff0044';
+            dlCtx.font = 'bold 40px Arial';
+            dlCtx.textAlign = 'center';
+            dlCtx.fillText('SALMA - OUR 1ST EID', 400, 120);
+
+            // Counter Display
+            dlCtx.fillStyle = '#ffffff';
+            dlCtx.fillRect(200, 180, 400, 100);
+            dlCtx.strokeStyle = '#000000';
+            dlCtx.lineWidth = 4;
+            dlCtx.strokeRect(200, 180, 400, 100);
+            
+            dlCtx.fillStyle = '#f73363';
+            dlCtx.font = '24px Arial';
+            dlCtx.fillText('EIDS TOGETHER', 400, 215);
+            dlCtx.font = 'bold 44px Arial';
+            dlCtx.fillText('❤️ 01 ❤️', 400, 265);
+
+            // Message Body (Manual wrapping)
+            dlCtx.fillStyle = '#333333';
+            dlCtx.font = '28px Arial';
+            const words = message.replace(/"/g, '').split(' ');
+            let line = '';
+            let y = 380;
+            for(let n = 0; n < words.length; n++) {
+                let testLine = line + words[n] + ' ';
+                if (testLine.length > 35 && n > 0) {
+                    dlCtx.fillText(line, 400, y);
+                    line = words[n] + ' ';
+                    y += 45;
+                } else {
+                    line = testLine;
+                }
+            }
+            dlCtx.fillText(line, 400, y);
+
+            // Signature
+            dlCtx.fillStyle = '#ff85a2';
+            dlCtx.font = 'italic 30px Arial';
+            dlCtx.fillText('🎀 Aid Mubarak Al-Hbeba 🎀', 400, 900);
+
+            // Trigger Download
+            const link = document.createElement('a');
+            link.download = 'salma_eid_memory_01.png';
+            link.href = dlCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        function spawnParticles(isExplosion) {
+            const count = isExplosion ? 60 : 30;
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2 - 80,
+                    vx: (Math.random() - 0.5) * (isExplosion ? 25 : 10),
+                    vy: (Math.random() - 0.5) * (isExplosion ? 25 : 10) - (isExplosion ? 10 : 5),
+                    color: ['#ff0044', '#ff85a2', '#ffffff', '#ffd700'][Math.floor(Math.random() * 4)],
+                    size: 6 + Math.random() * 4
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.vy += 0.8;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                if(p.y > canvas.height) particles.splice(i, 1);
+            });
+            if(particles.length > 0) requestAnimationFrame(animate);
+        }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+    </script>
+</body>
+</html>
