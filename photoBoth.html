@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapBooth | Capture The Moment</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #fdfdfd;
+            background-image: 
+                radial-gradient(circle at 100% 0%, #ffeaf0 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #e0f7fa 0%, transparent 50%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .font-title { font-family: 'Poppins', sans-serif; }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #FF578A 0%, #FF9A9E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .shadow-button { box-shadow: 0 8px 20px rgba(255, 87, 138, 0.3); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+        
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pink-200 selection:text-pink-900">
+
+    <!-- Background decorative blobs -->
+    <div class="blob bg-pink-300 w-72 h-72 rounded-full top-[-10%] left-[-10%]"></div>
+    <div class="blob bg-purple-200 w-96 h-96 rounded-full top-[40%] right-[-20%]"></div>
+    <div class="blob bg-cyan-200 w-80 h-80 rounded-full bottom-[-10%] left-[10%]"></div>
+
+    <!-- Navigation -->
+    <nav class="w-full p-6 flex justify-between items-center max-w-6xl mx-auto">
+        <div class="flex items-center gap-2">
+            <div class="bg-[#FF578A] text-white p-2 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+            <span class="font-title font-bold text-xl tracking-tight text-gray-800">SnapBooth</span>
+        </div>
+        <a href="#location" class="hidden md:inline-flex bg-white text-gray-800 px-6 py-2.5 rounded-full font-medium shadow-sm border border-gray-100 hover:shadow-md transition-all">
+            Find Us
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-6xl mx-auto px-6 pt-10 pb-20 flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 text-center md:text-left z-10">
+            <div class="inline-block bg-pink-100 text-[#FF578A] px-4 py-1.5 rounded-full font-semibold text-sm mb-6 border border-pink-200 animate-float">
+                ✨ The Ultimate Photo Experience
+            </div>
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-title font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
+                Capture your <br/>
+                <span class="text-gradient">best moments.</span>
+            </h1>
+            <p class="text-gray-500 text-lg md:text-xl mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                Step into SnapBooth. Grab your friends, strike a pose, and walk away with premium 4-shot photo strips instantly printed and delivered to your phone.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <a href="#location" class="bg-gradient-to-r from-[#FF578A] to-[#ff407a] text-white px-8 py-4 rounded-full font-title font-bold text-lg shadow-button hover:shadow-[0_10px_25px_rgba(255,87,138,0.4)] hover:-translate-y-1 transition-all text-center">
+                    Visit Our Location
+                </a>
+                <a href="#features" class="bg-white text-gray-700 border border-gray-200 px-8 py-4 rounded-full font-title font-bold text-lg hover:bg-gray-50 hover:-translate-y-1 transition-all text-center">
+                    See Features
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Image / Graphic -->
+        <div class="flex-1 w-full max-w-md relative z-10 animate-float" style="animation-delay: 1s;">
+            <div class="glass-card p-4 rounded-[2rem] transform rotate-3">
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="People taking photos" class="rounded-[1.5rem] w-full h-auto object-cover aspect-[4/5] shadow-inner" />
+                
+                <!-- Floating decorative strip -->
+                <div class="absolute -left-6 -bottom-6 bg-white p-2 rounded-lg shadow-xl border border-gray-100 transform -rotate-6 flex flex-col gap-1 w-24">
+                    <div class="w-full aspect-[3/2] bg-gray-200 rounded-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover grayscale"/></div>
+                    <div class="w-full aspect-[3/2] bg-gray-200 rounded-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover grayscale"/></div>
+                    <div class="w-full aspect-[3/2] bg-gray-200 rounded-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover grayscale"/></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-title font-bold text-gray-900 mb-4">Why choose SnapBooth?</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">We've completely reimagined the photobooth experience with modern technology and gorgeous filters.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-pink-100 text-[#FF578A] rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </div>
+                    <h3 class="text-xl font-title font-bold text-gray-900 mb-3">Instant Digital Delivery</h3>
+                    <p class="text-gray-500 leading-relaxed">No waiting around. Scan the QR code on the screen to save your high-res photos directly to your smartphone instantly.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <h3 class="text-xl font-title font-bold text-gray-900 mb-3">16+ Premium Effects</h3>
+                    <p class="text-gray-500 leading-relaxed">Apply beautiful studio-grade filters to your photos. From vintage film to vibrant neon, make your memories match your vibe.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-8 rounded-[2rem] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 bg-cyan-100 text-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    </div>
+                    <h3 class="text-xl font-title font-bold text-gray-900 mb-3">Classic Physical Prints</h3>
+                    <p class="text-gray-500 leading-relaxed">Take home a piece of the moment. We automatically print high-quality glossy photo strips for you to keep forever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location" class="py-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass-card rounded-[3rem] p-8 md:p-12 overflow-hidden relative">
+                
+                <div class="flex flex-col md:flex-row gap-10 items-center">
+                    <!-- Left: Location Info -->
+                    <div class="flex-1 text-center md:text-left">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-[#FF578A] text-white rounded-full mb-6 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-title font-bold text-gray-900 mb-4">Come find us!</h2>
+                        <p class="text-gray-600 mb-8 text-lg">We are currently stationed at the main plaza. Drop by to capture some memories!</p>
+                        
+                        <div class="space-y-4 mb-8 text-left max-w-sm mx-auto md:mx-0">
+                            <div class="flex items-start gap-4">
+                                <div class="mt-1 text-pink-500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg></div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Address</h4>
+                                    <p class="text-gray-500">123 Event Plaza Avenue<br/>City Center, 12345</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="mt-1 text-pink-500"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Operating Hours</h4>
+                                    <p class="text-gray-500">Today: 10:00 AM - 10:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="https://maps.google.com" target="_blank" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-title font-semibold shadow-lg hover:bg-gray-800 hover:-translate-y-1 transition-all w-full sm:w-auto text-center">
+                            Open in Google Maps
+                        </a>
+                    </div>
+
+                    <!-- Right: Decorative Map Area -->
+                    <div class="flex-1 w-full h-64 md:h-96 bg-gray-200 rounded-[2rem] border-4 border-white shadow-xl overflow-hidden relative">
+                        <!-- Placeholder for a map image -->
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Map Location" class="w-full h-full object-cover opacity-80 mix-blend-multiply" />
+                        <div class="absolute inset-0 bg-pink-500/10"></div>
+                        <!-- Fake Map Marker -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center animate-bounce">
+                            <div class="bg-[#FF578A] text-white p-3 rounded-full shadow-lg border-2 border-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            </div>
+                            <div class="w-2 h-2 bg-black/30 rounded-full mt-1 blur-[2px]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 SnapBooth Experience. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
