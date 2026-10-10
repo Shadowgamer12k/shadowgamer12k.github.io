@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I love you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  html, body { height: 100%; margin: 0; background: #000; }
+  body {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; color: #ff4d6d; overflow: hidden;
+    font-family: "Press Start 2P", ui-monospace, monospace;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  canvas {
+    width: min(92vw, 78vh * 286 / 242); aspect-ratio: 286 / 242; height: auto;
+    image-rendering: pixelated; image-rendering: crisp-edges;
+  }
+  canvas { filter: drop-shadow(0 0 10px rgba(255, 30, 70, .22)); }
+  canvas.done { filter: drop-shadow(0 0 22px rgba(255, 40, 80, .5)); }
+  #cap { min-height: 1.6em; font-size: clamp(8px, 2.2vw, 12px); text-align: center; line-height: 1.6; color: #ff8fa3; }
+  #cap b { color: #fff; font-weight: normal; }
+</style>
+</head>
+<body>
+<canvas id="c" width="286" height="242" aria-label="A pixel heart made of the words I love you in many languages"></canvas>
+<div id="cap" aria-live="polite"></div>
+
+<script>
+(function () {
+  const W = 286, H = 242, ROW = 11, FONT = '8px "Press Start 2P", ui-monospace, monospace';
+  const cv = document.getElementById('c'), ctx = cv.getContext('2d'), cap = document.getElementById('cap');
+  const SPEED = 480; // milliseconds per word: raise it to go slower, lower to go faster
+
+  const PHRASES = [
+    ['I love you', 'English'], ['Te amo', 'Spanish'], ['Je t\'aime', 'French'], ['Ich liebe dich', 'German'],
+    ['Ti amo', 'Italian'], ['愛してる', 'Japanese'], ['我爱你', 'Chinese'], ['사랑해', 'Korean'],
+    ['Я тебя люблю', 'Russian'], ['أحبك', 'Arabic'], ['Seni seviyorum', 'Turkish'], ['Σ\'αγαπώ', 'Greek'],
+    ['Ik hou van je', 'Dutch'], ['Jag älskar dig', 'Swedish'], ['Kocham cię', 'Polish'], ['Mahal kita', 'Filipino'],
+    ['Anh yêu em', 'Vietnamese'], ['मैं तुमसे प्यार करता हूँ', 'Hindi'], ['Szeretlek', 'Hungarian'], ['Te iubesc', 'Romanian'],
+    ['Eu te amo', 'Portuguese'], ['Rakastan sinua', 'Finnish'], ['Volim te', 'Croatian'], ['Miluji tě', 'Czech'],
+    ['Nakupenda', 'Swahili'], ['Aloha au iā \'oe', 'Hawaiian'], ['Ég elska þig', 'Icelandic'], ['Mi amas vin', 'Esperanto'],
+    ['Jeg elsker deg', 'Norwegian'], ['Ndiyakuthanda', 'Xhosa'], ['Te quiero', 'Spanish'], ['Ana behebak', 'Arabic'],
+    ['Aku cinta kamu', 'Indonesian'], ['Mo ni ifẹ rẹ', 'Yoruba'], ['Ya tabe kakhayu', 'Belarusian'], ['Saya cintakan awak', 'Malay'],
+    ['Ti voglio bene', 'Italian'], ['Ich hab dich lieb', 'German'], ['Bi hajra', 'Kurdish'], ['Luv u', 'Pixel']
+  ];
+  // very short words for the narrow parts of the heart (tip and top notch)
+  const TINY = [
+    ['愛', 'Japanese'], ['爱', 'Chinese'], ['사랑', 'Korean'], ['Amo', 'Latin'], ['Amor', 'Spanish'], ['Amour', 'French'],
+    ['Liebe', 'German'], ['Pyar', 'Hindi'], ['Ishq', 'Urdu'], ['Aroha', 'Maori'], ['Αγάπη', 'Greek'], ['Любов', 'Russian'],
+    ['احبك', 'Arabic'], ['Love', 'English'], ['Luv', 'Pixel'], ['Cinta', 'Indonesian'], ['Rak', 'Czech'], ['Ljubav', 'Serbian']
+  ];
+
+  // Turn text into hard-edged pixel art: draw it small, then make every pixel fully on or fully off
+  // Press Start 2P only has plain Latin + Cyrillic. Anything else (Japanese, Arabic, Hindi, Greek, accents like ę ẹ...)
+  // is drawn in a bold system font instead, so it stays readable.
+  const SANS = 'bold 11px "Noto Sans CJK JP","Noto Sans JP","Noto Sans Devanagari","Noto Sans Arabic","Noto Sans","Segoe UI","Microsoft YaHei","Yu Gothic","Malgun Gothic","Nirmala UI","Arial Unicode MS",sans-serif';
+  const fontFor = t => /[^\u0020-\u007E\u00C0-\u00FF\u0400-\u04FF]/.test(t) ? SANS : FONT;
+  const SH = ROW + 2;   // sprite height: a little taller than a text row so tall scripts aren't cut off
+  function sprite(text, color, white) {
+    const f = fontFor(text);
+    ctx.font = f;
+    const w = Math.ceil(ctx.measureText(text).width) + 2, c = document.createElement('canvas');
+    c.width = w; c.height = SH;
+    const g = c.getContext('2d');
+    g.font = f; g.textBaseline = 'middle'; g.fillStyle = white ? '#fff' : color;
+    g.fillText(text, 1, SH / 2 + 1);
+    // hard-edged pixels only: every pixel fully on or fully off (bolder cut-off for the system font)
+    const d = g.getImageData(0, 0, w, SH), px = d.data, cut = f === SANS ? 70 : 110;
+    for (let i = 3; i < px.length; i += 4) px[i] = px[i] > cut ? 255 : 0;
+    g.putImageData(d, 0, 0);
+    return c;
+  }
+
+  // The heart is a chunky pixel-art bitmap: 13 x 11 cubes, each cube 22 px (2 rows of text tall)
+  const CELL = 22;
+  const HEART = [
+    '..XXX...XXX..',
+    '.XXXXX.XXXXX.',
+    'XXXXXXXXXXXXX',
+    'XXXXXXXXXXXXX',
+    'XXXXXXXXXXXXX',
+    '.XXXXXXXXXXX.',
+    '..XXXXXXXXX..',
+    '...XXXXXXX...',
+    '....XXXXX....',
+    '.....XXX.....',
+    '......X......'
+  ];
+  const cells = [];
+  HEART.forEach((row, r) => { for (let c = 0; c < row.length; c++) if (row[c] === 'X') cells.push({ x: c * CELL, y: r * CELL }); });
+  const inside = (px, py) => {
+    const r = Math.floor(py / CELL), c = Math.floor(px / CELL);
+    return r >= 0 && r < HEART.length && c >= 0 && c < 13 && HEART[r][c] === 'X';
+  };
+
+  let placed = [], shown = 0, timer = null, last = 0, lastFloat = 0, done = false, doneAt = 0, hover = null;
+  const lblCache = {};
+  const parts = [], floats = [];
+  const stars = Array.from({ length: 46 }, () => ({ x: Math.floor(Math.random() * W), y: Math.floor(Math.random() * H), ph: Math.random() * 6.28 }));
+  const MINI = ['.X.X.', 'XXXXX', 'XXXXX', '.XXX.', '..X..'];
+  const BURST = ['#ffffff', '#ff8fa3', '#ff4d6d', '#ffd166'];
+
+  function burst(cx, cy, n) {
+    const t0 = performance.now();
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283, v = 12 + Math.random() * 34;
+      parts.push({ x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 6, t0, life: 450 + Math.random() * 600,
+                   c: BURST[Math.floor(Math.random() * BURST.length)] });
+    }
+  }
+
+  function layout() {
+    ctx.font = FONT;
+    const mk = p => { ctx.font = fontFor(p[0]); return { t: p[0], l: p[1], w: Math.ceil(ctx.measureText(p[0]).width) }; };
+    const shuf = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    const pool = () => shuf(PHRASES.concat(TINY).map(mk));
+    const queue = pool();
+    const refill = () => { if (queue.length < 8) queue.push(...pool()); };
+    const out = [];
+    for (let top = 0; top + ROW <= H; top += ROW) {
+      const ys = [top + 1, top + ROW / 2, top + ROW - 1];
+      const segs = []; let start = null;
+      for (let x = 0; x <= W; x++) {
+        const ok = x < W && ys.every(y => inside(x, y));
+        if (ok && start === null) start = x;
+        if (!ok && start !== null) { if (x - start >= 12) segs.push([start + 2, x - 2]); start = null; }
+      }
+      for (const [a, b] of segs) {
+        const width = b - a, row = []; let sum = 0;
+        refill();
+        for (let guard = 0; guard < 14; guard++) {
+          const room = width - sum - 5 * row.length;
+          let idx = -1;
+          for (let i = 0; i < queue.length; i++) {
+            if (queue[i].w <= room && (idx < 0 || queue[i].w > queue[idx].w)) idx = i;
+          }
+          if (idx < 0) break;
+          const q = queue.splice(idx, 1)[0]; row.push(q); sum += q.w;
+        }
+        if (!row.length) continue;
+        const gap = row.length > 1 ? Math.min(30, (width - sum) / (row.length - 1)) : 0;
+        let x = a + (width - (sum + gap * (row.length - 1))) / 2;
+        for (const q of row) {
+          const hue = 338 + Math.random() * 30, light = 68 + Math.random() * 14;
+          out.push({ t: q.t, l: q.l, x: Math.round(x), y: top + ROW / 2 + 1,
+                     c: 'hsl(' + (hue % 360) + ',100%,' + light + '%)' });
+          x += q.w + gap;
+        }
+      }
+    }
+    out.forEach(w => {
+      w.hl = Math.random() < 0.18; w.ph = Math.random() * 6.28;     // ~1 in 5 words is a gold highlight
+      w.a = sprite(w.t, w.hl ? '#ffd166' : w.c, false); w.b = sprite(w.t, w.c, true);
+    });
+    return out;
+  }
+
+  function draw(now) {
+    const dt = Math.min(50, now - (last || now)) / 1000; last = now;
+    ctx.clearRect(0, 0, W, H); // transparent, so no box shows around the heart
+
+    // twinkling background stars
+    for (const st of stars) {
+      const v = Math.sin(now / 420 + st.ph);
+      if (v > 0.55) { ctx.fillStyle = v > 0.92 ? '#ff8fa3' : '#5c1424'; ctx.fillRect(st.x, st.y, 1, 1); }
+    }
+    // tiny pixel hearts drifting up behind the big one
+    if (shown > 0 && now - lastFloat > 650) {
+      lastFloat = now;
+      floats.push({ x: 4 + Math.random() * (W - 12), y: H + 6, v: 9 + Math.random() * 14, ph: Math.random() * 6.28 });
+    }
+    ctx.fillStyle = '#6a1526';
+    for (let i = floats.length - 1; i >= 0; i--) {
+      const f = floats[i]; f.y -= f.v * dt;
+      if (f.y < -8) { floats.splice(i, 1); continue; }
+      const fx = Math.round(f.x + Math.sin(now / 600 + f.ph) * 3), fy = Math.round(f.y);
+      MINI.forEach((row, ry) => { for (let rx = 0; rx < 5; rx++) if (row[rx] === 'X') ctx.fillRect(fx + rx, fy + ry, 1, 1); });
+    }
+
+    // the cubic heart itself: dark red blocks that glow brighter as it fills
+    const pr = shown / (placed.length || 1), sw = done ? ((now - doneAt) / 8) % 620 - 60 : -999;
+    for (const c of cells) {
+      const hot = Math.abs(c.x + c.y - sw) < 26;
+      ctx.fillStyle = hot ? '#4a0f1c' : 'rgb(' + Math.round(20 + 22 * pr) + ',' + Math.round(4 + 4 * pr) + ',' + Math.round(9 + 8 * pr) + ')';
+      ctx.fillRect(c.x + 1, c.y + 1, CELL - 2, CELL - 2);
+      ctx.fillStyle = 'rgba(255,100,130,.14)'; ctx.fillRect(c.x + 1, c.y + 1, CELL - 2, 1); ctx.fillRect(c.x + 1, c.y + 1, 1, CELL - 2);
+      ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(c.x + 1, c.y + CELL - 2, CELL - 2, 1); ctx.fillRect(c.x + CELL - 2, c.y + 1, 1, CELL - 2);
+    }
+
+    // shine band that sweeps across the finished heart
+    const sweep = sw;
+    for (let i = 0; i < shown; i++) {
+      const w = placed[i], age = now - w.born;
+      let img = w.a;
+      if (age < 420) img = w.b;
+      else if (w.hl && Math.sin(now / 230 + w.ph) > 0.45) img = w.b;           // highlights twinkle
+      else if (Math.abs(w.x + w.y - sweep) < 16) img = w.b;                    // shine sweep
+      if (hover) { if (w === hover) img = w.b; ctx.globalAlpha = w === hover ? 1 : 0.2; }   // hovered word stays bright, rest fade
+      ctx.drawImage(img, w.x - 1, Math.round(w.y - img.height / 2 - 1) - (age < 160 ? 1 : 0));
+    }
+    ctx.globalAlpha = 1;
+
+    // language label, drawn inside the heart, only for the hovered word
+    if (hover) {
+      const L = lblCache[hover.l] || (lblCache[hover.l] = sprite(hover.l, '#ffd166', false));
+      const k = 2, lw = L.width * k, lh = L.height * k;
+      let cy = H / 2;
+      for (const c of [H / 2, 80, 160]) { cy = c; if (Math.abs(hover.y - c) > lh / 2 + ROW / 2 + 4) break; }
+      const lx = Math.round(W / 2 - lw / 2), ly = Math.round(cy - lh / 2);
+      ctx.fillStyle = '#000'; ctx.fillRect(lx - 5, ly - 3, lw + 10, lh + 6);
+      ctx.fillStyle = '#ff4d6d';
+      ctx.fillRect(lx - 5, ly - 3, lw + 10, 1); ctx.fillRect(lx - 5, ly + lh + 2, lw + 10, 1);
+      ctx.fillRect(lx - 5, ly - 3, 1, lh + 6); ctx.fillRect(lx + lw + 4, ly - 3, 1, lh + 6);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(L, lx, ly, lw, lh);
+    }
+
+    // spark particles
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const q = parts[i], age = now - q.t0;
+      if (age > q.life) { parts.splice(i, 1); continue; }
+      q.x += q.vx * dt; q.y += q.vy * dt; q.vy += 28 * dt;
+      ctx.globalAlpha = 1 - age / q.life; ctx.fillStyle = q.c;
+      ctx.fillRect(Math.round(q.x), Math.round(q.y), 1, 1);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+
+  function start() {
+    clearInterval(timer);
+    cv.classList.remove('done');
+    shown = 0; done = false; parts.length = 0; cap.innerHTML = '';
+    placed = layout();
+    // random reveal order (Fisher-Yates shuffle) instead of top-to-bottom
+    for (let i = placed.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [placed[i], placed[j]] = [placed[j], placed[i]];
+    }
+    timer = setInterval(function () {
+      if (shown >= placed.length) {
+        clearInterval(timer);
+        cv.classList.add('done');
+        done = true; doneAt = performance.now(); sfx.done();
+        for (let k = 0; k < 10; k++) setTimeout(function () {
+          let x, y, tries = 0;
+          do { x = Math.random() * W; y = Math.random() * H; } while (!inside(x, y) && ++tries < 60);
+          burst(x, y, 14); sfx.spark();
+        }, k * 140);
+        cap.innerHTML = 'I love you <b>&hearts;</b><br>click words to play notes, click empty space to replay';
+        return;
+      }
+      const w = placed[shown]; w.born = performance.now(); shown++;
+      burst(w.x + w.a.width / 2, w.y, w.hl ? 20 : 9);
+      sfx.spawn(shown / placed.length, w.hl, shown - 1);
+      cap.innerHTML = '<b>' + w.t + '</b><br>' + w.l;
+    }, SPEED);
+  }
+
+  // ---- sound effects: all synthesized with the Web Audio API, no audio files needed ----
+  let AC = null, waiting = false, bus = null, noiseBuf = null;
+  const SC = [261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25, 784, 880, 1046.5, 1174.66, 1318.5, 1568, 1760]; // pentatonic scale
+  function audio() {
+    if (!AC) {
+      try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+      // warm sound chain: a soft low-pass filter plus a big, gentle room reverb (no echoes, no beeps)
+      bus = AC.createGain(); bus.gain.value = 0.9;
+      const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+      const conv = AC.createConvolver(), len = Math.floor(AC.sampleRate * 2.6), ir = AC.createBuffer(2, len, AC.sampleRate);
+      for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.4); }
+      conv.buffer = ir;
+      const wet = AC.createGain(); wet.gain.value = 0.5;
+      bus.connect(lp); lp.connect(AC.destination);
+      lp.connect(conv); conv.connect(wet); wet.connect(AC.destination);
+      noiseBuf = null;
+    }
+    if (AC.state === 'suspended') AC.resume();
+    return AC;
+  }
+  function tone(f, d, type, v, to, delay, attack) {
+    const a = audio(); if (!a) return;
+    const t = a.currentTime + (delay || 0), o = a.createOscillator(), g = a.createGain();
+    o.type = type || 'square';
+    o.frequency.setValueAtTime(f, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + d);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v || 0.05, t + (attack || 0.008));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(bus || a.destination);
+    o.start(t); o.stop(t + d + 0.02);
+  }
+  function noise(d, v, type, freq, delay) {      // soft hats and brushes for the beat
+    const a = audio(); if (!a || !noiseBuf) return;
+    const t = a.currentTime + (delay || 0), src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = noiseBuf; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    src.connect(f); f.connect(g); g.connect(bus || a.destination);
+    src.start(t); src.stop(t + d + 0.02);
+  }
+  // ---- a soft, dreamy music box: slow chords underneath, gentle plucked notes on top, a faint heartbeat ----
+  const SCALE = [392, 440, 523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.5, 1568, 1760];   // C major pentatonic
+  // pad chords (Cmaj7 - Am7 - Fmaj7 - G6), one chord every 8 words
+  const PADS = [[130.81, 196, 246.94, 329.63], [110, 164.81, 196, 261.63], [87.31, 130.81, 164.81, 220], [98, 146.83, 164.81, 246.94]];
+  function pluck(f, v, delay) {                      // a music-box note: soft start, long gentle fade
+    tone(f, 1.9, 'sine', v, null, delay, 0.012);
+    tone(f * 1.003, 1.9, 'triangle', v * 0.3, null, delay, 0.012);
+    tone(f * 2, 1.0, 'sine', v * 0.18, null, delay, 0.012);
+  }
+  let mi = 4;
+  const sfx = {
+    spawn: function (p, hl, step) {                  // every new word adds one note to a slow, wandering melody
+      const b = step % 8, lag = b % 2 ? 0.05 : 0;
+      if (step === 0) mi = 4;
+      if (b === 0) PADS[Math.floor(step / 8) % 4].forEach(function (f) {
+        tone(f, 4.3, 'triangle', 0.02, null, 0, 1.3); tone(f * 1.004, 4.3, 'sine', 0.022, null, 0, 1.5);
+      });
+      if (b % 4 === 0) { tone(70, 0.2, 'sine', 0.07, 45, 0, 0.01); tone(60, 0.2, 'sine', 0.05, 40, 0.24, 0.01); }   // faint heartbeat
+      mi = Math.max(0, Math.min(8, mi + [-2, -1, -1, 0, 1, 1, 2][Math.floor(Math.random() * 7)]));
+      const f = SCALE[mi];
+      pluck(f, b % 2 ? 0.05 : 0.07, lag);
+      if (hl) pluck(f * 1.5, 0.035, lag + 0.1);                                                                    // gold words add a soft harmony note
+    },
+    tick: function () { tone(1046.5, 0.08, 'sine', 0.012, null, 0, 0.005); },
+    note: function (w) {                             // clicking a word plays a music-box note: higher up the heart = higher pitch
+      const f = SCALE[Math.max(0, Math.min(SCALE.length - 1, Math.floor((1 - w.y / H) * SCALE.length)))];
+      pluck(f, 0.09, 0); pluck(f * 1.5, 0.04, 0.08);
+    },
+    done: function () {
+      [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function (f, i) { pluck(f, 0.07, i * 0.2); });
+      [130.81, 196, 261.63, 329.63].forEach(function (f) { tone(f, 4, 'triangle', 0.025, null, 0, 1.0); });
+    },
+    spark: function () { pluck(SCALE[7 + Math.floor(Math.random() * 5)], 0.015, 0); },
+    restart: function () { pluck(783.99, 0.05, 0); pluck(587.33, 0.05, 0.18); }
+  };
+  function ping(w) { burst(w.x + w.a.width / 2, w.y, 14); sfx.note(w); cap.innerHTML = '<b>' + w.t + '</b><br>' + w.l; }
+
+  // Browsers only let a page make sound after a click or tap. So if sound is blocked at load,
+  // the heart waits for the first click, then starts, so you hear it from the very first word.
+  function unlock() {
+    const a = audio();
+    if (!waiting) return;
+    waiting = false;
+    if (a && a.resume) a.resume().then(start, start); else start();
+  }
+  ['pointerdown', 'click', 'touchend', 'keydown'].forEach(function (ev) { document.addEventListener(ev, unlock, true); });
+
+
+  // hover (or tap) a word to see its language; move away and everything goes back to normal
+  let clearTimer = null;
+  function pick(e) {
+    const r = cv.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width * W, py = (e.clientY - r.top) / r.height * H;
+    const prev = hover; hover = null;
+    for (let i = shown - 1; i >= 0; i--) {
+      const w = placed[i];
+      if (px >= w.x - 1 && px <= w.x + w.a.width - 1 && Math.abs(py - w.y) <= ROW / 2) { hover = w; break; }
+    }
+    if (hover && hover !== prev) sfx.tick();
+    cv.style.cursor = hover ? 'pointer' : '';
+  }
+  cv.addEventListener('pointermove', function (e) { clearTimeout(clearTimer); pick(e); });
+  cv.addEventListener('pointerdown', function (e) { clearTimeout(clearTimer); pick(e); });
+  cv.addEventListener('pointerup', function (e) {
+    if (e.pointerType === 'touch') clearTimer = setTimeout(function () { hover = null; }, 1500);
+  });
+  cv.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') { hover = null; cv.style.cursor = ''; } });
+  cv.addEventListener('pointercancel', function () { hover = null; });
+  cv.addEventListener('click', function () { if (hover) ping(hover); });
+
+  document.body.addEventListener('click', function () { if (placed.length && shown >= placed.length && !hover) { sfx.restart(); start(); } });
+
+  function fit() {
+    let k = Math.min(innerWidth * 0.95 / W, (innerHeight - 90) / H);
+    if (k >= 2) { k = Math.floor(k); cv.style.imageRendering = 'pixelated'; }   // whole-number zoom keeps every pixel even
+    else cv.style.imageRendering = 'auto';                                         // small screens: smooth scaling
+    cv.style.width = Math.round(W * k) + 'px'; cv.style.height = Math.round(H * k) + 'px';
+  }
+  addEventListener('resize', fit); fit();
+
+  const go = function () {
+    requestAnimationFrame(draw);
+    const a = audio();
+    if (!a || a.state === 'running') start();
+    else { waiting = true; cap.innerHTML = '<b>click anywhere to begin</b> &hearts;'; }
+  };
+  if (document.fonts && document.fonts.load) {
+    Promise.race([document.fonts.load('8px "Press Start 2P"'), new Promise(r => setTimeout(r, 1500))]).then(go, go);
+  } else go();
+})();
+</script>
+</body>
+</html>
